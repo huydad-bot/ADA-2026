@@ -1,0 +1,1237 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ADA 2026 당뇨병의 진단과 분류</title>
+<style>
+  :root {
+    --bg:#f6f8fa;--surface:#fff;--surface2:#f0f2f5;--border:#d0d7de;
+    --accent:#0969da;--accent2:#0550ae;--green:#1a7f37;--yellow:#9a6700;
+    --red:#cf222e;--orange:#bc4c00;--text:#1f2328;--text2:#57606a;
+    --teal:#0a7c8a;--purple:#5a3ea0;--fscale:1;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'Pretendard','Noto Sans KR',-apple-system,sans-serif;background:var(--bg);color:var(--text);font-size: calc(13px * var(--fscale, 1));line-height:1.5;}
+  header{background:var(--surface);border-bottom:1px solid var(--border);padding:12px 16px 8px;display:flex;flex-direction:column;align-items:center;gap:4px;position:sticky;top:0;z-index:100;}
+  .header-inner{width:100%;max-width:960px;display:flex;flex-direction:column;align-items:center;gap:4px;}
+  .logo-badge{background:var(--accent2);color:#fff;font-size: calc(10px * var(--fscale, 1));font-weight:700;padding:3px 8px;border-radius:4px;letter-spacing:.5px;}
+  .tab-bar{display:flex;justify-content:center;background:var(--surface);border-bottom:1px solid var(--border);overflow-x:auto;scrollbar-width:none;}
+  .tab-bar::-webkit-scrollbar{display:none;}
+  .font-zoom-btn{display:flex;align-items:center;gap:3px;flex-shrink:0;margin:4px 4px 4px 6px;padding:5px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:6px;color:var(--accent2);font-size:calc(11px * var(--fscale, 1));font-weight:700;cursor:pointer;user-select:none;white-space:nowrap;transition:background .15s;}
+  .font-zoom-btn:hover{background:var(--border);}
+  .font-zoom-btn .fz-icon{font-size:calc(12px * var(--fscale, 1));}
+  .tab-bar-inner{width:100%;max-width:960px;display:flex;align-items:center;gap:2px;padding:0 4px;}
+  .tab{padding:7px 11px;font-size: calc(11.5px * var(--fscale, 1));color:var(--text2);cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;transition:color .15s,border-color .15s;user-select:none;flex-shrink:0;}
+  .tab:hover{color:var(--text);}
+  .tab.active{color:var(--accent2);border-bottom-color:var(--accent2);}
+  .tab-abbr-wrap{display:flex;align-items:center;padding:4px 4px;margin-left:4px;flex-shrink:0;position:relative;}
+  .main{padding:12px 16px;max-width:960px;margin:0 auto;}
+  .panel{display:none;}
+  .panel.active{display:block;}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+  .grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;}
+  @media(max-width:680px){.grid2,.grid3{grid-template-columns:1fr;}}
+  .card{background:var(--surface);border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-bottom:10px;}
+  .card-header{background:var(--surface2);padding:8px 12px;font-size: calc(12px * var(--fscale, 1));font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.5px;border-bottom:1px solid var(--border);cursor:pointer;display:flex;align-items:center;justify-content:space-between;user-select:none;}
+  .card-header .toggle{font-size: calc(13px * var(--fscale, 1));transition:transform .2s;}
+  .card-header.open .toggle{transform:rotate(180deg);}
+  .card-body{padding:10px 12px;}
+  .card-body.collapsed{display:none;}
+  .stat-row{display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap;}
+  .stat-box{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:10px 14px;flex:1;min-width:90px;text-align:center;}
+  .stat-box.clickable{cursor:pointer;transition:box-shadow .15s,border-color .15s;}
+  .stat-box.clickable:hover{border-color:var(--accent2);box-shadow:0 2px 8px rgba(5,80,174,.15);}
+  .stat-val{font-size: calc(18px * var(--fscale, 1));font-weight:700;color:var(--accent2);}
+  .stat-lbl{font-size: calc(10px * var(--fscale, 1));color:var(--text2);margin-top:2px;}
+  .stat-hint{font-size: calc(9px * var(--fscale, 1));color:var(--accent2);margin-top:4px;opacity:.7;}
+  /* Modal */
+  .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:500;align-items:center;justify-content:center;}
+  .modal-overlay.open{display:flex;}
+  .modal-box{background:var(--surface);border-radius:12px;padding:20px;max-width:680px;width:92%;max-height:84vh;overflow-y:auto;box-shadow:0 16px 48px rgba(0,0,0,.22);position:relative;}
+  .modal-close{position:absolute;top:12px;right:14px;background:none;border:none;font-size: calc(18px * var(--fscale, 1));cursor:pointer;color:var(--text2);line-height:1;}
+  .modal-title{font-size: calc(15px * var(--fscale, 1));font-weight:700;color:var(--text);margin-bottom:12px;padding-right:20px;line-height:1.4;}
+  .modal-section{margin-bottom:12px;}
+  .modal-section-title{font-size: calc(11px * var(--fscale, 1));font-weight:700;color:var(--accent2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;border-bottom:1px solid var(--border);padding-bottom:4px;}
+  .modal-table{width:100%;border-collapse:collapse;font-size: calc(11.5px * var(--fscale, 1));}
+  .modal-table th{background:var(--surface2);color:var(--text2);padding:4px 8px;font-size: calc(10.5px * var(--fscale, 1));font-weight:600;text-align:left;border-bottom:1px solid var(--border);}
+  .modal-table td{padding:5px 8px;border-bottom:1px solid var(--border);vertical-align:top;}
+  .modal-table tr:last-child td{border-bottom:none;}
+  .rec-list{list-style:none;}
+  .rec-item{padding:7px 0;border-bottom:1px solid var(--border);display:flex;gap:8px;align-items:flex-start;}
+  .rec-item:last-child{border-bottom:none;}
+  .rec-text{font-size: calc(12px * var(--fscale, 1));color:var(--text);line-height:1.65;}
+  .rec-text strong{color:#1f2328;}
+  .badge{display:inline-flex;align-items:center;padding:2px 8px;border-radius:10px;font-size: calc(10px * var(--fscale, 1));font-weight:700;white-space:nowrap;flex-shrink:0;margin-top:1px;}
+  .badge-A{background:#dafbe1;color:#116329;border:1px solid #1a7f37;}
+  .badge-B{background:#ddf4ff;color:var(--accent2);border:1px solid var(--accent2);}
+  .badge-C{background:#fff8c5;color:#7a4b00;border:1px solid #d4a017;}
+  .badge-E{background:#f3e5f5;color:#5a3ea0;border:1px solid #5a3ea0;}
+  .alert{padding:8px 12px;border-radius:6px;font-size: calc(12px * var(--fscale, 1));margin:8px 0;display:flex;gap:8px;align-items:flex-start;}
+  .alert-info{background:#ddf4ff;border-left:3px solid var(--accent2);color:#0550ae;}
+  .alert-warn{background:#fff8c5;border-left:3px solid #d4a017;color:#7a4b00;}
+  .alert-danger{background:#ffebe9;border-left:3px solid var(--red);color:#82071e;}
+  .alert-success{background:#dafbe1;border-left:3px solid var(--green);color:#116329;}
+  .alert-teal{background:#e0f5f5;border-left:3px solid var(--teal);color:#075050;}
+  .alert-orange{background:#fff3e0;border-left:3px solid var(--orange);color:#7a3500;}
+  .alert-purple{background:#f3e5f5;border-left:3px solid var(--purple);color:#5a3ea0;}
+  .tc-table{width:100%;border-collapse:collapse;font-size: calc(11.5px * var(--fscale, 1));}
+  .tc-table th{background:var(--surface2);color:var(--text2);padding:5px 8px;font-size: calc(10.5px * var(--fscale, 1));text-transform:uppercase;letter-spacing:.3px;font-weight:600;text-align:left;border-bottom:1px solid var(--border);}
+  .tc-table td{padding:5px 8px;border-bottom:1px solid var(--border);vertical-align:top;}
+  .tc-table tr:last-child td{border-bottom:none;}
+  .tc-table tr:hover td{background:rgba(0,0,0,.02);}
+  .acc{border:1px solid var(--border);border-radius:6px;margin-bottom:6px;overflow:hidden;}
+  .acc-hdr{background:var(--surface2);padding:7px 12px;font-size: calc(12px * var(--fscale, 1));font-weight:600;color:var(--text);cursor:pointer;display:flex;justify-content:space-between;align-items:center;user-select:none;}
+  .acc-hdr:hover{background:#e8eaec;}
+  .acc-body{display:none;padding:10px 12px;font-size: calc(12px * var(--fscale, 1));line-height:1.65;}
+  .flow-box{border:1px solid var(--border);border-radius:6px;background:var(--surface);padding:8px 12px;margin-bottom:6px;font-size: calc(12px * var(--fscale, 1));line-height:1.6;}
+  .flow-arrow{text-align:center;color:var(--text2);font-size: calc(14px * var(--fscale, 1));margin:2px 0;}
+  .step-num{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;background:var(--accent2);color:#fff;font-size: calc(10px * var(--fscale, 1));font-weight:700;flex-shrink:0;margin-right:6px;}
+  ul.dot{padding-left:18px;}
+  ul.dot li{margin-bottom:3px;font-size: calc(12px * var(--fscale, 1));line-height:1.6;}
+  ol.num{padding-left:18px;}
+  ol.num li{margin-bottom:4px;font-size: calc(12px * var(--fscale, 1));line-height:1.6;}
+  ::-webkit-scrollbar{width:5px;height:5px;}
+  ::-webkit-scrollbar-track{background:var(--bg);}
+  ::-webkit-scrollbar-thumb{background:#c8d0d9;border-radius:3px;}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div style="display:flex;align-items:center;gap:10px">
+      <span class="logo-badge">ADA 2026</span>
+      <h1 style="font-size:17px;font-weight:700;color:var(--text)">당뇨병의 진단과 분류</h1>
+    </div>
+    <div style="text-align:center;line-height:1.5">
+      <span style="color:var(--text2);font-size: calc(11px * var(--fscale, 1))">Standards of Care in Diabetes—2026, Section 2 — American Diabetes Association</span><br>
+      <span style="font-size: calc(10px * var(--fscale, 1));color:var(--text2)">Diabetes Care 2026;49(Suppl. 1):S27–S49 · doi: 10.2337/dc26-S002</span>
+    </div>
+    <div style="font-size: calc(10px * var(--fscale, 1));color:var(--text2);font-style:italic;">This tool is not officially endorsed by the American Diabetes Association (ADA).</div>
+  </div>
+</header>
+
+<div class="tab-bar">
+  <div class="tab-bar-inner">
+    <div id="font-zoom-btn" class="font-zoom-btn" onclick="cycleFontZoom()"><span class="fz-icon">🔠</span><span id="font-zoom-label">100%</span></div>
+    <div class="tab active" onclick="showTab('overview')">🏠 개요</div>
+    <div class="tab" onclick="showTab('diagnosis')">🔬 진단검사</div>
+    <div class="tab" onclick="showTab('t1d')">🧬 1형·전단계</div>
+    <div class="tab" onclick="showTab('t2d')">🍽️ 2형·전당뇨</div>
+    <div class="tab" onclick="showTab('special')">💉 특수 원인</div>
+    <div class="tab" onclick="showTab('monogenic')">🧪 단일유전자</div>
+    <div class="tab" onclick="showTab('gdm')">🤰 임신성 당뇨</div>
+    <div class="tab" onclick="showTab('tables')">📁 기준표 모음</div>
+    <div class="tab-abbr-wrap">
+      <div style="position:relative;display:flex;align-items:center;flex-shrink:0">
+        <span style="position:absolute;left:8px;color:var(--text2);font-size: calc(12px * var(--fscale, 1));pointer-events:none">🔍</span>
+        <input id="abbr-input" type="text" placeholder="약어" oninput="filterAbbr(this.value)"
+          style="background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:4px 8px 4px 26px;color:var(--text);font-size: calc(12px * var(--fscale, 1));width:90px;outline:none;"
+          onfocus="this.style.borderColor='var(--accent2)'" onblur="this.style.borderColor='var(--border)'">
+      </div>
+      <div id="abbr-dropdown" style="display:none;position:fixed;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:8px;width:440px;max-height:360px;overflow-y:auto;z-index:300;box-shadow:0 8px 24px rgba(0,0,0,.12)">
+        <div id="abbr-grid-drop"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="main">
+
+<div id="tab-overview" class="panel active">
+  <div class="stat-row">
+    <div class="stat-box clickable" onclick="openModal('diagCriteriaModal')"><div class="stat-val">A1C/FPG/2hPG</div><div class="stat-lbl">3대 진단 기준 (택1)</div><div class="stat-hint">▸ 클릭하여 상세 보기</div></div>
+    <div class="stat-box clickable" onclick="openModal('classModal')"><div class="stat-val">4종</div><div class="stat-lbl">주요 당뇨병 분류</div><div class="stat-hint">▸ 클릭하여 상세 보기</div></div>
+    <div class="stat-box clickable" onclick="openModal('stagingModal')"><div class="stat-val">3단계</div><div class="stat-lbl">1형당뇨 병기 (Stage 1–3)</div><div class="stat-hint">▸ 클릭하여 상세 보기</div></div>
+    <div class="stat-box clickable" onclick="openModal('gdmModal')"><div class="stat-val">1-step / 2-step</div><div class="stat-lbl">GDM 진단 전략</div><div class="stat-hint">▸ 클릭하여 상세 보기</div></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>📋 진단 알고리즘 전체 흐름</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <div class="flow-box" style="border-left:3px solid var(--accent2)">
+        <strong>① 임상 상황 평가</strong><br>
+        <span style="color:var(--text2);font-size: calc(11px * var(--fscale, 1))">고전적 고혈당 증상(다뇨·다음·체중감소) 또는 고혈당 위기(DKA/HHS) 동반 여부 확인</span>
+      </div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-box" style="border-left:3px solid var(--green)">
+        <strong>② 명백한 고혈당 있음</strong><br>
+        <span style="font-size: calc(11.5px * var(--fscale, 1))">무작위 혈장포도당 ≥200 mg/dL + 증상 → 즉시 진단 확정, 확진검사 불필요</span>
+      </div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-box" style="border-left:3px solid var(--yellow)">
+        <strong>③ 명백한 고혈당 없음 (무증상)</strong><br>
+        <span style="font-size: calc(11.5px * var(--fscale, 1))">A1C, FPG, 75g OGTT 2시간 혈당 중 1개 검사 시행 → 이상 시 <strong>확진검사 필수</strong> (동시 2개 검사 또는 같은 검사 재시행)</span>
+      </div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-box" style="border-left:3px solid var(--orange)">
+        <strong>④ 진단 확정 후 분류</strong><br>
+        <span style="font-size: calc(11.5px * var(--fscale, 1))">연령·BMI·체중감소·케톤산증·자가면역 가족력 등으로 1형/2형/특수형태 감별 (AABBCC 접근법, Fig 2.1)</span>
+      </div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-box" style="border-left:3px solid var(--teal)">
+        <strong>⑤ 분류 불명확 시</strong><br>
+        <span style="font-size: calc(11.5px * var(--fscale, 1))">췌도 자가항체 검사, C-peptide 검사, 단일유전자 당뇨 유전자 검사 고려 → 전문 센터 의뢰</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <div class="card-header open" onclick="toggleCard(this)">
+        <span>📌 핵심 권고문 요약</span><span class="toggle">▾</span>
+      </div>
+      <div class="card-body">
+        <ul class="rec-list">
+          <li class="rec-item"><span class="badge badge-B">B</span><span class="rec-text"><strong>2.1a</strong> A1C 또는 혈장포도당(FPG/2hPG/무작위) 기준으로 진단</span></li>
+          <li class="rec-item"><span class="badge badge-B">B</span><span class="rec-text"><strong>2.1b</strong> 명백한 고혈당 없으면 확진검사 필수</span></li>
+          <li class="rec-item"><span class="badge badge-B">B</span><span class="rec-text"><strong>2.2a/b</strong> A1C는 NGSP 인증 방법 사용, POC 검사는 CLIA 인증 시설 제한</span></li>
+          <li class="rec-item"><span class="badge badge-B">B</span><span class="rec-text"><strong>2.3/2.4</strong> 혈당-A1C 불일치 시 간섭요인 평가, 특정 상태에서는 혈당 기준 우선</span></li>
+          <li class="rec-item"><span class="badge badge-E">E</span><span class="rec-text"><strong>2.5</strong> 개인맞춤 관리를 위해 적절한 진단 범주로 분류</span></li>
+          <li class="rec-item"><span class="badge badge-B">B</span><span class="rec-text"><strong>2.6–2.10</strong> 무증상 1형당뇨 선별검사 — 췌도 자가항체(IA, GAD, IA-2, ZnT8)</span></li>
+          <li class="rec-item"><span class="badge badge-B">B</span><span class="rec-text"><strong>2.11–2.18</strong> 2형당뇨·전당뇨 선별검사 — 위험인자 기반, 35세부터, 약물 관련 선별</span></li>
+          <li class="rec-item"><span class="badge badge-E">E</span><span class="rec-text"><strong>2.19–2.22</strong> 항암제(ICI, PI3Kα억제제, mTOR억제제)로 인한 고혈당 모니터링</span></li>
+          <li class="rec-item"><span class="badge badge-E">E</span><span class="rec-text"><strong>2.23</strong> 췌장염 후 3–6개월·매년 당뇨 선별</span></li>
+          <li class="rec-item"><span class="badge badge-B">B</span><span class="rec-text"><strong>2.24a/b</strong> 낭성섬유증 관련 당뇨(CFRD) — 10세부터 매년 OGTT 또는 A1C 2단계 전략</span></li>
+          <li class="rec-item"><span class="badge badge-B">B</span><span class="rec-text"><strong>2.26–2.28</strong> 이식 후 당뇨(PTDM) — 안정화 후 OGTT로 진단</span></li>
+          <li class="rec-item"><span class="badge badge-A">A</span><span class="rec-text"><strong>2.29a–c</strong> 생후 6개월 이내 발병·상염색체 우성 가족력 시 단일유전자 당뇨 유전자 검사</span></li>
+          <li class="rec-item"><span class="badge badge-B">B</span><span class="rec-text"><strong>2.30–2.32</strong> 임신성 당뇨(GDM) — 위험군 임신 전·15주 이전·24–28주 선별</span></li>
+          <li class="rec-item"><span class="badge badge-B">B</span><span class="rec-text"><strong>2.33/2.34</strong> GDM 산후 4–12주 OGTT 확인 + 평생 1–3년 간격 재선별</span></li>
+        </ul>
+      </div>
+    </div>
+
+    <div>
+      <div class="card">
+        <div class="card-header open" onclick="toggleCard(this)">
+          <span>⚠️ 권고 등급 체계 (Evidence Grading)</span><span class="toggle">▾</span>
+        </div>
+        <div class="card-body">
+          <table class="tc-table">
+            <tr><th>등급</th><th>의미</th></tr>
+            <tr><td><span class="badge badge-A">A</span></td><td>명확한 근거 — 잘 수행된 다기관 RCT 또는 메타분석</td></tr>
+            <tr><td><span class="badge badge-B">B</span></td><td>뒷받침되는 근거 — 잘 수행된 코호트 연구 등</td></tr>
+            <tr><td><span class="badge badge-C">C</span></td><td>뒷받침되는 근거 부족 — 대조군 없는 연구, 사례 보고</td></tr>
+            <tr><td><span class="badge badge-E">E</span></td><td>전문가 합의 또는 임상 경험 (Expert consensus)</td></tr>
+          </table>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header open" onclick="toggleCard(this)">
+          <span>🔑 핵심 개념</span><span class="toggle">▾</span>
+        </div>
+        <div class="card-body">
+          <div class="alert alert-info"><span>ℹ️</span><span>당뇨병 = 탄수화물 대사장애 군 — 인슐린 분비/작용 결함으로 포도당 이용 저하 + 간 포도당 생성 과다 → 고혈당</span></div>
+          <div class="alert alert-warn"><span>⚠️</span><span>성인 신규 1형당뇨의 <strong>최대 40%가 2형으로 오진</strong>됨. 반대로 MODY가 1형으로 오진되는 경우도 흔함.</span></div>
+          <div class="alert alert-danger"><span>🚫</span><span>비만이 있다고 해서 1형당뇨 가능성을 배제해서는 안 됨 — 일반 인구의 비만 증가로 1형당뇨에서도 비만 동반 증가</span></div>
+          <div class="alert alert-teal"><span>💡</span><span>2형당뇨 진단 후에도 전형적 위험인자가 없거나 젊은 연령이면 췌도 자가항체 검사로 1형당뇨 배제 고려</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- ═══ DIAGNOSIS ═══ -->
+<div id="tab-diagnosis" class="panel">
+  <div class="alert alert-orange"><span>🔬</span><span>A1C, FPG, 2시간 혈당(75g OGTT), 또는 증상 동반 무작위 혈당으로 진단. 명백한 고혈당이 없으면 확진검사가 필수다.</span></div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>📊 표 2.1 — 비임신 성인 당뇨병 진단 기준</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <table class="tc-table">
+        <tr><th>검사</th><th>기준</th><th>비고</th></tr>
+        <tr><td><strong>A1C</strong></td><td>≥6.5% (≥48 mmol/mol)</td><td>NGSP 인증·DCCT 표준화 검사실</td></tr>
+        <tr><td><strong>FPG</strong></td><td>≥126 mg/dL (≥7.0 mmol/L)</td><td>최소 8시간 공복</td></tr>
+        <tr><td><strong>2-h PG (75g OGTT)</strong></td><td>≥200 mg/dL (≥11.1 mmol/L)</td><td>WHO 기준 75g 포도당 부하</td></tr>
+        <tr><td><strong>무작위 혈당</strong></td><td>≥200 mg/dL (≥11.1 mmol/L)</td><td>고전적 고혈당 증상 또는 고혈당 위기(DKA/HHS) 동반 시에만</td></tr>
+      </table>
+      <div class="alert alert-warn" style="margin-top:8px"><span>⚠️</span><span>명백한 고혈당(고혈당 위기 등)이 없는 한, 진단에는 <strong>서로 다른 검사 2개 이상</strong>(동시 또는 시차)의 이상 결과가 필요하다.</span></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>📊 표 2.2 — 비임신 성인 전당뇨 진단 기준</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <table class="tc-table">
+        <tr><th>검사</th><th>전당뇨 범위</th></tr>
+        <tr><td>A1C</td><td>5.7–6.4% (39–47 mmol/mol)</td></tr>
+        <tr><td>FPG (IFG)</td><td>100–125 mg/dL (5.6–6.9 mmol/L)</td></tr>
+        <tr><td>2-h PG, 75g OGTT (IGT)</td><td>140–199 mg/dL (7.8–11.0 mmol/L)</td></tr>
+      </table>
+      <p style="font-size: calc(12px * var(--fscale, 1));margin-top:6px;color:var(--text2)">세 검사 모두에서 위험은 연속적이며 범위 하한 아래로도 이어지고, 상한에 가까울수록 불균형적으로 커진다.</p>
+    </div>
+  </div>
+
+  <div class="acc">
+    <div class="acc-hdr" onclick="toggleAcc(this)">
+      <span>FPG vs 2-h PG — 선별·진단 비교 <span class="badge badge-B" style="margin-left:6px">근거: B</span></span><span>▾</span>
+    </div>
+    <div class="acc-body">
+      <div class="grid2">
+        <div>
+          <p style="font-weight:600;margin-bottom:4px">FPG (공복혈당)</p>
+          <ul class="dot">
+            <li>저렴, 전 세계 대부분 검사실에서 가능</li>
+            <li>8시간 공복 필요 — 일중 변동, 검사 전 처리 지연 시 해당분해(glycolysis)로 위양성 저하</li>
+            <li>일상적 선별검사로 편의성 우선 시 선호</li>
+          </ul>
+        </div>
+        <div>
+          <p style="font-weight:600;margin-bottom:4px">2-h PG (75g OGTT)</p>
+          <ul class="dot">
+            <li>FPG·A1C보다 <strong>더 민감</strong> — 더 많은 전당뇨·당뇨 발견</li>
+            <li>당뇨 1차 예방 효과는 주로 IGT 환자에서 입증 (단독 IFG·A1C 기준 전당뇨에서는 불명확)</li>
+            <li>낭성섬유증 관련 당뇨, 이식 후 당뇨 등 특정 상태 선별에 우선 권장</li>
+            <li>검사 3일 전부터 하루 150g 이상 탄수화물 섭취 필요 — 탄수화물 제한 시 위양성 가능</li>
+          </ul>
+        </div>
+      </div>
+      <div class="alert alert-info" style="margin-top:8px"><span>💡</span><span>현재 CGM(연속혈당측정기)을 당뇨·전당뇨 선별 또는 진단에 사용할 충분한 근거는 없다.</span></div>
+    </div>
+  </div>
+
+  <div class="acc">
+    <div class="acc-hdr" onclick="toggleAcc(this)">
+      <span>A1C 사용 시 주의사항 <span class="badge badge-B" style="margin-left:6px">2.2–2.4, B</span></span><span>▾</span>
+    </div>
+    <div class="acc-body">
+      <div class="alert alert-success"><span>✅</span><span><strong>장점:</strong> 공복 불필요, 전분석 안정성 우수, 스트레스·식이·질병에 의한 일중 변동 적음</span></div>
+      <div class="alert alert-danger" style="margin-top:6px"><span>🚫</span><span><strong>A1C 부적합 상황:</strong> 빈혈, 에리스로포이에틴 치료, 혈액투석, HIV 치료 중 — 적혈구 회전율 변화로 부정확</span></div>
+      <ul class="dot" style="margin-top:8px">
+        <li>겸상적혈구 형질 등 일부 혈색소 변이체는 특정 A1C 검사법에 간섭 — ngsp.org/interf.asp 참조</li>
+        <li>X-linked G6PD G202A 변이(미국 흑인 11%) — 동형접합 남성 A1C 약 0.8%↓, 여성 0.7%↓</li>
+        <li>흑인은 비히스패닉 백인·히스패닉 대비 A1C가 약 0.3% 높게 측정되는 경향 — 단, 합병증 위험과의 연관성은 인종간 유사</li>
+        <li>혈당-A1C 간 지속적·실질적 불일치 시 분석 문제 또는 간섭 가능성 평가, 과당화알부민·프룩토사민 등 대안 지표 고려</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="acc">
+    <div class="acc-hdr" onclick="toggleAcc(this)">
+      <span>확진(Confirming the Diagnosis) 방법</span><span>▾</span>
+    </div>
+    <div class="acc-body">
+      <ul class="dot">
+        <li>동시 시행 2개 검사 이상이 모두 양성 → 진단 확정 (예: A1C + FPG 동시 이상)</li>
+        <li>같은 검사를 다른 시점에 재검 → 둘 다 이상이면 확정 (예: A1C 7.0% → 재검 6.8%)</li>
+        <li>두 검사 결과가 불일치하면 진단 기준을 초과한 검사를 재시행, 측정에 영향 줄 요인 함께 평가</li>
+        <li>한 검사(예: A1C 2회 ≥6.5%)만 기준 충족해도 다른 검사(FPG)가 정상이면 <strong>당뇨로 간주</strong></li>
+        <li>진단 임계값에 근접한 결과는 고혈당 증상 교육 후 3–6개월 내 재검 권고</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>📊 표 2.3 — 혈당 vs A1C 검사 특성 비교</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <table class="tc-table">
+        <tr><th>항목</th><th>혈당(Glucose)</th><th>A1C</th></tr>
+        <tr><td>비용</td><td>저렴, 전 세계 가능</td><td>고가, 일부 지역 접근성 제한</td></tr>
+        <tr><td>반영 기간</td><td>급성(현재 시점)</td><td>만성 — 지난 약 2–3개월</td></tr>
+        <tr><td>전분석 안정성</td><td>불량 — 즉시 분리 또는 냉장 필요</td><td>양호</td></tr>
+        <tr><td>검체</td><td>혈장/혈청/전혈, 모세혈관/정맥/동맥별 차이</td><td>전혈 필요</td></tr>
+        <tr><td>표준화</td><td>표준화 안 됨</td><td>잘 표준화됨</td></tr>
+        <tr><td>공복</td><td>공복 또는 정해진 시간 필요</td><td>공복 불필요</td></tr>
+        <tr><td>개인 내 변이</td><td>높음</td><td>낮음</td></tr>
+        <tr><td>급성 영향 요인</td><td>식이, 스트레스, 질병, 활동</td><td>영향 없음</td></tr>
+        <tr><td>기타 영향 요인</td><td>일중변동, 약물, 알코올, 흡연, 빌리루빈</td><td>적혈구 회전율 변화(빈혈, 철분상태, 비장절제, 출혈, 수혈, 용혈, G6PD결핍), HIV, 간경화, 신부전, 투석, 임신</td></tr>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ T1D ═══ -->
+<div id="tab-t1d" class="panel">
+  <div class="alert alert-orange"><span>🧬</span><span>자가면역 1형당뇨는 전체 당뇨병의 5–10%. 췌도 자가항체 지속 양성은 임상적 당뇨 발생의 거의 확실한 예측인자다.</span></div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>📊 표 2.4 — 1형당뇨 병기 분류 (Staging)</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <table class="tc-table">
+        <tr><th></th><th>Stage 1</th><th>Stage 2</th><th>Stage 3</th></tr>
+        <tr><td><strong>특징</strong></td><td>자가면역 / 정상혈당 / 무증상</td><td>자가면역 / 이상혈당(dysglycemia) / 무증상</td><td>자가면역 / 명백한 고혈당 / 유증상</td></tr>
+        <tr><td><strong>진단 기준</strong></td><td>다중 췌도 자가항체, IGT/IFG 없음, A1C 정상</td><td>췌도 자가항체(대개 다중) + 이상혈당<br>(IFG 100–125, IGT 140–199, A1C 5.7–6.4% 또는 ≥10% 상승)</td><td>자가항체 음전 가능, 표준 기준으로 당뇨 확정</td></tr>
+        <tr><td><strong>5년 진행 위험</strong></td><td>~44% (전체), 항체 수·age 등에 따라 다양</td><td>2년 내 ~60%, 5년 내 ~75%</td><td>—</td></tr>
+      </table>
+      <div class="alert alert-info" style="margin-top:8px"><span>💡</span><span>Stage 2에서 30/60/90분 OGTT 혈당 ≥200 mg/dL 및 확인검사를 18세 이상에서 대체 진단기준으로 사용한 임상연구도 있음.</span></div>
+    </div>
+  </div>
+
+  <div class="acc">
+    <div class="acc-hdr" onclick="toggleAcc(this)">
+      <span>2.6–2.10 — 무증상 1형당뇨 선별검사 <span class="badge badge-B" style="margin-left:6px">B</span></span><span>▾</span>
+    </div>
+    <div class="acc-body">
+      <ul class="dot">
+        <li><strong>2.6</strong> 췌도 자가항체(IA, GAD, IA-2, ZnT8)로 무증상 전단계(presymptomatic) 1형당뇨 선별</li>
+        <li><strong>2.7</strong> 1형당뇨 가족력 또는 유전적 고위험군에게 자가항체 선별 제공</li>
+        <li><strong>2.8a</strong> 1개 이상 항체 양성 → A1C·요검사·혈당으로 Stage 3(명백한 당뇨) 평가, 신속한 임상관리</li>
+        <li><strong>2.8b</strong> 다중 항체 양성 + 명백한 당뇨 미발생 → 전문센터 의뢰(병기 평가, 교육, 예방시험·승인 치료 고려 — 예: teplizumab)</li>
+        <li><strong>2.9</strong> 단독 IA-2 항체 양성은 다중 항체와 동등한 진행 위험 — 동일 빈도로 모니터링</li>
+        <li><strong>2.10</strong> 1형당뇨와 표현형이 겹치는 성인(젊은 연령, 의도하지 않은 체중감소, 케토산증, 빠른 인슐린 전환)은 표준화된 자가항체 검사 권장</li>
+      </ul>
+      <div class="alert alert-warn" style="margin-top:8px"><span>⚠️</span><span>단일 항체 양성자의 최대 50%는 추적 중 음전될 수 있음 — 첫 양성은 3개월 내 2차 검사로 확인 권장(IASP 기준 검사실 우선)</span></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span>📅 자가항체 재검 주기 (연령별)</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body collapsed">
+      <table class="tc-table">
+        <tr><th>연령군</th><th>재검 주기</th></tr>
+        <tr><td>3세 이하 소아</td><td>6개월마다 3년간 → 이후 3년간 매년</td></tr>
+        <tr><td>3–18세 소아·청소년</td><td>매년, 3년간 다중항체·이상혈당 진행 없으면 중단 고려</td></tr>
+        <tr><td>성인</td><td>3년마다, 단 다른 자가면역질환·고유전위험·1촌 가족력 있으면 매년</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="acc">
+    <div class="acc-hdr" onclick="toggleAcc(this)">
+      <span>면역관문억제제(ICI) 유발 자가면역 당뇨</span><span>▾</span>
+    </div>
+    <div class="acc-body">
+      <ul class="dot">
+        <li>발생률: ICI 치료자의 <strong>0.6–1.4%</strong>, PD-1/PD-L1 차단제(±CTLA-4 병용)에서 더 빈번</li>
+        <li>전격성(fulminant) 발병 — DKA 동반, C-peptide 매우 낮음/측정불가</li>
+        <li>절반 미만에서만 췌도 자가항체 양성, 부분 관해기(partial remission) 드묾 — 전형적 1형당뇨와 병태생리 다소 차이</li>
+        <li>고위험 HLA 일배체형에서 다수 발생하나 중립·보호 일배체형에서도 발생 가능 — 가족력·자가항체로 위험 예측 불가</li>
+        <li>거의 예외 없이 영구적 인슐린 치료 필요</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <div class="card-header" onclick="toggleCard(this)">
+        <span>🦠 1형당뇨 관련 자가면역·환경 요인</span><span class="toggle">▾</span>
+      </div>
+      <div class="card-body collapsed">
+        <ul class="dot">
+          <li>동반 자가면역질환: 하시모토 갑상선염, 그레이브스병, 셀리악병, 애디슨병, 백반증, 자가면역 간염, 중증근무력증, 악성빈혈</li>
+          <li>단일유전자 다발내분비자가면역증후군: IPEX 증후군(FOXP3 변이), AIRE 유전자 변이</li>
+          <li>관련 바이러스: 엔테로바이러스(콕사키바이러스 B 등)</li>
+          <li>SARS-CoV-2와의 연관성 — 코호트마다 결과 혼재, 일부는 의료접근성·진단지연이 주원인일 가능성</li>
+        </ul>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header" onclick="toggleCard(this)">
+        <span>🔍 특발성 1형당뇨 및 LADA</span><span class="toggle">▾</span>
+      </div>
+      <div class="card-body collapsed">
+        <ul class="dot">
+          <li><strong>특발성 1형당뇨:</strong> 영구적 인슐린 결핍, 케토산증 경향 있으나 자가면역 증거 없음 — 소수에 불과</li>
+          <li><strong>LADA</strong>(성인 잠재형 자가면역당뇨): 본 가이드라인은 발병 연령 무관하게 자가면역 매개 β세포 파괴를 모두 1형당뇨로 통합 분류</li>
+          <li>비검증 자가항체 검사 의존 시 2형당뇨 오분류 위험 — 고특이도 검사 + 자가면역 시사 임상특징 환자로 제한 권장</li>
+          <li>단독 GAD65 항체 양성은 IA-2·ZnT8A 양성보다 Stage 3 진행이 느림</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span>🌍 일반 인구 선별 프로그램</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body collapsed">
+      <ul class="dot">
+        <li>유럽: Fr1da, gppad.org / 호주: type1screen.org / 미국: trialnet.org, askhealth.org, cascadekids.org</li>
+        <li>이탈리아는 2023년부터 1–17세 일반인구 대상 1형당뇨·셀리악병 전국 선별 도입</li>
+        <li>유전적 위험점수 활용 신생아 선별 — 한 시뮬레이션에서 일반인구의 10%만 검사해도 향후 1형당뇨 발생자의 77% 이상 식별 가능</li>
+        <li>비유럽계 인구에서의 판별력 검증을 위한 대규모 사례-대조 코호트 추가 필요</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ T2D ═══ -->
+<div id="tab-t2d" class="panel">
+  <div class="alert alert-orange"><span>🍽️</span><span>2형당뇨는 전체 당뇨병의 90–95%. 인슐린저항성을 동반한 상대적(절대적이 아닌) 인슐린 결핍이 특징이다.</span></div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>📊 표 2.5 — 무증상 성인 당뇨·전당뇨 선별 기준</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <ol class="num">
+        <li>과체중·비만(BMI ≥25, 아시아계는 ≥23) + 아래 위험인자 1개 이상:
+          <ul class="dot" style="margin-top:4px">
+            <li>1촌 당뇨 가족력</li>
+            <li>고위험 인종·민족(아프리카계·라티노·아메리카원주민·아시아계 미국인)</li>
+            <li>심혈관질환 병력</li>
+            <li>고혈압(≥130/80 또는 치료 중)</li>
+            <li>HDL &lt;35 mg/dL 또는 중성지방 &gt;250 mg/dL</li>
+            <li>다낭성난소증후군</li>
+            <li>신체활동 부족</li>
+            <li>인슐린저항성 관련 상태(고도비만, 흑색가시세포증, MASLD)</li>
+          </ul>
+        </li>
+        <li>전당뇨(A1C ≥5.7%, IGT, IFG) 환자는 <strong>매년</strong> 재검</li>
+        <li>GDM 병력자는 최소 1–3년마다 검사</li>
+        <li>그 외 모든 사람은 <strong>35세부터</strong> 검사 시작</li>
+        <li>정상이면 최소 3년 간격 재검(초기 결과·위험도에 따라 더 자주 고려)</li>
+        <li>기타 고위험군(HIV, 고위험 약물 노출, 치주질환, 췌장염 병력)도 면밀히 모니터링</li>
+      </ol>
+    </div>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <div class="card-header" onclick="toggleCard(this)">
+        <span>💊 약물 관련 선별 — 2.16a/b</span><span class="toggle">▾</span>
+      </div>
+      <div class="card-body collapsed">
+        <table class="tc-table">
+          <tr><th>약물</th><th>선별 권고</th></tr>
+          <tr><td>스타틴, 티아지드 이뇨제, 일부 HIV 약제</td><td>당뇨·전당뇨 선별 고려 <span class="badge badge-C">C</span></td></tr>
+          <tr><td>2세대 항정신병약</td><td>기저시 선별, 시작 12–16주 후 재검, 이후 매년 <span class="badge badge-B">B</span></td></tr>
+          <tr><td>글루코코르티코이드</td><td>식후 또는 무작위 혈당 모니터링(공복혈당 아님) <span class="badge badge-B">B</span></td></tr>
+        </table>
+        <div class="alert alert-warn" style="margin-top:8px"><span>⚠️</span><span>글루코코르티코이드 유발 고혈당은 인슐린저항성 기전 — 공복혈당 단독 의존 시 <strong>과소진단</strong> 위험. 식후 1–2시간 또는 무작위 혈당 권장. 고용량(프레드니솔론 ≥5mg 상당)에서 발생률 18–32%.</span></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header" onclick="toggleCard(this)">
+        <span>🧪 HIV 환자 선별 — 2.17</span><span class="toggle">▾</span>
+      </div>
+      <div class="card-body collapsed">
+        <ul class="dot">
+          <li>항레트로바이러스 치료(ART) 시작 전, 약제 변경 시, 시작/변경 3–6개월 후 FPG 검사</li>
+          <li>초기 정상이면 매년 FPG 재검</li>
+          <li><strong>A1C는 HIV에서 혈당을 과소평가</strong> — 혈장포도당 기준이 우선</li>
+          <li>단백분해효소억제제(PI) 사용자 중 신규 당뇨 &gt;5%, 전당뇨 &gt;15%</li>
+          <li>NRTI는 지방 재분배(지방과다증식·위축) 유발 → 인슐린저항성 연관</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span>📊 표 2.6 — 소아·청소년 위험기반 선별 기준</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body collapsed">
+      <div class="alert alert-info"><span>💡</span><span>사춘기 시작 또는 10세 중 더 빠른 시점부터 선별 고려</span></div>
+      <p style="margin-top:6px;font-size: calc(12px * var(--fscale, 1))">과체중(≥85백분위수) <span class="badge badge-A">A</span> 또는 비만(≥95백분위수) <span class="badge badge-A">A</span> + 아래 위험인자 1개 이상:</p>
+      <ul class="dot" style="margin-top:6px">
+        <li>모체 임신 중 당뇨 또는 GDM 병력 <span class="badge badge-A">A</span></li>
+        <li>1·2촌 2형당뇨 가족력 <span class="badge badge-A">A</span></li>
+        <li>고위험 인종·민족 <span class="badge badge-A">A</span></li>
+        <li>인슐린저항성 징후/관련 상태(흑색가시세포증, 고혈압, 이상지질혈증, PCOS, 출생체중 이상) <span class="badge badge-B">B</span></li>
+      </ul>
+      <p style="margin-top:6px;font-size: calc(11px * var(--fscale, 1));color:var(--text2)">정상이면 최소 3년 간격 재검(BMI 증가·위험인자 악화 시 더 자주). 10세 이전 발병 사례도 보고되어 다수 위험인자 동반 시 고려 가능.</p>
+    </div>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <div class="card-header" onclick="toggleCard(this)">
+        <span>⏱️ 검사 간격·전략 고려사항</span><span class="toggle">▾</span>
+      </div>
+      <div class="card-body collapsed">
+        <ul class="dot">
+          <li>3년 간격의 근거: 위양성 확인검사 부담↓ + 위음성도 합병증 발생 전 재검 가능</li>
+          <li>진단 임계값에 근접했던 고위험군은 더 짧은 간격 고려</li>
+          <li>지역사회 선별은 일반적으로 비권장 — 후속 검사·진료 접근성 부족 우려 (단, 의뢰체계 사전 구축 시 고려 가능)</li>
+          <li>치과 진료기관 선별: 30세 이상 환자의 약 30%에서 신규 이상혈당 발견 보고 — 추가 연구 필요</li>
+        </ul>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header" onclick="toggleCard(this)">
+        <span>📈 A1C·혈당 기반 전당뇨 위험 예측력</span><span class="toggle">▾</span>
+      </div>
+      <div class="card-body collapsed">
+        <ul class="dot">
+          <li>A1C 5.5–6.0%: 5년 당뇨 발생률 9–25%</li>
+          <li>A1C 6.0–6.5%: 5년 발생률 25–50%, A1C 5.0% 대비 상대위험 20배</li>
+          <li>흑인·비히스패닉 백인 지역사회 코호트에서 기저 A1C가 공복혈당보다 향후 당뇨·심혈관 사건의 더 강력한 예측인자</li>
+          <li>DPP 연구에서도 기저 A1C가 추후 포도당 기준 당뇨 발생의 강력한 예측인자</li>
+        </ul>
+        <div class="alert alert-danger" style="margin-top:8px"><span>🚫</span><span>A1C &gt;6.0% 또는 IFG+IGT 동반 — <strong>매우 고위험군</strong>으로 적극적 중재·면밀한 추적 필요</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="alert alert-teal"><span>💡</span><span>DPP/DPPOS 연구: 전당뇨→당뇨 진행 예방이 망막병증·신증 발생률 감소로 이어짐. 전당뇨는 당뇨뿐 아니라 심혈관질환 등 심대사 위험인자이기도 하므로, 발견 시 포괄적 심혈관 위험요인 평가가 동반되어야 한다.</span></div>
+</div>
+
+<!-- ═══ SPECIAL ═══ -->
+<div id="tab-special" class="panel">
+  <div class="alert alert-orange"><span>💉</span><span>항암치료, 췌장 질환, 낭성섬유증, 장기이식 등 특수 상황에서의 당뇨는 별도의 선별·진단 전략이 필요하다.</span></div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>💊 항암제 유발 당뇨 — 2.19–2.22</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <table class="tc-table">
+        <tr><th>약물군</th><th>대표 약제</th><th>모니터링</th><th>등급</th></tr>
+        <tr><td>면역관문억제제(ICI)</td><td>nivolumab, pembrolizumab, avelumab</td><td>치료 전·매 방문시·증상 시 공복/무작위 혈당</td><td><span class="badge badge-E">E</span></td></tr>
+        <tr><td>PI3Kα 억제제</td><td>alpelisib, inavolisib</td><td>치료 전 혈당+A1C, 첫 2주 매주 무작위 혈당, 이후 4주마다, A1C 3개월마다 고려</td><td><span class="badge badge-C">C</span></td></tr>
+        <tr><td>mTOR 억제제</td><td>everolimus</td><td>치료 전·매 방문시 혈당, A1C 3개월마다 고려</td><td><span class="badge badge-C">C</span></td></tr>
+      </table>
+      <div class="grid2" style="margin-top:8px">
+        <div class="alert alert-warn"><span>⚠️</span><span><strong>PI3Kα 억제제:</strong> 3·4등급 고혈당 최대 36% — 약물 중단의 가장 흔한 원인. 중앙 발생 시점 13일(최대 ~1년까지 가능).</span></div>
+        <div class="alert alert-info"><span>ℹ️</span><span><strong>mTOR 억제제:</strong> 전체 고혈당 발생률 최대 27%(everolimus 메타분석), 3·4등급 2.5%. 발생 시점은 수주~수년으로 다양.</span></div>
+      </div>
+      <div class="alert alert-danger" style="margin-top:8px"><span>🚫</span><span>ICI 유발 자가면역 당뇨는 치료 시작 2–3개월 내 발생 빈도가 가장 높으나 <strong>치료 중단 후에도</strong> 발생 가능. 흔히 DKA로 발현하며 평생 인슐린 치료가 필요하다.</span></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span>🫀 췌장성 당뇨 (Type 3c / Pancreatogenic) — 2.23</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body collapsed">
+      <div class="alert alert-warn"><span>⚠️</span><span>구조적·기능적 인슐린 분비 손실이 외분비 췌장기능부전과 동반 — <strong>2형당뇨로 흔히 오진</strong>됨</span></div>
+      <ul class="dot" style="margin-top:8px">
+        <li>원인: 췌장염(급성·만성), 외상·췌장절제술, 종양, 혈색소증, 섬유석회화 췌장병증, 낭성섬유증, 특발성</li>
+        <li>감별점: 동반 외분비기능부전(분변 elastase 측정으로 선별), 췌장 영상 이상, 1형당뇨 자가면역 표지자 부재</li>
+        <li><strong>권고 2.23</strong> 급성 췌장염 후 3–6개월 내 및 매년 당뇨 선별 <span class="badge badge-E">E</span>; 만성 췌장염은 매년 선별</li>
+        <li>인크레틴 기반 치료제(GLP-1 RA 등)는 췌장염 위험 우려로 회피, 조기 인슐린 치료 고려</li>
+        <li>췌장절제술 후 의학적 난치성 만성췌장염에서 췌도 자가이식술로 내인성 섬 기능 보존 고려 가능(전문센터)</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span>🫁 낭성섬유증 관련 당뇨 (CFRD) — 2.24–2.25</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body collapsed">
+      <div class="stat-row">
+        <div class="stat-box"><div class="stat-val">~20%</div><div class="stat-lbl">청소년 CFRD 유병률</div></div>
+        <div class="stat-box"><div class="stat-val">~50%</div><div class="stat-lbl">성인 CFRD 유병률</div></div>
+        <div class="stat-box"><div class="stat-val">30–40%</div><div class="stat-lbl">실제 매년 OGTT 시행률 (저조)</div></div>
+      </div>
+      <table class="tc-table">
+        <tr><th>권고</th><th>내용</th><th>등급</th></tr>
+        <tr><td>2.24a</td><td>10세부터 매년 선별, OGTT 우선</td><td><span class="badge badge-B">B</span></td></tr>
+        <tr><td>2.24b</td><td>OGTT 불가 시 A1C 2단계 전략: A1C 5.5–6.4% → 3개월 내 OGTT 시행. A1C ≥6.5%면 CFRD 진단에 합당</td><td><span class="badge badge-C">C</span> / <span class="badge badge-B">B</span></td></tr>
+        <tr><td>2.25</td><td>CFRD 진단 5년 후부터 매년 합병증 모니터링</td><td><span class="badge badge-E">E</span></td></tr>
+      </table>
+      <div class="alert alert-info" style="margin-top:8px"><span>💡</span><span>A1C 5.5%/5.8% 임계값은 OGTT 대비 민감도 91%/95%. A1C 5.5%의 음성예측도는 약 98% — 불필요한 OGTT를 줄이는 1차 선별도구로 효과적.</span></div>
+      <ul class="dot" style="margin-top:6px">
+        <li>연령 무관하게 체중감소 또는 예상 체중증가 실패 시 선별 시행</li>
+        <li>CGM이 OGTT보다 초기 이상혈당 포착에 더 민감할 수 있으나, 검증된 진단 임계값 부재로 연구 목적 외 선별도구로 권고하지 않음</li>
+        <li>CFTR 조절제 치료 시대에도 현재까지 CFRD 선별전략 변경의 근거 불충분</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span>🔄 이식 후 당뇨 (PTDM) — 2.26–2.28</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body collapsed">
+      <ul class="dot">
+        <li>신장 이식 수혜자의 <strong>~90%</strong>가 이식 후 초기 수주 내 고혈당 — 대부분 퇴원 시점까지 호전(스트레스·글루코코르티코이드 관련)</li>
+        <li><strong>2.26</strong> 면역억제 유지요법으로 안정화(보통 3개월) 후, 급성 감염 없는 상태에서 공식 진단 <span class="badge badge-B">B</span></li>
+        <li><strong>2.27</strong> OGTT가 PTDM 진단의 선호 검사(이식 3개월부터 가능) <span class="badge badge-B">B</span></li>
+        <li><strong>2.28</strong> 면역억제 요법은 PTDM 위험과 무관하게 이식·생존에 가장 좋은 결과를 보이는 방식 선택 <span class="badge badge-E">E</span></li>
+        <li>위험인자: 일반 당뇨 위험인자(연령, 가족력, 비만) + 이식 특이적 요인(면역억제제 종류)</li>
+        <li>PTDM·이식 후 고혈당은 거부반응·감염·재입원 위험 증가와 연관</li>
+        <li>병원 내 고혈당 관리는 인슐린이 1차 선택, 퇴원 후 장기관리는 비인슐린제제도 고려(면역억제제 상호작용·심·신장 이익 고려)</li>
+      </ul>
+    </div>
+  </div>
+</div>
+<!-- ═══ MONOGENIC ═══ -->
+<div id="tab-monogenic" class="panel">
+  <div class="alert alert-orange"><span>🧪</span><span>단일유전자 당뇨는 전체 당뇨병의 5% 미만이나, 정확한 진단이 치료 선택과 가족 상담에 결정적이다.</span></div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>🔎 의심해야 할 임상 상황 — 2.29a–c</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="dot">
+        <li>생후 6개월 이내 발병 → <strong>현재 연령과 무관하게</strong> 신생아당뇨 유전자 검사 <span class="badge badge-A">A</span></li>
+        <li>1형·2형의 전형적 특징이 없고 연속 세대에 걸친 당뇨 가족력(상염색체 우성 양상 시사) → MODY 유전자 검사 <span class="badge badge-A">A</span></li>
+        <li>두 경우 모두 당뇨 유전학 전문센터 상담 권장(변이 의미·후속 평가·치료·유전상담) <span class="badge badge-E">E</span></li>
+        <li>1형당뇨 자가항체 양성은 보통 단일유전자 검사를 배제하나, 단일유전자 당뇨에서도 자가항체 양성 보고 사례 있음</li>
+        <li>안정적 경증 공복고혈당(100–150 mg/dL), 안정적 A1C 5.6–7.6%(특히 비만 없을 때)도 단일유전자 당뇨 시사</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <div class="card-header" onclick="toggleCard(this)">
+        <span>👶 신생아당뇨 (Neonatal Diabetes)</span><span class="toggle">▾</span>
+      </div>
+      <div class="card-body collapsed">
+        <ul class="dot">
+          <li>생후 6개월 미만 발병의 <strong>80–85%</strong>가 단일유전자 원인 — 자가면역 1형당뇨는 6개월 이전 드묾</li>
+          <li><strong>일시적(transient):</strong> 6q24 유전자(PLAGL1, HYMA1) 과발현 — 약 절반에서 재발, 인슐린 외 약제로 치료 가능</li>
+          <li><strong>영구적(permanent):</strong> KCNJ11(Kir6.2)·ABCC8(SUR1) 상염색체 우성 변이가 가장 흔한 원인</li>
+          <li>KATP 채널 관련 신생아당뇨의 <strong>30–50%</strong>는 고용량 설포닐유레아 경구치료로 인슐린보다 우수한 혈당조절 가능 → 정확한 진단의 임상적 의미가 큼</li>
+          <li>인슐린 유전자(INS) 변이는 두 번째로 흔한 영구 신생아당뇨 원인 — 인슐린 치료가 선호 전략</li>
+        </ul>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header" onclick="toggleCard(this)">
+        <span>🧬 MODY (Maturity-Onset Diabetes of the Young)</span><span class="toggle">▾</span>
+      </div>
+      <div class="card-body collapsed">
+        <ul class="dot">
+          <li>전형적으로 25세 이전 발병(더 늦게 진단되는 경우도 있음)</li>
+          <li>인슐린 분비 장애가 핵심, 인슐린 작용 결함은 최소~없음(동반 비만 없을 때)</li>
+          <li>상염색체 우성 유전, 14개 이상 유전자에서 변이 확인됨</li>
+          <li>가장 흔한 3형태: <strong>GCK-MODY(MODY2)</strong>, <strong>HNF1A-MODY(MODY3)</strong>, <strong>HNF4A-MODY(MODY1)</strong></li>
+          <li>치료적 함의: GCK-MODY는 비임신 시 치료 불필요, HNF1A/HNF4A-MODY는 설포닐유레아가 1차 치료</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>📊 표 2.7 — 단일유전자 당뇨 주요 원인 정리</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <table class="tc-table">
+        <tr><th>유전자</th><th>유전</th><th>임상 특징</th></tr>
+        <tr><td><strong>HNF1A</strong><br><span style="color:var(--text2);font-size:90%">MODY3</span></td><td>AD</td><td>청소년기·초기성인기 진행성 인슐린분비 결함; 신장 포도당 배출 임계값↓; OGTT 2시간 혈당 큰 상승(&gt;90mg/dL); 낮은 hs-CRP; 설포닐유레아 반응성 우수</td></tr>
+        <tr><td><strong>GCK</strong><br><span style="color:var(--text2);font-size:90%">MODY2</span></td><td>AD</td><td>포도당 자극 인슐린분비의 set point 상승 → 안정적·비진행성 공복혈당 상승; 비임신 시 치료 불필요; 미세혈관 합병증 희귀; OGTT 2시간 상승 작음(&lt;54mg/dL)</td></tr>
+        <tr><td><strong>HNF4A</strong><br><span style="color:var(--text2);font-size:90%">MODY1</span></td><td>AD</td><td>청소년기·초기성인기 진행성 결함; 거대아 출생 + 일시적 신생아 저혈당 동반 가능; 설포닐유레아 반응성</td></tr>
+        <tr><td><strong>HNF1B</strong></td><td>AD</td><td>발달성 신장질환(낭성), 비뇨생식기 이상, 췌장 위축, 고요산혈증, 통풍</td></tr>
+        <tr><td><strong>KCNJ11</strong></td><td>AD</td><td>IUGR, 발달지연·발작 가능, 설포닐유레아 반응성(신생아당뇨)</td></tr>
+        <tr><td><strong>ABCC8</strong></td><td>AD</td><td>IUGR, 발달지연 드묾, 설포닐유레아 반응성(신생아당뇨)</td></tr>
+        <tr><td><strong>INS</strong></td><td>AD</td><td>IUGR, 인슐린 치료 필요(신생아당뇨)</td></tr>
+        <tr><td><strong>FOXP3</strong></td><td>X-linked</td><td>IPEX 증후군: 자가면역 당뇨, 자가면역 갑상선질환, 박탈성 피부염, 인슐린 치료 필요</td></tr>
+        <tr><td><strong>6q24</strong><br>(PLAGL1, HYMA1)</td><td>부계 중복(AD)</td><td>IUGR, 대설증, 제대탈장; 일시적, 인슐린 외 약물치료 가능</td></tr>
+      </table>
+      <p style="font-size: calc(10.5px * var(--fscale, 1));color:var(--text2);margin-top:6px">AD, 상염색체 우성; IUGR, 자궁 내 성장지연. 출처: Carmody et al. — Genetic Diagnosis of Endocrine Disorders</p>
+    </div>
+  </div>
+
+  <div class="alert alert-warn"><span>⚠️</span><span>단일유전자 당뇨를 1형 또는 2형으로 오진하면 <strong>최적화되지 않거나 해로울 수 있는 치료</strong>로 이어지고, 다른 가족 구성원의 진단을 지연시킬 수 있다. 차세대 시퀀싱은 점점 보편화·비용효율화되고 있다.</span></div>
+</div>
+
+<!-- ═══ GDM ═══ -->
+<div id="tab-gdm" class="panel">
+  <div class="alert alert-orange"><span>🤰</span><span>임신성 당뇨(GDM) 진단은 임신 전·15주 이전·24–28주의 단계별 선별로 이루어지며, 두 가지 진단 전략(1-step/2-step)이 공존한다.</span></div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>📋 임신 중 당뇨 선별 타임라인</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <div class="flow-box" style="border-left:3px solid var(--accent2)">
+        <strong>임신 계획 시 — 2.30</strong><br>
+        <span style="font-size: calc(11.5px * var(--fscale, 1))">위험인자(표 2.5) 보유자 선별 <span class="badge badge-B">B</span>, 모든 가임기 여성의 미진단 전당뇨·당뇨 검사 고려 <span class="badge badge-E">E</span></span>
+      </div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-box" style="border-left:3px solid var(--yellow)">
+        <strong>15주 이전 — 2.31a/b</strong><br>
+        <span style="font-size: calc(11.5px * var(--fscale, 1))">미선별 시 위험군 표준기준으로 미진단 당뇨 검사 <span class="badge badge-B">B</span>; 이상혈당 범위(A1C 5.9–6.4% 또는 FPG 110–125)는 후기 GDM·불량한 임신결과 고위험군 식별 <span class="badge badge-B">B</span></span>
+      </div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-box" style="border-left:3px solid var(--orange)">
+        <strong>24–28주 — 2.32</strong><br>
+        <span style="font-size: calc(11.5px * var(--fscale, 1))">조기 선별에서 당뇨·고위험 이상혈당이 없던 모든 임신부에서 GDM 선별 <span class="badge badge-A">A</span></span>
+      </div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-box" style="border-left:3px solid var(--green)">
+        <strong>산후 4–12주 — 2.33</strong><br>
+        <span style="font-size: calc(11.5px * var(--fscale, 1))">75g OGTT + 비임신 진단기준으로 전당뇨·당뇨 선별 <span class="badge badge-B">B</span></span>
+      </div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-box" style="border-left:3px solid var(--teal)">
+        <strong>평생 — 2.34</strong><br>
+        <span style="font-size: calc(11.5px * var(--fscale, 1))">GDM 병력자는 1–3년마다 평생 전당뇨·당뇨 재선별 <span class="badge badge-B">B</span></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>📊 표 2.8 — GDM 선별·진단: 1-step vs 2-step</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <div class="grid2">
+        <div>
+          <p style="font-weight:700;color:var(--accent2);margin-bottom:6px">① 1-Step 전략 (IADPSG 기준)</p>
+          <p style="font-size: calc(11.5px * var(--fscale, 1));margin-bottom:6px">임신 24–28주, <strong>75g OGTT</strong> (공복+1h+2h), 8시간 이상 공복 후 아침 시행. 다음 중 <strong>1개 이상</strong> 충족 시 GDM 진단:</p>
+          <table class="tc-table">
+            <tr><th>시점</th><th>기준</th></tr>
+            <tr><td>공복</td><td>92 mg/dL (5.1 mmol/L)</td></tr>
+            <tr><td>1시간</td><td>180 mg/dL (10.0 mmol/L)</td></tr>
+            <tr><td>2시간</td><td>153 mg/dL (8.5 mmol/L)</td></tr>
+          </table>
+        </div>
+        <div>
+          <p style="font-weight:700;color:var(--orange);margin-bottom:6px">② 2-Step 전략 (Carpenter-Coustan)</p>
+          <p style="font-size: calc(11.5px * var(--fscale, 1));margin-bottom:6px"><strong>1단계:</strong> 50g 비공복 GLT, 1시간 측정. 130/135/140 mg/dL 이상(택1 사용)이면 2단계 진행.<br><strong>2단계:</strong> 100g OGTT(공복). 다음 4개 중 <strong>2개 이상</strong> 충족 시 GDM 진단:</p>
+          <table class="tc-table">
+            <tr><th>시점</th><th>기준</th></tr>
+            <tr><td>공복</td><td>95 mg/dL (5.3 mmol/L)</td></tr>
+            <tr><td>1시간</td><td>180 mg/dL (10.0 mmol/L)</td></tr>
+            <tr><td>2시간</td><td>155 mg/dL (8.6 mmol/L)</td></tr>
+            <tr><td>3시간</td><td>140 mg/dL (7.8 mmol/L)</td></tr>
+          </table>
+        </div>
+      </div>
+      <div class="alert alert-info" style="margin-top:8px"><span>💡</span><span>ACOG는 2-step 접근을 지지하지만 진단에 1개 이상치(2개 대신)도 사용 가능함을 명시. 2-step 사용 시 Carpenter-Coustan의 더 낮은 임계값 사용이 유리할 것으로 보임.</span></div>
+    </div>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <div class="card-header" onclick="toggleCard(this)">
+        <span>⚖️ 두 전략 비교</span><span class="toggle">▾</span>
+      </div>
+      <div class="card-body collapsed">
+        <table class="tc-table">
+          <tr><th></th><th>1-Step</th><th>2-Step</th></tr>
+          <tr><td>GDM 진단율</td><td>높음 (11.5%, 15–20% 추정)</td><td>낮음 (4.9–6%)</td></tr>
+          <tr><td>근거 기반</td><td>HAPO 연구의 임신 결과(odds 1.75배 지점) 기반</td><td>O'Sullivan-Mahan의 산모 추후 당뇨 예측 기반</td></tr>
+          <tr><td>RCT 직접 비교</td><td>출산 합병증 차이 없음(Hillier 2021, ScreenR2 trial)</td><td>—</td></tr>
+          <tr><td>비용효율성</td><td>더 많은 사례 발견, 비용효율적 가능성 더 높음(체계적 고찰)</td><td>의료자원 이용 적음</td></tr>
+          <tr><td>공복 필요</td><td>필요</td><td>1단계는 불필요(더 시행 용이)</td></tr>
+          <tr><td>국제 채택</td><td>국제적으로 선호 접근법으로 채택</td><td>미국 내 ACOG 지지</td></tr>
+        </table>
+        <div class="alert alert-warn" style="margin-top:8px"><span>⚠️</span><span>2013년 NIH 합의위원회는 1-step의 임상시험 근거 부족과 GDM 의료화(과잉진단·의료이용 증가) 우려를 지적, 2-step 유지를 권고했다 — 두 전략 모두 데이터로 뒷받침되며 합의는 아직 이루어지지 않았다.</span></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header" onclick="toggleCard(this)">
+        <span>👶 HAPO 연구 핵심 결과</span><span class="toggle">▾</span>
+      </div>
+      <div class="card-body collapsed">
+        <ul class="dot">
+          <li>23,000명 이상 다국가 코호트 — 임신 24–28주 모체 혈당이 정상으로 간주되던 범위 내에서도 모체·태아·신생아 이상결과 위험이 <strong>연속적으로 증가</strong></li>
+          <li>대부분의 합병증에 명확한 위험 임계값(threshold) 없음</li>
+          <li>HAPO 추적연구: GDM 산모 자녀는 10–14세에 IGT 비율↑, 인슐린감수성↓ — 모체 혈당과 자녀 대사결과는 연속적 연관성</li>
+          <li>신생아 비만도·제대혈 C-peptide(태아 고인슐린혈증)가 소아기 체지방의 매개인자로 확인</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="acc">
+    <div class="acc-hdr" onclick="toggleAcc(this)">
+      <span>GDM 정의와 미진단 당뇨 — 용어의 변화</span><span>▾</span>
+    </div>
+    <div class="acc-body">
+      <ul class="dot">
+        <li>전통적 정의: 임신 중 처음 발견된 모든 정도의 포도당 불내성 → 단순함이 장점이나 한계도 있음</li>
+        <li>비만·2형당뇨 증가로 가임기 여성의 <strong>미진단 2형당뇨</strong>가 GDM으로 분류되는 경우 증가 — 인종·민족 간 격차도 동반</li>
+        <li>15주 이전 발견된 당뇨는 "임신 합병 당뇨"(대개 2형, 드물게 1형·단일유전자)로 분류, 비임신 진단기준 적용</li>
+        <li>임신 전 관리는 A1C 감소, 선천성 기형·조산·주산기 사망·출생체중 이상·NICU 입원 위험 감소와 연관</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="alert alert-teal"><span>💡</span><span>GDM은 산모의 잠재적 β세포 기능장애를 반영하며, 산후 포도당불내성·당뇨 발생 위험을 현저히 높인다. 평생 1–3년 간격 재선별로 조기 예방중재·치료가 가능하다.</span></div>
+</div>
+
+<!-- ═══ TABLES ═══ -->
+<div id="tab-tables" class="panel">
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>📁 전체 권고문 표 (Rec 2.1–2.34)</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <table class="tc-table">
+        <tr><th>번호</th><th>권고 내용</th><th>등급</th></tr>
+        <tr><td>2.1a</td><td>A1C 또는 혈장포도당 기준으로 당뇨 진단</td><td><span class="badge badge-B">B</span></td></tr>
+        <tr><td>2.1b</td><td>명백한 고혈당 없으면 확진검사 필수</td><td><span class="badge badge-B">B</span></td></tr>
+        <tr><td>2.2a</td><td>A1C는 NGSP 인증·DCCT 표준화 검사법 사용</td><td><span class="badge badge-B">B</span></td></tr>
+        <tr><td>2.2b</td><td>POC A1C는 FDA 승인 기기 + CLIA 인증 시설로 제한</td><td><span class="badge badge-B">B</span></td></tr>
+        <tr><td>2.3</td><td>혈당-A1C 불일치 지속 시 간섭요인 평가</td><td><span class="badge badge-B">B</span></td></tr>
+        <tr><td>2.4</td><td>혈색소변이·임신·G6PD결핍·HIV 등에서는 혈당 기준 사용</td><td><span class="badge badge-B">B</span></td></tr>
+        <tr><td>2.5</td><td>개인맞춤 관리를 위해 적절한 진단범주로 분류</td><td><span class="badge badge-E">E</span></td></tr>
+        <tr><td>2.6</td><td>췌도 자가항체(IA/GAD/IA-2/ZnT8)로 1형당뇨 선별</td><td><span class="badge badge-B">B</span></td></tr>
+        <tr><td>2.7</td><td>가족력·고유전위험군에 자가항체 선별 제공</td><td><span class="badge badge-B">B</span></td></tr>
+        <tr><td>2.8a</td><td>항체 양성자 Stage 3 평가(A1C·요검사·혈당)</td><td><span class="badge badge-B">B</span></td></tr>
+        <tr><td>2.8b</td><td>다중항체 양성자 전문센터 의뢰</td><td><span class="badge badge-B">B</span></td></tr>
+        <tr><td>2.9</td><td>단독 IA-2 항체도 다중항체와 동일 빈도 모니터링</td><td><span class="badge badge-B">B</span></td></tr>
+        <tr><td>2.10</td><td>표현형 겹치는 성인에 표준화 자가항체 검사</td><td><span class="badge badge-E">E</span></td></tr>
+        <tr><td>2.11</td><td>위험인자·계산기로 전당뇨·2형당뇨 선별</td><td><span class="badge badge-B">B</span></td></tr>
+        <tr><td>2.12a</td><td>과체중·비만+위험인자 1개 이상 시 선별</td><td><span class="badge badge-B">B</span></td></tr>
+        <tr><td>2.12b</td><td>그 외 모두 35세부터 선별</td><td><span class="badge badge-B">B</span></td></tr>
+        <tr><td>2.12c</td><td>정상 시 최소 3년 간격 재검</td><td><span class="badge badge-C">C</span></td></tr>
+        <tr><td>2.13</td><td>FPG·2hPG·A1C 모두 선별에 적합</td><td><span class="badge badge-B">B</span></td></tr>
+        <tr><td>2.14</td><td>OGTT 전 3일간 탄수화물 150g/일 이상 확보</td><td><span class="badge badge-C">C</span></td></tr>
+        <tr><td>2.15</td><td>소아·청소년 위험기반 선별(사춘기/10세부터)</td><td><span class="badge badge-B">B</span></td></tr>
+        <tr><td>2.16a</td><td>스타틴·티아지드·일부 HIV약 사용자 선별 고려</td><td><span class="badge badge-C">C</span></td></tr>
+        <tr><td>2.16b</td><td>2세대 항정신병약 기저·12–16주·매년 선별</td><td><span class="badge badge-B">B</span></td></tr>
+        <tr><td>2.17</td><td>HIV 환자 ART 전후 FPG 선별</td><td><span class="badge badge-E">E</span></td></tr>
+        <tr><td>2.18</td><td>글루코코르티코이드 사용 시 식후/무작위 혈당 모니터</td><td><span class="badge badge-B">B</span></td></tr>
+        <tr><td>2.19</td><td>ICI·PI3Kα·mTOR억제제 시작 전 고혈당 교육</td><td><span class="badge badge-E">E</span></td></tr>
+        <tr><td>2.20</td><td>ICI 치료 시 매 방문 혈당 검사</td><td><span class="badge badge-E">E</span></td></tr>
+        <tr><td>2.21</td><td>PI3Kα억제제 — 치료 전·매주·4주마다 혈당 검사</td><td><span class="badge badge-C">C</span></td></tr>
+        <tr><td>2.22</td><td>mTOR억제제 — 치료 전·매 방문 혈당 검사</td><td><span class="badge badge-C">C</span></td></tr>
+        <tr><td>2.23</td><td>급성 췌장염 후 3–6개월·매년 선별, 만성췌장염 매년</td><td><span class="badge badge-E">E</span></td></tr>
+        <tr><td>2.24a</td><td>CFRD — 10세부터 매년 OGTT 선별</td><td><span class="badge badge-B">B</span></td></tr>
+        <tr><td>2.24b</td><td>OGTT 불가 시 A1C 2단계 전략</td><td><span class="badge badge-C">C</span>/<span class="badge badge-B">B</span></td></tr>
+        <tr><td>2.25</td><td>CFRD 진단 5년 후 매년 합병증 모니터링</td><td><span class="badge badge-E">E</span></td></tr>
+        <tr><td>2.26</td><td>이식 후 안정화 후 PTDM 진단</td><td><span class="badge badge-B">B</span></td></tr>
+        <tr><td>2.27</td><td>OGTT가 PTDM 진단 선호 검사</td><td><span class="badge badge-B">B</span></td></tr>
+        <tr><td>2.28</td><td>이식 결과 최선의 면역억제 요법 선택(PTDM 무관)</td><td><span class="badge badge-E">E</span></td></tr>
+        <tr><td>2.29a</td><td>생후 6개월 이내 발병 시 신생아당뇨 유전자 검사</td><td><span class="badge badge-A">A</span></td></tr>
+        <tr><td>2.29b</td><td>비전형적 + 상염색체우성 가족력 시 MODY 유전자 검사</td><td><span class="badge badge-A">A</span></td></tr>
+        <tr><td>2.29c</td><td>유전학 전문센터 상담 권장</td><td><span class="badge badge-E">E</span></td></tr>
+        <tr><td>2.30</td><td>임신 계획 시 위험군 선별, 전체 검사 고려</td><td><span class="badge badge-B">B</span>/<span class="badge badge-E">E</span></td></tr>
+        <tr><td>2.31a</td><td>15주 이전 위험군 미진단 당뇨 검사</td><td><span class="badge badge-B">B</span></td></tr>
+        <tr><td>2.31b</td><td>15주 이전 이상혈당 범위로 고위험군 식별</td><td><span class="badge badge-B">B</span></td></tr>
+        <tr><td>2.32</td><td>24–28주 GDM 선별</td><td><span class="badge badge-A">A</span></td></tr>
+        <tr><td>2.33</td><td>산후 4–12주 75g OGTT로 전당뇨·당뇨 선별</td><td><span class="badge badge-B">B</span></td></tr>
+        <tr><td>2.34</td><td>GDM 병력자 평생 1–3년마다 재선별</td><td><span class="badge badge-B">B</span></td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span>📊 진단 기준 한눈에 보기 (성인 비임신)</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body collapsed">
+      <table class="tc-table">
+        <tr><th>범주</th><th>A1C</th><th>FPG</th><th>2-h PG (75g OGTT)</th></tr>
+        <tr><td>정상</td><td>&lt;5.7%</td><td>&lt;100 mg/dL</td><td>&lt;140 mg/dL</td></tr>
+        <tr><td>전당뇨</td><td>5.7–6.4%</td><td>100–125 mg/dL</td><td>140–199 mg/dL</td></tr>
+        <tr><td>당뇨</td><td>≥6.5%</td><td>≥126 mg/dL</td><td>≥200 mg/dL</td></tr>
+      </table>
+    </div>
+  </div>
+</div>
+</div><!-- /main -->
+
+<!-- ═══ MODAL: 4종 당뇨병 분류 ═══ -->
+<div id="classModal" class="modal-overlay" onclick="closeModalOutside(event,'classModal')">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal('classModal')">✕</button>
+    <div class="modal-title">📋 당뇨병의 4가지 주요 분류</div>
+
+    <div class="alert alert-info" style="margin:0 0 12px"><span>💡</span><span>당뇨병은 전통적으로 4개 임상 범주로 분류되나, 유전체학·대사체학 등 새로운 특성에 기반해 재고려되고 있다. 1형·2형 모두 이질적(heterogeneous) 질환이며, 진단 시점에 명확히 구분되지 않는 경우도 많다.</span></div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">① 1형당뇨 (Type 1 Diabetes)</div>
+      <table class="modal-table">
+        <tr><th>항목</th><th>내용</th></tr>
+        <tr><td>기전</td><td>자가면역 β세포 파괴 → 대개 절대적 인슐린 결핍 (성인 잠재형 자가면역당뇨[LADA] 포함)</td></tr>
+        <tr><td>비중</td><td>전체 당뇨병의 5–10%</td></tr>
+        <tr><td>특징</td><td>발병 연령 무관(소아·성인 모두), 케토산증 경향, 췌도 자가항체(GAD·IA-2·ZnT8·IA) 양성</td></tr>
+      </table>
+    </div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">② 2형당뇨 (Type 2 Diabetes)</div>
+      <table class="modal-table">
+        <tr><th>항목</th><th>내용</th></tr>
+        <tr><td>기전</td><td>비자가면역성 진행성 β세포 인슐린 분비 저하, 흔히 인슐린저항성을 배경으로 발생</td></tr>
+        <tr><td>비중</td><td>전체 당뇨병의 90–95%</td></tr>
+        <tr><td>특징</td><td>대개 과체중·비만 동반, 점진적 발병(무증상 기간 길음), 가족력·고위험 인종 연관</td></tr>
+      </table>
+    </div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">③ 기타 원인에 의한 특정 당뇨병 유형</div>
+      <table class="modal-table">
+        <tr><th>하위 유형</th><th>예시</th></tr>
+        <tr><td>단일유전자 당뇨</td><td>신생아당뇨, MODY(HNF1A·GCK·HNF4A 등)</td></tr>
+        <tr><td>외분비 췌장 질환</td><td>췌장염(급성·만성), 췌장절제술, 낭성섬유증 관련 당뇨(CFRD), 혈색소증</td></tr>
+        <tr><td>약물·화학물질 유발</td><td>글루코코르티코이드, 면역관문억제제(ICI), PI3Kα억제제, mTOR억제제, 항정신병약 등</td></tr>
+        <tr><td>이식 후 당뇨</td><td>이식 후 당뇨병(PTDM)</td></tr>
+      </table>
+    </div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">④ 임신성 당뇨병 (Gestational Diabetes Mellitus, GDM)</div>
+      <table class="modal-table">
+        <tr><th>항목</th><th>내용</th></tr>
+        <tr><td>정의</td><td>임신 2·3분기에 진단된 당뇨로, 임신 전 명백한 당뇨가 아니었던 경우 (1형당뇨를 포함한 임신 중 발생하는 다른 유형도 포함)</td></tr>
+        <tr><td>진단</td><td>1-step(IADPSG) 또는 2-step(Carpenter-Coustan) 전략으로 24–28주 선별</td></tr>
+        <tr><td>의의</td><td>산모의 잠재적 β세포 기능장애 반영 — 산후 2형당뇨 발생 위험 현저히 증가</td></tr>
+      </table>
+    </div>
+
+    <div class="alert alert-warn" style="margin-top:4px"><span>⚠️</span><span>1형·2형의 전형적 특징이 혼재하는 경우(예: 비만 동반 1형당뇨)도 있으며, 분류가 불명확하면 췌도 자가항체·C-peptide·유전자 검사로 추가 평가가 필요하다.</span></div>
+  </div>
+</div>
+
+<!-- ═══ MODAL: 3대 진단 기준 ═══ -->
+<div id="diagCriteriaModal" class="modal-overlay" onclick="closeModalOutside(event,'diagCriteriaModal')">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal('diagCriteriaModal')">✕</button>
+    <div class="modal-title">🔬 당뇨병 진단의 3대 기준 (+무작위 혈당)</div>
+
+    <div class="alert alert-info" style="margin:0 0 12px"><span>💡</span><span>A1C, FPG, 75g OGTT 2시간 혈당 중 <strong>어느 것이든 1개</strong>로 진단 가능하다. 명백한 고혈당(증상 또는 고혈당 위기)이 없으면 반드시 확진검사가 필요하다.</span></div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">① A1C (당화혈색소)</div>
+      <table class="modal-table">
+        <tr><th>항목</th><th>내용</th></tr>
+        <tr><td>진단 기준</td><td>≥6.5% (≥48 mmol/mol)</td></tr>
+        <tr><td>검사 요건</td><td>NGSP 인증, DCCT 표준화 검사법 사용</td></tr>
+        <tr><td>장점</td><td>공복 불필요, 전분석 안정성 우수, 일중·스트레스·질병에 의한 변동 적음, 만성(2–3개월) 혈당 노출 반영</td></tr>
+        <tr><td>단점</td><td>비용이 높고 일부 지역 접근성 제한, FPG·2hPG보다 진단 민감도 낮음</td></tr>
+        <tr><td>부적합 상황</td><td>빈혈, 에리스로포이에틴 치료, 혈액투석, HIV — 적혈구 회전율 변화로 부정확</td></tr>
+      </table>
+    </div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">② FPG (공복혈장포도당)</div>
+      <table class="modal-table">
+        <tr><th>항목</th><th>내용</th></tr>
+        <tr><td>진단 기준</td><td>≥126 mg/dL (≥7.0 mmol/L)</td></tr>
+        <tr><td>검사 요건</td><td>최소 8시간 공복(무열량 섭취 없음)</td></tr>
+        <tr><td>장점</td><td>저렴, 전 세계 대부분 검사실에서 시행 가능, 일상 선별검사로 편의성 우수</td></tr>
+        <tr><td>단점</td><td>전분석 안정성 불량(즉시 분리·냉장 필요), 일중변동·최근 활동·스트레스 영향</td></tr>
+      </table>
+    </div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">③ 2-h PG (75g OGTT 2시간 혈당)</div>
+      <table class="modal-table">
+        <tr><th>항목</th><th>내용</th></tr>
+        <tr><td>진단 기준</td><td>≥200 mg/dL (≥11.1 mmol/L)</td></tr>
+        <tr><td>검사 요건</td><td>WHO 기준 75g 무수포도당 경구 부하, 검사 3일 전부터 탄수화물 150g/일 이상 섭취</td></tr>
+        <tr><td>장점</td><td>3개 검사 중 <strong>가장 민감</strong> — 더 많은 전당뇨·당뇨 환자 발견</td></tr>
+        <tr><td>단점</td><td>시간이 오래 걸리고 공복·부하 후 대기 필요, 탄수화물 제한 시 위양성 가능</td></tr>
+        <tr><td>우선 권장 상황</td><td>낭성섬유증 관련 당뇨(CFRD), 이식 후 당뇨(PTDM) 선별</td></tr>
+      </table>
+    </div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">④ 무작위 혈당 (고혈당 증상/위기 동반 시)</div>
+      <table class="modal-table">
+        <tr><th>항목</th><th>내용</th></tr>
+        <tr><td>진단 기준</td><td>≥200 mg/dL (≥11.1 mmol/L) + 고전적 고혈당 증상(다뇨·다음·체중감소) 또는 고혈당 위기(DKA/HHS)</td></tr>
+        <tr><td>특이사항</td><td>명백한 고혈당으로 간주되어 <strong>확진검사 없이 즉시 진단</strong> 가능</td></tr>
+      </table>
+    </div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">📊 진단 기준 한눈에 비교</div>
+      <table class="modal-table">
+        <tr><th>범주</th><th>A1C</th><th>FPG</th><th>2-h PG</th></tr>
+        <tr><td>정상</td><td>&lt;5.7%</td><td>&lt;100 mg/dL</td><td>&lt;140 mg/dL</td></tr>
+        <tr><td>전당뇨</td><td>5.7–6.4%</td><td>100–125 mg/dL</td><td>140–199 mg/dL</td></tr>
+        <tr><td>당뇨</td><td>≥6.5%</td><td>≥126 mg/dL</td><td>≥200 mg/dL</td></tr>
+      </table>
+    </div>
+
+    <div class="alert alert-warn" style="margin-top:4px"><span>⚠️</span><span>명백한 고혈당이 없는 한, 진단에는 <strong>서로 다른 검사 2개 이상</strong>(동시 또는 시차)의 이상 결과가 필요하다. 한 검사만 기준을 충족해도(예: A1C 2회 ≥6.5%) 다른 검사가 정상이면 당뇨로 간주한다.</span></div>
+  </div>
+</div>
+
+<!-- ═══ MODAL: 1형당뇨 병기 ═══ -->
+<div id="stagingModal" class="modal-overlay" onclick="closeModalOutside(event,'stagingModal')">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal('stagingModal')">✕</button>
+    <div class="modal-title">🧬 1형당뇨 병기 분류 (Staging) — 상세</div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">병기별 정의 및 위험도</div>
+      <table class="modal-table">
+        <tr><th>병기</th><th>특징</th><th>위험도</th></tr>
+        <tr><td><strong>Stage 1</strong></td><td>다중 췌도 자가항체 양성, 정상혈당, 무증상</td><td>5년 내 임상발병 위험 ~44% (항체 수·역가·연령에 따라 변동)</td></tr>
+        <tr><td><strong>Stage 2</strong></td><td>자가항체(대개 다중) + 이상혈당(아직 당뇨 진단기준 미달), 무증상</td><td>2년 내 ~60%, 5년 내 ~75% Stage 3 진행</td></tr>
+        <tr><td><strong>Stage 3</strong></td><td>표준 진단기준으로 당뇨 확정, 유증상. 자가항체는 음전 가능</td><td>임상적 당뇨 — 즉시 치료 필요</td></tr>
+      </table>
+    </div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">Stage 2 이상혈당(Dysglycemia) 정의 — 1개 이상 충족</div>
+      <table class="modal-table">
+        <tr><th>지표</th><th>기준</th></tr>
+        <tr><td>IFG</td><td>FPG 100–125 mg/dL (5.6–6.9 mmol/L)</td></tr>
+        <tr><td>IGT</td><td>2-h PG 140–199 mg/dL (7.8–11.0 mmol/L)</td></tr>
+        <tr><td>A1C</td><td>5.7–6.4% (39–47 mmol/mol) 또는 ≥10% 상승</td></tr>
+      </table>
+      <p style="font-size: calc(11px * var(--fscale, 1));color:var(--text2);margin-top:6px">대체 기준(임상연구용): 18세 이상에서 OGTT 30·60·90분 혈당 ≥200 mg/dL + 확인검사</p>
+    </div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">왜 병기 분류가 중요한가</div>
+      <ul class="dot">
+        <li>연구·규제 의사결정의 프레임워크 역할 (예방시험 설계 기준)</li>
+        <li>Stage 2 도달 시 teplizumab 등 승인 치료로 Stage 3 진행 지연 가능</li>
+        <li>조기 식별 → DKA 예방, 적시 인슐린 시작</li>
+        <li>1개 항체만 지속 양성인 소아의 10년 누적 진행 위험은 ~14–15%, 위험은 대부분 첫 2년 내 발생하며 어린 연령·단독 IA-2 양성에서 가장 높음</li>
+      </ul>
+    </div>
+
+    <div class="alert alert-info" style="margin-top:4px"><span>💡</span><span>이 단계 체계는 자가면역 진행의 연속성을 보여주며, 1형당뇨를 "갑자기 발생하는 병"이 아닌 "장기간 진행하는 과정"으로 이해하게 한다.</span></div>
+  </div>
+</div>
+
+<!-- ═══ MODAL: GDM 전략 비교 ═══ -->
+<div id="gdmModal" class="modal-overlay" onclick="closeModalOutside(event,'gdmModal')">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal('gdmModal')">✕</button>
+    <div class="modal-title">🤰 GDM 진단 — 1-Step vs 2-Step 상세 비교</div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">① 1-Step (IADPSG) — 75g OGTT</div>
+      <table class="modal-table">
+        <tr><th>시점</th><th>임계값</th></tr>
+        <tr><td>공복</td><td>92 mg/dL (5.1 mmol/L)</td></tr>
+        <tr><td>1시간</td><td>180 mg/dL (10.0 mmol/L)</td></tr>
+        <tr><td>2시간</td><td>153 mg/dL (8.5 mmol/L)</td></tr>
+      </table>
+      <p style="font-size: calc(11px * var(--fscale, 1));color:var(--text2);margin-top:6px">1개 이상치만으로 진단 — HAPO 연구에서 불량한 결과의 odds가 1.75배 되는 지점을 임계값으로 설정</p>
+    </div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">② 2-Step (Carpenter-Coustan) — 50g GLT → 100g OGTT</div>
+      <table class="modal-table">
+        <tr><th>단계</th><th>검사</th><th>임계값</th></tr>
+        <tr><td>1단계</td><td>50g 비공복 GLT, 1시간</td><td>130/135/140 mg/dL 중 택1 이상 시 2단계 진행</td></tr>
+        <tr><td rowspan="4">2단계</td><td>100g OGTT 공복</td><td>95 mg/dL</td></tr>
+        <tr><td>1시간</td><td>180 mg/dL</td></tr>
+        <tr><td>2시간</td><td>155 mg/dL</td></tr>
+        <tr><td>3시간</td><td>140 mg/dL</td></tr>
+      </table>
+      <p style="font-size: calc(11px * var(--fscale, 1));color:var(--text2);margin-top:6px">4개 중 2개 이상치 필요(ACOG는 1개도 인정). National Diabetes Data Group 기준도 대안으로 존재.</p>
+    </div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">근거 비교</div>
+      <table class="modal-table">
+        <tr><th>비교 항목</th><th>내용</th></tr>
+        <tr><td>직접 비교 RCT</td><td>Hillier 2021 (N Engl J Med) — 1-step이 2배 많은 GDM 발견, 그러나 임신·주산기 합병증 차이 없음</td></tr>
+        <tr><td>경제성 분석</td><td>체계적고찰: 1-step이 더 많은 사례 발견 + 더 비용효율적일 가능성 높음</td></tr>
+        <tr><td>장기 추적</td><td>1-step 기준 GDM(미인지) 산모 — 11년 후 전당뇨·2형당뇨 위험 3.4배, 자녀 비만·체지방 증가</td></tr>
+        <tr><td>NIH 입장 (2013)</td><td>1-step의 임상시험 근거 부족, GDM 의료화 우려로 2-step 유지 권고</td></tr>
+        <tr><td>국제 동향</td><td>IADPSG(1-step) 기준이 국제적으로 선호 접근법으로 채택</td></tr>
+      </table>
+    </div>
+
+    <div class="alert alert-warn" style="margin-top:4px"><span>⚠️</span><span>두 전략 모두 근거로 뒷받침되며 전문가 그룹 간 합의가 아직 이루어지지 않았다. ADA는 임신 결과 기반의 IADPSG(1-step) 기준을 권장하나, ACOG는 2-step을 지지한다.</span></div>
+  </div>
+</div>
+
+<script>
+const FONT_ZOOM_LEVELS = [1, 1.25, 1.5];
+let fontZoomIndex = 0;
+
+function applyFontZoom(scale) {
+  document.documentElement.style.setProperty('--fscale', scale);
+  const label = document.getElementById('font-zoom-label');
+  if (label) label.textContent = Math.round(scale * 100) + '%';
+}
+
+function cycleFontZoom() {
+  fontZoomIndex = (fontZoomIndex + 1) % FONT_ZOOM_LEVELS.length;
+  applyFontZoom(FONT_ZOOM_LEVELS[fontZoomIndex]);
+}
+
+function showTab(id){
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('tab-'+id).classList.add('active');
+  event.target.classList.add('active');
+}
+function toggleCard(el){
+  el.classList.toggle('open');
+  el.nextElementSibling.classList.toggle('collapsed');
+}
+function toggleAcc(el){
+  const b=el.nextElementSibling;
+  b.style.display=b.style.display==='block'?'none':'block';
+  el.querySelector('span:last-child').textContent=b.style.display==='block'?'▴':'▾';
+}
+
+function openModal(id){document.getElementById(id).classList.add('open');}
+function closeModal(id){document.getElementById(id).classList.remove('open');}
+function closeModalOutside(e,id){if(e.target===document.getElementById(id))closeModal(id);}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')document.querySelectorAll('.modal-overlay.open').forEach(m=>m.classList.remove('open'));});
+
+const abbrs=[
+  ['A1C','Glycated Hemoglobin (당화혈색소) — 지난 약 2–3개월간 평균 혈당을 반영하는 만성 혈당 지표. 진단 기준 ≥6.5%.'],
+  ['FPG','Fasting Plasma Glucose (공복혈장포도당) — 8시간 이상 공복 후 측정. 진단 기준 ≥126 mg/dL.'],
+  ['2-h PG','2-Hour Plasma Glucose (75g 경구포도당부하검사 2시간 혈당) — 진단 기준 ≥200 mg/dL.'],
+  ['OGTT','Oral Glucose Tolerance Test (경구포도당부하검사) — 75g(비임신) 또는 75g/100g(임신) 포도당 부하 후 혈당 측정.'],
+  ['IFG','Impaired Fasting Glucose (공복혈당장애) — FPG 100–125 mg/dL. 전당뇨 범주 중 하나.'],
+  ['IGT','Impaired Glucose Tolerance (내당능장애) — 2-h PG 140–199 mg/dL. 전당뇨 범주 중 하나.'],
+  ['NGSP','National Glycohemoglobin Standardization Program — A1C 검사 표준화 프로그램, DCCT 기준에 정합.'],
+  ['DCCT','Diabetes Control and Complications Trial — A1C 표준화의 기준이 된 대규모 임상시험.'],
+  ['CLIA','Clinical Laboratory Improvement Amendments — 미국 임상검사실 인증 규정. POC A1C 검사 시설 요건.'],
+  ['LADA','Latent Autoimmune Diabetes in Adults (성인 잠재성 자가면역당뇨) — 천천히 진행하는 성인 발병 자가면역 당뇨. 본 가이드라인에서 1형당뇨로 통합 분류.'],
+  ['GAD','Glutamic Acid Decarboxylase — 췌도 자가항체 표적. GAD65 항체는 1형당뇨 1차 선별 항체.'],
+  ['IA-2','Islet Antigen 2 (티로신 인산화효소 IA-2/IA-2b) — 췌도 자가항체 표적. 단독 양성도 다중항체와 동등한 진행위험.'],
+  ['ZnT8','Zinc Transporter 8 — 췌도 자가항체 표적 중 하나.'],
+  ['IA','Insulin Autoantibody (인슐린 자가항체) — 인슐린 미치료자에서 유용한 췌도 자가항체.'],
+  ['IASP','Islet Autoantibody Standardization Program — 자가항체 검사 성능 표준화 프로그램.'],
+  ['DKA','Diabetic Ketoacidosis (당뇨병성 케토산증) — 고혈당 위기의 한 형태. 명백한 고혈당으로 간주되어 즉시 진단 가능.'],
+  ['HHS','Hyperglycemic Hyperosmolar State (고혈당고삼투압상태) — 2형당뇨에서 더 흔한 고혈당 위기.'],
+  ['ICI','Immune Checkpoint Inhibitor (면역관문억제제) — PD-1/PD-L1, CTLA-4 차단 항암제. 자가면역 당뇨 유발 가능(0.6–1.4%).'],
+  ['PI3Kα','Phosphoinositide 3-Kinase alpha 억제제 — 유방암 치료제(alpelisib 등). 고혈당 부작용 빈번(최대 36%).'],
+  ['mTOR','Mammalian Target of Rapamycin 억제제 — everolimus 등. 변동성 있는 고혈당 유발.'],
+  ['MODY','Maturity-Onset Diabetes of the Young — 상염색체 우성 단일유전자 당뇨. HNF1A·GCK·HNF4A형이 가장 흔함.'],
+  ['CFRD','Cystic Fibrosis-Related Diabetes (낭성섬유증 관련 당뇨) — CF 환자의 특이적 당뇨 형태. 10세부터 매년 선별.'],
+  ['CFTR','Cystic Fibrosis Transmembrane Conductance Regulator — 낭성섬유증 원인 유전자/단백.'],
+  ['PTDM','Posttransplantation Diabetes Mellitus (이식 후 당뇨병) — 장기이식 후 발생하는 당뇨. OGTT로 진단.'],
+  ['NODAT','New-Onset Diabetes After Transplantation — 이식 후 신규발생 당뇨(이전 미진단 당뇨·일시적 고혈당 제외).'],
+  ['GDM','Gestational Diabetes Mellitus (임신성 당뇨병) — 임신 중 진단된 당뇨. 1-step/2-step 전략으로 진단.'],
+  ['IADPSG','International Association of the Diabetes and Pregnancy Study Groups — GDM 1-step 진단기준 제정 단체.'],
+  ['HAPO','Hyperglycemia and Adverse Pregnancy Outcome (연구) — GDM 진단기준의 근거가 된 대규모 다국가 코호트.'],
+  ['GLT','Glucose Load Test (포도당 부하 검사) — 2-step 전략의 1단계, 50g 비공복 검사.'],
+  ['ACOG','American College of Obstetricians and Gynecologists — 미국 산부인과학회. 2-step GDM 전략 지지.'],
+  ['IGF','관련 약어 — 본문에서는 사용되지 않으나 IFG/IGT와 혼동 주의.'],
+  ['G6PD','Glucose-6-Phosphate Dehydrogenase 결핍 — A1C를 저평가시키는 유전 변이. 혈당 기준 우선 사용.'],
+  ['MASLD','Metabolic Dysfunction-Associated Steatotic Liver Disease — 인슐린저항성 관련 간질환, 2형당뇨 위험인자.'],
+  ['PCOS','Polycystic Ovary Syndrome (다낭성난소증후군) — 당뇨·전당뇨 선별 위험인자.'],
+  ['IUGR','Intrauterine Growth Restriction (자궁 내 성장지연) — 일부 신생아당뇨 유전형(KCNJ11, ABCC8, INS)의 특징.'],
+  ['IPEX','Immune dysregulation, Polyendocrinopathy, Enteropathy, X-linked syndrome — FOXP3 유전자 변이로 인한 단일유전자 다발 자가면역증후군, 당뇨 포함.'],
+  ['AIRE','Autoimmune Regulator 유전자 — 변이 시 다발성 자가면역증후군 유발, 당뇨 동반 가능.'],
+  ['TEDDY','The Environmental Determinants of Diabetes in the Young — 1형당뇨 자가항체 진행 추적 국제 코호트 연구.'],
+  ['NIH','National Institutes of Health — 미국 국립보건원. GDM 진단기준 합의회의(2013) 주관.'],
+];
+
+function buildAbbr(){
+  const sorted=abbrs.slice().sort((a,b)=>a[0].localeCompare(b[0]));
+  document.getElementById('abbr-grid-drop').innerHTML=sorted.map(a=>
+    `<div style="background:var(--surface2);border:1px solid var(--border);border-radius:5px;padding:6px 10px;margin-bottom:4px;" data-term="${a[0].toLowerCase()}" data-def="${a[1].toLowerCase()}">
+       <span style="font-weight:700;color:var(--accent2);font-size: calc(12px * var(--fscale, 1));font-family:'Courier New',monospace">${a[0]}</span>
+       <div style="font-size: calc(11px * var(--fscale, 1));color:var(--text2);line-height:1.45;margin-top:2px">${a[1]}</div>
+     </div>`).join('');
+}
+function filterAbbr(val){
+  const v=val.toLowerCase().trim();
+  const drop=document.getElementById('abbr-dropdown');
+  const items=document.querySelectorAll('#abbr-grid-drop [data-term]');
+  if(!v){drop.style.display='none';return;}
+  const inp=document.getElementById('abbr-input');
+  const rect=inp.getBoundingClientRect();
+  const w=440;
+  let left=rect.right-w;if(left<8)left=8;
+  drop.style.top=(rect.bottom+4)+'px';drop.style.left=left+'px';
+  drop.style.display='block';
+  items.forEach(el=>{
+    const show=el.dataset.term.startsWith(v)||el.dataset.def.includes(v);
+    el.style.display=show?'':'none';
+  });
+}
+document.addEventListener('click',e=>{
+  const inp=document.getElementById('abbr-input');
+  const drop=document.getElementById('abbr-dropdown');
+  if(inp&&!inp.contains(e.target)&&drop&&!drop.contains(e.target))drop.style.display='none';
+});
+buildAbbr();
+</script>
+</body>
+</html>
+
+
+

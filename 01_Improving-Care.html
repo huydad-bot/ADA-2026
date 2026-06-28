@@ -1,0 +1,1005 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ADA 2026 인구집단 의료 향상과 건강 증진</title>
+<style>
+  :root {
+    --bg:#f6f8fa;--surface:#fff;--surface2:#f0f2f5;--border:#d0d7de;
+    --accent:#0969da;--accent2:#0550ae;--green:#1a7f37;--yellow:#9a6700;
+    --red:#cf222e;--orange:#bc4c00;--text:#1f2328;--text2:#57606a;
+    --teal:#0a7c8a;--purple:#5a3ea0;--fscale:1;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'Pretendard','Noto Sans KR',-apple-system,sans-serif;background:var(--bg);color:var(--text);font-size: calc(13px * var(--fscale, 1));line-height:1.5;}
+  header{background:var(--surface);border-bottom:1px solid var(--border);padding:12px 16px 8px;display:flex;flex-direction:column;align-items:center;gap:4px;position:sticky;top:0;z-index:100;}
+  .header-inner{width:100%;max-width:960px;display:flex;flex-direction:column;align-items:center;gap:4px;}
+  .logo-badge{background:var(--accent2);color:#fff;font-size: calc(10px * var(--fscale, 1));font-weight:700;padding:3px 8px;border-radius:4px;letter-spacing:.5px;}
+  .tab-bar{display:flex;justify-content:center;background:var(--surface);border-bottom:1px solid var(--border);overflow-x:auto;scrollbar-width:none;}
+  .tab-bar::-webkit-scrollbar{display:none;}
+  .font-zoom-btn{display:flex;align-items:center;gap:3px;flex-shrink:0;margin:4px 4px 4px 6px;padding:5px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:6px;color:var(--accent2);font-size:calc(11px * var(--fscale, 1));font-weight:700;cursor:pointer;user-select:none;white-space:nowrap;transition:background .15s;}
+  .font-zoom-btn:hover{background:var(--border);}
+  .font-zoom-btn .fz-icon{font-size:calc(12px * var(--fscale, 1));}
+  .tab-bar-inner{width:100%;max-width:960px;display:flex;align-items:center;gap:2px;padding:0 4px;}
+  .tab{padding:7px 11px;font-size: calc(11.5px * var(--fscale, 1));color:var(--text2);cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;transition:color .15s,border-color .15s;user-select:none;flex-shrink:0;}
+  .tab:hover{color:var(--text);}
+  .tab.active{color:var(--accent2);border-bottom-color:var(--accent2);}
+  .tab-abbr-wrap{display:flex;align-items:center;padding:4px 4px;margin-left:4px;flex-shrink:0;position:relative;}
+  .main{padding:12px 16px;max-width:960px;margin:0 auto;}
+  .panel{display:none;}
+  .panel.active{display:block;}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+  .grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;}
+  @media(max-width:680px){.grid2,.grid3{grid-template-columns:1fr;}}
+  .card{background:var(--surface);border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-bottom:10px;}
+  .card-header{background:var(--surface2);padding:8px 12px;font-size: calc(12px * var(--fscale, 1));font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.5px;border-bottom:1px solid var(--border);cursor:pointer;display:flex;align-items:center;justify-content:space-between;user-select:none;}
+  .card-header .toggle{font-size: calc(13px * var(--fscale, 1));transition:transform .2s;}
+  .card-header.open .toggle{transform:rotate(180deg);}
+  .card-body{padding:10px 12px;}
+  .card-body.collapsed{display:none;}
+  .stat-row{display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap;}
+  .stat-box{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:10px 14px;flex:1;min-width:90px;text-align:center;}
+  .stat-box.clickable{cursor:pointer;transition:box-shadow .15s,border-color .15s;}
+  .stat-box.clickable:hover{border-color:var(--accent2);box-shadow:0 2px 8px rgba(5,80,174,.15);}
+  .stat-val{font-size: calc(18px * var(--fscale, 1));font-weight:700;color:var(--accent2);}
+  .stat-lbl{font-size: calc(10px * var(--fscale, 1));color:var(--text2);margin-top:2px;}
+  .stat-hint{font-size: calc(9px * var(--fscale, 1));color:var(--accent2);margin-top:4px;opacity:.7;}
+  /* Modal */
+  .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:500;align-items:center;justify-content:center;}
+  .modal-overlay.open{display:flex;}
+  .modal-box{background:var(--surface);border-radius:12px;padding:20px;max-width:680px;width:92%;max-height:84vh;overflow-y:auto;box-shadow:0 16px 48px rgba(0,0,0,.22);position:relative;}
+  .modal-close{position:absolute;top:12px;right:14px;background:none;border:none;font-size: calc(18px * var(--fscale, 1));cursor:pointer;color:var(--text2);line-height:1;}
+  .modal-title{font-size: calc(15px * var(--fscale, 1));font-weight:700;color:var(--text);margin-bottom:12px;padding-right:20px;line-height:1.4;}
+  .modal-section{margin-bottom:12px;}
+  .modal-section-title{font-size: calc(11px * var(--fscale, 1));font-weight:700;color:var(--accent2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;border-bottom:1px solid var(--border);padding-bottom:4px;}
+  .modal-table{width:100%;border-collapse:collapse;font-size: calc(11.5px * var(--fscale, 1));}
+  .modal-table th{background:var(--surface2);color:var(--text2);padding:4px 8px;font-size: calc(10.5px * var(--fscale, 1));font-weight:600;text-align:left;border-bottom:1px solid var(--border);}
+  .modal-table td{padding:5px 8px;border-bottom:1px solid var(--border);vertical-align:top;}
+  .modal-table tr:last-child td{border-bottom:none;}
+  .rec-list{list-style:none;}
+  .rec-item{padding:7px 0;border-bottom:1px solid var(--border);display:flex;gap:8px;align-items:flex-start;}
+  .rec-item:last-child{border-bottom:none;}
+  .rec-text{font-size: calc(12px * var(--fscale, 1));color:var(--text);line-height:1.65;}
+  .rec-text strong{color:#1f2328;}
+  .badge{display:inline-flex;align-items:center;padding:2px 8px;border-radius:10px;font-size: calc(10px * var(--fscale, 1));font-weight:700;white-space:nowrap;flex-shrink:0;margin-top:1px;}
+  .badge-A{background:#dafbe1;color:#116329;border:1px solid #1a7f37;}
+  .badge-B{background:#ddf4ff;color:var(--accent2);border:1px solid var(--accent2);}
+  .badge-C{background:#fff8c5;color:#7a4b00;border:1px solid #d4a017;}
+  .badge-E{background:#f3e5f5;color:#5a3ea0;border:1px solid #5a3ea0;}
+  .alert{padding:8px 12px;border-radius:6px;font-size: calc(12px * var(--fscale, 1));margin:8px 0;display:flex;gap:8px;align-items:flex-start;}
+  .alert-info{background:#ddf4ff;border-left:3px solid var(--accent2);color:#0550ae;}
+  .alert-warn{background:#fff8c5;border-left:3px solid #d4a017;color:#7a4b00;}
+  .alert-danger{background:#ffebe9;border-left:3px solid var(--red);color:#82071e;}
+  .alert-success{background:#dafbe1;border-left:3px solid var(--green);color:#116329;}
+  .alert-teal{background:#e0f5f5;border-left:3px solid var(--teal);color:#075050;}
+  .alert-orange{background:#fff3e0;border-left:3px solid var(--orange);color:#7a3500;}
+  .alert-purple{background:#f3e5f5;border-left:3px solid var(--purple);color:#5a3ea0;}
+  .tc-table{width:100%;border-collapse:collapse;font-size: calc(11.5px * var(--fscale, 1));}
+  .tc-table th{background:var(--surface2);color:var(--text2);padding:5px 8px;font-size: calc(10.5px * var(--fscale, 1));text-transform:uppercase;letter-spacing:.3px;font-weight:600;text-align:left;border-bottom:1px solid var(--border);}
+  .tc-table td{padding:5px 8px;border-bottom:1px solid var(--border);vertical-align:top;}
+  .tc-table tr:last-child td{border-bottom:none;}
+  .tc-table tr:hover td{background:rgba(0,0,0,.02);}
+  .acc{border:1px solid var(--border);border-radius:6px;margin-bottom:6px;overflow:hidden;}
+  .acc-hdr{background:var(--surface2);padding:7px 12px;font-size: calc(12px * var(--fscale, 1));font-weight:600;color:var(--text);cursor:pointer;display:flex;justify-content:space-between;align-items:center;user-select:none;}
+  .acc-hdr:hover{background:#e8eaec;}
+  .acc-body{display:none;padding:10px 12px;font-size: calc(12px * var(--fscale, 1));line-height:1.65;}
+  .flow-box{border:1px solid var(--border);border-radius:6px;background:var(--surface);padding:8px 12px;margin-bottom:6px;font-size: calc(12px * var(--fscale, 1));line-height:1.6;}
+  .flow-arrow{text-align:center;color:var(--text2);font-size: calc(14px * var(--fscale, 1));margin:2px 0;}
+  .step-num{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;background:var(--accent2);color:#fff;font-size: calc(10px * var(--fscale, 1));font-weight:700;flex-shrink:0;margin-right:6px;}
+  ul.dot{padding-left:18px;}
+  ul.dot li{margin-bottom:3px;font-size: calc(12px * var(--fscale, 1));line-height:1.6;}
+  ol.num{padding-left:18px;}
+  ol.num li{margin-bottom:4px;font-size: calc(12px * var(--fscale, 1));line-height:1.6;}
+  ::-webkit-scrollbar{width:5px;height:5px;}
+  ::-webkit-scrollbar-track{background:var(--bg);}
+  ::-webkit-scrollbar-thumb{background:#c8d0d9;border-radius:3px;}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div style="display:flex;align-items:center;gap:10px">
+      <span class="logo-badge">ADA 2026</span>
+      <h1 style="font-size:17px;font-weight:700;color:var(--text)">인구집단 의료 향상과 건강 증진</h1>
+    </div>
+    <div style="text-align:center;line-height:1.5">
+      <span style="color:var(--text2);font-size: calc(11px * var(--fscale, 1))">Standards of Care in Diabetes—2026, Section 1 — American Diabetes Association</span><br>
+      <span style="font-size: calc(10px * var(--fscale, 1));color:var(--text2)">Diabetes Care 2026;49(Suppl. 1):S13–S26 · doi: 10.2337/dc26-S001</span>
+    </div>
+    <div style="font-size: calc(10px * var(--fscale, 1));color:var(--text2);font-style:italic;">This tool is not officially endorsed by the American Diabetes Association (ADA).</div>
+  </div>
+</header>
+
+<div class="tab-bar">
+  <div class="tab-bar-inner">
+    <div id="font-zoom-btn" class="font-zoom-btn" onclick="cycleFontZoom()"><span class="fz-icon">🔠</span><span id="font-zoom-label">100%</span></div>
+    <div class="tab active" onclick="showTab('overview')">🏠 개요</div>
+    <div class="tab" onclick="showTab('state')">📊 현황·통계</div>
+    <div class="tab" onclick="showTab('models')">🏥 진료모델·QI</div>
+    <div class="tab" onclick="showTab('telehealth')">💻 원격의료</div>
+    <div class="tab" onclick="showTab('access')">💳 접근성·비용</div>
+    <div class="tab" onclick="showTab('sdoh')">🌍 SDOH</div>
+    <div class="tab" onclick="showTab('subpop')">👥 특수 인구집단</div>
+    <div class="tab" onclick="showTab('tables')">📁 표·요약 모음</div>
+    <div class="tab-abbr-wrap">
+      <div style="position:relative;display:flex;align-items:center;flex-shrink:0">
+        <span style="position:absolute;left:8px;color:var(--text2);font-size: calc(12px * var(--fscale, 1));pointer-events:none">🔍</span>
+        <input id="abbr-input" type="text" placeholder="약어" oninput="filterAbbr(this.value)"
+          style="background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:4px 8px 4px 26px;color:var(--text);font-size: calc(12px * var(--fscale, 1));width:90px;outline:none;"
+          onfocus="this.style.borderColor='var(--accent2)'" onblur="this.style.borderColor='var(--border)'">
+      </div>
+      <div id="abbr-dropdown" style="display:none;position:fixed;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:8px;width:440px;max-height:360px;overflow-y:auto;z-index:300;box-shadow:0 8px 24px rgba(0,0,0,.12)">
+        <div id="abbr-grid-drop"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="main">
+
+<!-- ═══ OVERVIEW ═══ -->
+<div id="tab-overview" class="panel active">
+  <div class="stat-row">
+    <div class="stat-box clickable" onclick="openModal('ccmModal')"><div class="stat-val">CCM</div><div class="stat-lbl">만성질환관리모델 6요소</div><div class="stat-hint">▸ 클릭하여 상세 보기</div></div>
+    <div class="stat-box clickable" onclick="openModal('teamModal')"><div class="stat-val">−0.5%</div><div class="stat-lbl">팀기반관리 A1C 변화</div><div class="stat-hint">▸ 클릭하여 상세 보기</div></div>
+    <div class="stat-box clickable" onclick="openModal('sdohScreenModal')"><div class="stat-val">2종</div><div class="stat-lbl">식품·주거 불안정 선별도구</div><div class="stat-hint">▸ 클릭하여 상세 보기</div></div>
+    <div class="stat-box clickable" onclick="openModal('costModal')"><div class="stat-val">$413B</div><div class="stat-lbl">2022 美 당뇨 연간 비용</div><div class="stat-hint">▸ 클릭하여 상세 보기</div></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>📋 인구집단 건강 향상의 통합적 접근 흐름</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <div class="flow-box" style="border-left:3px solid var(--accent2)">
+        <strong>① 인구집단 수준 — 정책·시스템</strong><br>
+        <span style="color:var(--text2);font-size: calc(11px * var(--fscale, 1))">진료전달·결제모델 정비(CCM, PCMH, ACO 등), EHR 기반 환자등록·벤치마킹, QI 문화 정착</span>
+      </div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-box" style="border-left:3px solid var(--green)">
+        <strong>② 진료팀 수준 — 다학제 협력</strong><br>
+        <span style="font-size: calc(11.5px * var(--fscale, 1))">1차의료+CDCES+RDN+전문과 협진, 치료적 관성(therapeutic inertia) 회피, 내분비 전문팀 의뢰 기준 적용</span>
+      </div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-box" style="border-left:3px solid var(--yellow)">
+        <strong>③ 개인 수준 — 사회적 맥락 평가</strong><br>
+        <span style="font-size: calc(11.5px * var(--fscale, 1))">매 임상 접촉 시 SDOH(식품·주거·재정·보험·환경) 선별 → 지역사회 자원 연계</span>
+      </div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-box" style="border-left:3px solid var(--orange)">
+        <strong>④ 격차 식별 — 데이터 계층화</strong><br>
+        <span style="font-size: calc(11.5px * var(--fscale, 1))">보험상태·인종·민족·언어·장애·SDOH별 임상질 데이터 계층화로 불평등 식별</span>
+      </div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-box" style="border-left:3px solid var(--teal)">
+        <strong>⑤ 지속적 개선 — QI 사이클</strong><br>
+        <span style="font-size: calc(11.5px * var(--fscale, 1))">임상 챔피언·행정 리더·QI전문가·당사자로 구성된 QI팀이 표준화된 개선 사이클 반복</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <div class="card-header open" onclick="toggleCard(this)">
+        <span>📌 핵심 권고문 요약</span><span class="toggle">▾</span>
+      </div>
+      <div class="card-body">
+        <ul class="rec-list">
+          <li class="rec-item"><span class="badge badge-B">B</span><span class="rec-text"><strong>1.1</strong> 치료결정은 시의적절·근거기반이어야 하며 SDOH 고려, 공유의사결정 적용</span></li>
+          <li class="rec-item"><span class="badge badge-A">A</span><span class="rec-text"><strong>1.2</strong> 근거기반 진료모델(인간중심 팀기반 케어, 통합 장기치료)에 맞춰 관리 정렬</span></li>
+          <li class="rec-item"><span class="badge badge-B">B</span><span class="rec-text"><strong>1.3</strong> 대면·비대면 팀기반 케어 지원, 환자등록·의사결정도구·커뮤니티 참여 활용</span></li>
+          <li class="rec-item"><span class="badge badge-B">B</span><span class="rec-text"><strong>1.4</strong> 신뢰할 수 있는 데이터로 관리·위험요인·합병증 평가, 치료부담·비용 고려</span></li>
+          <li class="rec-item"><span class="badge badge-A">A</span><span class="rec-text"><strong>1.5</strong> 지속적 질 향상 문화 도입, 벤치마킹 프로그램·다학제 팀 참여</span></li>
+          <li class="rec-item"><span class="badge badge-B">B</span><span class="rec-text"><strong>1.6</strong> 보험상태·인종·민족·언어·장애·SDOH로 임상질 데이터 계층화하여 격차 평가</span></li>
+          <li class="rec-item"><span class="badge badge-B">B</span><span class="rec-text"><strong>1.7</strong> 임상 접촉 시 식품·주거 불안정, 재정장벽, 보험접근성, 환경요인, 사회적 자본 평가</span></li>
+          <li class="rec-item"><span class="badge badge-A">A</span><span class="rec-text"><strong>1.8</strong> 동료건강코치·내비게이터·CHW의 자기관리 지원 제공</span></li>
+          <li class="rec-item"><span class="badge badge-B">B</span><span class="rec-text"><strong>1.8</strong> 디지털 자기관리 도구·코치 고려 가능</span></li>
+          <li class="rec-item"><span class="badge badge-B">B</span><span class="rec-text"><strong>1.9</strong> 취약계층·소외 의료시스템에서 CHW 참여로 당뇨·심혈관·신장 위험요인 관리 지원</span></li>
+        </ul>
+      </div>
+    </div>
+
+    <div>
+      <div class="card">
+        <div class="card-header open" onclick="toggleCard(this)">
+          <span>⚠️ 권고 등급 체계 (Evidence Grading)</span><span class="toggle">▾</span>
+        </div>
+        <div class="card-body">
+          <table class="tc-table">
+            <tr><th>등급</th><th>의미</th></tr>
+            <tr><td><span class="badge badge-A">A</span></td><td>명확한 근거 — 잘 수행된 다기관 RCT 또는 메타분석</td></tr>
+            <tr><td><span class="badge badge-B">B</span></td><td>뒷받침되는 근거 — 잘 수행된 코호트 연구 등</td></tr>
+            <tr><td><span class="badge badge-C">C</span></td><td>뒷받침되는 근거 부족 — 대조군 없는 연구, 사례 보고</td></tr>
+            <tr><td><span class="badge badge-E">E</span></td><td>전문가 합의 또는 임상 경험 (Expert consensus)</td></tr>
+          </table>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header open" onclick="toggleCard(this)">
+          <span>🔑 핵심 개념</span><span class="toggle">▾</span>
+        </div>
+        <div class="card-body">
+          <div class="alert alert-info"><span>ℹ️</span><span>인구집단 건강(population health)은 정책·시스템·개인 수준의 통합 접근이 필요 — Quadruple Aim(환자경험·인구건강·비용·의료진 웰빙) 정렬</span></div>
+          <div class="alert alert-warn"><span>⚠️</span><span>2015–2018년 미국 성인 당뇨 환자 중 <strong>단 22.2%만</strong> A1C·혈압·콜레스테롤 3대 목표 모두 달성</span></div>
+          <div class="alert alert-danger"><span>🚫</span><span>치료목표 미달성자 중 다수가 약물치료 자체를 받지 못하는 <strong>과소치료(undertreatment)</strong> 상태 — 단순 순응도 문제가 아님</span></div>
+          <div class="alert alert-teal"><span>💡</span><span>비용 관련 약물 미준수(cost-related medication nonadherence)는 환자 2/3가 의사에게 알리지 않음 — 능동적 선별이 필수</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ STATE OF DIABETES ═══ -->
+<div id="tab-state" class="panel">
+  <div class="alert alert-orange"><span>📊</span><span>2021년 미국 당뇨병 인구 3,840만 명(11.6%), 전당뇨 9,760만 명(38.0%), 비만 1억 명 이상(41.9%) — 합병증 발생률은 2010년대 이후 다시 증가 추세.</span></div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>📊 표 1-A — 2021년 미국 당뇨병·전당뇨 유병 현황</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <table class="tc-table">
+        <tr><th>지표</th><th>수치</th><th>비고</th></tr>
+        <tr><td>전체 당뇨병 인구</td><td>3,840만 명 (11.6%)</td><td>성인 3,810만 명(14.7%) 포함</td></tr>
+        <tr><td>미진단 당뇨 성인</td><td>870만 명</td><td>전체 성인 당뇨의 약 23%</td></tr>
+        <tr><td>전당뇨 성인</td><td>9,760만 명 (38.0%)</td><td>18세 이상</td></tr>
+        <tr><td>비만 성인</td><td>1억 명 이상 (41.9%)</td><td>20세 이상, 2형당뇨 고위험군</td></tr>
+        <tr><td>소아청소년 비만</td><td>1,470만 명 (19.7%)</td><td>2–19세</td></tr>
+        <tr><td>1형당뇨 유병률(소아)</td><td>10,000명당 2.15명</td><td>19세 이하, 2017년 자료</td></tr>
+        <tr><td>2형당뇨 유병률(청소년)</td><td>1,000명당 0.67명</td><td>10–19세, 2017년 자료</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>📊 표 1-B — 치료목표 달성률 (2015–2018, 미국 지역사회 거주 성인)</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <table class="tc-table">
+        <tr><th>지표</th><th>목표</th><th>달성률</th></tr>
+        <tr><td>A1C</td><td>&lt;7%</td><td>50.5%</td></tr>
+        <tr><td>A1C</td><td>&lt;8%</td><td>75.4%</td></tr>
+        <tr><td>혈압</td><td>&lt;130/80 mmHg</td><td>47.7%</td></tr>
+        <tr><td>비-HDL 콜레스테롤</td><td>&lt;130 mg/dL</td><td>55.7%</td></tr>
+        <tr><td><strong>3대 지표 모두</strong></td><td>A1C+혈압+지질 동시 달성</td><td><strong>22.2%</strong></td></tr>
+      </table>
+      <div class="alert alert-warn" style="margin-top:8px"><span>⚠️</span><span>목표 미달성자 중 다수가 해당 위험요인(혈당·혈압·지질)에 대해 약물치료를 전혀 받지 않거나 불충분하게 받는 <strong>과소치료(undertreatment)</strong> 상태였다.</span></div>
+    </div>
+  </div>
+
+  <div class="acc">
+    <div class="acc-hdr" onclick="toggleAcc(this)">
+      <span>인종·민족·사회경제적 격차</span><span>▾</span>
+    </div>
+    <div class="acc-body">
+      <div class="grid2">
+        <div>
+          <p style="font-weight:600;margin-bottom:4px">인종·민족별 당뇨 유병률</p>
+          <ul class="dot">
+            <li>비히스패닉 흑인: 17.4%</li>
+            <li>비히스패닉 아시안: 16.7%</li>
+            <li>히스패닉: 15.5%</li>
+            <li>비히스패닉 백인: 13.6%</li>
+          </ul>
+        </div>
+        <div>
+          <p style="font-weight:600;margin-bottom:4px">사회경제적 요인별 유병률</p>
+          <ul class="dot">
+            <li>고졸 미만 13.1% vs 고졸 초과 6.9%</li>
+            <li>빈곤선 이하 13.1% vs 빈곤선 500%↑ 5.1%</li>
+            <li>비수도권 9.5% vs 수도권 8.1%</li>
+          </ul>
+        </div>
+      </div>
+      <div class="alert alert-info" style="margin-top:8px"><span>💡</span><span>county(군) 단위로도 당뇨 합병증·사망률에 상당한 지역 격차가 존재하며, 소외 인종·민족 집단에서 격차가 더 크게 나타난다.</span></div>
+    </div>
+  </div>
+
+  <div class="acc">
+    <div class="acc-hdr" onclick="toggleAcc(this)">
+      <span>소아·청소년·청년 당뇨 관리 격차 (SEARCH 연구 등)</span><span>▾</span>
+    </div>
+    <div class="acc-body">
+      <ul class="dot">
+        <li>2014–2019년 평균 A1C: 1형당뇨 9.1%, 2형당뇨 8.9% — 2002–2007년(8.5%, 8.4%) 대비 <strong>오히려 악화</strong></li>
+        <li>비히스패닉 흑인·아메리카 원주민 청년 1형당뇨 환자, 인슐린펌프 미사용자, 저소득층에서 A1C 유의하게 높음</li>
+        <li>18세 미만 1형당뇨 환자 중 권고 A1C 목표(&lt;7.5%) 달성자는 <strong>단 17%</strong></li>
+        <li>비히스패닉 흑인 청소년의 A1C는 사회경제적 지위 보정 후에도 백인·히스패닉 대비 지속적으로 높음</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span>💰 당뇨병의 경제적 부담 (2022년)</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body collapsed">
+      <table class="tc-table">
+        <tr><th>항목</th><th>금액</th></tr>
+        <tr><td>총 연간 비용</td><td>≥$4,130억</td></tr>
+        <tr><td>직접 의료비</td><td>≥$3,070억</td></tr>
+        <tr><td>생산성 손실</td><td>≥$1,060억</td></tr>
+        <tr><td>비용 증가율(2017–2022, 인플레 보정)</td><td>+7%</td></tr>
+        <tr><td>비용 증가율(2012–2022, 인플레 보정)</td><td>+35%</td></tr>
+      </table>
+      <p style="font-size: calc(12px * var(--fscale, 1));margin-top:6px;color:var(--text2)">재정적 부담은 약물 비축소(rationing), 진료 지연, 기타 지출 포기로 이어지며, 결과적으로 높은 A1C·당뇨고통(diabetes distress)·우울 증상과 상관관계를 보인다.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ CARE MODELS / QI ═══ -->
+<div id="tab-models" class="panel">
+  <div class="alert alert-orange"><span>🏥</span><span>만성질환관리모델(CCM)을 중심으로 다학제 팀기반 케어, 가치기반 결제모델, 체계적 QI 접근이 인구집단 건강 개선의 핵심 전략이다.</span></div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>📋 만성질환관리모델(Chronic Care Model, CCM) — 6대 핵심 요소</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <table class="tc-table">
+        <tr><th>#</th><th>요소</th><th>내용</th></tr>
+        <tr><td>1</td><td>진료전달체계 설계</td><td>반응형→사전대응형(proactive) 전환, 팀기반 계획된 방문</td></tr>
+        <tr><td>2</td><td>자기관리 지원</td><td>환자의 자기관리 역량 강화</td></tr>
+        <tr><td>3</td><td>의사결정 지원</td><td>임상 접점에서 근거기반 가이드라인 적용</td></tr>
+        <tr><td>4</td><td>임상정보시스템</td><td>환자별·인구집단별 데이터 지원 레지스트리 활용</td></tr>
+        <tr><td>5</td><td>커뮤니티 자원·정책</td><td>건강한 생활습관 지원 자원 발굴·개발</td></tr>
+        <tr><td>6</td><td>건강시스템</td><td>품질 중심 조직문화 조성</td></tr>
+      </table>
+      <div class="alert alert-success" style="margin-top:8px"><span>✅</span><span>CCM 핵심요소 포함 프로그램은 usual care 대비 A1C <strong>−0.21%</strong> 개선(95% CI −0.30~−0.13), <strong>4개 이상 요소</strong> 포함 시 효과 더 큼</span></div>
+    </div>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <div class="card-header open" onclick="toggleCard(this)">
+        <span>👥 팀기반 케어 효과</span><span class="toggle">▾</span>
+      </div>
+      <div class="card-body">
+        <table class="tc-table">
+          <tr><th>지표</th><th>변화량</th></tr>
+          <tr><td>A1C</td><td>−0.5% (95% CI −0.7~−0.3)</td></tr>
+          <tr><td>수축기혈압</td><td>−5.5 mmHg</td></tr>
+          <tr><td>이완기혈압</td><td>−3.2 mmHg</td></tr>
+          <tr><td>LDL 콜레스테롤</td><td>−8.0 mg/dL</td></tr>
+          <tr><td>총콜레스테롤</td><td>−7.4 mg/dL</td></tr>
+        </table>
+        <p style="font-size: calc(11px * var(--fscale, 1));color:var(--text2);margin-top:6px">35개 팀기반 케어 중재 메타분석(성인 1형·2형당뇨)</p>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header open" onclick="toggleCard(this)">
+        <span>🫀 CINEMA 프로그램 — ASCVD 위험 개선</span><span class="toggle">▾</span>
+      </div>
+      <div class="card-body">
+        <table class="tc-table">
+          <tr><th>지표</th><th>변화량</th></tr>
+          <tr><td>체중</td><td>−5.5 lb (−2.5 kg)</td></tr>
+          <tr><td>A1C</td><td>−0.5%</td></tr>
+          <tr><td>LDL</td><td>−9.0 mg/dL</td></tr>
+          <tr><td>10년 ASCVD 위험</td><td>−2.4%(절대값)</td></tr>
+        </table>
+        <p style="font-size: calc(11px * var(--fscale, 1));color:var(--text2);margin-top:6px">2형당뇨 또는 전당뇨 고위험 성인 대상 팀기반 케어 프로그램</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="acc">
+    <div class="acc-hdr" onclick="toggleAcc(this)">
+      <span>진료전달·결제 모델 비교</span><span>▾</span>
+    </div>
+    <div class="acc-body">
+      <table class="tc-table">
+        <tr><th>모델</th><th>특징·효과</th></tr>
+        <tr><td>PCMH<br>(환자중심 의료의 home)</td><td>종합 1차의료 강화, 팀기반 만성질환관리 새 기회 제공</td></tr>
+        <tr><td>ACO<br>(책임의료기구)</td><td>CCM 구현 지지, 참여 기관의 당뇨 관련 지표 개선과 연관</td></tr>
+        <tr><td>Accountable Health Communities Model</td><td>SDOH 식별·해결 지원 목적, 응급실 이용 감소 일부 입증 (당뇨 특이적 효과는 미평가)</td></tr>
+        <tr><td>APM(대체결제모델)</td><td>효과 혼재 — 고위험(capitation 등) APM이 저위험 APM보다 진료과정 개선에 더 효과적</td></tr>
+        <tr><td>가치기반 결제모델</td><td>혁신적 진료모델의 구현·지속가능성을 더 잘 지지할 것으로 가정되나 근거는 제한적</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span>🔄 질 향상(QI) 전략 — 구성과 핵심 영역</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body collapsed">
+      <div class="alert alert-info" style="margin-bottom:8px"><span>ℹ️</span><span>성공적인 QI팀 구성: <strong>임상 챔피언 + 행정 리더 + QI/데이터 전문가 + 당뇨 당사자(또는 가족)</strong></span></div>
+      <ul class="dot">
+        <li>근거기반 가이드라인 부합 진료 제공</li>
+        <li>더 적극적인 질환관리 전략으로 팀 역할 확대</li>
+        <li>약물복용 행태 추적, 진료과정 재설계</li>
+        <li>EHR 기반 인구집단 건강 도구 구현</li>
+        <li>당뇨인 역량강화·교육, 재정장벽 감소</li>
+        <li>원격의료 활용, 심리사회적 이슈 평가·해결</li>
+        <li>커뮤니티 자원·공공정책 참여</li>
+      </ul>
+      <div class="alert alert-success" style="margin-top:8px"><span>✅</span><span>ADA는 건강시스템이 입증된 QI 방법을 활용해 Standards of Care 권고안을 일상 진료표준으로 전환할 것을 권고한다.</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ TELEHEALTH ═══ -->
+<div id="tab-telehealth" class="panel">
+  <div class="alert alert-orange"><span>💻</span><span>원격의료는 대면진료를 대체하지 않고 <strong>보완</strong>해야 하며, 다양한 메타분석에서 A1C 개선 효과가 일관되게 확인된다.</span></div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>📊 원격의료 효과 — 인구집단별 메타분석 결과</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <table class="tc-table">
+        <tr><th>대상·연구</th><th>A1C 변화</th><th>비고</th></tr>
+        <tr><td>전체(2025 umbrella review, 30개 SR)</td><td>−0.37% (95% CI −0.41~−0.32)</td><td>16개 SR·681개 RCT 메타분석 추정치</td></tr>
+        <tr><td>2형당뇨+고혈압(54 RCT)</td><td>−0.45%(6개월) / −0.18%(12개월)</td><td>수축기혈압도 −5.63/−5.59 mmHg 동반 개선</td></tr>
+        <tr><td>1형당뇨(22 RCT, 2023)</td><td>−0.26% (95% CI −0.37~−0.15)</td><td></td></tr>
+        <tr><td>흑인·히스패닉 2형당뇨(9 RCT)</td><td>−0.47% (95% CI −0.65~−0.28)</td><td>소외계층 대상 효과 확인</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <div class="card-header open" onclick="toggleCard(this)">
+        <span>✅ 원격의료의 장점·적용 영역</span><span class="toggle">▾</span>
+      </div>
+      <div class="card-body">
+        <ul class="dot">
+          <li>농촌·의료접근 제한 지역의 혈당관리 개선</li>
+          <li>DSME, 탄수화물 계산 교육, 임상지원 제공</li>
+          <li>소아·청소년 1형당뇨 관리 지원</li>
+          <li>청년층 SDOH 해결에 활용</li>
+          <li>웹포털·문자메시지 등 양방향 소통 도구가 특히 효과적</li>
+          <li>고혈압·이상지질혈증 중재에도 효과 입증</li>
+        </ul>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header open" onclick="toggleCard(this)">
+        <span>🚫 디지털 격차 — 위험 요인</span><span class="toggle">▾</span>
+      </div>
+      <div class="card-body">
+        <ul class="dot">
+          <li><strong>재정적 장벽</strong> — 데이터 요금, 초고속 인터넷 비용</li>
+          <li><strong>정보적 장벽</strong> — 수리력, 문해력, 디지털 기술</li>
+          <li><strong>기술적 장벽</strong> — 상호운용성 부족, 복잡한 사용자 인터페이스</li>
+        </ul>
+        <div class="alert alert-warn" style="margin-top:8px"><span>⚠️</span><span>인프라(노트북·휴대폰·인터넷 접근)와 지원(디지털 문해교육·CHW)에 대한 투자 없이는 <strong>탈락률(attrition)이 높아져</strong> 기존 불평등을 악화시킬 수 있다.</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="acc">
+    <div class="acc-hdr" onclick="toggleAcc(this)">
+      <span>DSMES(당뇨자기관리교육·지지) — mHealth 전달 효과</span><span>▾</span>
+    </div>
+    <div class="acc-body">
+      <table class="tc-table">
+        <tr><th>중재 유형</th><th>A1C 변화 (MD)</th></tr>
+        <tr><td>DSME(교육)</td><td>−0.3% (95% CI −0.6~−0.1, P=0.002)</td></tr>
+        <tr><td>당뇨 자기관리 지지</td><td>−0.4% (95% CI −0.6~−0.2, P&lt;0.001)</td></tr>
+        <tr><td>DSMES(통합형)</td><td>−0.2% (95% CI −0.3~−0.0, P&lt;0.001)</td></tr>
+      </table>
+      <p style="font-size: calc(11px * var(--fscale, 1));color:var(--text2);margin-top:6px">43개 RCT 메타분석(2025) — 효과는 작지만 일관됨. 교육과정은 인구집단 특성(문화·언어·디지털 격차)에 맞춰 조정되어야 한다.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ ACCESS / COST ═══ -->
+<div id="tab-access" class="panel">
+  <div class="alert alert-orange"><span>💳</span><span>보험 가입 여부와 더불어 고액공제(high-deductible) 보험 설계, 인슐린·약제비 부담이 당뇨 관리 격차의 핵심 동인이다.</span></div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>📊 보험 접근성 현황 (2024 NHIS)</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <table class="tc-table">
+        <tr><th>연령군</th><th>무보험률</th></tr>
+        <tr><td>소아청소년(≤17세)</td><td>4.9%</td></tr>
+        <tr><td>성인(18–64세)</td><td>11.1%</td></tr>
+        <tr><td>고령자(65세↑)</td><td>0.6%</td></tr>
+      </table>
+      <div class="alert alert-warn" style="margin-top:8px"><span>⚠️</span><span>보험이 있어도 <strong>고액공제 보험(High-Deductible Health Plan)</strong> 가입자는 재정적 부담 증가, 망막검사·혈압·A1C 모니터링 감소, 급성·만성 합병증 위험 증가와 연관된다.</span></div>
+    </div>
+  </div>
+
+  <div class="acc">
+    <div class="acc-hdr" onclick="toggleAcc(this)">
+      <span>전문 내분비/당뇨 진료 접근성 — Medicare 자료</span><span>▾</span>
+    </div>
+    <div class="acc-body">
+      <table class="tc-table">
+        <tr><th>대상군</th><th>내분비전문의 진료율(2019)</th></tr>
+        <tr><td>1형당뇨 고령자</td><td>33%</td></tr>
+        <tr><td>2형당뇨 + 중증 저혈당 병력</td><td>14%</td></tr>
+        <tr><td>기타 2형당뇨 성인</td><td>9%</td></tr>
+      </table>
+      <p style="font-size: calc(11px * var(--fscale, 1));color:var(--text2);margin-top:6px">인종·민족 소외집단, 저소득층, 농촌 거주자, 장기요양시설 거주자는 내분비 진료를 받을 가능성이 더 낮다. (참고: 1차의료 접근률은 88%로 비교적 높음)</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>💉 인슐린 비용·접근성 정책</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="dot">
+        <li>2021년 설문: 1형당뇨 성인 <strong>18.6%</strong>, 인슐린 치료 2형당뇨 성인 <strong>15.8%</strong>가 비용절감을 위해 인슐린을 비축(rationing)</li>
+        <li>CMS Part D Senior Savings Model(2021) — 인슐린 월 본인부담 $35 상한</li>
+        <li>Inflation Reduction Act(2022) — 모든 Medicare 수혜자 인슐린 월 $35 상한으로 확대</li>
+        <li>25개 주 + DC — 주 규제 민간보험에서 인슐린 본인부담 상한 도입</li>
+        <li>2023–2024년 3대 인슐린 제조사가 일부 상황에서 월 $35로 가격 인하</li>
+      </ul>
+      <div class="alert alert-info" style="margin-top:8px"><span>💡</span><span>모든 당뇨인은 치료의 재정적 부담, 비용 관련 약물 미준수, 비용으로 인한 필수서비스 비축에 대해 <strong>선별검사</strong>를 받아야 한다.</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ SDOH ═══ -->
+<div id="tab-sdoh" class="panel">
+  <div class="alert alert-orange"><span>🌍</span><span>사회적 건강결정요인(SDOH)은 임상 접촉에서 일관되게 인식·논의되지 않으며, 당뇨인의 절반이 재정적 스트레스, 약 20%가 식품불안정을 경험한다.</span></div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>📊 표 1.1 — 다학제 팀 구성: 하위 인구집단별 고려사항 (요약)</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <table class="tc-table">
+        <tr><th>하위 인구집단</th><th>주요 추가 팀원</th><th>핵심 고려사항</th></tr>
+        <tr><td>전체 당뇨인</td><td>1차의료, CDCES, RDN, 전문과</td><td>SDOH 평가·해결</td></tr>
+        <tr><td>집중인슐린요법(MDI/펌프)</td><td>기술 숙련 의료팀</td><td>고급 당뇨기술 관리</td></tr>
+        <tr><td>소아청소년</td><td>소아내분비, 학교간호사, 보호자</td><td>학교 연계 관리계획, 자기관리 점진적 이전</td></tr>
+        <tr><td>합병증·동반질환</td><td>심장내과·안과·신장내과 등 전문의, 케어코디네이터</td><td>기능·인지·재정·물류 장벽 선별</td></tr>
+        <tr><td>사회·구조적 장벽</td><td>케어내비게이터, 사회복지사, CHW, 통역사</td><td>심리사회적 욕구·자원·지지체계 고려</td></tr>
+        <tr><td>고령자</td><td>노인의학전문의, 임상약사, 작업치료사</td><td>영양·시력·청력·인지·이동성 평가</td></tr>
+        <tr><td>장기요양시설 거주자</td><td>시설 의료진, 물리/작업치료사, RDN</td><td>안전한 시설 내 당뇨관리 체계</td></tr>
+        <tr><td>임신부</td><td>모체태아의학/산과, 안과, 수유상담사</td><td>산후 적절한 추적관리·전환</td></tr>
+        <tr><td>행동건강질환</td><td>행동건강전문가, 사회복지사</td><td>연령·상황별 선별 프로토콜</td></tr>
+      </table>
+      <p style="font-size: calc(10.5px * var(--fscale, 1));color:var(--text2);margin-top:6px">CDCES, 공인당뇨관리교육전문가; RDN, 등록영양사. 전체 상세 내용은 원문 Table 1.1 참조.</p>
+    </div>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <div class="card-header open" onclick="toggleCard(this)">
+        <span>🍽️ 식품 불안정 (Food Insecurity)</span><span class="toggle">▾</span>
+      </div>
+      <div class="card-body">
+        <p style="font-size: calc(12px * var(--fscale, 1));margin-bottom:8px">2022년 美 인구 약 13% 식품불안정 — 2형당뇨 위험·고혈당 증가와 연관, 저소득층·한부모 가정에서 특히 높음</p>
+        <div class="alert alert-info" style="margin-bottom:8px"><span>📋</span><span><strong>2문항 선별도구:</strong><br>① "지난 12개월간 돈이 부족해 식품이 떨어질까 걱정했다"<br>② "지난 12개월간 구매한 식품이 부족했고 추가로 살 돈이 없었다"</span></div>
+        <ul class="dot">
+          <li>고혈당 위험 ↑ — 저가 가공탄수화물 섭취, 폭식, 약물구매 재정난, 불안·우울, 수면부족</li>
+          <li>저혈당 위험 ↑ — 설폰요소제/인슐린 사용 중 불규칙한 탄수화물 섭취</li>
+        </ul>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header open" onclick="toggleCard(this)">
+        <span>🏠 주거 불안정 (Housing Insecurity)</span><span class="toggle">▾</span>
+      </div>
+      <div class="card-body">
+        <ul class="dot">
+          <li>당뇨인 자기관리 능력에 직접적 영향</li>
+          <li>주거불안정 인구 중 당뇨 유병률 약 8%</li>
+          <li>식품불안정·무보험·인지장애·낮은 문해력과 흔히 공존</li>
+          <li>인슐린·약물 보관(냉장 등)을 위한 안전한 장소 필요</li>
+          <li>재향군인 대상 개발·검증된 위험평가도구 존재</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="acc">
+    <div class="acc-hdr" onclick="toggleAcc(this)">
+      <span>언어장벽·건강문해력(Health Literacy)·수리력(Numeracy)</span><span>▾</span>
+    </div>
+    <div class="acc-body">
+      <ul class="dot">
+        <li>제한된 영어 능력자에게는 무료 <strong>전문 통역</strong> 제공 — 가족 등 비전문 통역 사용은 가급적 회피</li>
+        <li>서면자료는 적정 언어 + <strong>6학년 읽기 수준</strong>으로 작성</li>
+        <li>미국 성인 <strong>약 9/10이 제한적 건강문해력</strong> 보유로 추정</li>
+        <li>건강수리력은 혈당 판독, 식품라벨 해석, 약물 용량·시기 이해에 필수 — 특히 인슐린펌프 등 기술 사용자에서 중요</li>
+        <li>National CLAS Standards가 문화적역량·언어지원 개선 가이드 제공</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="acc">
+    <div class="acc-hdr" onclick="toggleAcc(this)">
+      <span>난민·이주노동자 — 특수 취약집단</span><span>▾</span>
+    </div>
+    <div class="acc-body">
+      <ul class="dot">
+        <li>난민 지위는 당뇨 진단과 마찬가지로 <strong>심혈관질환 독립 위험인자</strong></li>
+        <li>美 농업노동자 약 218만 명, 이주노동자 자가보고 당뇨 유병률 13.51% vs 비이주노동자 10.8%</li>
+        <li>이동 빈번(수 주 단위)으로 진료 연속성 단절, 비용·문화·언어·문해력·교통·근무시간 등 다중 장벽 공존</li>
+        <li>모바일 통합건강(mobile integrated health), 원격의료 활용이 접근성 개선에 유용</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span>👥 커뮤니티 건강관리자(CHW)·동료지지자 역할</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body collapsed">
+      <ul class="dot">
+        <li><strong>CHW</strong> — "신뢰받는 지역사회 구성원/지역에 대한 깊은 이해를 가진 일선 공공보건 인력"</li>
+        <li>업무 범위: 아웃리치·소통, 옹호, 사회적지지, 기초 건강교육, 지역클리닉 의뢰</li>
+        <li>위임된 제한적 임상업무는 반드시 의료진 직접 감독 하에 시행</li>
+        <li><strong>커뮤니티 파라메딕</strong> — 만성질환 모니터링·교육, 약물관리, 케어코디네이션, SDOH 평가까지 확장된 역할</li>
+        <li>동료지지자(peer supporter)·평신도리더(lay leader)도 DSMES 전달에 기여</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ SUBPOPULATIONS ═══ -->
+<div id="tab-subpop" class="panel">
+  <div class="alert alert-orange"><span>👥</span><span>소아·고령자·임신부·이주노동자·난민 등 인구집단별로 고유한 당뇨관리 장벽과 팀 구성이 필요하다.</span></div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>👶 소아·청소년·청년 — 고유 고려사항</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="dot">
+        <li>학교·방과후 활동 전문가와 협력해 <strong>개별화된 당뇨 의료관리계획</strong> 수립</li>
+        <li>안전·웰빙·학업수행에 대한 SDOH 장벽 평가</li>
+        <li>보호자→본인으로 <strong>자기관리의 발달단계별 점진적 이전</strong> 지원</li>
+        <li>저소득 가정, 비인슐린펌프 사용자에서 A1C 더 높음 — 기술 접근성 격차 해소 필요</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <div class="card-header open" onclick="toggleCard(this)">
+        <span>🤰 임신부 당뇨인</span><span class="toggle">▾</span>
+      </div>
+      <div class="card-body">
+        <ul class="dot">
+          <li>모체태아의학전문의/산과(특히 1형당뇨·집중인슐린요법 시), CDCES, RDN, 안과(기존 1형·2형당뇨 시), 수유상담사 협진</li>
+          <li><strong>산후 추적관리</strong>가 핵심 — 산과→1차의료 전환 확립 필요</li>
+        </ul>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header open" onclick="toggleCard(this)">
+        <span>👴 고령자</span><span class="toggle">▾</span>
+      </div>
+      <div class="card-body">
+        <ul class="dot">
+          <li>영양상태 — 재정(구매력)·접근성(구입)·요리능력(준비)·구강건강(섭취) 종합 평가</li>
+          <li>시력·청력·손기능(dexterity)·인지·이동성 등 기능적 장벽 평가</li>
+          <li>사회적 어려움이 삶의 질 저하·기능적 의존 위험 증가와 직결</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="acc">
+    <div class="acc-hdr" onclick="toggleAcc(this)">
+      <span>내분비/당뇨 전문팀 의뢰가 특히 중요한 상황</span><span>▾</span>
+    </div>
+    <div class="acc-body">
+      <ul class="dot">
+        <li>높은 임상복잡성·다중동반질환</li>
+        <li>관리가 어려운 고혈당 또는 저혈당</li>
+        <li>1차의료팀의 관리역량을 넘어서는 복잡한 치료요구</li>
+      </ul>
+      <p style="font-size: calc(11px * var(--fscale, 1));color:var(--text2);margin-top:6px">근거: 내분비 전문의 진료 시 A1C 목표 달성률 향상, 약물(심혈관·신장보호) 처방 격차 감소와 연관 (Setji 2019, McCoy 2025 등)</p>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ TABLES SUMMARY ═══ -->
+<div id="tab-tables" class="panel">
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>📊 핵심 수치 요약표</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <table class="tc-table">
+        <tr><th>항목</th><th>수치</th></tr>
+        <tr><td>미국 당뇨병 인구(2021)</td><td>3,840만 명 (11.6%)</td></tr>
+        <tr><td>미국 전당뇨 인구(2021)</td><td>9,760만 명 (38.0%)</td></tr>
+        <tr><td>3대 치료목표(A1C·혈압·지질) 동시 달성률</td><td>22.2%</td></tr>
+        <tr><td>2022년 당뇨 연간 경제비용</td><td>≥$4,130억</td></tr>
+        <tr><td>인슐린 비축(rationing) 경험률(1형당뇨)</td><td>18.6%</td></tr>
+        <tr><td>인슐린 본인부담 상한(Medicare, IRA 2022)</td><td>월 $35</td></tr>
+        <tr><td>CCM 중재 A1C 개선효과</td><td>−0.21%</td></tr>
+        <tr><td>팀기반케어 A1C 개선효과</td><td>−0.5%</td></tr>
+        <tr><td>원격의료 종합 A1C 개선효과</td><td>−0.37%</td></tr>
+        <tr><td>2019년 1형당뇨 고령자 내분비 진료율</td><td>33%</td></tr>
+        <tr><td>미국 성인 제한적 건강문해력 추정비율</td><td>~90%</td></tr>
+        <tr><td>식품불안정 미국 인구 비율(2022)</td><td>~13%</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span>📋 SDOH 선별 — 권고 1.6–1.9 체크리스트</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body collapsed">
+      <ul class="dot">
+        <li>☐ 보험상태·인종·민족·언어·장애·SDOH별 임상질 데이터 계층화 (1.6, B)</li>
+        <li>☐ 식품·주거 불안정 선별 (1.7, A/B)</li>
+        <li>☐ 재정 장벽·보험 접근성 평가 (1.7, B)</li>
+        <li>☐ 환경·이웃 요인, 사회적 자본/지지 평가 (1.7, B)</li>
+        <li>☐ 지역 커뮤니티 자원 의뢰 체계 확보</li>
+        <li>☐ 동료건강코치/내비게이터/CHW 활용 가능 여부 확인 (1.8, A)</li>
+        <li>☐ 디지털 자기관리 도구·코치 고려 (1.8, B)</li>
+        <li>☐ 소외 커뮤니티에서 CHW의 당뇨·심혈관·신장 위험요인 관리 참여 (1.9, B)</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span>📁 참고 — 유용한 외부 리소스</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body collapsed">
+      <table class="tc-table">
+        <tr><th>리소스</th><th>용도</th></tr>
+        <tr><td>findhelp.org / Unite Us / 211(United Way)</td><td>지역 SDOH 자원 의뢰</td></tr>
+        <tr><td>National CLAS Standards</td><td>문화적·언어적 적정성 의료서비스 가이드</td></tr>
+        <tr><td>CDC National Diabetes Education Program</td><td>진료전달체계 설계 툴킷</td></tr>
+        <tr><td>NIDDK Diabetes for Health Professionals</td><td>QI·진료변환 가이드</td></tr>
+      </table>
+    </div>
+  </div>
+</div>
+
+</div><!-- /main -->
+
+<!-- ═══ MODAL: CCM ═══ -->
+<div id="ccmModal" class="modal-overlay" onclick="closeModalOutside(event,'ccmModal')">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal('ccmModal')">✕</button>
+    <div class="modal-title">🏥 만성질환관리모델(Chronic Care Model) 상세</div>
+
+    <div class="alert alert-info" style="margin:0 0 12px"><span>💡</span><span>CCM은 당뇨와 같은 만성질환 진료 프로그램을 설명하는 가장 널리 쓰이는 프레임워크로, 6개 핵심 요소로 구성된다.</span></div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">6대 핵심 요소</div>
+      <table class="modal-table">
+        <tr><th>요소</th><th>설명</th></tr>
+        <tr><td>① 진료전달체계 설계</td><td>반응형(reactive)에서 사전대응형(proactive)으로 전환, 팀기반 계획방문 조율</td></tr>
+        <tr><td>② 자기관리 지원</td><td>환자의 자기관리 역량을 키우는 지지 체계</td></tr>
+        <tr><td>③ 의사결정 지원</td><td>임상 접점에서 근거기반·효과적 가이드라인에 기반한 진료</td></tr>
+        <tr><td>④ 임상정보시스템</td><td>개인·인구집단 단위 지원이 가능한 레지스트리 활용</td></tr>
+        <tr><td>⑤ 커뮤니티 자원·정책</td><td>건강한 생활습관을 지원할 자원의 발굴·개발</td></tr>
+        <tr><td>⑥ 건강시스템</td><td>품질 중심 조직문화 조성</td></tr>
+      </table>
+    </div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">근거 — RCT 메타분석 결과</div>
+      <table class="modal-table">
+        <tr><th>지표</th><th>결과</th></tr>
+        <tr><td>A1C 변화(usual care 대비)</td><td>−0.21% (95% CI −0.30~−0.13, P&lt;0.001)</td></tr>
+        <tr><td>효과가 큰 조건</td><td>기저 A1C가 높을수록, CCM 요소 4개 이상 포함 시</td></tr>
+        <tr><td>혈압·진료과정</td><td>개선됨(합병증 선별 등)</td></tr>
+        <tr><td>콜레스테롤·흡연·체중</td><td>유의한 영향 없음</td></tr>
+      </table>
+    </div>
+
+    <div class="alert alert-warn" style="margin-top:4px"><span>⚠️</span><span>개별 CCM 구성요소(케이스매니지먼트, 환자 레지스트리, 교육 등)의 효과는 중재·환경·평가방식의 이질성으로 일관되지 않게 나타난다.</span></div>
+  </div>
+</div>
+
+<!-- ═══ MODAL: TEAM-BASED CARE ═══ -->
+<div id="teamModal" class="modal-overlay" onclick="closeModalOutside(event,'teamModal')">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal('teamModal')">✕</button>
+    <div class="modal-title">👥 팀기반 케어 — 효과 상세</div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">35개 RCT 메타분석 (성인 1형·2형당뇨)</div>
+      <table class="modal-table">
+        <tr><th>지표</th><th>변화량 (95% CI)</th></tr>
+        <tr><td>A1C</td><td>−0.5% (−0.7~−0.3)</td></tr>
+        <tr><td>수축기혈압</td><td>−5.5 mmHg (−8.1~−3.0)</td></tr>
+        <tr><td>이완기혈압</td><td>−3.2 mmHg (−4.8~−1.5)</td></tr>
+        <tr><td>LDL 콜레스테롤</td><td>−8.0 mg/dL (−11.8~−4.3)</td></tr>
+        <tr><td>총콜레스테롤</td><td>−7.4 mg/dL (−13.9~−0.9)</td></tr>
+      </table>
+    </div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">CINEMA 프로그램 2년차 결과 (ASCVD 고위험 2형당뇨·전당뇨)</div>
+      <table class="modal-table">
+        <tr><th>지표</th><th>변화량</th></tr>
+        <tr><td>체중</td><td>−5.5 lb (−2.5 kg)</td></tr>
+        <tr><td>BMI</td><td>−0.9 kg/m²</td></tr>
+        <tr><td>수축기/이완기혈압</td><td>−3.6 / −1.2 mmHg</td></tr>
+        <tr><td>A1C</td><td>−0.5%</td></tr>
+        <tr><td>LDL / 총콜레스테롤</td><td>−9.0 / −10.7 mg/dL</td></tr>
+        <tr><td>중성지방</td><td>−13.5 mg/dL</td></tr>
+        <tr><td>10년 ASCVD 절대위험</td><td>−2.4%</td></tr>
+      </table>
+    </div>
+
+    <div class="alert alert-info" style="margin-top:4px"><span>💡</span><span>팀기반 케어는 1차의료팀의 관리역량을 초과하는 복잡한 다중동반질환·난치성 고혈당/저혈당 상황에서 내분비 전문팀 참여의 근거가 된다.</span></div>
+  </div>
+</div>
+
+<!-- ═══ MODAL: SDOH SCREENING ═══ -->
+<div id="sdohScreenModal" class="modal-overlay" onclick="closeModalOutside(event,'sdohScreenModal')">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal('sdohScreenModal')">✕</button>
+    <div class="modal-title">🌍 식품·주거 불안정 선별도구</div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">① 식품 불안정 — 2문항 선별 (Hager et al.)</div>
+      <table class="modal-table">
+        <tr><th>문항</th><th>내용</th></tr>
+        <tr><td>문항 1</td><td>"지난 12개월간, 돈이 부족해 음식이 떨어질까 걱정했다"</td></tr>
+        <tr><td>문항 2</td><td>"지난 12개월간, 구매한 음식이 부족했고 추가로 살 돈이 없었다"</td></tr>
+      </table>
+      <p style="font-size: calc(11px * var(--fscale, 1));color:var(--text2);margin-top:6px">2022년 기준 미국 인구 약 13%가 식품불안정 상태. 저소득·한부모가정·일부 소외 인종집단에서 비율이 불균형적으로 높음.</p>
+    </div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">② 주거 불안정 — 위험평가</div>
+      <table class="modal-table">
+        <tr><th>항목</th><th>내용</th></tr>
+        <tr><td>도구</td><td>재향군인 대상 개발·검증된 주거불안정 임박위험 평가도구</td></tr>
+        <tr><td>유병률</td><td>주거불안정 인구 중 당뇨 유병률 약 8%</td></tr>
+        <tr><td>공존 장벽</td><td>식품불안정, 무보험, 인지장애, 행동건강문제, 낮은 문해·수리력</td></tr>
+        <tr><td>관리상 특이사항</td><td>약물·기기 보관 장소, 인슐린 냉장보관 접근성 확보 필요</td></tr>
+      </table>
+    </div>
+
+    <div class="alert alert-warn" style="margin-top:4px"><span>⚠️</span><span>비용 관련 약물 미준수를 경험한 만성질환자 중 <strong>2/3는 이를 의사에게 알리지 않음</strong> — 능동적 선별 없이는 발견되지 않는다.</span></div>
+  </div>
+</div>
+
+<!-- ═══ MODAL: COST ═══ -->
+<div id="costModal" class="modal-overlay" onclick="closeModalOutside(event,'costModal')">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal('costModal')">✕</button>
+    <div class="modal-title">💰 당뇨병의 경제적 부담 — 상세 (2022년)</div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">총 비용 구성</div>
+      <table class="modal-table">
+        <tr><th>항목</th><th>금액</th></tr>
+        <tr><td>총 연간 비용</td><td>≥$4,130억</td></tr>
+        <tr><td>직접 의료비</td><td>≥$3,070억</td></tr>
+        <tr><td>생산성 손실(간접비)</td><td>≥$1,060억</td></tr>
+      </table>
+    </div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">증가 추세 (인플레이션 보정)</div>
+      <table class="modal-table">
+        <tr><th>기간</th><th>증가율</th></tr>
+        <tr><td>2017–2022</td><td>+7%</td></tr>
+        <tr><td>2012–2022</td><td>+35%</td></tr>
+      </table>
+      <p style="font-size: calc(11px * var(--fscale, 1));color:var(--text2);margin-top:6px">유병률 증가와 환자 1인당 비용 상승이 동시에 기여</p>
+    </div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">인슐린 비용 정책 타임라인</div>
+      <table class="modal-table">
+        <tr><th>시점</th><th>내용</th></tr>
+        <tr><td>2021</td><td>CMS Part D Senior Savings Model — 월 $35 상한(참여 플랜)</td></tr>
+        <tr><td>2022</td><td>Inflation Reduction Act — 모든 Medicare 수혜자로 확대</td></tr>
+        <tr><td>2023–2024</td><td>3대 인슐린 제조사 가격 인하(일부 상황 월 $35)</td></tr>
+        <tr><td>최근 5년</td><td>25개 주+DC가 주 규제 민간보험에 본인부담 상한 도입</td></tr>
+      </table>
+    </div>
+
+    <div class="alert alert-danger" style="margin-top:4px"><span>🚫</span><span>2021년 설문에서 1형당뇨 성인 18.6%, 인슐린치료 2형당뇨 성인 15.8%가 비용절감을 위해 인슐린을 비축(rationing)했다고 보고했다.</span></div>
+  </div>
+</div>
+
+<script>
+const FONT_ZOOM_LEVELS = [1, 1.25, 1.5];
+let fontZoomIndex = 0;
+
+function applyFontZoom(scale) {
+  document.documentElement.style.setProperty('--fscale', scale);
+  const label = document.getElementById('font-zoom-label');
+  if (label) label.textContent = Math.round(scale * 100) + '%';
+}
+
+function cycleFontZoom() {
+  fontZoomIndex = (fontZoomIndex + 1) % FONT_ZOOM_LEVELS.length;
+  applyFontZoom(FONT_ZOOM_LEVELS[fontZoomIndex]);
+}
+
+function showTab(id){
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('tab-'+id).classList.add('active');
+  event.target.classList.add('active');
+}
+function toggleCard(el){
+  el.classList.toggle('open');
+  el.nextElementSibling.classList.toggle('collapsed');
+}
+function toggleAcc(el){
+  const b=el.nextElementSibling;
+  b.style.display=b.style.display==='block'?'none':'block';
+  el.querySelector('span:last-child').textContent=b.style.display==='block'?'▴':'▾';
+}
+
+function openModal(id){document.getElementById(id).classList.add('open');}
+function closeModal(id){document.getElementById(id).classList.remove('open');}
+function closeModalOutside(e,id){if(e.target===document.getElementById(id))closeModal(id);}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')document.querySelectorAll('.modal-overlay.open').forEach(m=>m.classList.remove('open'));});
+
+const abbrs=[
+  ['ADA','American Diabetes Association — 미국당뇨병학회'],
+  ['CCM','Chronic Care Model (만성질환관리모델) — 6대 핵심요소 기반 만성질환 진료 프레임워크'],
+  ['PCMH','Patient-Centered Medical Home (환자중심 의료의 home) — 종합 1차의료·팀기반 만성질환관리 모델'],
+  ['ACO','Accountable Care Organization (책임의료기구) — 1차의료 중심 결제·진료모델'],
+  ['APM','Alternative Payment Model (대체결제모델) — 행위별수가가 아닌 가치·위험기반 결제구조'],
+  ['QI','Quality Improvement (질 향상) — 체계적 진료질 개선 활동'],
+  ['SDOH','Social Determinants of Health (사회적 건강결정요인) — 경제·환경·정치·사회적 조건'],
+  ['CHW','Community Health Worker (커뮤니티 건강관리자) — 지역사회 신뢰기반 일선 보건인력'],
+  ['CDCES','Certified Diabetes Care and Education Specialist (공인당뇨관리교육전문가)'],
+  ['RDN','Registered Dietitian Nutritionist (등록영양사)'],
+  ['DSME','Diabetes Self-Management Education (당뇨자기관리교육)'],
+  ['DSMES','Diabetes Self-Management Education and Support (당뇨자기관리교육 및 지지)'],
+  ['mHealth','Mobile Health — 모바일 기기 기반 건강관리 중재'],
+  ['EHR','Electronic Health Record (전자의무기록)'],
+  ['NHIS','National Health Interview Survey (국민건강면접조사) — 미국 CDC 시행'],
+  ['CMS','Centers for Medicare & Medicaid Services — 미국 메디케어·메디케이드 서비스센터'],
+  ['IRA','Inflation Reduction Act (인플레이션감축법, 2022) — 인슐린 본인부담 상한 포함'],
+  ['HDHP','High-Deductible Health Plan (고액공제 건강보험) — 본인부담 공제액이 높은 보험 설계'],
+  ['HSA','Health Savings Account (건강저축계좌) — HDHP의 본인부담을 일부 상쇄'],
+  ['ASCVD','Atherosclerotic Cardiovascular Disease (죽상동맥경화성 심혈관질환)'],
+  ['CINEMA','Center for Integrated and Novel Approaches in Vascular-Metabolic Disease (프로그램명) — 팀기반 ASCVD 위험관리 프로그램'],
+  ['NHANES','National Health and Nutrition Examination Survey — 미국 국민건강영양조사'],
+  ['CLAS','Culturally and Linguistically Appropriate Services — 문화적·언어적 적정 서비스 국가표준'],
+  ['NIDDK','National Institute of Diabetes and Digestive and Kidney Diseases — 美 국립당뇨·소화기·신장질환연구소'],
+  ['NQS','National Quality Strategy (국가품질전략) — ACA 기반 3대 목표(인구건강·진료경험·비용) 전략'],
+  ['T1D Exchange','1형당뇨 임상데이터 레지스트리·QI 협력체 — 다기관 벤치마킹 활용'],
+  ['COST','Comprehensive Score for Financial Toxicity — 당뇨인의 재정적 독성(부담) 측정도구'],
+  ['PTDM','Posttransplantation Diabetes Mellitus (이식 후 당뇨병) — 본문 1.7 SDOH 맥락과 별개로 합병증 챕터 참조'],
+];
+
+function buildAbbr(){
+  const sorted=abbrs.slice().sort((a,b)=>a[0].localeCompare(b[0]));
+  document.getElementById('abbr-grid-drop').innerHTML=sorted.map(a=>
+    `<div style="background:var(--surface2);border:1px solid var(--border);border-radius:5px;padding:6px 10px;margin-bottom:4px;" data-term="${a[0].toLowerCase()}" data-def="${a[1].toLowerCase()}">
+       <span style="font-weight:700;color:var(--accent2);font-size: calc(12px * var(--fscale, 1));font-family:'Courier New',monospace">${a[0]}</span>
+       <div style="font-size: calc(11px * var(--fscale, 1));color:var(--text2);line-height:1.45;margin-top:2px">${a[1]}</div>
+     </div>`).join('');
+}
+function filterAbbr(val){
+  const v=val.toLowerCase().trim();
+  const drop=document.getElementById('abbr-dropdown');
+  const items=document.querySelectorAll('#abbr-grid-drop [data-term]');
+  if(!v){drop.style.display='none';return;}
+  const inp=document.getElementById('abbr-input');
+  const rect=inp.getBoundingClientRect();
+  const w=440;
+  let left=rect.right-w;if(left<8)left=8;
+  drop.style.top=(rect.bottom+4)+'px';drop.style.left=left+'px';
+  drop.style.display='block';
+  items.forEach(el=>{
+    const show=el.dataset.term.startsWith(v)||el.dataset.def.includes(v);
+    el.style.display=show?'':'none';
+  });
+}
+document.addEventListener('click',e=>{
+  const inp=document.getElementById('abbr-input');
+  const drop=document.getElementById('abbr-dropdown');
+  if(inp&&!inp.contains(e.target)&&drop&&!drop.contains(e.target))drop.style.display='none';
+});
+buildAbbr();
+</script>
+</body>
+</html>

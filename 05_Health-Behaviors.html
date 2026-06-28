@@ -1,0 +1,1425 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ADA 2026 긍정적 건강행동 촉진과 웰빙</title>
+<style>
+  :root {
+    --bg:#f6f8fa;--surface:#fff;--surface2:#f0f2f5;--border:#d0d7de;
+    --accent:#0969da;--accent2:#0550ae;--green:#1a7f37;--yellow:#9a6700;
+    --red:#cf222e;--orange:#bc4c00;--text:#1f2328;--text2:#57606a;
+    --teal:#0a7c8a;--purple:#5a3ea0;--fscale:1;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'Pretendard','Noto Sans KR',-apple-system,sans-serif;background:var(--bg);color:var(--text);font-size: calc(13px * var(--fscale, 1));line-height:1.5;}
+  header{background:var(--surface);border-bottom:1px solid var(--border);padding:12px 16px 8px;display:flex;flex-direction:column;align-items:center;gap:4px;position:sticky;top:0;z-index:100;}
+  .header-inner{width:100%;max-width:960px;display:flex;flex-direction:column;align-items:center;gap:4px;}
+  .logo-badge{background:var(--accent2);color:#fff;font-size: calc(10px * var(--fscale, 1));font-weight:700;padding:3px 8px;border-radius:4px;letter-spacing:.5px;}
+  .tab-bar{display:flex;justify-content:center;background:var(--surface);border-bottom:1px solid var(--border);overflow-x:auto;scrollbar-width:none;}
+  .tab-bar::-webkit-scrollbar{display:none;}
+  .font-zoom-btn{display:flex;align-items:center;gap:3px;flex-shrink:0;margin:4px 4px 4px 6px;padding:5px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:6px;color:var(--accent2);font-size:calc(11px * var(--fscale, 1));font-weight:700;cursor:pointer;user-select:none;white-space:nowrap;transition:background .15s;}
+  .font-zoom-btn:hover{background:var(--border);}
+  .font-zoom-btn .fz-icon{font-size:calc(12px * var(--fscale, 1));}
+  .tab-bar-inner{width:100%;max-width:960px;display:flex;align-items:center;gap:2px;padding:0 4px;}
+  .tab{padding:7px 11px;font-size: calc(11.5px * var(--fscale, 1));color:var(--text2);cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;transition:color .15s,border-color .15s;user-select:none;flex-shrink:0;}
+  .tab:hover{color:var(--text);}
+  .tab.active{color:var(--accent2);border-bottom-color:var(--accent2);}
+  .tab-abbr-wrap{display:flex;align-items:center;padding:4px 4px;margin-left:4px;flex-shrink:0;position:relative;}
+  .main{padding:12px 16px;max-width:960px;margin:0 auto;}
+  .panel{display:none;}
+  .panel.active{display:block;}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+  .grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;}
+  @media(max-width:680px){.grid2,.grid3{grid-template-columns:1fr;}}
+  .card{background:var(--surface);border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-bottom:10px;}
+  .card-header{background:var(--surface2);padding:8px 12px;font-size: calc(12px * var(--fscale, 1));font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.5px;border-bottom:1px solid var(--border);cursor:pointer;display:flex;align-items:center;justify-content:space-between;user-select:none;}
+  .card-header .toggle{font-size: calc(13px * var(--fscale, 1));transition:transform .2s;}
+  .card-header.open .toggle{transform:rotate(180deg);}
+  .card-body{padding:10px 12px;}
+  .card-body.collapsed{display:none;}
+  .stat-row{display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap;}
+  .stat-box{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:10px 14px;flex:1;min-width:90px;text-align:center;}
+  .stat-box.clickable{cursor:pointer;transition:box-shadow .15s,border-color .15s;}
+  .stat-box.clickable:hover{border-color:var(--accent2);box-shadow:0 2px 8px rgba(5,80,174,.15);}
+  .stat-val{font-size: calc(18px * var(--fscale, 1));font-weight:700;color:var(--accent2);}
+  .stat-lbl{font-size: calc(10px * var(--fscale, 1));color:var(--text2);margin-top:2px;}
+  .stat-hint{font-size: calc(9px * var(--fscale, 1));color:var(--accent2);margin-top:4px;opacity:.7;}
+  /* Modal */
+  .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:500;align-items:center;justify-content:center;}
+  .modal-overlay.open{display:flex;}
+  .modal-box{background:var(--surface);border-radius:12px;padding:20px;max-width:680px;width:92%;max-height:84vh;overflow-y:auto;box-shadow:0 16px 48px rgba(0,0,0,.22);position:relative;}
+  .modal-close{position:absolute;top:12px;right:14px;background:none;border:none;font-size: calc(18px * var(--fscale, 1));cursor:pointer;color:var(--text2);line-height:1;}
+  .modal-title{font-size: calc(15px * var(--fscale, 1));font-weight:700;color:var(--text);margin-bottom:12px;padding-right:20px;line-height:1.4;}
+  .modal-section{margin-bottom:12px;}
+  .modal-section-title{font-size: calc(11px * var(--fscale, 1));font-weight:700;color:var(--accent2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;border-bottom:1px solid var(--border);padding-bottom:4px;}
+  .modal-table{width:100%;border-collapse:collapse;font-size: calc(11.5px * var(--fscale, 1));}
+  .modal-table th{background:var(--surface2);color:var(--text2);padding:4px 8px;font-size: calc(10.5px * var(--fscale, 1));font-weight:600;text-align:left;border-bottom:1px solid var(--border);}
+  .modal-table td{padding:5px 8px;border-bottom:1px solid var(--border);vertical-align:top;}
+  .modal-table tr:last-child td{border-bottom:none;}
+  .rec-list{list-style:none;}
+  .rec-item{padding:7px 0;border-bottom:1px solid var(--border);display:flex;gap:8px;align-items:flex-start;}
+  .rec-item:last-child{border-bottom:none;}
+  .rec-text{font-size: calc(12px * var(--fscale, 1));color:var(--text);line-height:1.65;}
+  .rec-text strong{color:#1f2328;}
+  .badge{display:inline-flex;align-items:center;padding:2px 8px;border-radius:10px;font-size: calc(10px * var(--fscale, 1));font-weight:700;white-space:nowrap;flex-shrink:0;margin-top:1px;}
+  .badge-A{background:#dafbe1;color:#116329;border:1px solid #1a7f37;}
+  .badge-B{background:#ddf4ff;color:var(--accent2);border:1px solid var(--accent2);}
+  .badge-C{background:#fff8c5;color:#7a4b00;border:1px solid #d4a017;}
+  .badge-E{background:#f3e5f5;color:#5a3ea0;border:1px solid #5a3ea0;}
+  .alert{padding:8px 12px;border-radius:6px;font-size: calc(12px * var(--fscale, 1));margin:8px 0;display:flex;gap:8px;align-items:flex-start;}
+  .alert-info{background:#ddf4ff;border-left:3px solid var(--accent2);color:#0550ae;}
+  .alert-warn{background:#fff8c5;border-left:3px solid #d4a017;color:#7a4b00;}
+  .alert-danger{background:#ffebe9;border-left:3px solid var(--red);color:#82071e;}
+  .alert-success{background:#dafbe1;border-left:3px solid var(--green);color:#116329;}
+  .alert-teal{background:#e0f5f5;border-left:3px solid var(--teal);color:#075050;}
+  .alert-orange{background:#fff3e0;border-left:3px solid var(--orange);color:#7a3500;}
+  .alert-purple{background:#f3e5f5;border-left:3px solid var(--purple);color:#5a3ea0;}
+  .tc-table{width:100%;border-collapse:collapse;font-size: calc(11.5px * var(--fscale, 1));}
+  .tc-table th{background:var(--surface2);color:var(--text2);padding:5px 8px;font-size: calc(10.5px * var(--fscale, 1));text-transform:uppercase;letter-spacing:.3px;font-weight:600;text-align:left;border-bottom:1px solid var(--border);}
+  .tc-table td{padding:5px 8px;border-bottom:1px solid var(--border);vertical-align:top;}
+  .tc-table tr:last-child td{border-bottom:none;}
+  .tc-table tr:hover td{background:rgba(0,0,0,.02);}
+  .acc{border:1px solid var(--border);border-radius:6px;margin-bottom:6px;overflow:hidden;}
+  .acc-hdr{background:var(--surface2);padding:7px 12px;font-size: calc(12px * var(--fscale, 1));font-weight:600;color:var(--text);cursor:pointer;display:flex;justify-content:space-between;align-items:center;user-select:none;}
+  .acc-hdr:hover{background:#e8eaec;}
+  .acc-body{display:none;padding:10px 12px;font-size: calc(12px * var(--fscale, 1));line-height:1.65;}
+  .flow-box{border:1px solid var(--border);border-radius:6px;background:var(--surface);padding:8px 12px;margin-bottom:6px;font-size: calc(12px * var(--fscale, 1));line-height:1.6;}
+  .flow-arrow{text-align:center;color:var(--text2);font-size: calc(14px * var(--fscale, 1));margin:2px 0;}
+  .step-num{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;background:var(--accent2);color:#fff;font-size: calc(10px * var(--fscale, 1));font-weight:700;flex-shrink:0;margin-right:6px;}
+  ul.dot{padding-left:18px;}
+  ul.dot li{margin-bottom:3px;font-size: calc(12px * var(--fscale, 1));line-height:1.6;}
+  ol.num{padding-left:18px;}
+  ol.num li{margin-bottom:4px;font-size: calc(12px * var(--fscale, 1));line-height:1.6;}
+  ::-webkit-scrollbar{width:5px;height:5px;}
+  ::-webkit-scrollbar-track{background:var(--bg);}
+  ::-webkit-scrollbar-thumb{background:#c8d0d9;border-radius:3px;}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div style="display:flex;align-items:center;gap:10px">
+      <span class="logo-badge">ADA 2026</span>
+      <h1 style="font-size:17px;font-weight:700;color:var(--text)">긍정적 건강행동 촉진과 웰빙</h1>
+    </div>
+    <div style="text-align:center;line-height:1.5">
+      <span style="color:var(--text2);font-size: calc(11px * var(--fscale, 1))">Standards of Care in Diabetes—2026, Section 5 — American Diabetes Association</span><br>
+      <span style="font-size: calc(10px * var(--fscale, 1));color:var(--text2)">Diabetes Care 2026;49(Suppl. 1):S89–S131 · doi: 10.2337/dc26-S005</span>
+    </div>
+    <div style="font-size: calc(10px * var(--fscale, 1));color:var(--text2);font-style:italic;">This tool is not officially endorsed by the American Diabetes Association (ADA).</div>
+  </div>
+</header>
+
+<div class="tab-bar">
+  <div class="tab-bar-inner">
+    <div id="font-zoom-btn" class="font-zoom-btn" onclick="cycleFontZoom()"><span class="fz-icon">🔠</span><span id="font-zoom-label">100%</span></div>
+    <div class="tab active" onclick="showTab('overview')">🏠 개요</div>
+    <div class="tab" onclick="showTab('dsmes')">📚 DSMES</div>
+    <div class="tab" onclick="showTab('nutrition')">🥗 영양치료</div>
+    <div class="tab" onclick="showTab('fasting')">🌙 단식·라마단</div>
+    <div class="tab" onclick="showTab('activity')">🏃 신체활동</div>
+    <div class="tab" onclick="showTab('smoking')">🚭 금연·기호물질</div>
+    <div class="tab" onclick="showTab('psychosocial')">🧠 심리사회 케어</div>
+    <div class="tab" onclick="showTab('eating')">🍽️ 이상섭식·SMI</div>
+    <div class="tab" onclick="showTab('sleep')">😴 수면건강</div>
+    <div class="tab" onclick="showTab('tables')">📁 표·요약 모음</div>
+    <div class="tab-abbr-wrap">
+      <div style="position:relative;display:flex;align-items:center;flex-shrink:0">
+        <span style="position:absolute;left:8px;color:var(--text2);font-size: calc(12px * var(--fscale, 1));pointer-events:none">🔍</span>
+        <input id="abbr-input" type="text" placeholder="약어" oninput="filterAbbr(this.value)"
+          style="background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:4px 8px 4px 26px;color:var(--text);font-size: calc(12px * var(--fscale, 1));width:90px;outline:none;"
+          onfocus="this.style.borderColor='var(--accent2)'" onblur="this.style.borderColor='var(--border)'">
+      </div>
+      <div id="abbr-dropdown" style="display:none;position:fixed;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:8px;width:440px;max-height:360px;overflow-y:auto;z-index:300;box-shadow:0 8px 24px rgba(0,0,0,.12)">
+        <div id="abbr-grid-drop"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="main">
+
+<!-- ═══ OVERVIEW ═══ -->
+<div id="tab-overview" class="panel active">
+  <div class="stat-row">
+    <div class="stat-box clickable" onclick="openModal('dsmesTimingModal')"><div class="stat-val">4대 시점</div><div class="stat-lbl">DSMES 의뢰 핵심 타이밍</div><div class="stat-hint">▸ 클릭하여 상세 보기</div></div>
+    <div class="stat-box clickable" onclick="openModal('plateModal')"><div class="stat-val">접시법</div><div class="stat-lbl">기본 식사계획 시각화 도구</div><div class="stat-hint">▸ 클릭하여 상세 보기</div></div>
+    <div class="stat-box clickable" onclick="openModal('distressModal')"><div class="stat-val">60–70%</div><div class="stat-lbl">당뇨고통(distress) 유병률</div><div class="stat-hint">▸ 클릭하여 상세 보기</div></div>
+    <div class="stat-box clickable" onclick="openModal('ramadanModal')"><div class="stat-val">IDF-DAR</div><div class="stat-lbl">라마단 단식 위험평가도구</div><div class="stat-hint">▸ 클릭하여 상세 보기</div></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>📋 인간중심 행동건강 지원 — 전체 흐름</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <div class="flow-box" style="border-left:3px solid var(--accent2)">
+        <strong>① DSMES — 진단·연례·전환기마다</strong><br>
+        <span style="color:var(--text2);font-size: calc(11px * var(--fscale, 1))">진단 시, 연 1회/목표미달성 시, 합병증 발생 시, 생애전환 시 DSMES 평가·의뢰(A/E)</span>
+      </div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-box" style="border-left:3px solid var(--green)">
+        <strong>② 영양치료(MNT) — RDN 의뢰</strong><br>
+        <span style="font-size: calc(11.5px * var(--fscale, 1))">개별화된 식이패턴, 체중 5–7%↓ 목표, 나트륨·첨가당 제한, 고섬유 탄수화물 강조(A/B)</span>
+      </div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-box" style="border-left:3px solid var(--yellow)">
+        <strong>③ 신체활동 — 유산소+저항운동</strong><br>
+        <span style="font-size: calc(11.5px * var(--fscale, 1))">주 150분 중강도 유산소 + 주 2–3회 저항운동, 좌식시간 30분마다 중단(B/C)</span>
+      </div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-box" style="border-left:3px solid var(--orange)">
+        <strong>④ 금연·기호물질 평가</strong><br>
+        <span style="font-size: calc(11.5px * var(--fscale, 1))">매 방문 흡연·베이핑 평가, 카나비스 사용 시 케톤산증 위험 교육(A/E)</span>
+      </div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-box" style="border-left:3px solid var(--teal)">
+        <strong>⑤ 심리사회 선별 — 최소 연 1회</strong><br>
+        <span style="font-size: calc(11.5px * var(--fscale, 1))">당뇨고통·불안·우울·이상섭식·인지기능·수면 표준화 도구로 선별(A/B/C)</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <div class="card-header open" onclick="toggleCard(this)">
+        <span>📌 핵심 권고문 요약 (5.1–5.57)</span><span class="toggle">▾</span>
+      </div>
+      <div class="card-body">
+        <ul class="rec-list">
+          <li class="rec-item"><span class="badge badge-A">A</span><span class="rec-text"><strong>5.1/5.2</strong> 모든 당뇨인에 DSMES 권장, 진단·연례·목표미달성·전환기 제공(E)</span></li>
+          <li class="rec-item"><span class="badge badge-A">A</span><span class="rec-text"><strong>5.4–5.7</strong> 행동전략(동기면담 등) 사용, 그룹/개인 모두 효과적, 원격의료 활용(B), 보험적용 권장(B)</span></li>
+          <li class="rec-item"><span class="badge badge-A">A</span><span class="rec-text"><strong>5.10–5.12</strong> RDN을 통한 개별화 MNT, 보험적용 권장(B/E), 체중 5–7%↓ 목표(A)</span></li>
+          <li class="rec-item"><span class="badge badge-B">B</span><span class="rec-text"><strong>5.14–5.16</strong> 비전분채소·전곡·콩류 강조, 가공식품 최소화, 보충제 비권장(C)</span></li>
+          <li class="rec-item"><span class="badge badge-B">B</span><span class="rec-text"><strong>5.17–5.22</strong> 베타카로틴 비권장, 알코올 제한, 나트륨&lt;2,300mg, 비영양감미료 적정 사용(A/B)</span></li>
+          <li class="rec-item"><span class="badge badge-E">E</span><span class="rec-text"><strong>5.26</strong> SGLT2i 복용 시 케토제닉 식이 비권장, 케톤검사도구 제공</span></li>
+          <li class="rec-item"><span class="badge badge-B">B</span><span class="rec-text"><strong>5.32/5.33</strong> 라마단 단식 — IDF-DAR 위험평가, 사전 치료계획 최적화</span></li>
+          <li class="rec-item"><span class="badge badge-B">B</span><span class="rec-text"><strong>5.34–5.39</strong> 좌식시간 평가, 연령별 운동량 권고(주150분+저항운동 2–3회)</span></li>
+          <li class="rec-item"><span class="badge badge-A">A</span><span class="rec-text"><strong>5.40/5.41</strong> 흡연·베이핑 완전금지 권고(A), 1형당뇨 카나비스 사용 금지(E)</span></li>
+          <li class="rec-item"><span class="badge badge-A">A</span><span class="rec-text"><strong>5.42–5.44</strong> 모든 당뇨인에 심리사회케어 제공(A), 연1회 표준화 선별(C), 행동건강전문가 의뢰(B)</span></li>
+          <li class="rec-item"><span class="badge badge-B">B</span><span class="rec-text"><strong>5.45–5.49</strong> 당뇨고통·불안·우울 연1회 선별, 저혈당두려움 선별·의뢰(A)</span></li>
+          <li class="rec-item"><span class="badge badge-B">B</span><span class="rec-text"><strong>5.50/5.51</strong> 이상섭식행동 표준화도구 선별, 치료계획 재평가</span></li>
+          <li class="rec-item"><span class="badge badge-B">B</span><span class="rec-text"><strong>5.52/5.53</strong> 중증정신질환 동반 시 강화지원, 항정신병약물 사용 시 대사지표 모니터링(C)</span></li>
+          <li class="rec-item"><span class="badge badge-B">B</span><span class="rec-text"><strong>5.54–5.57</strong> 생애 전반 인지능력 모니터링(E), 수면건강 선별·상담(B/A)</span></li>
+        </ul>
+      </div>
+    </div>
+
+    <div>
+      <div class="card">
+        <div class="card-header open" onclick="toggleCard(this)">
+          <span>⚠️ 권고 등급 체계 (Evidence Grading)</span><span class="toggle">▾</span>
+        </div>
+        <div class="card-body">
+          <table class="tc-table">
+            <tr><th>등급</th><th>의미</th></tr>
+            <tr><td><span class="badge badge-A">A</span></td><td>명확한 근거 — 잘 수행된 다기관 RCT 또는 메타분석</td></tr>
+            <tr><td><span class="badge badge-B">B</span></td><td>뒷받침되는 근거 — 잘 수행된 코호트 연구 등</td></tr>
+            <tr><td><span class="badge badge-C">C</span></td><td>뒷받침되는 근거 부족 — 대조군 없는 연구, 사례 보고</td></tr>
+            <tr><td><span class="badge badge-E">E</span></td><td>전문가 합의 또는 임상 경험 (Expert consensus)</td></tr>
+          </table>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header open" onclick="toggleCard(this)">
+          <span>🔑 핵심 개념</span><span class="toggle">▾</span>
+        </div>
+        <div class="card-body">
+          <div class="alert alert-info"><span>ℹ️</span><span>DSMES는 <strong>한 번의 행사가 아니라 지속적 과정</strong> — 보험 통한 의뢰자 중 10% 미만만 실제 수령</span></div>
+          <div class="alert alert-warn"><span>⚠️</span><span>당뇨에 이상적인 단일 매크로영양소 비율은 <strong>없음</strong> — 식품 중심·개별화 접근이 핵심</span></div>
+          <div class="alert alert-danger"><span>🚫</span><span>SGLT2i 복용자의 초저탄수화물/케토제닉 식이는 <strong>당뇨케톤산증(DKA) 위험</strong> — 절대 금기</span></div>
+          <div class="alert alert-teal"><span>💡</span><span>"불순응"이 아닌 <strong>인간중심·강점기반 언어</strong> 사용 — 자기관리는 능동적 과정</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ DSMES ═══ -->
+<div id="tab-dsmes" class="panel">
+  <div class="alert alert-orange"><span>📚</span><span>DSMES는 진단 시뿐 아니라 연례·목표미달성·합병증 발생·생애전환 시 지속적으로 제공되어야 하는 핵심 서비스다.</span></div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>📋 National Standards for DSMES — 8대 콘텐츠 영역</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="dot">
+        <li>당뇨병리·치료옵션</li>
+        <li>건강한 대처(coping)</li>
+        <li>건강한 식이</li>
+        <li>활동적인 생활</li>
+        <li>약물 복용</li>
+        <li>모니터링</li>
+        <li>위험 감소(급·만성 합병증 치료)</li>
+        <li>문제해결·행동변화전략</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <div class="card-header open" onclick="toggleCard(this)">
+        <span>📊 DSMES의 효과 — 근거 요약</span><span class="toggle">▾</span>
+      </div>
+      <div class="card-body">
+        <ul class="dot">
+          <li>지식·자기관리행동 개선, A1C 감소, 자가보고 체중 감소</li>
+          <li>삶의 질 개선, 전체사망률 감소, 의료비 절감</li>
+          <li>예방서비스 이용 증가, 급성/입원서비스 이용 감소</li>
+          <li>효과는 <strong>&gt;10시간(6–12개월에 걸쳐)</strong> 제공 시 더 좋음</li>
+          <li>디지털 개입(앱·웹·문자) — A1C −0.30%p (95% CI −0.42~−0.19), 대면과 동등하거나 우수</li>
+          <li>흑인·히스패닉 대상 원격DSMES — A1C −0.465% 감소</li>
+        </ul>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header open" onclick="toggleCard(this)">
+        <span>💳 Medicare 보험적용(DSMT) — 핵심 사실</span><span class="toggle">▾</span>
+      </div>
+      <div class="card-body">
+        <table class="tc-table">
+          <tr><th>항목</th><th>내용</th></tr>
+          <tr><td>초기 DSMT</td><td>평생 1회 혜택, 첫 10시간(개인1+그룹9시간)</td></tr>
+          <tr><td>추적 DSMT</td><td>매년 2시간 허용</td></tr>
+          <tr><td>MNT(1년차)</td><td>개인상담 3시간</td></tr>
+          <tr><td>MNT(이후 매년)</td><td>최대 2시간(치료변경 시 추가 가능)</td></tr>
+          <tr><td>원격의료 조건</td><td>2025.10.1부터 美 농촌지역 의료기관 위치 요구</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="acc">
+    <div class="acc-hdr" onclick="toggleAcc(this)">
+      <span>DSMES 팀 구성과 자격</span><span>▾</span>
+    </div>
+    <div class="acc-body">
+      <ul class="dot">
+        <li>간호사, RDN, 약사, 사회복지사, 운동생리학자, 심리학자, CHW, 케어코디네이터 등</li>
+        <li>공인 DCES 또는 BC-ADM 자격 — 전문성 입증</li>
+        <li>CHW·동료교육자·동료지지·평신도리더의 역할도 증가</li>
+        <li>DCES 부재 지역에서는 다른 팀원이 일부 제공 가능(단, 청구 제한 고려)</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="acc">
+    <div class="acc-hdr" onclick="toggleAcc(this)">
+      <span>당뇨 기술과 DSMES — 시너지 효과</span><span>▾</span>
+    </div>
+    <div class="acc-body">
+      <ul class="dot">
+        <li>양방향 소통+개별화된 피드백+개인생성건강데이터 활용 시 A1C 개선 효과 최대</li>
+        <li>CGM+개별화 DSMES — CGM 단독보다 혈당·심리사회적 결과 더 우수</li>
+        <li>isCGM+DSMES — TIR 증가, TAR 감소, A1C 더 큰 감소(DSMES 단독 대비)</li>
+        <li>가상환경(아바타 기반) DSMES — 표준 웹사이트 대비 더 큰 체중감소</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span>🚧 DSMES 장벽과 해결 전략</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body collapsed">
+      <ul class="dot">
+        <li>보험·시스템·클리닉·의료진·개인 수준 모두에 장벽 존재</li>
+        <li>의뢰 부족, 물류문제(접근성·시기), 비용, 효과인식 부족이 주요 원인</li>
+        <li>다단계 개입(임상연계+표준프로토콜+SDOH 선별·의뢰)으로 DSMES 수령률 15%↑ 달성 사례</li>
+        <li>기관 리더십의 지지가 성공의 기반</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ NUTRITION ═══ -->
+<div id="tab-nutrition" class="panel">
+  <div class="alert alert-orange"><span>🥗</span><span>당뇨에 이상적인 단일 매크로영양소 비율은 없다 — 식품 중심·개별화된 접근과 영양밀도가 핵심이다.</span></div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>📊 핵심 영양 권고(표 5.1 요약)</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <table class="tc-table">
+        <tr><th>권고</th><th>핵심내용</th><th>등급</th></tr>
+        <tr><td>5.10</td><td>RDN을 통한 개별화 MNT 의뢰</td><td>A</td></tr>
+        <tr><td>5.12</td><td>과체중·비만 5–7%↓ 체중감소 목표</td><td>A</td></tr>
+        <tr><td>5.14</td><td>비전분채소·전곡·콩류↑, 가공식품·첨가당↓</td><td>B</td></tr>
+        <tr><td>5.15</td><td>일부 성인 탄수화물 제한(가공식품 제한으로)</td><td>B</td></tr>
+        <tr><td>5.16/5.17</td><td>미량영양소·허브보충제 비권장, 베타카로틴 비권장</td><td>C/B</td></tr>
+        <tr><td>5.20</td><td>나트륨 &lt;2,300mg/일</td><td>B</td></tr>
+        <tr><td>5.24</td><td>고섬유(≥14g/1,000kcal) 탄수화물원 강조</td><td>B</td></tr>
+        <tr><td>5.26</td><td>SGLT2i 복용자 케토제닉 식이 비권장, 케톤검사 도구 제공</td><td>E</td></tr>
+        <tr><td>5.30</td><td>지중해식 식이패턴 권장(심혈관·혈당 개선)</td><td>A/B</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <div class="card-header open" onclick="toggleCard(this)">
+        <span>🍽️ 식사계획 접근법 비교</span><span class="toggle">▾</span>
+      </div>
+      <div class="card-body">
+        <table class="tc-table">
+          <tr><th>방법</th><th>설명</th></tr>
+          <tr><td>접시법(Plate Method)</td><td>9인치 접시 — 1/2비전분채소, 1/4단백질, 1/4탄수화물</td></tr>
+          <tr><td>탄수화물 계산</td><td>식사당 탄수화물량 추적 — 표준교육과 A1C 차이 없음(메타분석)</td></tr>
+          <tr><td>인슐린-탄수화물 비율</td><td>식사별 인슐린 용량 조절(MDI 사용자)</td></tr>
+        </table>
+        <p style="font-size: calc(11px * var(--fscale, 1));color:var(--text2);margin-top:6px">AID 시스템 사용 시 정밀한 탄수화물계산 필요성이 감소함</p>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header open" onclick="toggleCard(this)">
+        <span>📊 DASH4D 연구 결과(2형당뇨+고혈압)</span><span class="toggle">▾</span>
+      </div>
+      <div class="card-body">
+        <table class="tc-table">
+          <tr><th>지표</th><th>결과</th></tr>
+          <tr><td>TIR 개선</td><td>+5.2%p (P&lt;0.001)</td></tr>
+          <tr><td>수축기혈압</td><td>−4.6 mmHg</td></tr>
+          <tr><td>이완기혈압</td><td>−2.3 mmHg</td></tr>
+        </table>
+        <p style="font-size: calc(11px * var(--fscale, 1));color:var(--text2);margin-top:6px">중탄수화물(45%), 저나트륨(1,500mg/일) 식이패턴 — 나트륨감소 효과가 식이패턴 자체보다 더 강함</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="acc">
+    <div class="acc-hdr" onclick="toggleAcc(this)">
+      <span>탄수화물 — 저탄수화물 식이의 근거와 한계</span><span>▾</span>
+    </div>
+    <div class="acc-body">
+      <ul class="dot">
+        <li>매우 저탄수화물(&lt;26% 총열량) — 단기간(&lt;6개월) A1C 감소 효과, 1년 이후 차이 줄어듦</li>
+        <li>케토제닉 식이(12주 RCT) — A1C 유의한 개선 없음, LDL 콜레스테롤은 오히려 증가</li>
+        <li>장기 지속가능성에 어려움 — 정기적 재평가·개별화 필요</li>
+        <li>임신·수유, 소아, 신질환자, 이상섭식 위험군에서는 권장하지 않음</li>
+        <li><strong>SGLT2 억제제 복용자는 절대 회피</strong> — DKA 사례보고 다수</li>
+        <li>고-GI 식품 다량섭취 — 2형당뇨 위험 27%↑, 심혈관질환 15%↑, 전체사망률 8%↑(대규모 코호트 메타분석)</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <div class="card-header open" onclick="toggleCard(this)">
+        <span>🐟 지방 — 지중해식 식이와 n-3 지방산</span><span class="toggle">▾</span>
+      </div>
+      <div class="card-body">
+        <ul class="dot">
+          <li>지방의 종류가 총량보다 중요 — 포화지방 제한이 핵심</li>
+          <li>지중해식 식이 — 혈당관리·지질 모두 개선(다수 RCT)</li>
+          <li>ASCEND 시험: n-3 1g/일 — 심혈관 이득 없음</li>
+          <li>REDUCE-IT 시험: 순수EPA 4g/일 — 심혈관사건 절대위험 5%↓(고중성지방혈증 동반 ASCVD)</li>
+        </ul>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header open" onclick="toggleCard(this)">
+        <span>🧂 나트륨 — DASH-sodium 연구</span><span class="toggle">▾</span>
+      </div>
+      <div class="card-body">
+        <table class="tc-table">
+          <tr><th>나트륨 섭취</th><th>eGFR 변화(4주)</th></tr>
+          <tr><td>저나트륨(~1,150mg/일)</td><td>−3.10 mL/min/1.73m²</td></tr>
+          <tr><td>고나트륨(~3,450mg/일)</td><td>대조군</td></tr>
+        </table>
+        <p style="font-size: calc(11px * var(--fscale, 1));color:var(--text2);margin-top:6px">가공식품 제한이 나트륨 감소의 가장 효과적인 전략</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="acc">
+    <div class="acc-hdr" onclick="toggleAcc(this)">
+      <span>단백질 — 식물성 단백질의 부상</span><span>▾</span>
+    </div>
+    <div class="acc-body">
+      <ul class="dot">
+        <li>일반 권장량(0.8–1.5g/kg/일 또는 총열량 15–20%) 벗어날 근거 부족</li>
+        <li>당뇨 관련 CKD라도 단백질을 0.8g/kg 이하로 제한하는 것은 <strong>권장하지 않음</strong> — 영양실조 위험</li>
+        <li>동물성→식물성 단백질 대체 — A1C·공복혈당 소폭 개선(13개 RCT 메타분석)</li>
+        <li>식물성 단백질은 포화지방 낮고 섬유질 높음 — 행성건강에도 기여</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span>💊 보충제·알코올·비영양감미료 — 핵심 사실</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body collapsed">
+      <table class="tc-table">
+        <tr><th>항목</th><th>권고</th></tr>
+        <tr><td>비타민/미네랄/허브 보충제</td><td>결핍 없는 한 혈당개선 근거 없음(시나몬, 커큐민, 알로에베라, 크롬 등)</td></tr>
+        <tr><td>비타민D</td><td>결핍 없는 당뇨인 보편적 보충 비권장 — 특정군에서만 가능 이득</td></tr>
+        <tr><td>베타카로틴</td><td>폐암·심혈관사망 위험 증가 — 명확히 비권장</td></tr>
+        <tr><td>메트포르민+B12</td><td>장기복용자 주기적 B12 검사 고려</td></tr>
+        <tr><td>알코올</td><td>WHO: 안전한 음주량은 없음 — 남성 ≤2잔/일, 여성 ≤1잔/일 한도 내 권고, 비음주자는 시작 비권장</td></tr>
+        <tr><td>비영양감미료(NNS)</td><td>혈당에 유의한 영향 없음, 적정량 사용 시 칼로리·탄수화물 감소에 도움</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span>⚖️ 체중관리 — 목표와 근거</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body collapsed">
+      <table class="tc-table">
+        <tr><th>대상</th><th>목표</th><th>비고</th></tr>
+        <tr><td>전당뇨</td><td>≥5–7%↓</td><td>당뇨진행 위험 감소</td></tr>
+        <tr><td>2형당뇨(과체중·비만)</td><td>≥5%↓(최소)</td><td>혈당·지질·혈압 개선</td></tr>
+        <tr><td>더 적극적 목표</td><td>15%↓ 고려 가능</td><td>필요성·가능성·안전성 따라 개별화</td></tr>
+      </table>
+      <div class="alert alert-info" style="margin-top:8px"><span>💡</span><span>식사대체(meal replacement) 단기전략(&lt;6개월)으로 체중·A1C·공복혈당 개선 — Look AHEAD, DiRECT, PREVIEW 등 주요 임상시험에서 활용</span></div>
+      <div class="alert alert-warn" style="margin-top:8px"><span>⚠️</span><span>체중대화는 항상 <strong>동의를 구한 후</strong> 시작 — 과체중이라고 해서 체중논의를 원한다고 가정하지 말 것</span></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span>🍽️ 식품 불안정(Food Insecurity)</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body collapsed">
+      <p style="margin-bottom:8px">2023년 미국 인구 13.5% 식품불안정 — 당뇨인은 16% vs 비당뇨인 9%</p>
+      <div class="alert alert-info"><span>📋</span><span><strong>Hunger Vital Sign 2문항 선별:</strong><br>① "지난 12개월간 돈이 부족해 음식이 떨어질까 걱정했다"<br>② "지난 12개월간 구매한 음식이 부족했고 추가로 살 돈이 없었다"<br>(둘 중 하나라도 "자주/때때로 그렇다"면 양성)</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ FASTING / RAMADAN ═══ -->
+<div id="tab-fasting" class="panel">
+  <div class="alert alert-orange"><span>🌙</span><span>비종교적 간헐적 단식과 종교적 단식(라마단 등)은 위험 프로필이 다르며, 종교적 단식은 사전 위험평가와 치료계획 조정이 필수다.</span></div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>📊 종교적 단식 vs 간헐적 단식 — 차이와 유사점</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <table class="tc-table">
+        <tr><th>특성</th><th>종교적 단식(라마단 등)</th><th>간헐적 단식</th></tr>
+        <tr><td>기간·시간</td><td>고정됨</td><td>유연함</td></tr>
+        <tr><td>동기</td><td>내재적 동기 높음</td><td>내재·외재 동기 다양</td></tr>
+        <tr><td>고혈당 위험</td><td>단식 종료 시점에 위험(±케톤산증)</td><td>건강목적이라 고혈당 위험 낮음</td></tr>
+        <tr><td>탈수 위험</td><td>일부 유형에서 가능</td><td>추가 위험 없음</td></tr>
+        <tr><td>저혈당 위험</td><td colspan="2" style="text-align:center">양쪽 모두 존재 — 사전 위험평가·교육 필수, 치료조정 필요</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>🕌 비종교적 간헐적 단식 — 3대 유형</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <table class="tc-table">
+        <tr><th>유형</th><th>방법</th></tr>
+        <tr><td>격일단식(ADF)</td><td>이틀에 한 번 500–600kcal로 제한</td></tr>
+        <tr><td>5:2 식이패턴</td><td>주 5일 정상섭취, 2일 500–600kcal 제한</td></tr>
+        <tr><td>시간제한식이(TRE)</td><td>일일 8–15시간 섭취창 제한</td></tr>
+      </table>
+      <p style="font-size: calc(11px * var(--fscale, 1));color:var(--text2);margin-top:6px">8–12주간 체중 3–8% 감소, 연속적 칼로리제한과 효과 차이 없음. 인슐린/인슐린분비촉진제 사용자는 단식기간 중 의학적 모니터링 필요.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>📊 표 5.3 — 라마단 단식 위험점수 핵심 요소(IDF-DAR)</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <table class="tc-table">
+        <tr><th>위험요소</th><th>최고 위험점수</th></tr>
+        <tr><td>임신(모든 당뇨유형)</td><td>6.5</td></tr>
+        <tr><td>저혈당 인지장애</td><td>6.5</td></tr>
+        <tr><td>최근 1개월 내 DKA/HHS</td><td>3.5</td></tr>
+        <tr><td>불안정 대혈관질환</td><td>6.5</td></tr>
+        <tr><td>eGFR&lt;30</td><td>6.5</td></tr>
+        <tr><td>인지장애/중증 노쇄</td><td>6.5</td></tr>
+        <tr><td>다회 혼합인슐린주사</td><td>2</td></tr>
+        <tr><td>CGM 사용</td><td>−0.5 (위험 감소요인)</td></tr>
+      </table>
+      <div class="alert alert-info" style="margin-top:8px"><span>💡</span><span><strong>위험분류:</strong> 0–3.0점 저위험(단식 안전 가능) / 3.5–6.0점 중등도위험(불확실) / &gt;6.0점 고위험(단식 안전하지 않을 가능성 높음)</span></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>💊 표 5.4 — 단식 중 약물 조정 가이드</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <table class="tc-table">
+        <tr><th>약물</th><th>저혈당위험</th><th>용량조정</th></tr>
+        <tr><td>메트포르민, SGLT2i, DPP-4i, GLP-1RA, 아카보스, 피오글리타존</td><td>낮음</td><td>변경 없음</td></tr>
+        <tr><td>신세대 설폰요소제(글리메피리드 등)</td><td>낮음~중등도</td><td>목표내 혈당이면 감량 고려</td></tr>
+        <tr><td>구세대 설폰요소제(글리부리드)</td><td>중등도~높음</td><td>신세대로 교체 또는 50%↓</td></tr>
+        <tr><td>기저인슐린(초장기형)</td><td>중등도~높음</td><td>시점변경 불필요, 25–35%↓ 고려</td></tr>
+        <tr><td>식사인슐린</td><td>높음</td><td>단식 직전 식사분 35–50%↓</td></tr>
+        <tr><td>혼합인슐린</td><td>높음</td><td>단식 직전 식사분 35–50%↓</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <div class="card-header open" onclick="toggleCard(this)">
+        <span>⚠️ 라마단 단식 중 주의사항</span><span class="toggle">▾</span>
+      </div>
+      <div class="card-body">
+        <ul class="dot">
+          <li>단식 마지막 몇 시간에 저혈당 사건의 약 50% 발생 — 격렬한 운동 회피</li>
+          <li>2형당뇨 환자 16.5%가 단식 중 혈당&gt;300mg/dL 경험(연구사례)</li>
+          <li>단식 종료 식사(이프타르)는 고탄수화물·고당류 음식이 많아 식이상담 필요</li>
+          <li>SGLT2 억제제 — 단식 시작 직전 신규 시작은 피하되, 복용중이면 용량변경 불필요</li>
+        </ul>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header open" onclick="toggleCard(this)">
+        <span>✅ 기술 활용 — 안전성 향상</span><span class="toggle">▾</span>
+      </div>
+      <div class="card-body">
+        <ul class="dot">
+          <li>CGM/isCGM — 고위험군의 안전한 단식 지지에 효과적(특히 라마단 교육과 병행 시)</li>
+          <li>인슐린펌프 — 1형당뇨 단식 중 저혈당 발생률 낮음과 연관</li>
+          <li>당뇨기술은 위험계산·영양계획·교육의 유용한 보조도구로 고려해야 함</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ PHYSICAL ACTIVITY ═══ -->
+<div id="tab-activity" class="panel">
+  <div class="alert alert-orange"><span>🏃</span><span>신체활동과 운동은 혈당·심혈관위험·체중·사망률·심리사회적 웰빙에 광범위한 이득을 주는 당뇨관리의 핵심 요소다.</span></div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>📊 연령·당뇨유형별 운동 권고</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <table class="tc-table">
+        <tr><th>대상</th><th>유산소</th><th>저항운동</th><th>등급</th></tr>
+        <tr><td>소아청소년(1·2형)</td><td>매일 60분 이상 중-고강도</td><td>주 3일 이상 근력·뼈강화</td><td>C/B</td></tr>
+        <tr><td>성인 전체</td><td>주150분↑, 최소주3일, 연속2일 초과 금지</td><td>주 2–3회(비연속일)</td><td>B/C</td></tr>
+        <tr><td>고령자</td><td>(상동)</td><td>유연성·균형훈련 주 2–3회 추가</td><td>C</td></tr>
+        <tr><td>비만치료(약물/수술) 동반자</td><td>(상동)</td><td>근력운동 특히 강조(근육량 유지)</td><td>C</td></tr>
+      </table>
+      <div class="alert alert-info" style="margin-top:8px"><span>💡</span><span>좌식시간은 최소 30분마다 중단 권고(C) — 짧은 걷기나 저항운동으로 식후혈당 개선</span></div>
+    </div>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <div class="card-header open" onclick="toggleCard(this)">
+        <span>📊 운동 종류별 혈당 효과</span><span class="toggle">▾</span>
+      </div>
+      <div class="card-body">
+        <table class="tc-table">
+          <tr><th>운동유형</th><th>효과</th></tr>
+          <tr><td>유산소운동(8주↑)</td><td>A1C −0.66%(BMI 변화 없이도)</td></tr>
+          <tr><td>유산소+저항 병행</td><td>단독보다 더 큰 혈당개선 가능</td></tr>
+          <tr><td>저항운동</td><td>인슐린감수성·근력·골밀도·심대사건강 개선</td></tr>
+          <tr><td>HIIT</td><td>β세포기능·중심성지방·심장기능 개선, 시간효율적</td></tr>
+        </table>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header open" onclick="toggleCard(this)">
+        <span>🚶 걸음수와 생존 효과</span><span class="toggle">▾</span>
+      </div>
+      <div class="card-body">
+        <ul class="dot">
+          <li>일일 걸음 500보 증가 — 심혈관·전체사망 위험 2–9%↓</li>
+          <li>5–6분 빠른걷기/일 — 약 4년 더 긴 기대수명과 연관</li>
+          <li>1형당뇨: 일 7,000–10,000보가 TIR 소폭 개선·인슐린요구량 감소와 연관</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="acc">
+    <div class="acc-hdr" onclick="toggleAcc(this)">
+      <span>1형당뇨 운동 — 실제 데이터(T1DEXI)</span><span>▾</span>
+    </div>
+    <div class="acc-body">
+      <ul class="dot">
+        <li>유산소운동이 급성 운동 후 혈당을 HIIT·저항운동보다 더 낮춤</li>
+        <li>그러나 3가지 운동 모두 24시간 TIR 개선에 기여</li>
+        <li>HIIT는 운동 후 일시적 고혈당 유발 가능 — 1형당뇨에서 볼루스 보정 필요할 수 있음</li>
+        <li>혈당반응의 개인차가 크므로 운동유형·강도·인슐린조정은 개별화 필요</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>⚠️ 합병증별 운동 시 주의사항</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <table class="tc-table">
+        <tr><th>합병증</th><th>주의사항</th></tr>
+        <tr><td>증식성/중증 비증식성 망막병증</td><td>고강도 유산소·저항운동 금기(유리체출혈·망막박리 위험) — 안과 상담 권장</td></tr>
+        <tr><td>말초신경병증</td><td>적절한 신발 착용 시 중강도 걷기 안전 — 발 상처 시 비체중부하 활동만</td></tr>
+        <tr><td>자율신경병증</td><td>심박반응저하·기립성저혈압·체온조절장애 — 운동 전 심장검사 권고</td></tr>
+        <tr><td>CKD</td><td>일반적으로 운동 제한 불필요 — 진행 가속 근거 없음</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span>💪 비만치료(약물/수술) 병행 운동 — 근육량 보존</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body collapsed">
+      <ul class="dot">
+        <li>비만약물·대사수술은 체지방+근육량(fat-free mass) 동시 감소 유발 가능 — 근감소증·노쇄 우려</li>
+        <li>수술 전후 운동프로그램 — 근육량·근력 보존, 체중재증가 감소</li>
+        <li>GLP-1RA+구조화 운동 병행 — β세포기능·인슐린감수성·체지방감소 개선(일부 연구)</li>
+        <li>단, 일부 연구에서 운동+GLP-1RA 병행 시 좌심실 이완기능에 억제적 영향 시사(추가연구 필요)</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span>🌙 24시간 신체행동의 중요성(Fig 5.2 요약)</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body collapsed">
+      <table class="tc-table">
+        <tr><th>행동영역</th><th>혈당/인슐린</th><th>신체기능</th><th>삶의질</th></tr>
+        <tr><td>좌식시간 중단</td><td>강한 근거</td><td>약한 근거</td><td>강한 근거</td></tr>
+        <tr><td>걷기(stepping)</td><td>강한 근거</td><td>약한 근거</td><td>강한 근거</td></tr>
+        <tr><td>중-고강도 운동(sweating)</td><td>강한 근거</td><td>강한 근거</td><td>강한 근거</td></tr>
+        <tr><td>저항운동(strengthening)</td><td>강한 근거</td><td>강한 근거</td><td>중간 근거</td></tr>
+        <tr><td>적절한 수면시간</td><td>강한 근거</td><td>자료 없음</td><td>강한 근거</td></tr>
+        <tr><td>좋은 수면질</td><td>강한 근거</td><td>자료 없음</td><td>강한 근거</td></tr>
+      </table>
+      <p style="font-size: calc(10.5px * var(--fscale, 1));color:var(--text2);margin-top:6px">저녁형(밤늦게자고 늦게 일어남) 일주기유형은 활동저하·불량한 혈당과 더 연관됨</p>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ SMOKING ═══ -->
+<div id="tab-smoking" class="panel">
+  <div class="alert alert-orange"><span>🚭</span><span>흡연·베이핑은 당뇨인의 대혈관·미세혈관 합병증과 조기사망 위험을 높이며, 카나비스는 1형당뇨에서 케톤산증 위험을 동반한다.</span></div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>📊 흡연과 당뇨 — 용량-반응 관계</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="dot">
+        <li>현재흡연 — 2형당뇨 위험 용량-반응적 증가, 금연 후 시간이 지날수록 위험 감소</li>
+        <li>금연은 건강수명을 최대 10년까지 연장 가능</li>
+        <li>금연 후 평균 체중증가 3–5kg — 그러나 장기적으로 지속되지 않거나 심혈관이득을 상쇄하지 않음</li>
+        <li>금연 시 체중증가 여부와 무관하게 심혈관·전체사망 위험 감소(메타분석)</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <div class="card-header open" onclick="toggleCard(this)">
+        <span>💊 금연 약물치료 — 근거</span><span class="toggle">▾</span>
+      </div>
+      <div class="card-body">
+        <ul class="dot">
+          <li><strong>바레니클린</strong> — EAGLES 시험에서 당뇨인 대상 가장 효과적(미국호흡기학회 1차 권고)</li>
+          <li>WHO — 비임신 성인에 상담+약물치료 병행 권고</li>
+          <li>체중증가 완화 전략: 개별화 체중관리, 운동, 니코틴대체요법, 플루옥세틴</li>
+          <li>GLP-1RA — 금연 성공률↑, 갈망/금단증상↓, 체중증가↓ 가능성(신생 연구, 추가시험 필요)</li>
+          <li>치료받는 사람의 2/3 이상이 근거기반 가이드라인을 따르지 않음 — 적극적 개입 필요</li>
+        </ul>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header open" onclick="toggleCard(this)">
+        <span>💨 베이핑·전자담배 — 위험성</span><span class="toggle">▾</span>
+      </div>
+      <div class="card-body">
+        <ul class="dot">
+          <li>전자담배가 일반담배보다 안전하다는 인식은 잘못됨 — 안전한 담배제품은 없음</li>
+          <li>심혈관·호흡기계에 유의한 건강위험</li>
+          <li>PATH 연구: 전자담배도 니코틴 의존 유발</li>
+          <li>금연수단으로 전자담배 사용 시에도 <strong>일반+전자담배 모두 중단</strong> 권고</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>🌿 카나비스 — 1형당뇨 특이 위험</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <div class="alert alert-danger" style="margin-bottom:8px"><span>🚫</span><span>1형당뇨인의 카나비스 사용은 DKA 위험 증가와 연관 — <strong>모든 형태의 사용 비권장</strong>(5.41, E)</span></div>
+      <table class="tc-table">
+        <tr><th>항목</th><th>내용</th></tr>
+        <tr><td>카나비스고혈당케톤증후군</td><td>중증오심·복통·구토 동반</td></tr>
+        <tr><td>진단기준</td><td>혈당≥250mg/dL, 음이온차&gt;10, β-OH부티르산&gt;0.6mmol/L, pH≥7.4, 중탄산염≥15mmol/L</td></tr>
+        <tr><td>CBD 단독</td><td>2형당뇨 혈당·인슐린에 유의한 영향 없음</td></tr>
+        <tr><td>델타-8 THC 등</td><td>FDA 미규제, 부작용보고(구토 등) — 공중보건경고 발령</td></tr>
+      </table>
+      <div class="alert alert-info" style="margin-top:8px"><span>💡</span><span>1형당뇨 환자가 pH≥7.4·중탄산염&gt;15mmol/L이면서 케톤증 동반 시 카나비스고혈당케톤증후군 고려해야 함(전형적 DKA와 구별)</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ PSYCHOSOCIAL CARE ═══ -->
+<div id="tab-psychosocial" class="panel">
+  <div class="alert alert-orange"><span>🧠</span><span>당뇨인은 임상적으로 의미있는 행동건강 진단의 유병률이 비당뇨인보다 훨씬 높으며, 정기적 선별과 통합적 케어가 핵심이다.</span></div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>📊 표 5.5 — 행동건강전문가 의뢰가 필요한 상황</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="dot">
+        <li>우울·당뇨고통·불안·저혈당두려움·자살사고·인지장애 표준화도구 양성</li>
+        <li>이상섭식행동·섭식장애·식이패턴 붕괴 증상/의심</li>
+        <li>체중감소 목적의 의도적 인슐린/비인슐린약물 누락 또는 저용량 투여</li>
+        <li>심각한 정신질환 의심</li>
+        <li>소아청소년·가족의 행동적 자기관리 어려움, 반복적 DKA 입원, 발달이정표 미달성, 심각한 고통</li>
+        <li>자기관리행동 참여도 저조, 자기관리능력 저하/장애</li>
+        <li>대사수술 전후(필요시 조정지원)</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>📅 심리사회 선별 — 핵심 시점</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="dot">
+        <li>진단 시, 정기방문(연 1회 이상), 입원, 새로운 합병증 발생 시</li>
+        <li>케어 전환기(예: 소아→성인 케어팀), 치료방법 변경 시</li>
+        <li>A1C목표·삶의질·자기관리 문제 발생 시</li>
+        <li>생활환경·SDOH 변화 시</li>
+        <li>돌봄자·가족이 중요한 역할을 할 경우 그들의 심리사회적 문제도 평가</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <div class="card-header open" onclick="toggleCard(this)">
+        <span>💬 진료 중 활용 가능한 간단 중재기법</span><span class="toggle">▾</span>
+      </div>
+      <div class="card-body">
+        <ul class="dot">
+          <li>개방형 질문, 반영적 진술, 적극적 경청</li>
+          <li>"중요도"·"확신도" 룰러 활용</li>
+          <li>CBT틀 내 1주간 행동실험</li>
+          <li>호흡운동을 통한 마음챙김 시범</li>
+          <li>SMART목표 설정으로 문제해결 촉진</li>
+          <li>그라운딩 기법으로 감정조절 지지</li>
+        </ul>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header open" onclick="toggleCard(this)">
+        <span>📋 핵심 권고문 (5.42–5.44)</span><span class="toggle">▾</span>
+      </div>
+      <div class="card-body">
+        <ul class="rec-list">
+          <li class="rec-item"><span class="badge badge-A">A</span><span class="rec-text">모든 당뇨인에 협력적·인간중심·문화적으로 적절한 심리사회케어 제공</span></li>
+          <li class="rec-item"><span class="badge badge-C">C</span><span class="rec-text">표준화·검증된 도구로 연1회 이상 선별, 건강상태 변화 시 재선별</span></li>
+          <li class="rec-item"><span class="badge badge-B">B</span><span class="rec-text">필요시 (이상적으로 당뇨경험 있는) 행동건강전문가에게 의뢰</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="acc">
+    <div class="acc-hdr" onclick="toggleAcc(this)">
+      <span>당뇨고통(Diabetes Distress) — 핵심 사실</span><span>▾</span>
+    </div>
+    <div class="acc-body">
+      <table class="tc-table">
+        <tr><th>항목</th><th>내용</th></tr>
+        <tr><td>2형당뇨 유병률</td><td>&gt;60%</td></tr>
+        <tr><td>1형당뇨 유병률</td><td>&gt;70%</td></tr>
+        <tr><td>특징</td><td>우울·불안과는 구별되는 독립적 개념, 자기관리 요구·질병진행과 연관</td></tr>
+        <tr><td>효과적 중재</td><td>DSMES, CBT, 마음챙김기반치료, 동기면담</td></tr>
+      </table>
+      <div class="alert alert-info" style="margin-top:8px"><span>💡</span><span>낙인(stigma)은 당뇨고통을 더 악화시킬 수 있음 — 비판단적 언어와 접근이 중요</span></div>
+    </div>
+  </div>
+
+  <div class="acc">
+    <div class="acc-hdr" onclick="toggleAcc(this)">
+      <span>불안과 저혈당 두려움</span><span>▾</span>
+    </div>
+    <div class="acc-body">
+      <ul class="dot">
+        <li>불안장애 통합 유병률 28%(당뇨인) — 양방향 관계(불안→당뇨위험19%↑, 당뇨→불안위험41%↑)</li>
+        <li>저혈당 두려움 — 야간저혈당 병력, 동반 심리문제, 수면장애와 연관</li>
+        <li>실시간CGM·센서증강펌프·AID — 저혈당빈도와 독립적으로 저혈당두려움 감소</li>
+        <li>CBT기반중재(8주) — 1형당뇨 청년층 저혈당두려움 8.5%↓, TIR 개선</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="acc">
+    <div class="acc-hdr" onclick="toggleAcc(this)">
+      <span>우울증 — 선별과 치료</span><span>▾</span>
+    </div>
+    <div class="acc-body">
+      <ul class="dot">
+        <li>1형·2형당뇨 약 1/4에서 우울증상 동반(소아청소년 부모도 포함)</li>
+        <li>우울증 과거력·현재우울·항우울제사용 — 2형당뇨 발생의 위험인자</li>
+        <li>여성이 남성보다 더 높은 우울률 보고</li>
+        <li>통합케어모델이 우울·혈당결과 모두 개선</li>
+        <li>GLP-1RA — 일부 메타분석에서 우울증상 개선(다른 메타분석은 유의한 차이 없음, 결과 혼재)</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span>🧠 인지능력 평가 — 권고 5.54/5.55</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body collapsed">
+      <ul class="dot">
+        <li>생애 전반 인지능력 모니터링 권고(B) — 인지장애 보유자, 중증저혈당 경험자, 매우 어린 소아, 고령자 특히 중요</li>
+        <li>인지능력 변화/저하 의심 시 정식 평가 의뢰 고려(E)</li>
+        <li>1형당뇨: 어린 진단연령, 긴 유병기간, 반복 DKA, 고A1C, 미세혈관합병증과 연관</li>
+        <li>2형당뇨: 긴 유병기간, 고A1C, 고공복혈당, 미세/대혈관합병증, 고혈압, 우울, 신체활동부족과 연관</li>
+        <li>중증저혈당은 인지저하의 독립적 위험인자이자 가속인자</li>
+        <li>GLP-1RA는 치매위험 유의하게 감소(SGLT2i·피오글리타존은 유의한 차이 없음)</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ DISORDERED EATING / SMI ═══ -->
+<div id="tab-eating" class="panel">
+  <div class="alert alert-orange"><span>🍽️</span><span>이상섭식행동과 중증정신질환은 당뇨와 상호작용하며 복잡한 임상적 고려가 필요하다.</span></div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>📊 이상섭식행동 — 유형별 특징</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <table class="tc-table">
+        <tr><th>당뇨유형</th><th>흔한 양상</th><th>주요 수치</th></tr>
+        <tr><td>1형당뇨</td><td>인슐린 제한/누락(체중조절목적)</td><td>중앙값 유병률 15%</td></tr>
+        <tr><td>2형당뇨</td><td>폭식장애, 야간식이증후군, 의도적 약물누락</td><td>인슐린치료군에서 흔히 보고</td></tr>
+      </table>
+      <div class="alert alert-warn" style="margin-top:8px"><span>⚠️</span><span>이상섭식행동·섭식장애는 모두 높은 A1C와 연관되며, 당뇨고통·우울·저혈당두려움·불안과 흔히 동반됨</span></div>
+    </div>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <div class="card-header open" onclick="toggleCard(this)">
+        <span>📋 선별도구 — 당뇨유형별</span><span class="toggle">▾</span>
+      </div>
+      <div class="card-body">
+        <table class="tc-table">
+          <tr><th>당뇨유형</th><th>권장도구</th></tr>
+          <tr><td>1형당뇨</td><td>DEPS-R(이상섭식), mSCOFF(인슐린누락 문항 포함)</td></tr>
+          <tr><td>2형당뇨</td><td>QEWP-5, Binge Eating Scale, Night Eating Questionnaire</td></tr>
+        </table>
+        <p style="font-size: calc(11px * var(--fscale, 1));color:var(--text2);margin-top:6px">mSCOFF에서 "예" 응답 시 종합평가로 이어져야 함</p>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header open" onclick="toggleCard(this)">
+        <span>📋 핵심 권고문 (5.50/5.51)</span><span class="toggle">▾</span>
+      </div>
+      <div class="card-body">
+        <ul class="rec-list">
+          <li class="rec-item"><span class="badge badge-B">B</span><span class="rec-text">검증된 도구로 이상섭식 선별, 치료계획의 식욕/칼로리 영향 검토</span></li>
+          <li class="rec-item"><span class="badge badge-B">B</span><span class="rec-text">증상 발견 시 자격있는 전문가와 협력하여 치료계획 재평가</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="acc">
+    <div class="acc-hdr" onclick="toggleAcc(this)">
+      <span>치료계획 재평가 — 안전 우선 원칙</span><span>▾</span>
+    </div>
+    <div class="acc-body">
+      <ul class="dot">
+        <li>낙인적 언어 회피, A1C에만 초점 맞추지 않기</li>
+        <li>DKA·중증저혈당·합병증 위험 최소화</li>
+        <li>엄격한 탄수화물계산·집중적 체중감시는 적응부전 패턴을 강화할 수 있음 — 회피</li>
+        <li>당뇨생리·이상섭식 위험인자·치료법을 모두 이해하는 전문가와 협력 필수</li>
+        <li>GLP-1RA/듀얼GIP·GLP-1RA — 식욕·보상회로 조절로 폭식행동 감소 초기근거 존재</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>🧠 중증정신질환(SMI) — 당뇨 동반관리</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <table class="tc-table">
+        <tr><th>항목</th><th>내용</th></tr>
+        <tr><td>2형당뇨 발생위험</td><td>1.5–2.5배(조현병 등 사고장애 동반 시)</td></tr>
+        <tr><td>항정신병약물 영향</td><td>혈당·체중·BMI·총콜레스테롤·LDL↑, HDL↓</td></tr>
+        <tr><td>모니터링 주기</td><td>12–16주마다(임상적으로 더 빠른 모니터링 필요시 단축)</td></tr>
+        <tr><td>비약물중재 효과</td><td>정신증상·총콜레스테롤·LDL 유의한 감소(A1C·중성지방·BMI는 유의한 차이 없음)</td></tr>
+      </table>
+      <div class="alert alert-info" style="margin-top:8px"><span>💡</span><span>판단력에 영향을 미치는 중증정신질환 환자에서는 <strong>비의료 돌봄자</strong>를 치료의사결정에 포함시키는 것이 유익함 — 케어코디네이션·자기관리참여 지원</span></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span>📋 핵심 권고문 (5.52/5.53)</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body collapsed">
+      <ul class="rec-list">
+        <li class="rec-item"><span class="badge badge-B">B</span><span class="rec-text">SMI 동반 당뇨인에 강화된 모니터링·자기관리지원 제공</span></li>
+        <li class="rec-item"><span class="badge badge-C">C</span><span class="rec-text">2세대 항정신병약물 처방 시 체중·혈당·지질 변화 모니터링, 필요시 치료계획 조정</span></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ SLEEP ═══ -->
+<div id="tab-sleep" class="panel">
+  <div class="alert alert-orange"><span>😴</span><span>수면장애는 당뇨발생의 위험인자이자 당뇨인의 흔한 동반질환으로, 혈당관리·삶의 질에 직접적 영향을 미친다.</span></div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>📊 당뇨인 수면장애 유병률</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <table class="tc-table">
+        <tr><th>당뇨유형</th><th>수면문제</th><th>유병률</th></tr>
+        <tr><td>1형당뇨</td><td>불량한 수면</td><td>30–50%</td></tr>
+        <tr><td>1형당뇨</td><td>중등도~중증 OSA</td><td>&gt;50%</td></tr>
+        <tr><td>2형당뇨</td><td>OSA</td><td>55%</td></tr>
+        <tr><td>2형당뇨</td><td>불면증</td><td>39%</td></tr>
+        <tr><td>2형당뇨</td><td>하지불안증후군</td><td>8–45%</td></tr>
+      </table>
+      <div class="alert alert-warn" style="margin-top:8px"><span>⚠️</span><span>하지불안증후군 동반 2형당뇨인은 미세·대혈관 합병증, 우울 위험이 더 높음</span></div>
+    </div>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <div class="card-header open" onclick="toggleCard(this)">
+        <span>📊 OSA 치료 — 효과 근거</span><span class="toggle">▾</span>
+      </div>
+      <div class="card-body">
+        <table class="tc-table">
+          <tr><th>중재</th><th>효과</th></tr>
+          <tr><td>CPAP</td><td>A1C −0.24%(메타분석)</td></tr>
+          <tr><td>GLP-1RA</td><td>무호흡-저호흡지수 감소(2형당뇨군 대조군보다 효과적)</td></tr>
+          <tr><td>듀얼GIP/GLP-1RA(티르제파타이드)</td><td>52주 후 수면무호흡 중증도·체중 유의하게 감소(비당뇨 비만+OSA 대상)</td></tr>
+        </table>
+        <p style="font-size: calc(11px * var(--fscale, 1));color:var(--text2);margin-top:6px">수면분절·저산소증은 교감신경계 활성화 → 고혈당·인슐린저항성·산화스트레스 유발</p>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header open" onclick="toggleCard(this)">
+        <span>💊 불면증 약물치료 — 3대 RCT 결과</span><span class="toggle">▾</span>
+      </div>
+      <div class="card-body">
+        <table class="tc-table">
+          <tr><th>약물</th><th>효과</th></tr>
+          <tr><td>수보렉산트</td><td>총수면시간·수면효율 개선</td></tr>
+          <tr><td>라멜테온</td><td>수면질·수면시작지연 개선</td></tr>
+          <tr><td>렘보렉산트</td><td>수면시작·수면유지 개선</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="acc">
+    <div class="acc-hdr" onclick="toggleAcc(this)">
+      <span>비약물적 수면개선 전략 — 근거기반</span><span>▾</span>
+    </div>
+    <div class="acc-body">
+      <ul class="dot">
+        <li>CBT(불면증용 CBT-I 포함) — 수면결과·A1C·공복혈당·우울증상 개선</li>
+        <li>수면연장(sleep extension) — 인슐린저항성 개선 가능성</li>
+        <li>수면교육(sleep hygiene) — 수면질 개선, A1C·인슐린저항성 감소(2형당뇨 RCT)</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>💤 수면촉진 루틴 — 실천 가이드</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="dot">
+        <li>주말 포함 규칙적 취침·기상 시간 유지</li>
+        <li>어둡고 조용하며 온도·습도가 조절된 침실 환경 조성</li>
+        <li>취침 전 루틴 확립</li>
+        <li>전자기기(당뇨관리기기 제외)는 무음/꺼짐 모드</li>
+        <li>낮 시간 운동, 낮잠 회피</li>
+        <li>저녁 시간 카페인·니코틴 제한</li>
+        <li>밤에 매운 음식 회피</li>
+        <li>취침 전 알코올 회피</li>
+      </ul>
+      <div class="alert alert-info" style="margin-top:8px"><span>💡</span><span>1형당뇨에서는 저혈당 위험이 특수한 수면 어려움을 야기 — 당뇨기술(AID시스템)이 수면에 가장 큰 도움으로 인식됨</span></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span>🕐 교대근무·일주기리듬 영향</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body collapsed">
+      <ul class="dot">
+        <li>교대근무자 — 일주기리듬장애 위험↑, 높은 A1C·신경병증·심리적 웰빙 저하와 연관</li>
+        <li>저녁형 일주기유형(밤늦게 자고 늦게 일어남) — 활동저하·불량한 혈당과 연관</li>
+        <li>건강진료팀은 수면시간, 교대근무 일정, 실제 휴무일 등을 종합평가해야 함</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ TABLES SUMMARY ═══ -->
+<div id="tab-tables" class="panel">
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>📊 핵심 수치 요약표</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <table class="tc-table">
+        <tr><th>항목</th><th>수치</th></tr>
+        <tr><td>DSMES 효과적 제공 시간</td><td>&gt;10시간(6–12개월)</td></tr>
+        <tr><td>디지털DSMES A1C 개선</td><td>−0.30%p</td></tr>
+        <tr><td>MNT(RDN제공) A1C 개선(1형/2형)</td><td>1.0–1.9% / 0.3–2.0%</td></tr>
+        <tr><td>나트륨 제한 목표</td><td>&lt;2,300 mg/일</td></tr>
+        <tr><td>섬유질 목표</td><td>≥14g/1,000kcal</td></tr>
+        <tr><td>체중감소 목표(전당뇨/2형당뇨)</td><td>5–7%↓ / ≥5%↓</td></tr>
+        <tr><td>식품불안정 유병률(당뇨인/비당뇨인)</td><td>16% / 9%</td></tr>
+        <tr><td>유산소운동 권고량(성인)</td><td>주150분↑</td></tr>
+        <tr><td>저항운동 권고(성인)</td><td>주2–3회(비연속일)</td></tr>
+        <tr><td>좌식시간 중단 권고</td><td>최소 30분마다</td></tr>
+        <tr><td>당뇨고통 유병률(2형/1형)</td><td>&gt;60% / &gt;70%</td></tr>
+        <tr><td>불안장애 통합유병률(당뇨인)</td><td>28%</td></tr>
+        <tr><td>우울증상 유병률(1형·2형)</td><td>약 1/4</td></tr>
+        <tr><td>1형당뇨 인슐린제한 중앙값 유병률</td><td>15%</td></tr>
+        <tr><td>SMI 동반 2형당뇨 발생위험</td><td>1.5–2.5배</td></tr>
+        <tr><td>당뇨인 OSA 유병률(1형/2형)</td><td>&gt;50% / 55%</td></tr>
+        <tr><td>CPAP의 A1C 개선효과</td><td>−0.24%</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span>📋 종합 심리사회 선별 체크리스트</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body collapsed">
+      <ul class="dot">
+        <li>☐ 당뇨고통(연1회 이상, 진단·전환기·합병증 발생시 추가)</li>
+        <li>☐ 우울증상(연1회 이상, 과거력있으면 더 빈번히)</li>
+        <li>☐ 불안증상(연1회 이상)</li>
+        <li>☐ 저혈당두려움(고위험·중증/빈번 저혈당 경험자 연1회)</li>
+        <li>☐ 이상섭식행동(당뇨특이도구 사용)</li>
+        <li>☐ 인지능력(생애전반, 고령자·중증저혈당경험자·소아 특히)</li>
+        <li>☐ 수면건강(수면장애·당뇨관련 수면방해 모두 평가)</li>
+        <li>☐ SDOH(식품불안정 포함)</li>
+        <li>☐ 자살사고(고위험군 적절성 판단 시)</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span>📁 참고 — 유용한 외부 리소스</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body collapsed">
+      <table class="tc-table">
+        <tr><th>리소스</th><th>용도</th></tr>
+        <tr><td>professional.diabetes.org/meetings/behavioral-health-toolkit</td><td>ADA 행동건강 툴킷·선별 설문</td></tr>
+        <tr><td>professional.diabetes.org/ada-mental-health-provider-directory</td><td>ADA 정신건강전문가 디렉토리</td></tr>
+        <tr><td>cdc.gov/diabetes-toolkit</td><td>CDC DSMES 구현 가이드</td></tr>
+        <tr><td>professional.diabetes.org/sites/dpro/files/2023-12/plan_your_plate.pdf</td><td>당뇨 접시법 시각자료</td></tr>
+        <tr><td>fda.gov(아스파탐 등 감미료 정보)</td><td>비영양감미료 안전성·일일허용량</td></tr>
+      </table>
+    </div>
+  </div>
+</div>
+
+</div><!-- /main -->
+
+<!-- ═══ MODAL: DSMES TIMING ═══ -->
+<div id="dsmesTimingModal" class="modal-overlay" onclick="closeModalOutside(event,'dsmesTimingModal')">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal('dsmesTimingModal')">✕</button>
+    <div class="modal-title">📚 DSMES — 4대 핵심 의뢰 시점</div>
+
+    <div class="alert alert-info" style="margin:0 0 12px"><span>💡</span><span>DSMES는 한 번의 행사가 아니라 지속적 과정으로 이해해야 하며, 다음 4개 시점에서 필요성을 재평가해야 한다.</span></div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">4대 핵심 시점(권고 5.2)</div>
+      <table class="modal-table">
+        <tr><th>시점</th><th>세부내용</th></tr>
+        <tr><td>① 진단 시</td><td>새로 진단된 모든 당뇨인에게 제공</td></tr>
+        <tr><td>② 연례 또는 목표미달성 시</td><td>둘 중 더 빈번한 시점에 재평가</td></tr>
+        <tr><td>③ 합병증 발생 시</td><td>의학적·기능적·심리사회적 복잡요인 발생 시</td></tr>
+        <tr><td>④ 생애·케어 전환기</td><td>예: 소아→성인 케어팀 전환, 새 치료법 도입</td></tr>
+      </table>
+    </div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">DSMES의 8대 콘텐츠(National Standards 2022)</div>
+      <ul class="dot">
+        <li>당뇨병리·치료옵션</li>
+        <li>건강한 대처(coping)</li>
+        <li>건강한 식이</li>
+        <li>활동적인 생활</li>
+        <li>약물 복용</li>
+        <li>모니터링</li>
+        <li>위험 감소(급·만성 합병증)</li>
+        <li>문제해결·행동변화전략</li>
+      </ul>
+    </div>
+
+    <div class="alert alert-warn" style="margin-top:4px"><span>⚠️</span><span>보험을 통해 DSMES에 의뢰된 사람 중 <strong>10% 미만만 실제로 받음</strong> — 의뢰 부족, 물류 문제, 비용, 효과 인식 부족이 주요 장벽</span></div>
+  </div>
+</div>
+
+<!-- ═══ MODAL: PLATE METHOD ═══ -->
+<div id="plateModal" class="modal-overlay" onclick="closeModalOutside(event,'plateModal')">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal('plateModal')">✕</button>
+    <div class="modal-title">🍽️ 당뇨 접시법(Diabetes Plate Method) — 상세</div>
+
+    <div class="alert alert-info" style="margin:0 0 12px"><span>💡</span><span>1형·2형당뇨 모두에게 기본적인 식사계획 지침을 제공하는 가장 널리 사용되는 시각적 접근법이다.</span></div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">접시법 구성(9인치 접시 기준)</div>
+      <table class="modal-table">
+        <tr><th>비율</th><th>식품군</th></tr>
+        <tr><td>1/2</td><td>비전분 채소(짙은녹색·적색·주황색 — 생/냉동/저나트륨캔 모두 가능)</td></tr>
+        <tr><td>1/4</td><td>단백질(살코기·가금류·생선·콩류 등)</td></tr>
+        <tr><td>1/4</td><td>탄수화물(전곡·콩류·과일·유제품 등)</td></tr>
+      </table>
+    </div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">접시법 vs 탄수화물계산 — RCT 비교</div>
+      <p style="font-size: calc(12px * var(--fscale, 1));line-height:1.6">한 RCT에서 두 방법 모두 A1C 개선에 효과적이었다. 탄수화물계산 vs 표준교육 비교 메타분석에서는 A1C에 유의한 차이가 없었다.</p>
+    </div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">개별화 고려사항</div>
+      <ul class="dot">
+        <li>건강수리력(health numeracy)과 식품문해력(food literacy) 평가 필요</li>
+        <li>MDI 사용자 — 인슐린-탄수화물 비율 교육이 식사별 인슐린 조절에 유용</li>
+        <li>AID 시스템 사용자 — 정밀한 탄수화물계산 필요성 감소</li>
+        <li>고지방/고단백 혼합식 — 지연된 식후고혈당 가능, 신중한 인슐린 증량 또는 분할볼루스 고려</li>
+      </ul>
+    </div>
+
+    <div class="alert alert-success" style="margin-top:4px"><span>✅</span><span>최근에는 스마트폰 앱·CGM 등 신기술이 개별화된 영양접근을 지원하며 정밀 탄수화물계산의 부담을 줄여준다.</span></div>
+  </div>
+</div>
+
+<!-- ═══ MODAL: DIABETES DISTRESS ═══ -->
+<div id="distressModal" class="modal-overlay" onclick="closeModalOutside(event,'distressModal')">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal('distressModal')">✕</button>
+    <div class="modal-title">🧠 당뇨고통(Diabetes Distress) — 상세</div>
+
+    <div class="alert alert-info" style="margin:0 0 12px"><span>💡</span><span>당뇨고통은 부담스러운 만성질환과 함께 살고 관리하는 데 따른 정서적 짐과 걱정을 의미하며, 우울·불안과는 구별되는 독립적 개념이다.</span></div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">유병률과 영향</div>
+      <table class="modal-table">
+        <tr><th>대상</th><th>유병률</th></tr>
+        <tr><td>2형당뇨</td><td>&gt;60%</td></tr>
+        <tr><td>1형당뇨</td><td>&gt;70%</td></tr>
+        <tr><td>소아청소년 부모(1형당뇨)</td><td>가족갈등 증가·자기관리행동 감소와 연관</td></tr>
+      </table>
+    </div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">관련 결과(근거강도 — 표 5.6/5.7 기반)</div>
+      <ul class="dot">
+        <li>A1C 상승, 자기관리행동 감소 — 강한 근거</li>
+        <li>대혈관·미세혈관 합병증 증가 — 강한 근거</li>
+        <li>동반 심리사회적 문제(우울·불안) — 강한 근거</li>
+        <li>삶의 질 저하 — 강한 근거</li>
+        <li>약물복용행태에 악영향, 낮은 자기효능감</li>
+      </ul>
+    </div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">효과적 중재</div>
+      <ul class="dot">
+        <li>DSMES(특히 동료지지와 결합 시 A1C도 개선)</li>
+        <li>CBT — 당뇨고통·A1C·우울증상 1년까지 개선</li>
+        <li>마음챙김기반치료 — 자기자비 증가, 우울·당뇨고통 감소, A1C 개선</li>
+        <li>그룹기반 DSMES+감정중심기술 결합 — 당뇨고통·A1C 임상적으로 의미있는 개선</li>
+        <li>AID 시스템 — 1형당뇨 성인·소아 돌봄자의 당뇨고통 감소에 기여(소아청소년 본인 효과는 근거 혼재)</li>
+      </ul>
+    </div>
+
+    <div class="alert alert-warn" style="margin-top:4px"><span>⚠️</span><span>당뇨로 인한 낙인(stigma) 경험은 당뇨고통을 더욱 악화시킬 수 있다 — 비판단적 언어와 접근이 필수적이다.</span></div>
+  </div>
+</div>
+
+<!-- ═══ MODAL: RAMADAN ═══ -->
+<div id="ramadanModal" class="modal-overlay" onclick="closeModalOutside(event,'ramadanModal')">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal('ramadanModal')">✕</button>
+    <div class="modal-title">🕌 IDF-DAR 라마단 단식 위험평가도구 — 상세</div>
+
+    <div class="alert alert-info" style="margin:0 0 12px"><span>💡</span><span>International Diabetes Federation과 Diabetes and Ramadan International Alliance가 공동 개발한 위험계산기로, 다양한 위험요소를 종합해 단식의 안전성을 평가한다.</span></div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">14개 평가 영역(표 5.3 요약)</div>
+      <table class="modal-table">
+        <tr><th>영역</th><th>최고 위험점수</th></tr>
+        <tr><td>① 임신</td><td>6.5</td></tr>
+        <tr><td>② 당뇨유형(1형/LADA)</td><td>1.0</td></tr>
+        <tr><td>③ 당뇨유병기간(&gt;20년)</td><td>1.0</td></tr>
+        <tr><td>④ 치료유형(다회혼합인슐린)</td><td>2.0</td></tr>
+        <tr><td>⑤ 저혈당(인지장애)</td><td>6.5</td></tr>
+        <tr><td>⑥ A1C 수준(&gt;9%)</td><td>1.0</td></tr>
+        <tr><td>⑦ 혈당모니터링(미시행)</td><td>2.0</td></tr>
+        <tr><td>⑧ 고혈당응급(최근1개월 DKA/HHS)</td><td>3.5</td></tr>
+        <tr><td>⑨ 대혈관합병증(불안정)</td><td>6.5</td></tr>
+        <tr><td>⑩ 미세혈관합병증(신증 eGFR&lt;30)</td><td>6.5</td></tr>
+        <tr><td>⑪ 인지기능·노쇄·연령</td><td>6.5</td></tr>
+        <tr><td>⑫ 신체노동강도(고강도)</td><td>4.0</td></tr>
+        <tr><td>⑬ 단식교육 여부(미시행)</td><td>1.0</td></tr>
+        <tr><td>⑭ 단식시간(≥16시간)</td><td>1.0</td></tr>
+      </table>
+    </div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">위험분류와 권고</div>
+      <table class="modal-table">
+        <tr><th>점수</th><th>분류</th><th>의미</th></tr>
+        <tr><td>0–3.0</td><td>저위험</td><td>단식이 안전할 가능성 높음</td></tr>
+        <tr><td>3.5–6.0</td><td>중등도위험</td><td>단식 안전성 불확실</td></tr>
+        <tr><td>&gt;6.0</td><td>고위험</td><td>단식이 안전하지 않을 가능성 높음</td></tr>
+      </table>
+    </div>
+
+    <div class="alert alert-success" style="margin-top:4px"><span>✅</span><span>CGM 사용은 위험점수를 −0.5점 낮추는 보호요인으로 반영된다 — 당뇨기술이 위험평가·영양계획의 유용한 보조도구임을 시사한다.</span></div>
+  </div>
+</div>
+
+<script>
+const FONT_ZOOM_LEVELS = [1, 1.25, 1.5];
+let fontZoomIndex = 0;
+
+function applyFontZoom(scale) {
+  document.documentElement.style.setProperty('--fscale', scale);
+  const label = document.getElementById('font-zoom-label');
+  if (label) label.textContent = Math.round(scale * 100) + '%';
+}
+
+function cycleFontZoom() {
+  fontZoomIndex = (fontZoomIndex + 1) % FONT_ZOOM_LEVELS.length;
+  applyFontZoom(FONT_ZOOM_LEVELS[fontZoomIndex]);
+}
+
+function showTab(id){
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('tab-'+id).classList.add('active');
+  event.target.classList.add('active');
+}
+function toggleCard(el){
+  el.classList.toggle('open');
+  el.nextElementSibling.classList.toggle('collapsed');
+}
+function toggleAcc(el){
+  const b=el.nextElementSibling;
+  b.style.display=b.style.display==='block'?'none':'block';
+  el.querySelector('span:last-child').textContent=b.style.display==='block'?'▴':'▾';
+}
+
+function openModal(id){document.getElementById(id).classList.add('open');}
+function closeModal(id){document.getElementById(id).classList.remove('open');}
+function closeModalOutside(e,id){if(e.target===document.getElementById(id))closeModal(id);}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')document.querySelectorAll('.modal-overlay.open').forEach(m=>m.classList.remove('open'));});
+
+const abbrs=[
+  ['DSMES','Diabetes Self-Management Education and Support — 당뇨자기관리교육 및 지지'],
+  ['DSMT','Diabetes Self-Management Training — Medicare 청구상 DSMES 용어'],
+  ['MNT','Medical Nutrition Therapy — 의학적영양치료(RDN만 청구 가능)'],
+  ['RDN','Registered Dietitian Nutritionist — 등록영양사'],
+  ['DCES','Diabetes Care and Education Specialist — 당뇨관리교육전문가'],
+  ['BC-ADM','Board Certification in Advanced Diabetes Management — 고급당뇨관리 board 인증'],
+  ['CHW','Community Health Worker — 커뮤니티 건강관리자'],
+  ['GI/GL','Glycemic Index/Glycemic Load — 혈당지수/혈당부하지수'],
+  ['DASH','Dietary Approaches to Stop Hypertension — 고혈압예방식이패턴'],
+  ['DASH4D','DASH for Diabetes — 2형당뇨+고혈압 대상 DASH 변형 RCT'],
+  ['NNS','Non-Nutritive Sweeteners — 비영양감미료(인공감미료)'],
+  ['SGLT2i','Sodium-Glucose Cotransporter 2 inhibitor — SGLT2 억제제'],
+  ['GLP-1 RA','Glucagon-Like Peptide-1 Receptor Agonist — GLP-1 수용체작용제'],
+  ['GIP','Glucose-dependent Insulinotropic Polypeptide — 위장관 호르몬'],
+  ['ADF','Alternate-Day Fasting — 격일단식'],
+  ['TRE','Time-Restricted Eating — 시간제한식이'],
+  ['IDF-DAR','International Diabetes Federation and Diabetes and Ramadan International Alliance — 라마단단식 위험평가 공동기구'],
+  ['LADA','Latent Autoimmune Diabetes in Adults — 성인잠재자가면역당뇨(1형당뇨 변형)'],
+  ['DKA/HHS','Diabetic Ketoacidosis/Hyperglycemic Hyperosmolar State — 당뇨케톤산증/고혈당고삼투압상태'],
+  ['HIIT','High-Intensity Interval Training — 고강도인터벌훈련'],
+  ['T1DEXI','Type 1 Diabetes Exercise Initiative — 1형당뇨 운동 실제데이터 연구'],
+  ['AID','Automated Insulin Delivery — 자동인슐린전달시스템'],
+  ['CGM/isCGM','Continuous/intermittently scanned Glucose Monitoring — 연속/간헐스캔 혈당모니터링'],
+  ['TIR/TAR','Time in Range/Time Above Range — 목표범위시간/목표상회시간'],
+  ['EAGLES','Evaluating Adverse Events in a Global Smoking Cessation Study — 금연약물 안전성 비교 RCT'],
+  ['PATH Study','Population Assessment of Tobacco and Health — 美 담배·건강 추적조사'],
+  ['THC/CBD','Tetrahydrocannabinol/Cannabidiol — 카나비스 주요 성분(향정신성/비향정신성)'],
+  ['DEPS-R','Diabetes Eating Problem Survey-Revised — 1형당뇨 이상섭식 선별도구'],
+  ['mSCOFF','당뇨 특화 5문항 이상섭식 선별 설문(인슐린누락 문항 포함)'],
+  ['QEWP-5','Questionnaire on Eating and Weight Patterns-5 — 폭식장애 선별도구'],
+  ['SMI','Serious Mental Illness — 중증정신질환(조현병·양극성장애 등)'],
+  ['CBT','Cognitive Behavioral Therapy — 인지행동치료'],
+  ['CBT-I','CBT for Insomnia — 불면증 인지행동치료'],
+  ['OSA','Obstructive Sleep Apnea — 폐쇄성수면무호흡'],
+  ['CPAP','Continuous Positive Airway Pressure — 지속적양압기'],
+  ['DCCT/EDIC','Diabetes Control and Complications Trial/Epidemiology of Diabetes Interventions and Complications — 1형당뇨 장기추적 핵심연구'],
+  ['ADHD','Attention-Deficit Hyperactivity Disorder — 주의력결핍과잉행동장애'],
+];
+
+function buildAbbr(){
+  const sorted=abbrs.slice().sort((a,b)=>a[0].localeCompare(b[0]));
+  document.getElementById('abbr-grid-drop').innerHTML=sorted.map(a=>
+    `<div style="background:var(--surface2);border:1px solid var(--border);border-radius:5px;padding:6px 10px;margin-bottom:4px;" data-term="${a[0].toLowerCase()}" data-def="${a[1].toLowerCase()}">
+       <span style="font-weight:700;color:var(--accent2);font-size: calc(12px * var(--fscale, 1));font-family:'Courier New',monospace">${a[0]}</span>
+       <div style="font-size: calc(11px * var(--fscale, 1));color:var(--text2);line-height:1.45;margin-top:2px">${a[1]}</div>
+     </div>`).join('');
+}
+function filterAbbr(val){
+  const v=val.toLowerCase().trim();
+  const drop=document.getElementById('abbr-dropdown');
+  const items=document.querySelectorAll('#abbr-grid-drop [data-term]');
+  if(!v){drop.style.display='none';return;}
+  const inp=document.getElementById('abbr-input');
+  const rect=inp.getBoundingClientRect();
+  const w=440;
+  let left=rect.right-w;if(left<8)left=8;
+  drop.style.top=(rect.bottom+4)+'px';drop.style.left=left+'px';
+  drop.style.display='block';
+  items.forEach(el=>{
+    const show=el.dataset.term.startsWith(v)||el.dataset.def.includes(v);
+    el.style.display=show?'':'none';
+  });
+}
+document.addEventListener('click',e=>{
+  const inp=document.getElementById('abbr-input');
+  const drop=document.getElementById('abbr-dropdown');
+  if(inp&&!inp.contains(e.target)&&drop&&!drop.contains(e.target))drop.style.display='none';
+});
+buildAbbr();
+</script>
+</body>
+</html>

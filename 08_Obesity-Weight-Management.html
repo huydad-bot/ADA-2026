@@ -1,0 +1,1233 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ADA 2026 비만과 체중관리</title>
+<style>
+  :root {
+    --bg:#f6f8fa;--surface:#fff;--surface2:#f0f2f5;--border:#d0d7de;
+    --accent:#0969da;--accent2:#0550ae;--green:#1a7f37;--yellow:#9a6700;
+    --red:#cf222e;--orange:#bc4c00;--text:#1f2328;--text2:#57606a;
+    --teal:#0a7c8a;--purple:#5a3ea0;--fscale:1;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'Pretendard','Noto Sans KR',-apple-system,sans-serif;background:var(--bg);color:var(--text);font-size: calc(13px * var(--fscale, 1));line-height:1.5;}
+  header{background:var(--surface);border-bottom:1px solid var(--border);padding:12px 16px 8px;display:flex;flex-direction:column;align-items:center;gap:4px;position:sticky;top:0;z-index:100;}
+  .header-inner{width:100%;max-width:960px;display:flex;flex-direction:column;align-items:center;gap:4px;}
+  .logo-badge{background:var(--accent2);color:#fff;font-size: calc(10px * var(--fscale, 1));font-weight:700;padding:3px 8px;border-radius:4px;letter-spacing:.5px;}
+  .tab-bar{display:flex;justify-content:center;background:var(--surface);border-bottom:1px solid var(--border);overflow-x:auto;scrollbar-width:none;}
+  .tab-bar::-webkit-scrollbar{display:none;}
+  .font-zoom-btn{display:flex;align-items:center;gap:3px;flex-shrink:0;margin:4px 4px 4px 6px;padding:5px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:6px;color:var(--accent2);font-size:calc(11px * var(--fscale, 1));font-weight:700;cursor:pointer;user-select:none;white-space:nowrap;transition:background .15s;}
+  .font-zoom-btn:hover{background:var(--border);}
+  .font-zoom-btn .fz-icon{font-size:calc(12px * var(--fscale, 1));}
+  .tab-bar-inner{width:100%;max-width:960px;display:flex;align-items:center;gap:2px;padding:0 4px;}
+  .tab{padding:7px 11px;font-size: calc(11.5px * var(--fscale, 1));color:var(--text2);cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;transition:color .15s,border-color .15s;user-select:none;flex-shrink:0;}
+  .tab:hover{color:var(--text);}
+  .tab.active{color:var(--accent2);border-bottom-color:var(--accent2);}
+  .tab-abbr-wrap{display:flex;align-items:center;padding:4px 4px;margin-left:4px;flex-shrink:0;position:relative;}
+  .main{padding:12px 16px;max-width:960px;margin:0 auto;}
+  .panel{display:none;}
+  .panel.active{display:block;}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+  .grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;}
+  @media(max-width:680px){.grid2,.grid3{grid-template-columns:1fr;}}
+  .card{background:var(--surface);border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-bottom:10px;}
+  .card-header{background:var(--surface2);padding:8px 12px;font-size: calc(12px * var(--fscale, 1));font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.5px;border-bottom:1px solid var(--border);cursor:pointer;display:flex;align-items:center;justify-content:space-between;user-select:none;}
+  .card-header .toggle{font-size: calc(13px * var(--fscale, 1));transition:transform .2s;}
+  .card-header.open .toggle{transform:rotate(180deg);}
+  .card-body{padding:10px 12px;}
+  .card-body.collapsed{display:none;}
+  .stat-row{display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap;}
+  .stat-box{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:10px 14px;flex:1;min-width:90px;text-align:center;}
+  .stat-box.clickable{cursor:pointer;transition:box-shadow .15s,border-color .15s;}
+  .stat-box.clickable:hover{border-color:var(--accent2);box-shadow:0 2px 8px rgba(5,80,174,.15);}
+  .stat-val{font-size: calc(18px * var(--fscale, 1));font-weight:700;color:var(--accent2);}
+  .stat-lbl{font-size: calc(10px * var(--fscale, 1));color:var(--text2);margin-top:2px;}
+  .stat-hint{font-size: calc(9px * var(--fscale, 1));color:var(--accent2);margin-top:4px;opacity:.7;}
+  /* Modal */
+  .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:500;align-items:center;justify-content:center;}
+  .modal-overlay.open{display:flex;}
+  .modal-box{background:var(--surface);border-radius:12px;padding:20px;max-width:680px;width:92%;max-height:84vh;overflow-y:auto;box-shadow:0 16px 48px rgba(0,0,0,.22);position:relative;}
+  .modal-close{position:absolute;top:12px;right:14px;background:none;border:none;font-size: calc(18px * var(--fscale, 1));cursor:pointer;color:var(--text2);line-height:1;}
+  .modal-title{font-size: calc(15px * var(--fscale, 1));font-weight:700;color:var(--text);margin-bottom:12px;padding-right:20px;line-height:1.4;}
+  .modal-section{margin-bottom:12px;}
+  .modal-section-title{font-size: calc(11px * var(--fscale, 1));font-weight:700;color:var(--accent2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;border-bottom:1px solid var(--border);padding-bottom:4px;}
+  .modal-table{width:100%;border-collapse:collapse;font-size: calc(11.5px * var(--fscale, 1));}
+  .modal-table th{background:var(--surface2);color:var(--text2);padding:4px 8px;font-size: calc(10.5px * var(--fscale, 1));font-weight:600;text-align:left;border-bottom:1px solid var(--border);}
+  .modal-table td{padding:5px 8px;border-bottom:1px solid var(--border);vertical-align:top;}
+  .modal-table tr:last-child td{border-bottom:none;}
+  .rec-list{list-style:none;}
+  .rec-item{padding:7px 0;border-bottom:1px solid var(--border);display:flex;gap:8px;align-items:flex-start;}
+  .rec-item:last-child{border-bottom:none;}
+  .rec-text{font-size: calc(12px * var(--fscale, 1));color:var(--text);line-height:1.65;}
+  .rec-text strong{color:#1f2328;}
+  .badge{display:inline-flex;align-items:center;padding:2px 8px;border-radius:10px;font-size: calc(10px * var(--fscale, 1));font-weight:700;white-space:nowrap;flex-shrink:0;margin-top:1px;}
+  .badge-A{background:#dafbe1;color:#116329;border:1px solid #1a7f37;}
+  .badge-B{background:#ddf4ff;color:var(--accent2);border:1px solid var(--accent2);}
+  .badge-C{background:#fff8c5;color:#7a4b00;border:1px solid #d4a017;}
+  .badge-E{background:#f3e5f5;color:#5a3ea0;border:1px solid #5a3ea0;}
+  .alert{padding:8px 12px;border-radius:6px;font-size: calc(12px * var(--fscale, 1));margin:8px 0;display:flex;gap:8px;align-items:flex-start;}
+  .alert-info{background:#ddf4ff;border-left:3px solid var(--accent2);color:#0550ae;}
+  .alert-warn{background:#fff8c5;border-left:3px solid #d4a017;color:#7a4b00;}
+  .alert-danger{background:#ffebe9;border-left:3px solid var(--red);color:#82071e;}
+  .alert-success{background:#dafbe1;border-left:3px solid var(--green);color:#116329;}
+  .alert-teal{background:#e0f5f5;border-left:3px solid var(--teal);color:#075050;}
+  .alert-orange{background:#fff3e0;border-left:3px solid var(--orange);color:#7a3500;}
+  .alert-purple{background:#f3e5f5;border-left:3px solid var(--purple);color:#5a3ea0;}
+  .tc-table{width:100%;border-collapse:collapse;font-size: calc(11.5px * var(--fscale, 1));}
+  .tc-table th{background:var(--surface2);color:var(--text2);padding:5px 8px;font-size: calc(10.5px * var(--fscale, 1));text-transform:uppercase;letter-spacing:.3px;font-weight:600;text-align:left;border-bottom:1px solid var(--border);}
+  .tc-table td{padding:5px 8px;border-bottom:1px solid var(--border);vertical-align:top;}
+  .tc-table tr:last-child td{border-bottom:none;}
+  .tc-table tr:hover td{background:rgba(0,0,0,.02);}
+  .acc{border:1px solid var(--border);border-radius:6px;margin-bottom:6px;overflow:hidden;}
+  .acc-hdr{background:var(--surface2);padding:7px 12px;font-size: calc(12px * var(--fscale, 1));font-weight:600;color:var(--text);cursor:pointer;display:flex;justify-content:space-between;align-items:center;user-select:none;}
+  .acc-hdr:hover{background:#e8eaec;}
+  .acc-body{display:none;padding:10px 12px;font-size: calc(12px * var(--fscale, 1));line-height:1.65;}
+  .flow-box{border:1px solid var(--border);border-radius:6px;background:var(--surface);padding:8px 12px;margin-bottom:6px;font-size: calc(12px * var(--fscale, 1));line-height:1.6;}
+  .flow-arrow{text-align:center;color:var(--text2);font-size: calc(14px * var(--fscale, 1));margin:2px 0;}
+  .step-num{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;background:var(--accent2);color:#fff;font-size: calc(10px * var(--fscale, 1));font-weight:700;flex-shrink:0;margin-right:6px;}
+  ul.dot{padding-left:18px;}
+  ul.dot li{margin-bottom:3px;font-size: calc(12px * var(--fscale, 1));line-height:1.6;}
+  ol.num{padding-left:18px;}
+  ol.num li{margin-bottom:4px;font-size: calc(12px * var(--fscale, 1));line-height:1.6;}
+  ::-webkit-scrollbar{width:5px;height:5px;}
+  ::-webkit-scrollbar-track{background:var(--bg);}
+  ::-webkit-scrollbar-thumb{background:#c8d0d9;border-radius:3px;}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div style="display:flex;align-items:center;gap:10px">
+      <span class="logo-badge">ADA 2026</span>
+      <h1 style="font-size:17px;font-weight:700;color:var(--text)">비만과 체중관리</h1>
+    </div>
+    <div style="text-align:center;line-height:1.5">
+      <span style="color:var(--text2);font-size: calc(11px * var(--fscale, 1))">Standards of Care in Diabetes—2026, Section 8 — American Diabetes Association</span><br>
+      <span style="font-size: calc(10px * var(--fscale, 1));color:var(--text2)">Diabetes Care 2026;49(Suppl. 1):S166–S182 · doi: 10.2337/dc26-S008 · The Obesity Society 승인</span>
+    </div>
+    <div style="font-size: calc(10px * var(--fscale, 1));color:var(--text2);font-style:italic;">This tool is not officially endorsed by the American Diabetes Association (ADA).</div>
+  </div>
+</header>
+
+<div class="tab-bar">
+  <div class="tab-bar-inner">
+    <div id="font-zoom-btn" class="font-zoom-btn" onclick="cycleFontZoom()"><span class="fz-icon">🔠</span><span id="font-zoom-label">100%</span></div>
+    <div class="tab active" onclick="showTab('overview')">🏠 개요</div>
+    <div class="tab" onclick="showTab('assess')">📏 평가·모니터링</div>
+    <div class="tab" onclick="showTab('lifestyle')">🥗 생활습관·행동치료</div>
+    <div class="tab" onclick="showTab('pharma')">💊 약물치료</div>
+    <div class="tab" onclick="showTab('surgery')">🔪 대사수술</div>
+    <div class="tab" onclick="showTab('t1d')">💉 1형당뇨의 비만</div>
+    <div class="tab" onclick="showTab('tables')">📁 기준표 모음</div>
+    <div class="tab-abbr-wrap">
+      <div style="position:relative;display:flex;align-items:center;flex-shrink:0">
+        <span style="position:absolute;left:8px;color:var(--text2);font-size: calc(12px * var(--fscale, 1));pointer-events:none">🔍</span>
+        <input id="abbr-input" type="text" placeholder="약어" oninput="filterAbbr(this.value)"
+          style="background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:4px 8px 4px 26px;color:var(--text);font-size: calc(12px * var(--fscale, 1));width:90px;outline:none;"
+          onfocus="this.style.borderColor='var(--accent2)'" onblur="this.style.borderColor='var(--border)'">
+      </div>
+      <div id="abbr-dropdown" style="display:none;position:fixed;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:8px;width:440px;max-height:360px;overflow-y:auto;z-index:300;box-shadow:0 8px 24px rgba(0,0,0,.12)">
+        <div id="abbr-grid-drop"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="main">
+
+<!-- ═══════════ TAB: 개요 ═══════════ -->
+<div id="tab-overview" class="panel active">
+  <div class="stat-row">
+    <div class="stat-box clickable" onclick="openModal('weightLossModal')"><div class="stat-val">5–7% / &gt;10%</div><div class="stat-lbl">체중감량 목표 단계</div><div class="stat-hint">▸ 클릭하여 상세 보기</div></div>
+    <div class="stat-box clickable" onclick="openModal('bmiClassModal')"><div class="stat-val">BMI 25–40+</div><div class="stat-lbl">과체중·비만 분류</div><div class="stat-hint">▸ 클릭하여 상세 보기</div></div>
+    <div class="stat-box clickable" onclick="openModal('pharmaPrefModal')"><div class="stat-val">GLP-1RA / Tirzepatide</div><div class="stat-lbl">선호 약물치료</div><div class="stat-hint">▸ 클릭하여 상세 보기</div></div>
+    <div class="stat-box clickable" onclick="openModal('surgeryModal')"><div class="stat-val">BMI ≥30(≥27.5)</div><div class="stat-lbl">대사수술 적응 기준</div><div class="stat-hint">▸ 클릭하여 상세 보기</div></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>📋 Section 8 전체 흐름</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <div class="flow-box" style="border-left:3px solid var(--accent2)">
+        <strong>① 평가</strong><br>
+        <span style="color:var(--text2);font-size: calc(11px * var(--fscale, 1))">사람중심 비낙인 언어 사용, 연 1회 이상 BMI 선별 + 허리둘레 등 추가 측정 고려</span>
+      </div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-box" style="border-left:3px solid var(--green)">
+        <strong>② 목표 설정·공유의사결정</strong><br>
+        <span style="font-size: calc(11.5px * var(--fscale, 1))">2형당뇨·과체중/비만 환자에서 체중관리를 혈당관리와 동등한 1차 치료목표로 설정</span>
+      </div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-box" style="border-left:3px solid var(--yellow)">
+        <strong>③ 생활습관·행동치료</strong><br>
+        <span style="font-size: calc(11.5px * var(--fscale, 1))">500–750kcal/day 결핍, 주 16회 이상 상담(6개월), 장기 유지 프로그램(≥1년) 병행</span>
+      </div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-box" style="border-left:3px solid var(--orange)">
+        <strong>④ 약물치료</strong><br>
+        <span style="font-size: calc(11.5px * var(--fscale, 1))">체중감소 효과가 큰 GLP-1RA·dual GIP/GLP-1RA(semaglutide·tirzepatide) 우선 고려, 만성 지속치료 원칙</span>
+      </div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-box" style="border-left:3px solid var(--teal)">
+        <strong>⑤ 목표 미달 시 강화·대사수술</strong><br>
+        <span style="font-size: calc(11.5px * var(--fscale, 1))">치료 정체기에 추가/대체 약물, 구조화 생활습관 프로그램, 또는 대사수술(BMI ≥30, 아시안 ≥27.5)로 강화</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <div class="card-header open" onclick="toggleCard(this)">
+        <span>📌 핵심 권고문 요약</span><span class="toggle">▾</span>
+      </div>
+      <div class="card-body">
+        <ul class="rec-list">
+          <li class="rec-item"><span class="badge badge-E">E</span><span class="rec-text"><strong>8.1</strong> 사람중심·비낙인 언어 사용(person-first language)</span></li>
+          <li class="rec-item"><span class="badge badge-E">E</span><span class="rec-text"><strong>8.2a/b</strong> 연 1회 BMI 선별, 활성 치료 중 3개월마다 인체측정 모니터링</span></li>
+          <li class="rec-item"><span class="badge badge-A">A</span><span class="rec-text"><strong>8.4</strong> 2형당뇨+과체중/비만에서 체중관리를 1차 치료목표로</span></li>
+          <li class="rec-item"><span class="badge badge-A">A</span><span class="rec-text"><strong>8.5</strong> 5–7% 감량으로 대사개선, &gt;10% 감량으로 질병수정·관해 효과</span></li>
+          <li class="rec-item"><span class="badge badge-A">A</span><span class="rec-text"><strong>8.6</strong> 생활습관·약물·수술 중 개인 맞춤 초기치료 선택</span></li>
+          <li class="rec-item"><span class="badge badge-A">A</span><span class="rec-text"><strong>8.8a</strong> 500–750kcal/day 결핍 목표, 16회 이상/6개월 집중상담</span></li>
+          <li class="rec-item"><span class="badge badge-A">A</span><span class="rec-text"><strong>8.11</strong> 장기(≥1년) 유지 프로그램 — 월 1회 이상 접촉, 주 200–300분 활동</span></li>
+          <li class="rec-item"><span class="badge badge-B">B</span><span class="rec-text"><strong>8.16/8.18</strong> 체중감소 효과 있는 혈당강하제 우선, GLP-1RA/dual GIP·GLP-1RA 선호</span></li>
+          <li class="rec-item"><span class="badge badge-B">B</span><span class="rec-text"><strong>8.19</strong> 비만약물치료는 목표달성 후에도 지속(중단 시 체중재증가)</span></li>
+          <li class="rec-item"><span class="badge badge-A">A</span><span class="rec-text"><strong>8.22</strong> BMI ≥30(아시안 ≥27.5) 2형당뇨에서 대사수술 고려</span></li>
+          <li class="rec-item"><span class="badge badge-B">B</span><span class="rec-text"><strong>8.24/8.25</strong> 수술 전 정신사회적 평가, 수술 후 장기 영양·대사 모니터링</span></li>
+          <li class="rec-item"><span class="badge badge-A">A</span><span class="rec-text"><strong>8.26</strong> 대사수술후 저혈당 — 교육·영양치료·약물 단계적 접근</span></li>
+          <li class="rec-item"><span class="badge badge-B">B</span><span class="rec-text"><strong>8.29</strong> 1형당뇨 비만에도 GLP-1RA·대사수술 적용(개별화 필요)</span></li>
+        </ul>
+      </div>
+    </div>
+
+    <div>
+      <div class="card">
+        <div class="card-header open" onclick="toggleCard(this)">
+          <span>⚠️ 권고 등급 체계 (Evidence Grading)</span><span class="toggle">▾</span>
+        </div>
+        <div class="card-body">
+          <table class="tc-table">
+            <tr><th>등급</th><th>의미</th></tr>
+            <tr><td><span class="badge badge-A">A</span></td><td>명확한 근거 — 잘 수행된 다기관 RCT 또는 메타분석</td></tr>
+            <tr><td><span class="badge badge-B">B</span></td><td>뒷받침되는 근거 — 잘 수행된 코호트 연구 등</td></tr>
+            <tr><td><span class="badge badge-C">C</span></td><td>뒷받침되는 근거 부족 — 대조군 없는 연구, 사례 보고</td></tr>
+            <tr><td><span class="badge badge-E">E</span></td><td>전문가 합의 또는 임상 경험 (Expert consensus)</td></tr>
+          </table>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header open" onclick="toggleCard(this)">
+          <span>🔑 핵심 개념</span><span class="toggle">▾</span>
+        </div>
+        <div class="card-body">
+          <div class="alert alert-info"><span>ℹ️</span><span>비만은 만성·재발성 질환으로, 2형당뇨 발생·진행의 핵심 병태생리적 원동력 — 혈당관리와 체중관리를 함께 다루는 양방향 치료목표 필요</span></div>
+          <div class="alert alert-warn"><span>⚠️</span><span>인슐린·설폰요소제·피오글리타존 등은 체중증가 유발 가능 — 비만 동반 당뇨에서는 체중에 미치는 영향을 고려해 약물 선택</span></div>
+          <div class="alert alert-danger"><span>🚫</span><span>비만 낙인(weight stigma)은 의료진·일반인 모두에서 흔함 — 사람중심 언어("비만이 있는 사람" vs "비만인")를 사용하고 명시적·암묵적 편견을 자각해야 함</span></div>
+          <div class="alert alert-teal"><span>💡</span><span>비만약물치료는 고혈압처럼 만성질환 관리 패러다임으로 접근 — 갑작스런 중단 시 1년 내 체중감량분의 1/2~2/3가 재증가</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ TAB: 평가·모니터링 ═══════════ -->
+<div id="tab-assess" class="panel">
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>📌 ASSESSMENT AND MONITORING 핵심 권고문</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="rec-list">
+        <li class="rec-item"><span class="badge badge-E">E</span><span class="rec-text"><strong>8.1</strong> 사람중심·비낙인 언어 사용("비만이 있는 사람" vs "비만인", "당뇨가 있는 사람" vs "당뇨인")</span></li>
+        <li class="rec-item"><span class="badge badge-E">E</span><span class="rec-text"><strong>8.2a</strong> 연 1회 BMI로 과체중·비만 선별. 과다체지방 확인 위해 허리-엉덩이둘레비, DXA, 생체전기저항분석 등 추가 평가 고려 가능</span></li>
+        <li class="rec-item"><span class="badge badge-E">E</span><span class="rec-text"><strong>8.2b</strong> 최소 연 1회 비만관련 인체측정 모니터링, 활성 치료 중에는 최소 3개월마다</span></li>
+        <li class="rec-item"><span class="badge badge-E">E</span><span class="rec-text"><strong>8.3</strong> 인체측정 시 사생활 보호를 위한 배려 필요</span></li>
+        <li class="rec-item"><span class="badge badge-A">A</span><span class="rec-text"><strong>8.4</strong> 2형당뇨+과체중/비만에서 체중관리는 혈당관리와 함께 1차 치료목표</span></li>
+        <li class="rec-item"><span class="badge badge-A">A</span><span class="rec-text"><strong>8.5</strong> 어떤 정도의 체중감량이든 시도. 5–7% 감량으로 혈당·심혈관위험인자 개선. &gt;10% 지속감량은 질병수정·당뇨관해 가능성 <span class="badge badge-B">B</span> 및 장기 심혈관·사망률 개선</span></li>
+        <li class="rec-item"><span class="badge badge-A">A</span><span class="rec-text"><strong>8.6</strong> 병력·생활환경·선호에 따라 초기 비만치료(생활습관/약물/수술) 개별화 <span class="badge badge-C">C</span>, 병합치료 고려 가능</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>📐 BMI에 의한 과체중·비만 분류</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <table class="tc-table">
+        <tr><th>분류</th><th>BMI (kg/m²)</th></tr>
+        <tr><td>과체중(Overweight)</td><td>25–29.9</td></tr>
+        <tr><td>비만 1단계(Class 1)</td><td>30–34.9</td></tr>
+        <tr><td>비만 2단계(Class 2)</td><td>35–39.9</td></tr>
+        <tr><td>비만 3단계(Class 3)</td><td>≥40</td></tr>
+      </table>
+      <div class="alert alert-warn" style="margin-top:8px"><span>⚠️</span><span>BMI는 측정이 쉽지만 체지방량을 완벽히 반영하지 못하며, 체지방 분포·기능, 체중관련 건강영향을 측정하지 않음 — 근육량이 매우 많은 운동선수나 근육량이 적은 사람, 인종에 따른 체구성 차이가 있는 집단에서 분류 오류 위험이 큼</span></div>
+      <div class="alert alert-info"><span>ℹ️</span><span>BMI 25–34.9 범위 및 남아시아인 등 특정 인구집단에서는 허리둘레·허리-엉덩이비·허리-키비 등 적어도 1개 이상의 추가 인체측정 기준으로 과다체지방을 확인하는 것이 권장됨 — 연령·성별·인종에 맞는 검증된 방법·절단값 사용</span></div>
+      <div class="alert alert-teal"><span>💡</span><span>미국 20–59세 성인에서는 BMI 기준 비만 유병률이 과다체지방 확인 후 유병률과 거의 동일 — 일상 임상에서 BMI 단독 사용도 합리적 대안이 될 수 있음</span></div>
+    </div>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <div class="card-header open" onclick="toggleCard(this)">
+        <span>🔄 비만-당뇨의 악순환</span><span class="toggle">▾</span>
+      </div>
+      <div class="card-body">
+        <ul class="dot">
+          <li>비만은 당뇨, 고혈압, 이상지질혈증, MASLD, 염증상태 등 심혈관 위험인자의 핵심 병태생리적 원동력</li>
+          <li>당뇨는 체중증가 유발 약물(인슐린, 설폰요소제, 피오글리타존) 사용을 통해 비만을 악화시킬 수 있음</li>
+          <li>비만은 다시 고혈당·당뇨를 악화시켜 미세혈관·대혈관 합병증으로 이어지는 <strong>악순환</strong> 형성</li>
+          <li>따라서 고혈당과 그 근본 원인(비만)을 모두 다루는 양방향 치료목표가 전인적 이득에 필요</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header open" onclick="toggleCard(this)">
+        <span>🚫 체중낙인(Weight Stigma)과 사람중심 의사소통</span><span class="toggle">▾</span>
+      </div>
+      <div class="card-body">
+        <ul class="dot">
+          <li>체중낙인·비만편견(fat bias)은 의료진·일반대중 모두에서 흔함</li>
+          <li>의료진은 암묵적·명시적 비만 편견에 대한 인식 제고 필요, 공감·이해 증진이 편견 감소에 유용</li>
+          <li>사람중심 언어 사용으로 사람을 질환으로 정의하지 않도록 함 ("비만이 있는 사람" vs "비만인")</li>
+          <li>체중·신장 측정 거부/의문 제기 시 과거 낙인 경험 가능성을 염두에 두고, 치료결정에 도움을 주는 의료평가의 일환으로 모니터링의 가치를 설명</li>
+          <li>체중관련 고통·불만족이 큰 경우 특히 측정 시 사생활 보호 배려 필요 — 인체측정 정보는 민감정보로 취급</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>📊 체중감량 정도별 임상적 이득</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <table class="tc-table">
+        <tr><th>체중감량</th><th>주요 이득</th></tr>
+        <tr><td><strong>5–7%</strong></td><td>혈당·혈압·지질 개선, 전당뇨→당뇨 진행 감소, 질병특이 약물 필요성 감소 가능</td></tr>
+        <tr><td><strong>&gt;10%</strong></td><td>혈당 개선 + 전체·심혈관 사망률 감소, MASH/MASLD·지방조직염증·수면무호흡 개선, 일부에서 당뇨관해 2–5년 유지 가능(기저 β세포기능 양호자에서 더 잘 반응)</td></tr>
+        <tr><td><strong>&gt;20%(대사수술)</strong></td><td>혈당 현저 개선, 당뇨관해 흔함, 삶의 질·심혈관결과 개선, 사망률 감소</td></tr>
+      </table>
+      <div class="alert alert-warn" style="margin-top:8px"><span>⚠️</span><span>5% 미만의 체중감량은 혈당·지질·혈압 개선을 보여주지 못함 — 대사적 개선을 위해서는 <strong>최소 5% 이상</strong>의 감량이 필요한 것으로 보임</span></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══════════ TAB: 생활습관·행동치료 ═══════════ -->
+<div id="tab-lifestyle" class="panel">
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>📌 NUTRITION, PHYSICAL ACTIVITY, AND BEHAVIORAL THERAPY 핵심 권고문</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="rec-list">
+        <li class="rec-item"><span class="badge badge-B">B</span><span class="rec-text"><strong>8.7</strong> 영양·신체활동·행동치료를 체중·건강결과 목표 모두를 위해 권장</span></li>
+        <li class="rec-item"><span class="badge badge-A">A</span><span class="rec-text"><strong>8.8a</strong> 가능하면 고빈도 상담(6개월 내 ≥16회), 500–750kcal/day 결핍 목표 중재 권장(영양소 구성 무관)</span></li>
+        <li class="rec-item"><span class="badge badge-E">E</span><span class="rec-text"><strong>8.8b</strong> 접근 제한 시 원격/모바일앱 등 대체 구조화 프로그램 고려</span></li>
+        <li class="rec-item"><span class="badge badge-A">A</span><span class="rec-text"><strong>8.9</strong> 개인 선호·영양필요에 맞춘 에너지결핍 식이계획, 일반 영양지침 준수</span></li>
+        <li class="rec-item"><span class="badge badge-C">C</span><span class="rec-text"><strong>8.10</strong> 식품불안정·접근성 등 사회적 결정요인을 치료계획에 반영</span></li>
+        <li class="rec-item"><span class="badge badge-E">E</span><span class="rec-text"><strong>8.11</strong> 목표달성 후 지속 모니터링·지원. <span class="badge badge-A">A</span> 장기(≥1년) 유지프로그램 — 월 1회 접촉, 주간 자가체중측정, 주 200–300분 활동</span></li>
+        <li class="rec-item"><span class="badge badge-B">B</span><span class="rec-text"><strong>8.12</strong> 초저열량식(800–1,000kcal/day)은 신중히 선별된 대상에 훈련된 전문가가 의료환경에서 면밀히 모니터링하며 단기 처방, 장기 유지전략 병행</span></li>
+        <li class="rec-item"><span class="badge badge-A">A</span><span class="rec-text"><strong>8.13</strong> 영양보충제는 체중감량 효과 근거 부족으로 권장하지 않음</span></li>
+        <li class="rec-item"><span class="badge badge-E">E</span><span class="rec-text"><strong>8.14</strong> 의도적 체중감량 시 단백질부족·미량영양소결핍 예방을 위한 정기 모니터링·상담</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>🏃 Look AHEAD 연구 — 핵심 결과</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="dot">
+        <li>비만+2형당뇨 환자가 집중생활습관중재(ILI)로 <strong>최대 8년간(시험종료 후)</strong> 체중감량을 유지할 수 있음을 입증</li>
+        <li>ILI 참여자 약 절반이 초기체중의 <strong>≥5%를 감량·유지</strong></li>
+        <li>1년 시점 ≥10% 감량자는 당뇨지원교육군 대비 사망률 <strong>21% 감소</strong>(HR 0.79, 95%CI 0.67–0.94, P=0.007)</li>
+        <li>8년 시점 집중생활습관군의 약 1/3이 초기체중의 ≥10%를 감량·유지, 표준치료군 대비 혈당·혈압·지질약물 필요성 더 적음</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <div class="card-header open" onclick="toggleCard(this)">
+        <span>🍽️ 영양중재 접근법</span><span class="toggle">▾</span>
+      </div>
+      <div class="card-body">
+        <ul class="dot">
+          <li>에너지결핍을 만드는 방법은 다양 — 단일 최선의 방법은 없음</li>
+          <li>대량영양소 구성 변경, 훈련된 전문가의 식사대체식 처방 등이 흔히 사용됨</li>
+          <li>가공·초가공식품 섭취 감소도 유망한 연구영역 — POUNDS Lost 시험에서 등열량 대체 시 체지방 감소에 작지만 유의한 개선</li>
+          <li><strong>저탄수화물 vs 균형탄수화물</strong> 2022 메타분석(12주–2년) — 체중·A1C 변화에 유의한 차이 없음(평균차 −0.14%)</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header open" onclick="toggleCard(this)">
+        <span>🎯 500–750 kcal/day 결핍 목표</span><span class="toggle">▾</span>
+      </div>
+      <div class="card-body">
+        <table class="tc-table">
+          <tr><th>성별</th><th>대략적 목표 섭취량</th></tr>
+          <tr><td>여성(대부분)</td><td>약 1,200–1,500 kcal/day</td></tr>
+          <tr><td>남성(대부분)</td><td>약 1,500–1,800 kcal/day</td></tr>
+        </table>
+        <div style="font-size: calc(10px * var(--fscale, 1));color:var(--text2);margin-top:6px">개인 기저체중에 따라 조정. DPP·Look AHEAD 근거 기반 — 초기 6개월 ≥16회 상담, 대면/원격, 개인/그룹 모두 가능</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>⚡ 초저열량식 (Very-Low-Calorie, 800–1,000 kcal/day) — DiRECT 연구</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="dot">
+        <li>영국 DiRECT 시험 — 고단백 식품·식사대체품을 이용한 구조화 초저열량식이 표준 행동중재보다 <strong>초기 체중감량 속도·정도, 혈당개선</strong>을 증가시킬 수 있음을 입증</li>
+        <li><strong>훈련되고 경험있는 전문가</strong>가 의료환경에서 면밀히 모니터링하며 행동지원·상담과 통합해야 함</li>
+        <li>전해질이상, 심한 피로, 심부정맥 등 합병증 위험이 높아 일반적으로 <strong>최대 3개월</strong>까지 단기 사용으로 제한</li>
+        <li>적용 예: 수술 전 체중감량·혈당관리가 필요하고 이득이 위험을 상회하는 신중히 선별된 환자</li>
+        <li>체중재증가가 흔하므로 <strong>장기적·종합적 체중유지 전략</strong>과 상담을 포함해야 함</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <div class="card-header" onclick="toggleCard(this)">
+        <span>💊 영양보충제 — 효과 근거 부족</span><span class="toggle">▾</span>
+      </div>
+      <div class="card-body collapsed">
+        <ul class="dot">
+          <li>광범위한 마케팅·과장된 주장에도 불구, 영양보충제(허브, 비타민·미네랄, 아미노산, 효소, 항산화제)가 비만관리·체중감량에 효과적이라는 명확한 근거 없음</li>
+          <li>대형 체계적 문헌고찰들에서 대부분의 시험이 저품질·고편향위험</li>
+          <li>고품질 연구는 거의 또는 전혀 체중감량 효과를 보이지 않음</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header" onclick="toggleCard(this)">
+        <span>🔬 영양상태 모니터링 — 미량영양소·단백질</span><span class="toggle">▾</span>
+      </div>
+      <div class="card-body collapsed">
+        <ul class="dot">
+          <li>1,200kcal/day 미만 섭취자, 채식주의자, 흡수장애 동반자, 50세 이상, 과도한 체중감량자 등에서 종합비타민/미네랄 보충 고려</li>
+          <li><strong>&gt;20%(중증) 또는 &gt;4%/month(급속)</strong> 체중감량 시 미량영양소 결핍 선별 — 철, 칼슘, 마그네슘, 아연, 비타민 A·D·E·K·B1·B12·C 등 주의</li>
+          <li>근육량 보존 위해 단백질 섭취 최적화 + 저항운동 강조, 필요시 단백질 보충 권장</li>
+          <li>초저열량식이자는 변비 예방 위해 적절한 섬유질·수분 섭취 권장</li>
+          <li>등록영양사 의뢰가 이러한 교육을 효율화할 수 있음</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>🏃‍♂️ 신체활동 — 체중감량을 넘어선 가치</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="dot">
+        <li>신체활동은 체중감량만을 위한 것이 아니라, <strong>삶의 질·심폐체력·혈당관리 개선, 사망률 감소</strong>를 위해 권장되어야 함</li>
+        <li>모든 성인처럼 즐길 수 있는 활동을 권장, 궁극적으로 <strong>주 150분</strong>의 신체활동을 목표</li>
+        <li>장기 유지 단계에서는 <strong>주 200–300분</strong>의 높은 활동량이 권장됨</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>🌍 건강불균형과 사회적 결정요인</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="dot">
+        <li>인종·민족, 사회경제적 지위, 성별정체성, 장애 등으로 체계적으로 더 큰 건강장벽을 경험한 집단에서 비만·당뇨·당뇨관련 합병증 위험 증가</li>
+        <li>식품선택·건강식 접근성·영양패턴에 영향을 주는 체계적·구조적·사회경제적 요인 평가 필요</li>
+        <li>동네 안전성, 신체활동을 위한 안전한 야외공간 가용성 등 행동패턴도 평가 대상</li>
+        <li>문화적으로 맞춤화된 행동중재가 효과 증진에 추가적으로 유용할 수 있음</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>📅 장기 체중유지 프로그램 (≥1년)</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="dot">
+        <li>체중감량에 성공한 사람들에게 장기(≥1년) 종합 체중유지 프로그램을 제공해야 함</li>
+        <li>훈련·경험을 갖춘 다학제팀이 시행</li>
+        <li>구성: <strong>월 1회 이상 접촉</strong>, 주간 이상의 자가체중측정, 식음료섭취·걸음수 등 자가모니터링, 영양·행동변화 지속 초점, <strong>주 200–300분</strong> 신체활동</li>
+      </ul>
+      <div class="alert alert-warn" style="margin-top:8px"><span>⚠️</span><span>일부 상업적 체중감량 프로그램은 가이드라인을 충족하지 못하거나 비과학적·위험할 수 있는 방법을 홍보 — 효과 근거가 결여된 경우가 많음</span></div>
+      <div class="alert alert-info"><span>ℹ️</span><span>현재 대부분의 보험사·Medicare·Medicaid는 장기 체중유지 프로그램을 충분히 보장하지 않으나, 개인·인구집단 수준에서 효과를 지지하는 근거는 존재</span></div>
+      <div class="alert alert-teal"><span>💡</span><span>당뇨 자가관리교육·영양치료 방문 시, 비만+당뇨/전당뇨 환자에서 다이어트 병력과 현재/과거 섭식장애행동에 대한 선별이 권장됨</span></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══════════ TAB: 약물치료 ═══════════ -->
+<div id="tab-pharma" class="panel">
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>📌 PHARMACOTHERAPY 핵심 권고문</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="rec-list">
+        <li class="rec-item"><span class="badge badge-E">E</span><span class="rec-text"><strong>8.15</strong> 임상적으로 적절한 경우 타 진료팀과 협력하여 체중증가 유발약물 사용 최소화</span></li>
+        <li class="rec-item"><span class="badge badge-B">B</span><span class="rec-text"><strong>8.16</strong> 혈당강하제 선택 시 체중에 이로운 효과가 있는 약물 우선</span></li>
+        <li class="rec-item"><span class="badge badge-A">A</span><span class="rec-text"><strong>8.17</strong> 생활습관변화와 병행한 비만약물치료 고려, 이득·위험 모두 고려</span></li>
+        <li class="rec-item"><span class="badge badge-A">A</span><span class="rec-text"><strong>8.18</strong> 체중감소 효과가 큰 GLP-1RA 또는 dual GIP·GLP-1RA(semaglutide, tirzepatide)를 비체중 이득까지 고려해 선호 약물로</span></li>
+        <li class="rec-item"><span class="badge badge-B">B</span><span class="rec-text"><strong>8.19</strong> 만성치료 적응증 비만약물은 목표달성 후에도 지속 — 중단 시 체중재증가·심대사위험 재발 흔함</span></li>
+        <li class="rec-item"><span class="badge badge-B">B</span><span class="rec-text"><strong>8.20</strong> 용량·적정법 개별화(효과·이득·내약성 균형), 최적용량이 최대승인용량이 아닐 수 있음</span></li>
+        <li class="rec-item"><span class="badge badge-B">B</span><span class="rec-text"><strong>8.21</strong> 목표 미달 시 구조화 생활습관프로그램, <span class="badge badge-A">A</span> 대사수술, 추가/대체 약물로 치료 강화</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>⚖️ 혈당강하제의 체중 효과 분류</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <table class="tc-table">
+        <tr><th>체중 효과</th><th>약물군</th></tr>
+        <tr><td><strong>현저한 체중감소</strong></td><td>GLP-1 수용체작용제(RA), dual GIP·GLP-1 RA(tirzepatide) — 안정적 보험적용 시 선호 약물</td></tr>
+        <tr><td>경미한 체중감소(&lt;5%)</td><td>SGLT2 억제제, metformin, 아밀린 모방체</td></tr>
+        <tr><td>체중중립</td><td>DPP-4 억제제, bromocriptine(중추작용 도파민작용제), α-glucosidase 억제제, bile acid sequestrant(colesevelam)</td></tr>
+        <tr><td>체중증가</td><td>인슐린분비촉진제(설폰요소제, 메글리티니드), thiazolidinedione, 인슐린</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>💊 병용약물 — 체중증가 유발 약물 검토</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px">
+        <span class="badge" style="background:#fff3e0;color:#7a3500;border:1px solid var(--orange)">항정신병약(clozapine·olanzapine·risperidone)</span>
+        <span class="badge" style="background:#fff3e0;color:#7a3500;border:1px solid var(--orange)">일부 항우울제(삼환계·일부 SSRI·MAOI)</span>
+        <span class="badge" style="background:#fff3e0;color:#7a3500;border:1px solid var(--orange)">글루코코르티코이드</span>
+        <span class="badge" style="background:#fff3e0;color:#7a3500;border:1px solid var(--orange)">주사용 프로게스틴</span>
+        <span class="badge" style="background:#fff3e0;color:#7a3500;border:1px solid var(--orange)">일부 항경련제(gabapentin·pregabalin)</span>
+        <span class="badge" style="background:#fff3e0;color:#7a3500;border:1px solid var(--orange)">β차단제(atenolol·metoprolol·propranolol)</span>
+        <span class="badge" style="background:#fff3e0;color:#7a3500;border:1px solid var(--orange)">진정성 항히스타민·항콜린제(가능성)</span>
+      </div>
+      <div class="alert alert-warn"><span>⚠️</span><span>Look AHEAD 사후분석 — 체중증가 유발약물 사용은 체중감량 효과와 <strong>용량의존적 음의 연관성</strong>; 2개 이상 사용 시 1개 사용 대비 5%·10% 체중감량 달성률이 더 낮음</span></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>📊 Table 8.1 — 비만약물치료 비교 (2형당뇨 환자 대상)</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <table class="tc-table">
+        <tr><th>약물</th><th>용량; 체중감량(기저대비)</th><th>주요 부작용</th><th>핵심 안전성 고려사항</th></tr>
+        <tr><td>Phentermine<br><span style="color:var(--text2);font-size:9px">(단기 사용만 승인)</span></td><td>15mg qd: 7.4%<br>7.5mg qd: 6.6%<br>위약: 2.3%</td><td>구갈, 불면, 현기증, 과민, 혈압·심박수 증가</td><td>MAOI 병용금기, 심혈관질환 병력 금기, 녹내장 고위험 시 금기</td></tr>
+        <tr><td>Orlistat</td><td>120mg tid: 9.6%<br>위약: 5.6%</td><td>복통, 가스, 변실금</td><td>담즙정체 금기, 지용성비타민 흡수저해, 드물게 중증 간손상·담석·신석 보고</td></tr>
+        <tr><td>Phentermine/Topiramate ER</td><td>15/92mg qd: 9.8%<br>7.5/46mg qd: 7.8%<br>위약: 1.2%</td><td>변비, 감각이상, 불면, 비인두염, 구갈, 혈압상승, 신석</td><td>MAOI 병용금기, 임신금기(태아위해), 급속적정 시 인지장애, 심혈관질환 주의, 녹내장 고위험 금기</td></tr>
+        <tr><td>Naltrexone/Bupropion ER</td><td>16/180mg bid: 5%<br>위약: 1.8%</td><td>변비, 오심, 두통, 구갈, 불면, 심박수·혈압상승</td><td>고혈압·발작장애 금기, 만성오피오이드치료 금기, 박스경고: 24세 미만 우울증 동반자 자살행동/사고 위험</td></tr>
+        <tr><td>Liraglutide(GLP-1RA)</td><td>3.0mg qd: 6%<br>1.8mg qd: 4.7%<br>위약: 2%</td><td>위장관 부작용(오심·구토·설사·역류·변비)</td><td>박스경고: 갑상선C세포종양(설치류), 갑상선수질암·MEN2 병력 금기</td></tr>
+        <tr><td>Semaglutide(GLP-1RA)</td><td>2.4mg 주1회: 9.6%<br>1.0mg 주1회: 7%<br>위약: 3.4%</td><td>위장관 부작용</td><td>GLP-1RA 공통 고려사항 참조</td></tr>
+        <tr><td>Tirzepatide(dual GIP/GLP-1RA)</td><td>15mg 주1회: 14.7%<br>10mg 주1회: 12.8%<br>위약: 3.2%</td><td>위장관 부작용</td><td>경구피임약 등 경구약물 흡수 영향(위장관운동저하) — 적정 4주간 비경구피임/차단법 병용</td></tr>
+      </table>
+      <div style="font-size: calc(10px * var(--fscale, 1));color:var(--text2);margin-top:6px;line-height:1.6">GLP-1RA 공통 주의사항: 수술 전 중단 안내(흡인위험), 췌장염 의심 시 중단, 담낭질환 평가, 위장관운동저하 관련 장폐색, 당뇨망막병증 모니터링(특히 고령·당뇨유병 10년 이상), 비동맥성 전방허혈성 시신경병증(드묾), 경구약물 흡수영향, 저혈당(인슐린·SU 병용시) 등</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span>💰 Table 8.2 — 약물별 월 비용 (AWP/NADAC, 유지용량 기준)</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body collapsed">
+      <table class="tc-table">
+        <tr><th>약물</th><th>유지용량</th><th>AWP(30일)</th><th>NADAC(30일)</th></tr>
+        <tr><td>Phentermine</td><td>8–37.5mg/day</td><td>$43($3–58)</td><td>$2($2–3)</td></tr>
+        <tr><td>Orlistat 60mg(OTC)</td><td>tid</td><td>$58($41–90)</td><td>NA</td></tr>
+        <tr><td>Orlistat 120mg(Rx)</td><td>tid</td><td>$675($520–781)</td><td>$514($416–611)</td></tr>
+        <tr><td>Phentermine/Topiramate ER</td><td>7.5/46mg/day</td><td>$238($238–251)</td><td>NA</td></tr>
+        <tr><td>Naltrexone/Bupropion ER</td><td>16/180mg bid</td><td>$750</td><td>NA</td></tr>
+        <tr><td>Liraglutide</td><td>3mg/day</td><td>$1,619</td><td>$1,303</td></tr>
+        <tr><td>Semaglutide</td><td>2.4mg 주1회</td><td>$1,619</td><td>$1,302</td></tr>
+        <tr><td>Tirzepatide</td><td>5/10/15mg 주1회</td><td>$1,304*</td><td>$1,022</td></tr>
+      </table>
+      <div style="font-size: calc(10px * var(--fscale, 1));color:var(--text2);margin-top:6px">2025년 7월 기준, 전국 평균치이며 개인별 비용·보험적용·할인은 반영되지 않음 *펜형 제품 가격(제조사 바이알 가격 별도)</div>
+    </div>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <div class="card-header open" onclick="toggleCard(this)">
+        <span>📈 핵심 임상시험 결과</span><span class="toggle">▾</span>
+      </div>
+      <div class="card-body">
+        <table class="tc-table">
+          <tr><th>시험</th><th>약물</th><th>결과(68–72주)</th></tr>
+          <tr><td>STEP 2</td><td>Semaglutide 2.4mg</td><td>위약 대비 체중 −6.2%, A1C −1.2%</td></tr>
+          <tr><td>SURMOUNT-2</td><td>Tirzepatide 10/15mg</td><td>위약 대비 체중 −9.6%/−11.6%, A1C −1.55%/−1.57%</td></tr>
+        </table>
+        <div class="alert alert-info" style="margin-top:8px"><span>ℹ️</span><span>당뇨 동반자의 비만약물 체중감량 효과는 유사 기저체중의 비당뇨인보다 <strong>낮은 경향</strong> — 성공의 정의를 "체중감량+혈당개선+인슐린필요량 감소+심혈관 이득"으로 재구성해 기대치 관리 필요</span></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header open" onclick="toggleCard(this)">
+        <span>❤️ 체중감량 외 추가 이득</span><span class="toggle">▾</span>
+      </div>
+      <div class="card-body">
+        <ul class="dot">
+          <li>심혈관위험인자(혈압·지질), 염증, 폐쇄성수면무호흡, MASLD/MASH, HFpEF 관련 증상 개선</li>
+          <li>Liraglutide 1.8mg, Semaglutide 1mg(당뇨용량) — 고위험/기존CVD 2형당뇨에서 심혈관사건 감소(LEADER, SUSTAIN-6)</li>
+          <li>Semaglutide 2.4mg(비만용량) — 비당뇨 과체중/비만+기존CVD에서도 심혈관사건 감소(SELECT)</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>⚙️ 효과·안전성 평가 및 최적화</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="dot">
+        <li>최저용량으로 시작, 내약성·반응에 따라 적정 — 점진적 단계적 증량이 내약성 향상·이상반응 감소에 잘 검증된 전략</li>
+        <li>GLP-1RA·dual GIP/GLP-1RA 추가 시 설폰요소제는 <strong>중단 또는 감량</strong>, 인슐린은 저혈당 예방 위해 조정(예: A1C&lt;7.5%면 볼러스 10–20%·기저 ~10% 감량)</li>
+        <li>일부 환자는 제조사 권장보다 <strong>느리고 작은 증량단위</strong>가 필요할 수 있음(RCT에서 유연한 저속적정이 복약유지율 향상·이상반응 감소, 효과는 유지)</li>
+        <li>초기 <strong>1–3개월은 매월</strong>, 이후 <strong>최소 분기별</strong>로 효과·안전성 평가</li>
+      </ul>
+      <table class="tc-table" style="margin-top:8px">
+        <tr><th>3개월 시점 반응</th><th>권장 접근</th></tr>
+        <tr><td><strong>&gt;5% 감량</strong> (충분한 조기반응)</td><td>특별한 이유(불내성·비용·선호) 없으면 장기 지속</td></tr>
+        <tr><td><strong>&lt;5% 감량</strong> (불충분한 반응)</td><td>혈당반응·다른 치료옵션·내약성·치료부담을 종합해 지속 여부 재검토</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>🔄 만성질환으로서의 비만 — 중단 시 재발</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <div class="alert alert-danger"><span>🚫</span><span>Semaglutide·Tirzepatide <strong>갑작스런 중단</strong> 시 1년 내 감량분의 <strong>1/2~2/3가 재증가</strong>하며 심대사 개선효과도 역전됨(STEP 1 extension, STEP 4, SURMOUNT-4)</span></div>
+      <ul class="dot" style="margin-top:8px">
+        <li>비만은 고혈압처럼 만성·재발성 질환 — 체중감량목표 달성 후에도 통상 약물치료 지속이 필요</li>
+        <li>장기 관리방안에 대해 공유의사결정 활용: 최저유효용량으로 지속·간헐치료 vs 중단 후 면밀한 체중모니터링</li>
+        <li>GLP-1RA 중단자에게는 National Weight Control Registry 성공사례 전략(규칙적 신체활동 ≥60분/day, 자가모니터링, 미가공·영양밀도 높은 식단)이 도움될 수 있으나, GLP-1RA 치료 후 환경에서는 아직 검증되지 않음</li>
+        <li>목표 미달·미유지 시 치료 정체(inertia)를 피하고 대사수술·추가/대체 약물·구조화 생활습관프로그램으로 강화</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span>🩺 영양결핍 위험 — GLP-1RA 코호트 분석</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body collapsed">
+      <ul class="dot">
+        <li>2017–2022년 GLP-1RA 처방 461,382명 미국 성인 후향코호트(과체중/비만 50% 이상, 2형당뇨 80% 이상)</li>
+        <li>영양결핍 진단 — <strong>6개월 시점 약 13%, 12개월 시점 22% 이상</strong></li>
+        <li>가장 흔한 결핍: <strong>비타민D</strong>(6개월 7.5%, 12개월 13.6%)</li>
+        <li>치료선택은 동반질환, 부작용·치료부담, 비용·접근성, 개인 치료목표·선호를 종합한 사람중심 요인으로 결정해야 함</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span>💉 의료기기 및 보험 접근성</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body collapsed">
+      <ul class="dot">
+        <li>위밴드는 장기효과 제한·합병증 빈도로 선호도 하락. 위내풍선, 미주신경자극기, 위흡인요법 등 미세침습기기가 단기 체중감량용으로 FDA 승인되었으나 고비용·제한적 보험적용·효과근거 부족으로 일부 기기는 시장에서 자발적 철수</li>
+        <li>약가·보험적용은 치료결정에 큰 영향 — 처방자는 보험적용 요건, 약가지원프로그램 자격, 공동부담 할인카드 등을 숙지해야 함</li>
+      </ul>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══════════ TAB: 대사수술 ═══════════ -->
+<div id="tab-surgery" class="panel">
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>📌 METABOLIC SURGERY 핵심 권고문</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="rec-list">
+        <li class="rec-item"><span class="badge badge-A">A</span><span class="rec-text"><strong>8.22</strong> BMI ≥30.0(아시안계 미국인 ≥27.5)이고 수술적합 2형당뇨 환자에서 체중·혈당관리 방법으로 대사수술 고려</span></li>
+        <li class="rec-item"><span class="badge badge-E">E</span><span class="rec-text"><strong>8.23</strong> 비만·당뇨·위장관수술 경험을 갖춘 다학제팀의 고수술량센터에서 시행</span></li>
+        <li class="rec-item"><span class="badge badge-B">B</span><span class="rec-text"><strong>8.24</strong> 수술결과에 영향줄 수 있는 동반 정신질환·사회적·상황적 요인 평가</span></li>
+        <li class="rec-item"><span class="badge badge-B">B</span><span class="rec-text"><strong>8.25</strong> 장기 의학적·행동적 지원, 정기 미량영양소·영양·대사상태 모니터링</span></li>
+        <li class="rec-item"><span class="badge badge-A">A</span><span class="rec-text"><strong>8.26</strong> 수술후저혈당 의심 시 타 원인 배제, 교육·경험있는 영양사의 영양치료·필요시 약물치료. <span class="badge badge-C">C</span> CGM으로 안전성 향상</span></li>
+        <li class="rec-item"><span class="badge badge-C">C</span><span class="rec-text"><strong>8.27</strong> 정신사회·행동건강 변화 정기 선별, 필요시 행동건강전문가 의뢰</span></li>
+        <li class="rec-item"><span class="badge badge-E">E</span><span class="rec-text"><strong>8.28</strong> 6–12개월마다 불충분한 체중감량·재증가 모니터링. <span class="badge badge-C">C</span> 소인 평가 및 추가 체중감량중재 고려</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>🔪 주요 수술방식 비교 — VSG vs RYGB</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <table class="tc-table">
+        <tr><th>항목</th><th>수직위소매절제술(VSG)</th><th>Roux-en-Y 위우회술(RYGB)</th></tr>
+        <tr><td>술식</td><td>위의 약 80% 절제, 길고 얇은 소매형 주머니 형성</td><td>호두알 크기의 작은 위주머니 형성 후 원위 소장에 연결(십이지장·공장 우회)</td></tr>
+        <tr><td>1년 체중감량</td><td>22.8%</td><td>29.1%</td></tr>
+        <tr><td>5년 체중감량</td><td>16.1%</td><td>24.1%</td></tr>
+        <tr><td>5년 당뇨관해율</td><td>83.5%</td><td>86.1%</td></tr>
+        <tr><td>5년 관해후 재발률</td><td>41.6%(더 높음, HR 0.75 RYGB대비)</td><td>33.1%</td></tr>
+        <tr><td>5년 A1C 변화</td><td>—</td><td>RYGB가 평균 0.4%p 더 큰 감소</td></tr>
+      </table>
+      <div style="font-size: calc(10px * var(--fscale, 1));color:var(--text2);margin-top:6px">PCORnet 실세계 데이터 분석(RYGB 6,233명, VSG 3,477명) 기준. 미국에서 시행되는 대사수술의 대부분이 이 두 술식임</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>🏆 핵심 RCT — STAMPEDE / ARMMS-T2D</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <table class="tc-table">
+        <tr><th>시험</th><th>설계</th><th>주요 결과</th></tr>
+        <tr><td><strong>STAMPEDE</strong></td><td>150명, A1C&gt;7%, BMI 27–43, 수술 vs 내과치료 RCT</td><td>5년 시점 A1C ≤6.0% 달성률 — RYGB 29%, VSG 23%</td></tr>
+        <tr><td><strong>ARMMS-T2D</strong>(4개 단일센터 RCT 통합분석)</td><td>대사수술 vs 내과/생활습관</td><td>7년 관해율 — 수술군 18% vs 내과군 6%</td></tr>
+      </table>
+      <div class="alert alert-info" style="margin-top:8px"><span>ℹ️</span><span>당뇨관해의 <strong>35–50%는 시간이 지나며 재발</strong>하나, RYGB 후 관해유지자의 median 무병기간은 <strong>8.3년</strong>이며, 대다수가 5–15년간 기저 대비 상당한 혈당개선을 유지</span></div>
+    </div>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <div class="card-header open" onclick="toggleCard(this)">
+        <span>🔮 당뇨관해 예측인자</span><span class="toggle">▾</span>
+      </div>
+      <div class="card-body">
+        <ul class="dot">
+          <li>젊은 연령</li>
+          <li>짧은 당뇨 유병기간(예: &lt;8년)</li>
+          <li>경한 당뇨 중증도(혈당관리 양호, 인슐린 미사용)</li>
+          <li>높은 기저 내장지방면적(특히 아시아계 미국인에서)</li>
+        </ul>
+        <div style="font-size: calc(10px * var(--fscale, 1));color:var(--text2);margin-top:6px">수술전 예측인자는 매우 적게 확인되어 있음</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header open" onclick="toggleCard(this)">
+        <span>📈 그 외 입증된 이득</span><span class="toggle">▾</span>
+      </div>
+      <div class="card-body">
+        <ul class="dot">
+          <li>미세혈관질환 발생 감소</li>
+          <li>삶의 질 개선, 암 위험 감소</li>
+          <li>심혈관질환 위험인자·장기 심혈관사건 개선</li>
+          <li>전체사망률 감소(매칭 코호트연구에서도 일관되게 확인)</li>
+          <li>MASH(생검확인 포함) 환자의 간 결과 개선</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>🛡️ 수술 안전성</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <table class="tc-table">
+        <tr><th>지표</th><th>수치</th></tr>
+        <tr><td>주변사망률(perioperative mortality)</td><td>0.1–0.5% — 담낭절제술·자궁절제술 등 일반복부수술과 유사</td></tr>
+        <tr><td>주요 합병증</td><td>2–6% — 다른 통상적 선택적 수술보다 양호한 수준</td></tr>
+        <tr><td>경미한 합병증·재수술 필요</td><td>최대 15%</td></tr>
+      </table>
+      <div class="alert alert-teal" style="margin-top:8px"><span>💡</span><span>최소침습(복강경) 접근법의 발전, 교육·자격관리 강화, 다학제팀 참여로 안전성이 크게 향상됨. 수술자·수술팀의 숙련도가 사망률·합병증·재수술·재입원의 핵심 결정요인 — 비만·당뇨·위장관수술 경험을 갖춘 <strong>고수술량센터</strong>에서 시행 권장</span></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>⚠️ 장기 위험 — 영양결핍, 덤핑증후군, 수술후저혈당</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <table class="tc-table">
+        <tr><th>합병증</th><th>특징</th></tr>
+        <tr><td>비타민·미네랄 결핍, 빈혈, 골다공증</td><td>수술방식별로 빈도 다름 — 평생 미량영양소 모니터링·보충 필요</td></tr>
+        <tr><td><strong>덤핑증후군</strong></td><td>식후 10–30분 내 설사·오심·구토·심계항진·피로. 증상 시점에는 보통 저혈당 없으나, 일부에서 수시간 후 저혈당 발생 가능</td></tr>
+        <tr><td><strong>수술후저혈당</strong></td><td>RYGB·VSG·기타 위장관수술 후 발생 가능, 삶의 질에 심각한 영향</td></tr>
+      </table>
+
+      <div class="alert alert-warn" style="margin-top:8px"><span>⚠️</span><span><strong>덤핑증후군</strong>은 보통 수술 후 곧 발생하고 시간이 지나며 개선되는 반면, <strong>수술후저혈당</strong>은 통상 <strong>수술 1년 이후</strong>에 나타남 — 시간경과 패턴으로 감별</span></div>
+
+      <div class="modal-section" style="margin-top:8px">
+        <div class="modal-section-title">수술후저혈당 — 기전 및 임상상</div>
+        <ul class="dot">
+          <li>섭취 영양분의 위배출 변화로 빠른 소장 포도당흡수 → 식후 GLP-1 등 위장관펩타이드 과다분비 → 인슐린 과분비 → 급격한 혈당하강</li>
+          <li>고탄수화물 식사 <strong>1–3시간 후</strong> 가장 흔히 발생</li>
+          <li>증상: 발한·떨림·빈맥·식욕증가부터 인지장애·의식소실·발작까지</li>
+        </ul>
+      </div>
+
+      <div class="modal-section">
+        <div class="modal-section-title">진단 및 관리</div>
+        <ul class="dot">
+          <li>진단 — 병력·식이기록·신체활동·증상패턴 면밀 검토 + 타 저혈당 원인(영양불량, 약물·보충제 부작용, 덤핑증후군, 인슐린종) 배제</li>
+          <li>초기관리 — 빠르게 소화되는 탄수화물 섭취 감소 교육, 적절한 단백질·건강한 지방·비타민/영양소 보충제 섭취 유지</li>
+          <li>가능하면 수술후저혈당 경험이 있는 등록영양사의 영양치료 + <strong>CGM(이상적으로 실시간형)</strong> — 특히 저혈당인지저하 동반자에서 중증 저혈당 전 조기감지에 유용</li>
+          <li>약물치료(필요시) — 탄수화물흡수 지연(acarbose) 또는 GLP-1·인슐린분비 감소(diazoxide, octreotide)</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>🧠 정신건강 평가 및 모니터링</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="dot">
+        <li>대사수술 후 물질사용, 우울·불안장애의 악화/신규발생, 자살사고 위험 증가 가능</li>
+        <li>수술 고려 전 <strong>비만관리 전문성을 갖춘 행동건강전문가</strong>의 평가 필요</li>
+        <li>알코올·물질사용장애, 중증 우울증, 자살사고, 기타 중요한 행동건강질환이 있는 경우 — 해당 문제가 적절히 해결될 때까지 <strong>수술 연기</strong></li>
+        <li>수술전 또는 신규발생 정신병리가 있는 환자는 수술후 행동건강·수술결과 최적화를 위해 <strong>정기적 재평가</strong> 필요</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span>💊 수술 전후 GLP-1RA·dual GIP/GLP-1RA 병용</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body collapsed">
+      <ul class="dot">
+        <li>만성비만에 대한 수술 전후 nutrient-stimulated hormone-based therapeutics 사용을 지지하는 확정적 근거는 아직 없음</li>
+        <li>BMI&gt;50 환자에서 GLP-1RA가 수술 전 유의한 체중감량과 연관, 합병증·수술까지의 시간 증가 없음을 시사하는 연구 존재</li>
+        <li>수술 후 보조요법으로 — 수술 직후 또는 체중감량이 정체된 시점에 초기 감량을 증대하기 위해 고려 가능</li>
+        <li>대사수술 후 체중재증가의 효과적 치료로 작용할 수 있어 <strong>재수술의 대안</strong>으로 고려 가능</li>
+        <li>다만 약물중단 시 체중재증가 양상, 장기 부작용에 대한 데이터는 아직 부족</li>
+      </ul>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══════════ TAB: 1형당뇨의 비만 ═══════════ -->
+<div id="tab-t1d" class="panel">
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>📌 TREATMENT OF OBESITY IN TYPE 1 DIABETES — 권고문</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="rec-list">
+        <li class="rec-item"><span class="badge badge-B">B</span><span class="rec-text"><strong>8.29</strong> 비만(BMI ≥30.0, 아시안계 미국인 ≥27.5) 1형당뇨 성인에게 일반 성인인구와 동일한 비만관리 전략(GLP-1RA 기반치료, <span class="badge badge-C">C</span> 대사수술) 적용 — 공유의사결정으로 개별화</span></li>
+      </ul>
+      <div class="alert alert-info" style="margin-top:8px"><span>ℹ️</span><span>1형당뇨에서 과체중(30–40%)·비만(15–30%) 유병률은 일반 성인인구와 비슷한 수준 — 비만 동반 시 비만이 없는 경우보다 심혈관·미세혈관 합병증 부담이 더 큼</span></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>📊 실세계 데이터 및 사용 동향</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="dot">
+        <li>대규모 전자건강기록 기반 단면연구 — 2023년 기준 1형당뇨 환자의 약 <strong>6.5%</strong>가 GLP-1RA/dual GIP·GLP-1RA 처방받음(처방 추세 지속 증가)</li>
+        <li>대형 RCT 대부분이 1형당뇨를 제외했으나, 실세계 데이터는 체중감소·A1C 개선·인슐린요구량 감소와 연관됨을 시사</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>🧪 ADJUNCT ONE / ADJUNCT TWO 시험 — Liraglutide</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <table class="tc-table">
+        <tr><th>시험</th><th>기간</th><th>주요 결과</th></tr>
+        <tr><td>ADJUNCT ONE</td><td>52주</td><td>Liraglutide 1.8mg/day — 체중 약 6% 감소</td></tr>
+        <tr><td>ADJUNCT TWO</td><td>26주</td><td>동일 경향 확인</td></tr>
+      </table>
+      <div class="alert alert-danger" style="margin-top:8px"><span>🚫</span><span>모든 용량에서 저혈당률 <strong>20–30% 증가</strong>, Liraglutide 1.8mg에서는 케톤증 동반 고혈당 위험이 위약대비 <strong>2배</strong> — 식욕억제·섭취열량감소+인슐린요구량감소가 케톤증 위험의 핵심 기전으로 추정</span></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>🎯 1형당뇨에서 GLP-1RA 사용 시 핵심 주의사항</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="dot">
+        <li>약물 부작용 프로파일에 대한 상세 검토 + 목표·기대에 대한 사람중심 대화 선행</li>
+        <li><strong>저혈당 위험 증가·인슐린요구량 감소를 사전 예고</strong>, 임계 탄수화물 섭취 유지, 과도한 케톤체 생성 검사를 교육</li>
+        <li>2형당뇨용으로 검증된 <strong>적정프로토콜을 그대로 외삽해서는 안 됨</strong> — 1형당뇨에서는 특히 신중한 적정 + 인슐린요구량·저혈당 빈도 변화에 대한 면밀한 모니터링 필요</li>
+        <li>치료중단에 관한 1형당뇨 특화 데이터는 부족하나, 체중재증가 예방을 위해 <strong>장기치료 유지</strong> 원칙을 적용해야 함</li>
+        <li>GLP-1RA 중단자(비만 동반자의 1년 내 &gt;50%에서 발생) — 인슐린요구량의 가변적 증가를 예상해야 함</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <div class="card-header open" onclick="toggleCard(this)">
+        <span>✅ 적합한 후보 — 동반질환</span><span class="toggle">▾</span>
+      </div>
+      <div class="card-body">
+        <ul class="dot">
+          <li>폐쇄성수면무호흡</li>
+          <li>MASH</li>
+          <li>관상동맥질환</li>
+        </ul>
+        <div style="font-size: calc(10px * var(--fscale, 1));color:var(--text2);margin-top:6px">이러한 동반질환 존재가 GLP-1RA/dual GIP·GLP-1RA 치료에서 특히 이득을 볼 가능성이 높은 환자 선정에 도움</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header open" onclick="toggleCard(this)">
+        <span>🚫 치료 시작을 만류해야 할 상황</span><span class="toggle">▾</span>
+      </div>
+      <div class="card-body">
+        <ul class="dot">
+          <li>기존 위마비(gastroparesis)</li>
+          <li>저혈당 인지 저하</li>
+          <li>최근 DKA 또는 정상혈당케톤산증(euglycemic ketoacidosis) 병력</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>⚙️ 자동인슐린전달(AID) 시스템 사용자에서의 병용</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="dot">
+        <li>AID 사용 1형당뇨에서 GLP-1RA/dual GIP·GLP-1RA 보조요법 시 <strong>AID 설정의 주기적 재평가</strong> 필요 — 주로 저혈당 위험 감소, 케톤증을 유발할 수 있는 장시간 인슐린전달 중단 방지 목적</li>
+        <li>최근 합의보고서에 따르면 적정 과정에서 <strong>인슐린-탄수화물비·민감도인자의 디인텐시피케이션</strong>이 예상되어야 함</li>
+        <li>위배출 지연으로 식사시점 인슐린투여를 <strong>식사 시작 시 또는 직후</strong>로 조정하여 인슐린전달과 음식흡수를 최적으로 매칭할 필요가 있을 수 있음</li>
+      </ul>
+      <div class="alert alert-teal" style="margin-top:8px"><span>💡</span><span>요약 — 1형당뇨에서 GLP-1RA 기반치료 시작 결정은 인슐린요구량 감소 예측, 케톤모니터링·sick-day rules 시행의 중요성, AID 설정 변경 가능성을 포함한 위험·이득에 대한 상세한 대화를 바탕으로 이루어져야 함</span></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>🔪 1형당뇨에서의 대사수술</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <table class="tc-table">
+        <tr><th>지표</th><th>결과</th></tr>
+        <tr><td>후향분석(17개 연구, 107명, 65% RYGB)</td><td>평균 BMI 41→31kg/m²(추적 1.5–5년)</td></tr>
+        <tr><td>A1C 효과</td><td>일관되지 않음, 일부 연구에서는 5년 시점 오히려 증가</td></tr>
+        <tr><td>DKA 발생률</td><td><strong>15–20%</strong> — 흔히 수술 후 며칠 내, 탄수화물 섭취·인슐린용량 감소와 동시발생</td></tr>
+      </table>
+      <div class="alert alert-danger" style="margin-top:8px"><span>🚫</span><span>1형당뇨에서 대사수술 고려 시 <strong>DKA 위험 증가, 저혈당 위험 증가</strong>가 핵심 안전성 이슈로 상세히 논의되어야 함. 장기 합병증(덤핑증후군 등)도 1형당뇨에서는 관리가 특히 까다로움</span></div>
+      <div class="alert alert-teal"><span>💡</span><span>다학제적 접근을 통한 신중한 평가와 충분한 상담을 거쳐, 대사수술로 가장 큰 이득을 볼 1형당뇨 환자를 선별하고 목표·기대치를 개별화·현실화해야 함</span></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══════════ TAB: 기준표 모음 ═══════════ -->
+<div id="tab-tables" class="panel">
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>📁 전체 권고문 표 (Rec 8.1–8.29)</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <table class="tc-table">
+        <tr><th>번호</th><th>권고 내용</th><th>등급</th></tr>
+        <tr><td>8.1</td><td>사람중심·비낙인 언어 사용</td><td><span class="badge badge-E">E</span></td></tr>
+        <tr><td>8.2a</td><td>연 1회 BMI 선별, 필요시 추가 인체측정/직접측정</td><td><span class="badge badge-E">E</span></td></tr>
+        <tr><td>8.2b</td><td>연 1회 인체측정 모니터링, 활성치료중 3개월마다</td><td><span class="badge badge-E">E</span></td></tr>
+        <tr><td>8.3</td><td>인체측정 시 사생활 보호</td><td><span class="badge badge-E">E</span></td></tr>
+        <tr><td>8.4</td><td>2형당뇨+과체중/비만에서 체중관리를 1차 목표로</td><td><span class="badge badge-A">A</span></td></tr>
+        <tr><td>8.5</td><td>5–7% 대사개선, &gt;10% 질병수정·관해효과</td><td><span class="badge badge-A">A</span>/<span class="badge badge-B">B</span></td></tr>
+        <tr><td>8.6</td><td>병력·환경·선호 기반 초기치료 개별화</td><td><span class="badge badge-A">A</span>/<span class="badge badge-C">C</span></td></tr>
+        <tr><td>8.7</td><td>영양·신체활동·행동치료 권장</td><td><span class="badge badge-B">B</span></td></tr>
+        <tr><td>8.8a</td><td>고빈도 상담(≥16회/6개월), 500–750kcal/day 결핍</td><td><span class="badge badge-A">A</span></td></tr>
+        <tr><td>8.8b</td><td>접근제한시 원격·앱 등 대체 구조화 프로그램</td><td><span class="badge badge-E">E</span></td></tr>
+        <tr><td>8.9</td><td>개인맞춤 영양계획, 에너지결핍 식이</td><td><span class="badge badge-A">A</span></td></tr>
+        <tr><td>8.10</td><td>사회적 결정요인 반영한 치료계획</td><td><span class="badge badge-C">C</span></td></tr>
+        <tr><td>8.11</td><td>장기(≥1년) 유지프로그램 — 월1회 접촉, 주200–300분 활동</td><td><span class="badge badge-E">E</span>/<span class="badge badge-A">A</span></td></tr>
+        <tr><td>8.12</td><td>초저열량식 — 선별된 환자, 전문가 모니터링, 단기처방</td><td><span class="badge badge-B">B</span></td></tr>
+        <tr><td>8.13</td><td>영양보충제 — 효과근거 부족, 권장하지 않음</td><td><span class="badge badge-A">A</span></td></tr>
+        <tr><td>8.14</td><td>단백질·미량영양소 결핍예방 위한 정기 모니터링</td><td><span class="badge badge-E">E</span></td></tr>
+        <tr><td>8.15</td><td>체중증가 유발약물 사용 최소화 위한 타과 협진</td><td><span class="badge badge-E">E</span></td></tr>
+        <tr><td>8.16</td><td>체중에 이로운 혈당강하제 우선</td><td><span class="badge badge-B">B</span></td></tr>
+        <tr><td>8.17</td><td>생활습관변화와 병행한 비만약물치료 고려</td><td><span class="badge badge-A">A</span></td></tr>
+        <tr><td>8.18</td><td>GLP-1RA/dual GIP·GLP-1RA(semaglutide·tirzepatide) 선호</td><td><span class="badge badge-A">A</span></td></tr>
+        <tr><td>8.19</td><td>목표달성 후에도 약물치료 지속(중단시 재증가)</td><td><span class="badge badge-B">B</span></td></tr>
+        <tr><td>8.20</td><td>용량·적정법 개별화(최적용량≠최대용량)</td><td><span class="badge badge-B">B</span></td></tr>
+        <tr><td>8.21</td><td>목표미달시 생활습관·수술·약물로 치료 강화</td><td><span class="badge badge-B">B</span>/<span class="badge badge-A">A</span></td></tr>
+        <tr><td>8.22</td><td>BMI≥30(아시안≥27.5) 2형당뇨에서 대사수술 고려</td><td><span class="badge badge-A">A</span></td></tr>
+        <tr><td>8.23</td><td>고수술량센터 다학제팀에서 시행</td><td><span class="badge badge-E">E</span></td></tr>
+        <tr><td>8.24</td><td>수술전 정신사회·상황적 요인 평가</td><td><span class="badge badge-B">B</span></td></tr>
+        <tr><td>8.25</td><td>장기 의학적·행동적 지원, 영양·대사 모니터링</td><td><span class="badge badge-B">B</span></td></tr>
+        <tr><td>8.26</td><td>수술후저혈당 — 타원인배제, 영양치료·약물, CGM</td><td><span class="badge badge-A">A</span>/<span class="badge badge-C">C</span></td></tr>
+        <tr><td>8.27</td><td>정신사회·행동건강 정기선별, 필요시 의뢰</td><td><span class="badge badge-C">C</span></td></tr>
+        <tr><td>8.28</td><td>6–12개월마다 체중감량 불충분/재증가 모니터링</td><td><span class="badge badge-E">E</span>/<span class="badge badge-C">C</span></td></tr>
+        <tr><td>8.29</td><td>1형당뇨 비만 — GLP-1RA·대사수술 개별화 적용</td><td><span class="badge badge-B">B</span>/<span class="badge badge-C">C</span></td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span>📊 BMI 분류 한눈에 보기</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body collapsed">
+      <table class="tc-table">
+        <tr><th>분류</th><th>BMI(kg/m²)</th></tr>
+        <tr><td>과체중</td><td>25–29.9</td></tr>
+        <tr><td>비만 1단계</td><td>30–34.9</td></tr>
+        <tr><td>비만 2단계</td><td>35–39.9</td></tr>
+        <tr><td>비만 3단계</td><td>≥40</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span>📊 혈당강하제 체중효과 분류 한눈에 보기</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body collapsed">
+      <table class="tc-table">
+        <tr><th>체중효과</th><th>약물</th></tr>
+        <tr><td>현저한 감소</td><td>GLP-1RA, dual GIP·GLP-1RA</td></tr>
+        <tr><td>경미한 감소(&lt;5%)</td><td>SGLT2i, metformin, 아밀린모방체</td></tr>
+        <tr><td>중립</td><td>DPP-4i, bromocriptine, α-glucosidase억제제, colesevelam</td></tr>
+        <tr><td>증가</td><td>설폰요소제, 메글리티니드, TZD, 인슐린</td></tr>
+      </table>
+    </div>
+  </div>
+</div>
+</div><!-- /main -->
+
+<!-- ═══ MODAL: 체중감량 단계 ═══ -->
+<div id="weightLossModal" class="modal-overlay" onclick="closeModalOutside(event,'weightLossModal')">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal('weightLossModal')">✕</button>
+    <div class="modal-title">📊 체중감량 정도별 임상적 이득 단계</div>
+
+    <div class="alert alert-info" style="margin:0 0 12px"><span>💡</span><span>체중감량의 이득은 단계적(progressive)으로 나타난다 — 더 큰 감량목표(&gt;7%, &gt;10%, &gt;15%)는 안전하고 현실적으로 달성 가능하다면 추가적인 건강개선을 가져올 수 있다.</span></div>
+
+    <div class="modal-section">
+      <table class="modal-table">
+        <tr><th>체중감량</th><th>주요 임상적 이득</th></tr>
+        <tr><td><strong>5–7%</strong></td><td>혈당·혈압·지질 개선, 전당뇨→당뇨 진행 위험감소, 질병특이 약물 필요성 감소 가능</td></tr>
+        <tr><td><strong>&gt;10%(지속)</strong></td><td>질병수정 효과, 당뇨관해 가능성(A), 장기 심혈관결과·사망률 개선 가능성(B), MASH/MASLD·지방조직염증·수면무호흡 개선</td></tr>
+        <tr><td><strong>&gt;20%(대사수술 평균)</strong></td><td>혈당 현저 개선, 당뇨관해 흔함, 삶의질·심혈관결과 개선, 사망률 감소</td></tr>
+      </table>
+    </div>
+
+    <div class="alert alert-warn" style="margin-top:4px"><span>⚠️</span><span>5% 미만의 체중감량은 혈당·지질·혈압 개선을 보여주지 못한 연구들이 있음 — 대사적 이득을 위해서는 최소 5% 이상의 감량이 필요한 것으로 보인다.</span></div>
+    <div class="alert alert-teal"><span>💡</span><span>당뇨 유병기간에 따라 일부에서 당뇨관해가 2–5년간 유지될 수 있으며, 기저 β세포기능이 양호한 반응자에서 더 좋은 결과를 보인다.</span></div>
+  </div>
+</div>
+
+<!-- ═══ MODAL: BMI 분류 ═══ -->
+<div id="bmiClassModal" class="modal-overlay" onclick="closeModalOutside(event,'bmiClassModal')">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal('bmiClassModal')">✕</button>
+    <div class="modal-title">📏 BMI 기반 과체중·비만 분류</div>
+
+    <div class="modal-section">
+      <table class="modal-table">
+        <tr><th>분류</th><th>BMI(kg/m²)</th></tr>
+        <tr><td>과체중(Overweight)</td><td>25–29.9</td></tr>
+        <tr><td>비만 1단계</td><td>30–34.9</td></tr>
+        <tr><td>비만 2단계</td><td>35–39.9</td></tr>
+        <tr><td>비만 3단계</td><td>≥40</td></tr>
+      </table>
+    </div>
+
+    <div class="alert alert-warn" style="margin:8px 0"><span>⚠️</span><span>BMI는 체지방량을 완벽히 반영하지 못하며 체지방 분포·기능, 체중관련 건강영향을 측정하지 않음. 매우 근육질인 사람(운동선수)이나 근육량이 적은 사람, 체구성이 다른 인구집단에서 분류오류 위험이 큼.</span></div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">추가 인체측정이 권장되는 상황</div>
+      <ul class="dot">
+        <li>BMI 25–34.9 kg/m² 범위인 경우</li>
+        <li>남아시아인 등 특정 인구집단</li>
+      </ul>
+      <div style="font-size: calc(11px * var(--fscale, 1));color:var(--text2);margin-top:4px">추가측정: 허리둘레, 허리-엉덩이비, 허리-키비 (연령·성별·인종에 맞는 검증된 방법·절단값 사용)</div>
+    </div>
+
+    <div class="alert alert-info" style="margin-top:4px"><span>ℹ️</span><span>미국 20–59세 성인에서는 BMI 기준 비만 유병률이 과다체지방 확인 후 유병률과 거의 동일 — 임상에서 BMI 단독 사용도 합리적인 대안이 될 수 있다.</span></div>
+  </div>
+</div>
+
+<!-- ═══ MODAL: 약물 선호 ═══ -->
+<div id="pharmaPrefModal" class="modal-overlay" onclick="closeModalOutside(event,'pharmaPrefModal')">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal('pharmaPrefModal')">✕</button>
+    <div class="modal-title">💊 비만약물치료 — 선호 약물 및 핵심 근거</div>
+
+    <div class="alert alert-info" style="margin:0 0 12px"><span>💡</span><span>당뇨와 과체중/비만이 있는 사람에서는 체중감소 효과가 큰 GLP-1RA 또는 dual GIP·GLP-1RA(semaglutide, tirzepatide)가 비체중 이득까지 고려하여 선호되는 약물치료다.</span></div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">핵심 임상시험 결과</div>
+      <table class="modal-table">
+        <tr><th>시험</th><th>약물</th><th>결과</th></tr>
+        <tr><td>STEP 2</td><td>Semaglutide 2.4mg</td><td>위약대비 체중 −6.2%, A1C −1.2%(68주)</td></tr>
+        <tr><td>SURMOUNT-2</td><td>Tirzepatide 10/15mg</td><td>위약대비 체중 −9.6%/−11.6%, A1C −1.55%/−1.57%(72주)</td></tr>
+      </table>
+    </div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">체중 외 추가 이득</div>
+      <ul class="dot">
+        <li>심혈관위험인자(혈압·지질), 염증, 폐쇄성수면무호흡, MASLD/MASH, HFpEF 증상 개선</li>
+        <li>Liraglutide 1.8mg·Semaglutide 1mg — 고위험/기존CVD 2형당뇨에서 심혈관사건 감소</li>
+        <li>Semaglutide 2.4mg — 비당뇨 과체중/비만+기존CVD에서도 심혈관사건 감소(SELECT)</li>
+      </ul>
+    </div>
+
+    <div class="alert alert-danger" style="margin-top:4px"><span>🚫</span><span>갑작스런 중단 시 1년 내 체중감량분의 1/2~2/3가 재증가하며 심대사 개선효과도 역전됨 — 만성치료 적응증 약물은 목표달성 후에도 지속이 원칙이다.</span></div>
+  </div>
+</div>
+
+<!-- ═══ MODAL: 대사수술 적응증 ═══ -->
+<div id="surgeryModal" class="modal-overlay" onclick="closeModalOutside(event,'surgeryModal')">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal('surgeryModal')">✕</button>
+    <div class="modal-title">🔪 대사수술 — 적응증 및 핵심 결과</div>
+
+    <div class="alert alert-info" style="margin:0 0 12px"><span>💡</span><span>BMI ≥30.0 kg/m²(아시안계 미국인 ≥27.5 kg/m²)이고 수술적합 2형당뇨 환자에서 체중·혈당관리 방법으로 대사수술을 고려할 수 있다. 고수술량센터의 다학제팀에서 시행해야 한다.</span></div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">VSG vs RYGB 비교(PCORnet 실세계데이터)</div>
+      <table class="modal-table">
+        <tr><th>항목</th><th>VSG</th><th>RYGB</th></tr>
+        <tr><td>5년 체중감량</td><td>16.1%</td><td>24.1%</td></tr>
+        <tr><td>5년 당뇨관해율</td><td>83.5%</td><td>86.1%</td></tr>
+        <tr><td>5년 재발률</td><td>41.6%</td><td>33.1%(더 낮음)</td></tr>
+      </table>
+    </div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">안전성</div>
+      <table class="modal-table">
+        <tr><th>지표</th><th>수치</th></tr>
+        <tr><td>주변사망률</td><td>0.1–0.5%(담낭절제술 수준)</td></tr>
+        <tr><td>주요 합병증</td><td>2–6%</td></tr>
+      </table>
+    </div>
+
+    <div class="alert alert-warn" style="margin-top:4px"><span>⚠️</span><span>수술 전 동반 정신질환·사회적 요인 평가가 필수이며, 알코올·물질사용장애·중증 우울증·자살사고가 있는 경우 적절히 해결될 때까지 수술을 연기해야 한다.</span></div>
+  </div>
+</div>
+
+<script>
+const FONT_ZOOM_LEVELS = [1, 1.25, 1.5];
+let fontZoomIndex = 0;
+
+function applyFontZoom(scale) {
+  document.documentElement.style.setProperty('--fscale', scale);
+  const label = document.getElementById('font-zoom-label');
+  if (label) label.textContent = Math.round(scale * 100) + '%';
+}
+
+function cycleFontZoom() {
+  fontZoomIndex = (fontZoomIndex + 1) % FONT_ZOOM_LEVELS.length;
+  applyFontZoom(FONT_ZOOM_LEVELS[fontZoomIndex]);
+}
+
+function showTab(id){
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('tab-'+id).classList.add('active');
+  event.target.classList.add('active');
+}
+function toggleCard(el){
+  el.classList.toggle('open');
+  el.nextElementSibling.classList.toggle('collapsed');
+}
+function toggleAcc(el){
+  const b=el.nextElementSibling;
+  b.style.display=b.style.display==='block'?'none':'block';
+  el.querySelector('span:last-child').textContent=b.style.display==='block'?'▴':'▾';
+}
+
+function openModal(id){document.getElementById(id).classList.add('open');}
+function closeModal(id){document.getElementById(id).classList.remove('open');}
+function closeModalOutside(e,id){if(e.target===document.getElementById(id))closeModal(id);}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')document.querySelectorAll('.modal-overlay.open').forEach(m=>m.classList.remove('open'));});
+
+const abbrs=[
+  ['BMI','Body Mass Index (체질량지수) — 체중(kg)/키(m)². 비만 진단·단계분류에 가장 널리 사용되는 지표.'],
+  ['GLP-1','Glucagon-Like Peptide 1 — 식욕억제·인슐린분비촉진 호르몬, 해당 수용체작용제(RA)가 비만·당뇨 치료에 사용.'],
+  ['GIP','Glucose-dependent Insulinotropic Polypeptide — tirzepatide가 GLP-1과 함께 이중작용하는 호르몬 경로.'],
+  ['RA','Receptor Agonist (수용체작용제) — GLP-1 RA 등 호르몬 수용체에 결합해 작용을 모방하는 약물.'],
+  ['MASLD','Metabolic dysfunction-Associated Steatotic Liver Disease — 인슐린저항성 관련 지방간질환, 비만의 주요 동반질환.'],
+  ['MASH','Metabolic dysfunction-Associated Steatohepatitis — MASLD의 진행된 형태(지방간염), 체중감량·GLP-1RA로 개선 가능.'],
+  ['ILI','Intensive Lifestyle Intervention (집중생활습관중재) — Look AHEAD에서 사용된 체중감량 행동중재 프로그램.'],
+  ['Look AHEAD','Action for Health in Diabetes (연구) — 2형당뇨+비만 환자의 집중생활습관중재 장기효과를 입증한 대규모 RCT.'],
+  ['DPP','Diabetes Prevention Program — 생활습관중재의 당뇨예방 효과를 입증한 대표적 RCT, 행동중재 프로토콜의 근거.'],
+  ['DiRECT','Diabetes Remission Clinical Trial — 영국의 초저열량식 기반 1차의료 체중관리로 당뇨관해를 입증한 연구.'],
+  ['VLCD','Very-Low-Calorie Diet (초저열량식, 800–1,000kcal/day) — 전문가 모니터링 하에 단기간만 처방하는 구조화 식이.'],
+  ['STEP','Semaglutide Treatment Effect in People with obesity (시험군) — semaglutide의 비만·당뇨 효과를 검증한 임상시험 시리즈.'],
+  ['SURMOUNT','Tirzepatide 비만치료 임상시험 시리즈 — SURMOUNT-2는 2형당뇨 동반 비만에서의 효과를 검증.'],
+  ['SURPASS','Tirzepatide 당뇨치료 임상시험 시리즈.'],
+  ['LEADER','Liraglutide Effect and Action in Diabetes: Evaluation of CV outcome Results — liraglutide의 심혈관이득을 입증한 시험.'],
+  ['SUSTAIN-6','Semaglutide의 심혈관이득을 입증한 시험.'],
+  ['SELECT','비당뇨 과체중/비만+기존CVD에서 semaglutide 2.4mg의 심혈관이득을 입증한 시험.'],
+  ['VSG','Vertical Sleeve Gastrectomy (수직위소매절제술) — 위의 약 80%를 절제하는 대사수술, 미국에서 가장 흔한 술식 중 하나.'],
+  ['RYGB','Roux-en-Y Gastric Bypass (위우회술) — 작은 위주머니를 원위소장에 연결하는 대사수술, VSG보다 체중감량·당뇨관해 효과가 더 큼.'],
+  ['STAMPEDE','Surgical Treatment And Medications Potentially Eradicate Diabetes Efficiently — 대사수술 vs 내과치료를 비교한 핵심 RCT.'],
+  ['ARMMS-T2D','Alliance of Randomized trials of Medicine vs Metabolic Surgery in Type 2 Diabetes — 4개 RCT 통합분석, 7년 관해율 비교.'],
+  ['PCORnet','National Patient-Centered Outcomes Research Network — 미국의 실세계 데이터 기반 임상연구 네트워크.'],
+  ['HFpEF','Heart Failure with preserved Ejection Fraction (박출률보존심부전) — semaglutide가 관련 증상 개선을 입증.'],
+  ['DKA','Diabetic Ketoacidosis (당뇨병성케토산증) — 1형당뇨에서 GLP-1RA 사용·대사수술 후 위험이 증가할 수 있는 급성 합병증.'],
+  ['AID','Automated Insulin Delivery (자동인슐린전달시스템) — 1형당뇨에서 GLP-1RA 병용 시 설정 재평가가 필요한 인슐린펌프 시스템.'],
+  ['NADAC','National Average Drug Acquisition Cost — 약가 산정에 사용되는 미국 평균 약물구입비용 지표.'],
+  ['AWP','Average Wholesale Price — 미국의 평균 도매약가 지표.'],
+  ['DXA','Dual-energy X-ray Absorptiometry — 체지방 직접측정에 사용되는 영상검사.'],
+];
+
+function buildAbbr(){
+  const sorted=abbrs.slice().sort((a,b)=>a[0].localeCompare(b[0]));
+  document.getElementById('abbr-grid-drop').innerHTML=sorted.map(a=>
+    `<div style="background:var(--surface2);border:1px solid var(--border);border-radius:5px;padding:6px 10px;margin-bottom:4px;" data-term="${a[0].toLowerCase()}" data-def="${a[1].toLowerCase()}">
+       <span style="font-weight:700;color:var(--accent2);font-size: calc(12px * var(--fscale, 1));font-family:'Courier New',monospace">${a[0]}</span>
+       <div style="font-size: calc(11px * var(--fscale, 1));color:var(--text2);line-height:1.45;margin-top:2px">${a[1]}</div>
+     </div>`).join('');
+}
+function filterAbbr(val){
+  const v=val.toLowerCase().trim();
+  const drop=document.getElementById('abbr-dropdown');
+  const items=document.querySelectorAll('#abbr-grid-drop [data-term]');
+  if(!v){drop.style.display='none';return;}
+  const inp=document.getElementById('abbr-input');
+  const rect=inp.getBoundingClientRect();
+  const w=440;
+  let left=rect.right-w;if(left<8)left=8;
+  drop.style.top=(rect.bottom+4)+'px';drop.style.left=left+'px';
+  drop.style.display='block';
+  items.forEach(el=>{
+    const show=el.dataset.term.startsWith(v)||el.dataset.def.includes(v);
+    el.style.display=show?'':'none';
+  });
+}
+document.addEventListener('click',e=>{
+  const inp=document.getElementById('abbr-input');
+  const drop=document.getElementById('abbr-dropdown');
+  if(inp&&!inp.contains(e.target)&&drop&&!drop.contains(e.target))drop.style.display='none';
+});
+buildAbbr();
+</script>
+</body>
+</html>

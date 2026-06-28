@@ -1,0 +1,1198 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ADA 2026 임신과 당뇨병 관리</title>
+<style>
+  :root {
+    --bg:#f6f8fa;--surface:#fff;--surface2:#f0f2f5;--border:#d0d7de;
+    --accent:#0969da;--accent2:#0550ae;--green:#1a7f37;--yellow:#9a6700;
+    --red:#cf222e;--orange:#bc4c00;--text:#1f2328;--text2:#57606a;
+    --teal:#0a7c8a;--purple:#5a3ea0;--fscale:1;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'Pretendard','Noto Sans KR',-apple-system,sans-serif;background:var(--bg);color:var(--text);font-size: calc(13px * var(--fscale, 1));line-height:1.5;}
+  header{background:var(--surface);border-bottom:1px solid var(--border);padding:12px 16px 8px;display:flex;flex-direction:column;align-items:center;gap:4px;position:sticky;top:0;z-index:100;}
+  .header-inner{width:100%;max-width:960px;display:flex;flex-direction:column;align-items:center;gap:4px;}
+  .logo-badge{background:var(--accent2);color:#fff;font-size: calc(10px * var(--fscale, 1));font-weight:700;padding:3px 8px;border-radius:4px;letter-spacing:.5px;}
+  .tab-bar{display:flex;justify-content:center;background:var(--surface);border-bottom:1px solid var(--border);overflow-x:auto;scrollbar-width:none;}
+  .tab-bar::-webkit-scrollbar{display:none;}
+  .font-zoom-btn{display:flex;align-items:center;gap:3px;flex-shrink:0;margin:4px 4px 4px 6px;padding:5px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:6px;color:var(--accent2);font-size:calc(11px * var(--fscale, 1));font-weight:700;cursor:pointer;user-select:none;white-space:nowrap;transition:background .15s;}
+  .font-zoom-btn:hover{background:var(--border);}
+  .font-zoom-btn .fz-icon{font-size:calc(12px * var(--fscale, 1));}
+  .tab-bar-inner{width:100%;max-width:960px;display:flex;align-items:center;gap:2px;padding:0 4px;}
+  .tab{padding:7px 11px;font-size: calc(11.5px * var(--fscale, 1));color:var(--text2);cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;transition:color .15s,border-color .15s;user-select:none;flex-shrink:0;}
+  .tab:hover{color:var(--text);}
+  .tab.active{color:var(--accent2);border-bottom-color:var(--accent2);}
+  .tab-abbr-wrap{display:flex;align-items:center;padding:4px 4px;margin-left:4px;flex-shrink:0;position:relative;}
+  .main{padding:12px 16px;max-width:960px;margin:0 auto;}
+  .panel{display:none;}
+  .panel.active{display:block;}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+  .grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;}
+  @media(max-width:680px){.grid2,.grid3{grid-template-columns:1fr;}}
+  .card{background:var(--surface);border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-bottom:10px;}
+  .card-header{background:var(--surface2);padding:8px 12px;font-size: calc(12px * var(--fscale, 1));font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.5px;border-bottom:1px solid var(--border);cursor:pointer;display:flex;align-items:center;justify-content:space-between;user-select:none;}
+  .card-header .toggle{font-size: calc(13px * var(--fscale, 1));transition:transform .2s;}
+  .card-header.open .toggle{transform:rotate(180deg);}
+  .card-body{padding:10px 12px;}
+  .card-body.collapsed{display:none;}
+  .stat-row{display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap;}
+  .stat-box{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:10px 14px;flex:1;min-width:90px;text-align:center;}
+  .stat-box.clickable{cursor:pointer;transition:box-shadow .15s,border-color .15s;}
+  .stat-box.clickable:hover{border-color:var(--accent2);box-shadow:0 2px 8px rgba(5,80,174,.15);}
+  .stat-val{font-size: calc(18px * var(--fscale, 1));font-weight:700;color:var(--accent2);}
+  .stat-lbl{font-size: calc(10px * var(--fscale, 1));color:var(--text2);margin-top:2px;}
+  .stat-hint{font-size: calc(9px * var(--fscale, 1));color:var(--accent2);margin-top:4px;opacity:.7;}
+  /* Modal */
+  .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:500;align-items:center;justify-content:center;}
+  .modal-overlay.open{display:flex;}
+  .modal-box{background:var(--surface);border-radius:12px;padding:20px;max-width:680px;width:92%;max-height:84vh;overflow-y:auto;box-shadow:0 16px 48px rgba(0,0,0,.22);position:relative;}
+  .modal-close{position:absolute;top:12px;right:14px;background:none;border:none;font-size: calc(18px * var(--fscale, 1));cursor:pointer;color:var(--text2);line-height:1;}
+  .modal-title{font-size: calc(15px * var(--fscale, 1));font-weight:700;color:var(--text);margin-bottom:12px;padding-right:20px;line-height:1.4;}
+  .modal-section{margin-bottom:12px;}
+  .modal-section-title{font-size: calc(11px * var(--fscale, 1));font-weight:700;color:var(--accent2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;border-bottom:1px solid var(--border);padding-bottom:4px;}
+  .modal-table{width:100%;border-collapse:collapse;font-size: calc(11.5px * var(--fscale, 1));}
+  .modal-table th{background:var(--surface2);color:var(--text2);padding:4px 8px;font-size: calc(10.5px * var(--fscale, 1));font-weight:600;text-align:left;border-bottom:1px solid var(--border);}
+  .modal-table td{padding:5px 8px;border-bottom:1px solid var(--border);vertical-align:top;}
+  .modal-table tr:last-child td{border-bottom:none;}
+  .rec-list{list-style:none;}
+  .rec-item{padding:7px 0;border-bottom:1px solid var(--border);display:flex;gap:8px;align-items:flex-start;}
+  .rec-item:last-child{border-bottom:none;}
+  .rec-text{font-size: calc(12px * var(--fscale, 1));color:var(--text);line-height:1.65;}
+  .rec-text strong{color:#1f2328;}
+  .badge{display:inline-flex;align-items:center;padding:2px 8px;border-radius:10px;font-size: calc(10px * var(--fscale, 1));font-weight:700;white-space:nowrap;flex-shrink:0;margin-top:1px;}
+  .badge-A{background:#dafbe1;color:#116329;border:1px solid #1a7f37;}
+  .badge-B{background:#ddf4ff;color:var(--accent2);border:1px solid var(--accent2);}
+  .badge-C{background:#fff8c5;color:#7a4b00;border:1px solid #d4a017;}
+  .badge-E{background:#f3e5f5;color:#5a3ea0;border:1px solid #5a3ea0;}
+  .alert{padding:8px 12px;border-radius:6px;font-size: calc(12px * var(--fscale, 1));margin:8px 0;display:flex;gap:8px;align-items:flex-start;}
+  .alert-info{background:#ddf4ff;border-left:3px solid var(--accent2);color:#0550ae;}
+  .alert-warn{background:#fff8c5;border-left:3px solid #d4a017;color:#7a4b00;}
+  .alert-danger{background:#ffebe9;border-left:3px solid var(--red);color:#82071e;}
+  .alert-success{background:#dafbe1;border-left:3px solid var(--green);color:#116329;}
+  .alert-teal{background:#e0f5f5;border-left:3px solid var(--teal);color:#075050;}
+  .alert-orange{background:#fff3e0;border-left:3px solid var(--orange);color:#7a3500;}
+  .alert-purple{background:#f3e5f5;border-left:3px solid var(--purple);color:#5a3ea0;}
+  .tc-table{width:100%;border-collapse:collapse;font-size: calc(11.5px * var(--fscale, 1));}
+  .tc-table th{background:var(--surface2);color:var(--text2);padding:5px 8px;font-size: calc(10.5px * var(--fscale, 1));text-transform:uppercase;letter-spacing:.3px;font-weight:600;text-align:left;border-bottom:1px solid var(--border);}
+  .tc-table td{padding:5px 8px;border-bottom:1px solid var(--border);vertical-align:top;}
+  .tc-table tr:last-child td{border-bottom:none;}
+  .tc-table tr:hover td{background:rgba(0,0,0,.02);}
+  .acc{border:1px solid var(--border);border-radius:6px;margin-bottom:6px;overflow:hidden;}
+  .acc-hdr{background:var(--surface2);padding:7px 12px;font-size: calc(12px * var(--fscale, 1));font-weight:600;color:var(--text);cursor:pointer;display:flex;justify-content:space-between;align-items:center;user-select:none;}
+  .acc-hdr:hover{background:#e8eaec;}
+  .acc-body{display:none;padding:10px 12px;font-size: calc(12px * var(--fscale, 1));line-height:1.65;}
+  .flow-box{border:1px solid var(--border);border-radius:6px;background:var(--surface);padding:8px 12px;margin-bottom:6px;font-size: calc(12px * var(--fscale, 1));line-height:1.6;}
+  .flow-arrow{text-align:center;color:var(--text2);font-size: calc(14px * var(--fscale, 1));margin:2px 0;}
+  .step-num{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;background:var(--accent2);color:#fff;font-size: calc(10px * var(--fscale, 1));font-weight:700;flex-shrink:0;margin-right:6px;}
+  ul.dot{padding-left:18px;}
+  ul.dot li{margin-bottom:3px;font-size: calc(12px * var(--fscale, 1));line-height:1.6;}
+  ol.num{padding-left:18px;}
+  ol.num li{margin-bottom:4px;font-size: calc(12px * var(--fscale, 1));line-height:1.6;}
+  ::-webkit-scrollbar{width:5px;height:5px;}
+  ::-webkit-scrollbar-track{background:var(--bg);}
+  ::-webkit-scrollbar-thumb{background:#c8d0d9;border-radius:3px;}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div style="display:flex;align-items:center;gap:10px">
+      <span class="logo-badge">ADA 2026</span>
+      <h1 style="font-size:17px;font-weight:700;color:var(--text)">임신과 당뇨병 관리</h1>
+    </div>
+    <div style="text-align:center;line-height:1.5">
+      <span style="color:var(--text2);font-size: calc(11px * var(--fscale, 1))">Standards of Care in Diabetes—2026, Section 15 — American Diabetes Association</span><br>
+      <span style="font-size: calc(10px * var(--fscale, 1));color:var(--text2)">Diabetes Care 2026;49(Suppl. 1):S321–S338 · doi: 10.2337/dc26-S015</span>
+    </div>
+    <div style="font-size: calc(10px * var(--fscale, 1));color:var(--text2);font-style:italic;">This tool is not officially endorsed by the American Diabetes Association (ADA).</div>
+  </div>
+</header>
+
+<div class="tab-bar">
+  <div class="tab-bar-inner">
+    <div id="font-zoom-btn" class="font-zoom-btn" onclick="cycleFontZoom()"><span class="fz-icon">🔠</span><span id="font-zoom-label">100%</span></div>
+    <div class="tab active" onclick="showTab('overview')">🏠 개요·임신전상담</div>
+    <div class="tab" onclick="showTab('goals')">🎯 혈당목표·CGM</div>
+    <div class="tab" onclick="showTab('nutrition')">🥗 영양·생활습관</div>
+    <div class="tab" onclick="showTab('pharm')">💊 약물치료</div>
+    <div class="tab" onclick="showTab('preeclampsia')">🩺 자간전증·비혈당약물</div>
+    <div class="tab" onclick="showTab('postpartum')">👶 산후관리</div>
+    <div class="tab" onclick="showTab('special')">⚠️ 특수상황</div>
+    <div class="tab" onclick="showTab('tables')">📁 기준표 모음</div>
+    <div class="tab-abbr-wrap">
+      <div style="position:relative;display:flex;align-items:center;flex-shrink:0">
+        <span style="position:absolute;left:8px;color:var(--text2);font-size: calc(12px * var(--fscale, 1));pointer-events:none">🔍</span>
+        <input id="abbr-input" type="text" placeholder="약어" oninput="filterAbbr(this.value)"
+          style="background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:4px 8px 4px 26px;color:var(--text);font-size: calc(12px * var(--fscale, 1));width:90px;outline:none;"
+          onfocus="this.style.borderColor='var(--accent2)'" onblur="this.style.borderColor='var(--border)'">
+      </div>
+      <div id="abbr-dropdown" style="display:none;position:fixed;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:8px;width:440px;max-height:360px;overflow-y:auto;z-index:300;box-shadow:0 8px 24px rgba(0,0,0,.12)">
+        <div id="abbr-grid-drop"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="main">
+
+<!-- ═══ OVERVIEW & PRECONCEPTION ═══ -->
+<div id="tab-overview" class="panel active">
+  <div class="stat-row">
+    <div class="stat-box clickable" onclick="openModal('a1cPreModal')"><div class="stat-val">&lt;6.5%</div><div class="stat-lbl">임신전 권장 A1C</div><div class="stat-hint">▸ 클릭하여 상세 보기</div></div>
+    <div class="stat-box clickable" onclick="openModal('checklistModal')"><div class="stat-val">표15.1</div><div class="stat-lbl">임신전관리 체크리스트</div><div class="stat-hint">▸ 클릭하여 상세 보기</div></div>
+    <div class="stat-box clickable" onclick="openModal('glp1Modal')"><div class="stat-val">2개월</div><div class="stat-lbl">세마글루타이드 중단 권장기간</div><div class="stat-hint">▸ 클릭하여 상세 보기</div></div>
+    <div class="stat-box clickable" onclick="openModal('teamModal')"><div class="stat-val">인터프로</div><div class="stat-lbl">권장 진료팀 구성</div><div class="stat-hint">▸ 클릭하여 상세 보기</div></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>📋 임신 중 당뇨병 — 개관</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <p style="margin-bottom:8px">비만의 전세계적 유행과 함께 미국 내 임신 중 당뇨병 유병률이 증가하고 있다. 가임연령의 1형·2형당뇨 유병률 증가와 함께 임신성 당뇨병(GDM) 보고율도 급격히 증가했다.</p>
+      <div class="alert alert-warn"><span>⚠️</span><span>당뇨병은 산모·태아 위험을 현저히 증가시키며, 이는 주로 고혈당 정도에 비례하나 당뇨병의 만성 합병증·동반질환과도 관련된다.</span></div>
+      <table class="tc-table" style="margin-top:8px">
+        <tr><th>위험 범주</th><th>구체적 위험</th></tr>
+        <tr><td>임신 중</td><td>자연유산, 태아기형, 자간전증, 태아사망, 거대아, 신생아저혈당, 신생아고빌리루빈혈증, 신생아호흡곤란증후군</td></tr>
+        <tr><td>장기적(자녀)</td><td>자궁내 고혈당 노출 — 추후 비만·고혈압·2형당뇨 위험 증가</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>📋 임신전상담 — 핵심 권고</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="rec-list">
+        <li class="rec-item"><span class="badge badge-A">A</span><span class="rec-text"><strong>15.1</strong> 사춘기 시작부터 가임가능 모든 당뇨병 환자에게 일상진료에 임신전상담 통합</span></li>
+        <li class="rec-item"><span class="badge badge-A">A</span><span class="rec-text"><strong>15.2</strong> 가족계획 논의 및 치료계획·A1C가 임신에 최적화될 때까지 효과적 피임(장기지속형 가역적 피임 고려) 처방·사용</span></li>
+        <li class="rec-item"><span class="badge badge-A">A</span><span class="rec-text"><strong>15.3</strong> 과도한 저혈당 없이 안전하게 가능한 정상에 가까운 혈당 — 이상적으로 A1C&lt;6.5%(&lt;48mmol/mol) — 달성의 중요성을 상담, 선천기형·자간전증·거대아·조산 등 위험감소</span></li>
+        <li class="rec-item"><span class="badge badge-E">E</span><span class="rec-text"><strong>15.4</strong> GDM 병력자 — 임신전 당뇨선별·관리로 고혈당 식별/치료 및 선천기형·기타 불량한 산모/태아 결과 예방</span></li>
+      </ul>
+      <div class="alert alert-info" style="margin-top:8px"><span>ℹ️</span><span>기존 1형·2형당뇨 환자의 임신전상담은 선천기형 위험 감소, 조산·신생아중환자실(NICU) 입원 위험 감소와 매우 효과적으로 연관된다. 또한 주산기사망률·부당경량아 출생률 감소와도 연관된다.</span></div>
+    </div>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <div class="card-header" onclick="toggleCard(this)">
+        <span>🧬 A1C와 선천기형 위험</span><span class="toggle">▾</span>
+      </div>
+      <div class="card-body collapsed">
+        <ul class="dot">
+          <li>관찰연구: 임신 첫 10주 A1C 상승에 직접 비례하여 당뇨병성 배아병증(특히 무뇌증·소두증·선천성심장병·신장이상·미골퇴행) 위험 증가</li>
+          <li>기관형성(organogenesis)은 주로 임신 5–8주에 발생 — 이 시기 이전 A1C&lt;6.5% 달성이 선천기형·자간전증·조산의 가장 낮은 위험과 연관</li>
+          <li>체계적 문헌고찰·메타분석: 임신전관리는 더 낮은 A1C 및 출생결함·조산·주산기사망률·부당경량아·NICU입원 위험 감소와 연관</li>
+        </ul>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header" onclick="toggleCard(this)">
+        <span>⚖️ GDM 위험의 연속성</span><span class="toggle">▾</span>
+      </div>
+      <div class="card-body collapsed">
+        <ul class="dot">
+          <li>GDM 위험은 부당중량아 출생, 신생아·임신합병증, 장기적 산모 2형당뇨, 자녀의 비정상 포도당대사 위험 증가로 특징됨</li>
+          <li>모성 OGTT 결과와의 연관성은 연속적이며 명확한 변곡점이 없음(HAPO 연구)</li>
+          <li>미치료 GDM 노출 자녀 — 인슐린감수성·β세포보상 저하, 소아기 내당능장애 더 흔함</li>
+          <li>즉 단기·장기위험 모두 모성 고혈당 진행에 따라 증가</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>👥 임신전관리 — 핵심 권고</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="rec-list">
+        <li class="rec-item"><span class="badge badge-B">B</span><span class="rec-text"><strong>15.5</strong> 임신계획 중인 기존당뇨병환자 — 이상적으로 임신 전부터 내분비내과·모체태아의학전문의·영양사·당뇨교육전문가를 포함한 인터프로페셔널 진료 시작</span></li>
+        <li class="rec-item"><span class="badge badge-B">B</span><span class="rec-text"><strong>15.6</strong> 혈당목표 달성에 집중된 표준임신전관리 외에 영양·신체활동·당뇨자가관리교육·동반질환/합병증 선별에 추가 집중 <span class="badge badge-A" style="margin-left:4px">A</span></span></li>
+        <li class="rec-item"><span class="badge badge-B">B</span><span class="rec-text"><strong>15.7</strong> 임신계획/이미 임신한 기존당뇨병환자 — 망막병증 발생/진행 위험 상담, 이상적으로 임신전·1분기에 산동안검사 시행, 이후 망막병증 정도·안과전문의 권고에 따라 매 분기·산후1년까지 모니터링</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span>💊 GLP-1 RA·GIP/GLP-1 RA — 임신전 중단 지침</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body collapsed">
+      <ul class="dot">
+        <li>GLP-1 RA 및 이중 GIP/GLP-1 RA는 임신 전 중단해야 하며, 복용 중에는 피임 사용 필요</li>
+        <li>세마글루타이드 — 긴 반감기로 인해 계획된 임신 최소 2개월 전 중단을 제조사 처방정보에서 권장</li>
+        <li>티르제파타이드 — 미국 처방정보에는 권고 없음, 캐나다 제조사 처방정보는 임신 최소 1개월 전 중단 권장</li>
+        <li>임신시도 전, GLP-1 RA/GIP-GLP-1 RA 중단 후 필요시 인슐린요법 시작·적정을 통해 임신전 혈당목표를 달성해야 함</li>
+        <li>약물제거와 임신승인 치료로의 조정 모두를 위해 보통 수개월이 필요함을 상담해야 함</li>
+        <li>이들 제제 중단 후 체중재증가 위험에 대해서도 상담 필요</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ GLYCEMIC GOALS & CGM ═══ -->
+<div id="tab-goals" class="panel">
+  <div class="alert alert-orange"><span>🎯</span><span>정상혈당대사 임신은 태아·태반의 인슐린비의존적 포도당흡수로 공복혈당이 비임신상태보다 낮고, 태반의 당뇨유발인자로 인한 경미한 식후고혈당·탄수화물불내성이 특징이다. 인슐린저항성은 임신 중기·후기에 점진적으로 증가한다.</span></div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>📋 혈당목표 — 핵심 권고</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="rec-list">
+        <li class="rec-item"><span class="badge badge-B">B</span><span class="rec-text"><strong>15.8</strong> 최적혈당 달성 위해 공복·식전·식후 혈당모니터링 권장. 목표 — 공복혈당&lt;95mg/dL(&lt;5.3mmol/L), 1시간 식후&lt;140mg/dL(&lt;7.8mmol/L) 또는 2시간 식후&lt;120mg/dL(&lt;6.7mmol/L)</span></li>
+        <li class="rec-item"><span class="badge badge-B">B</span><span class="rec-text"><strong>15.9</strong> 적혈구 회전율 증가로 임신 중 A1C는 당뇨병 유무와 무관하게 약간 낮음. 의미있는 저혈당없이 달성가능하면 A1C&lt;6%(&lt;42mmol/mol)가 이상적 목표, 필요시 &lt;7%(&lt;53mmol/mol)로 완화 가능</span></li>
+        <li class="rec-item"><span class="badge badge-A">A</span><span class="rec-text"><strong>15.10</strong> CGM은 1형당뇨 임신에서 혈당목표(TIR·TAR 등) <span class="badge badge-A" style="margin-left:4px">A</span> 및 A1C목표 <span class="badge badge-B" style="margin-left:4px">B</span> 달성에 도움, 다른 유형 당뇨병 임신에서도 유익할 가능성 <span class="badge badge-E" style="margin-left:4px">E</span></span></li>
+        <li class="rec-item"><span class="badge badge-A">A</span><span class="rec-text"><strong>15.11</strong> 1형당뇨 임신부에게 CGM 권장 — 전통적 식전·식후목표 달성과 함께, 1형당뇨 동반 임신에서 부당중량아·신생아저혈당 위험 감소 가능</span></li>
+        <li class="rec-item"><span class="badge badge-E">E</span><span class="rec-text"><strong>15.12</strong> CGM지표는 혈당측정과 병용하여 최적 식전·식후목표 달성에 사용 가능</span></li>
+        <li class="rec-item"><span class="badge badge-C">C</span><span class="rec-text"><strong>15.13</strong> 일반적으로 사용되는 추정A1C·혈당관리지표 계산법은 임신 중 A1C 추정치로 사용해서는 안 됨</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>📊 표 15.2 — 임신 중 혈당목표</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <table class="tc-table">
+        <tr><th>측정시점</th><th>1형·2형당뇨^</th><th>인슐린치료 GDM</th><th>비인슐린치료 GDM</th></tr>
+        <tr><td>공복혈당</td><td>70–95mg/dL (3.9–5.3mmol/L)</td><td>70–95mg/dL (3.9–5.3mmol/L)</td><td>&lt;95mg/dL (&lt;5.3mmol/L)</td></tr>
+        <tr><td>1시간 식후혈당</td><td>110–140mg/dL* (6.1–7.8mmol/L)</td><td>110–140mg/dL* (6.1–7.8mmol/L)</td><td>&lt;140mg/dL* (&lt;7.8mmol/L)</td></tr>
+        <tr><td>2시간 식후혈당</td><td>100–120mg/dL (5.6–6.7mmol/L)</td><td>100–120mg/dL (5.6–6.7mmol/L)</td><td>&lt;120mg/dL (&lt;6.7mmol/L)</td></tr>
+      </table>
+      <p style="font-size: calc(10.5px * var(--fscale, 1));color:var(--text2);margin-top:6px">^하한선은 영양치료만으로 관리되는 2형당뇨 환자에게는 적용 안 됨. 의미있는 저혈당없이 달성불가하면 임상경험·개별화에 기반한 덜 엄격한 목표 추구. *1시간 또는 2시간 식후혈당 중 하나가 해당 칸 범위 내면 최적목표 달성. GDM 목표는 제5차 국제GDM워크숍-컨퍼런스 권고 기준.</p>
+    </div>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <div class="card-header" onclick="toggleCard(this)">
+        <span>🩸 임신 중 저혈당 기준</span><span class="toggle">▾</span>
+      </div>
+      <div class="card-body collapsed">
+        <ul class="dot">
+          <li>현재 권고 저혈당 임계치: 혈당&lt;70mg/dL(&lt;3.9mmol/L), 센서혈당&lt;63mg/dL(&lt;3.5mmol/L)</li>
+          <li>과거에는 &lt;60~&lt;70mg/dL 범위로 다양하게 사용됨, 최적 임계치는 아직 검증되지 않음</li>
+          <li>반복저혈당병력·저혈당인지저하 1형당뇨 환자는 의미있는 저혈당 없이 목표달성이 어려울 수 있음 — 이 경우 임상경험에 기반한 개별화된 덜 엄격한 목표 추구</li>
+        </ul>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header" onclick="toggleCard(this)">
+        <span>🌡️ 임신 초기 경미한 고혈당 — 치료논쟁</span><span class="toggle">▾</span>
+      </div>
+      <div class="card-body collapsed">
+        <p style="margin-bottom:6px"><strong>TOBOGM 시험</strong>(75g OGTT 조기선별, 평균 15.6주): 조기치료가 복합신생아예후를 소폭 개선(24.9% vs 30.5%), 주로 신생아호흡곤란 차이에 의해 견인됨</p>
+        <ul class="dot">
+          <li>관찰군의 약 1/3이 24–28주 재검 시 GDM 회복(regression) — 이들은 조기치료로부터 이득을 보기 어려움</li>
+          <li>체계적 문헌고찰·메타분석은 조기GDM치료의 일관된 이득을 보이지 못함</li>
+          <li>OGTT 결과가 낮은 혈당범위인 참가자에서는 부당경량아 위험 증가 가능성도 시사됨</li>
+          <li>전문학회 권고가 첨예하게 다름(ACOG vs ADIPS 등)</li>
+          <li>안전성 이유로 공복혈당≥110mg/dL인 참가자는 TOBOGM에서 제외 — 따라서 110–125mg/dL 구간의 위험-이득균형은 평가되지 않음</li>
+        </ul>
+        <div class="alert alert-info" style="margin-top:8px"><span>ℹ️</span><span>현재 권고: 영양상담 + 주기적 공복혈당검사(주3–4회). 15주 이전 공복혈당이 지속적으로 ≥110mg/dL이면 검사빈도를 매일로, 치료강화를 고려할 수 있음. 치료 시작 시 표15.2의 표준혈당목표 적용</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>🧪 임신 중 A1C — 한계와 활용</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="dot">
+        <li>정상임신에서도 A1C 상승은 불량한 결과와 연관(HAPO 연구에서도 동일)</li>
+        <li>기존당뇨병 관찰연구: 임신초기 A1C&lt;6–6.5%에서 가장 낮은 불량태아결과율</li>
+        <li>적혈구회전율의 생리적 증가로 정상임신에서도 A1C가 감소</li>
+        <li>A1C는 통합혈당 측정치로, 거대아를 유발하는 식후고혈당을 완전히 반영하지 못할 수 있음 — 혈당모니터링 후 2차 측정치로 사용해야 함</li>
+        <li>2·3분기에는 A1C&lt;6%가 부당중량아·조산·자간전증 위험이 가장 낮음</li>
+        <li>단, 의미있는 저혈당 없이 달성 가능할 때만 — 저혈당은 저체중출생 위험도 증가시킬 수 있음</li>
+        <li>임신 중 적혈구동역학·생리적변화로 A1C는 평소보다 더 자주(예: 매달) 모니터링이 필요할 수 있음</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>📱 임신 중 CGM — 유형별 근거</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <div class="acc">
+        <div class="acc-hdr" onclick="toggleAcc(this)"><span>1형당뇨 — CONCEPTT 시험</span><span>▾</span></div>
+        <div class="acc-body">실시간CGM+표준관리(식전·식후목표 최적화 포함) vs 표준관리 단독 RCT. A1C 경미개선, 모성TIR·TAR 유의개선(저혈당증가없이), 부당중량아 출생·신생아입원기간·중증신생아저혈당 감소. 관찰코호트: 낮은 평균혈당·낮은 SD·높은 TIR%가 부당중량아 등 불량신생아예후 감소와 연관. CGM 보고 평균혈당이 추정A1C·혈당관리지표보다 우수(임신 중 A1C 변화 때문). TIR 5%p 증가가 신생아이상(부당중량아, NICU입원) 개선과 연관. CGM 비용은 개선된 모성·신생아예후로 상쇄됨.</div>
+      </div>
+      <div class="acc">
+        <div class="acc-hdr" onclick="toggleAcc(this)"><span>2형당뇨·GDM — 근거 제한적</span><span>▾</span></div>
+        <div class="acc-body">현재 모든 2형당뇨·GDM 환자에게 CGM 사용을 지지할 충분한 데이터는 없음. 한 RCT(GDM, CGM vs 표준BGM) — 1차종료점(복합주산기/신생아예후) 차이 없음, CGM군 TIR이 더 낮았으나 참가자는 CGM 선호. 다른 RCT(CGM+보조BGM vs BGM단독) — 24시간TIR 더 높고 평균혈당 더 낮음. 2형당뇨 임신부만을 대상으로 한 충분한검정력의 RCT는 아직 없음. 2형·GDM에서 CGM지표의 최적목표도 아직 정의되지 않음 — 사용여부는 치료계획·상황·선호·필요에 따라 개별화.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>🎯 임신 중 센서혈당 목표 범위 (1형당뇨 특화)</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <table class="tc-table">
+        <tr><th>지표</th><th>범위</th><th>목표</th></tr>
+        <tr><td>TIR</td><td>63–140mg/dL (3.5–7.8mmol/L)</td><td>&gt;70%</td></tr>
+        <tr><td>Level 1 TBR</td><td>&lt;63mg/dL (&lt;3.5mmol/L)</td><td>&lt;4%</td></tr>
+        <tr><td>Level 2 TBR</td><td>&lt;54mg/dL (&lt;3.0mmol/L)</td><td>&lt;1%</td></tr>
+        <tr><td>TAR</td><td>&gt;140mg/dL (&gt;7.8mmol/L)</td><td>&lt;25%</td></tr>
+      </table>
+      <div class="alert alert-info" style="margin-top:8px"><span>ℹ️</span><span>국제TIR합의는 2형당뇨·GDM에도 동일한 센서혈당 목표범위를 채택하나, 데이터부족으로 각 범주별 목표시간비율은 정량화하지 못함. CGM기기 정확도는 사용 1일째 78.6%에서 4·7일째 96.3%, 10일째 97.3%로 증가 — 저혈당교정 직후, 증상이 센서값과 불일치할 때, 사용 첫날에는 손가락혈당검사 권장</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ NUTRITION & LIFESTYLE ═══ -->
+<div id="tab-nutrition" class="panel">
+  <div class="alert alert-orange"><span>🥗</span><span>임신 중 혈당목표는 비임신상태보다 더 엄격하므로, 의학영양치료와 인슐린투여의 조합으로 목표를 달성하는 것이 중요하다.</span></div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>📋 영양·생활습관 — 핵심 권고</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="rec-list">
+        <li class="rec-item"><span class="badge badge-C">C</span><span class="rec-text"><strong>15.14</strong> 임신 전·중 영양상담 — 과일·채소·콩류·통곡물·견과류·씨앗류·생선·기타 저지방단백질을 포함한 식이패턴 권장, 영양소균형·건강한 n-3지방산 제공</span></li>
+        <li class="rec-item"><span class="badge badge-A">A</span><span class="rec-text"><strong>15.15</strong> 생활습관행동변화는 GDM관리의 필수요소, 다수에서 단독치료로 충분. 필요시 혈당목표달성 위해 인슐린 추가</span></li>
+        <li class="rec-item"><span class="badge badge-A">A</span><span class="rec-text"><strong>15.16</strong> GDM임신부 — 대면방문과 병합한 원격의료방문이 표준대면관리 단독보다 결과 개선 가능</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>🍽️ 영양치료 세부 가이드</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="dot">
+        <li>임신부는 식전인슐린용량에 맞춰 일정량의 탄수화물을 섭취하거나, 인슐린-탄수화물비율을 사용해 식후 고/저혈당을 최소화해야 함</li>
+        <li>영양사 의뢰가 식이계획·체중증가목표 설정에 중요</li>
+        <li>CONCEPTT 하위분석: 임신계획/임신중 참가자는 고지방·저섬유·저품질탄수화물 섭취 특징, 과일·채소 섭취 부족, 4명 중 1명이 미세영양소결핍위험 — 의학영양치료의 중요성 강조</li>
+        <li>모든 거대영양소를 심하게 제한하는 식이패턴(케토제닉, 유제품제한 팔레오, 과도한포화지방 식이)은 피해야 함</li>
+        <li>최소 탄수화물 175g(2,000kcal식이의 약35%), 최소 단백질 71g, 식이섬유 28g</li>
+        <li>단일불포화·다중불포화지방 강조, 포화지방 제한, 트랜스지방 회피</li>
+        <li>고품질·영양밀도높은 탄수화물 — 더 나은 공복/식후혈당, 낮은 유리지방산, 개선된 인슐린작용, 혈관이득, 과도한 영아체지방 감소 가능</li>
+        <li>탄수화물을 지방으로 대체하면 의도치않게 지방분해촉진·유리지방산상승·모성인슐린저항성 악화 가능</li>
+        <li>공복케톤검사가 과도한 탄수화물제한을 식별하는 데 유용할 수 있음</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <div class="card-header" onclick="toggleCard(this)">
+        <span>⚖️ 권장 체중증가</span><span class="toggle">▾</span>
+      </div>
+      <div class="card-body collapsed">
+        <table class="tc-table">
+          <tr><th>임신전 상태</th><th>권장 체중증가</th></tr>
+          <tr><td>과체중</td><td>15–25lbs (6.8–11.3kg)</td></tr>
+          <tr><td>비만</td><td>10–20lbs (4.5–9.1kg)</td></tr>
+        </table>
+        <p style="font-size: calc(11px * var(--fscale, 1));color:var(--text2);margin-top:6px">BMI&gt;35kg/m²의 최적체중증가 vs 체중유지 비교 데이터는 부족. 단, 부당경량아 위험증가로 체중감량은 권장하지 않음.</p>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header" onclick="toggleCard(this)">
+        <span>🏃 신체활동 권고</span><span class="toggle">▾</span>
+      </div>
+      <div class="card-body collapsed">
+        <ul class="dot">
+          <li>일반적으로 건강한 사람은 임신·산후기간 중 매주 최소 150분 중등도강도 유산소운동(가능하면 주중 분산)</li>
+          <li>운동강도의 큰변화를 고려할 때는 의료진과 상담 후 조정</li>
+          <li>심호흡능력 향상, 과도한 임신중체중증가/산후체중잔류 위험 감소</li>
+          <li>규칙적 운동은 GDM·임신성고혈압·자간전증 발생확률을 각각 38%·39%·41% 감소(보고)</li>
+          <li>급성·장기적 임신중운동은 혈당에 긍정적 영향, 당뇨병환자에서 더 큰 효과</li>
+          <li>GDM 체계적문헌고찰: 운동중재로 혈당결과 개선·인슐린시작/용량필요성 감소, 단 효과적 운동유형(유산소/저항/둘다)·기간(일20–50분, 주2–7일)의 이질성 존재 — 최적 운동프로그램 유형에 대한 근거는 아직 불충분</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span>🏥 임신 중 당뇨병 의료전달 — 텔레헬스 근거</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body collapsed">
+      <p style="margin-bottom:6px">단일전문센터(가능시) 또는 인터프로페셔널 팀구성원이 있는 여러센터를 통한 팀기반관리가 권장된다.</p>
+      <div class="alert alert-success"><span>✅</span><span>32개 RCT 메타분석(텔레헬스방문+대면방문 vs 대면관리 단독, GDM 대상): 제왕절개·조기양막파열·임신유발고혈압/자간전증·조산·신생아질식·다태아양수과다증 발생률 감소</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ PHARMACOLOGIC THERAPY ═══ -->
+<div id="tab-pharm" class="panel">
+  <div class="alert alert-orange"><span>💊</span><span>인슐린이 1형당뇨 임신관리의 표준이며, GDM·2형당뇨 임신에서도 선호되는 약물이다. 임신생리는 변화하는 요구량에 맞춘 빈번한 인슐린조정이 필요함을 강조한다.</span></div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>📋 약물치료 — 핵심 권고</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="rec-list">
+        <li class="rec-item"><span class="badge badge-A">A</span><span class="rec-text"><strong>15.17</strong> 1형당뇨 임신에 인슐린 사용, GDM·2형당뇨 임신의 선호약물 <span class="badge badge-B" style="margin-left:4px">B</span></span></li>
+        <li class="rec-item"><span class="badge badge-C">C</span><span class="rec-text"><strong>15.18</strong> 1형당뇨 합병 임신 — 다회주사 또는 인슐린펌프기술 모두 사용 가능</span></li>
+        <li class="rec-item"><span class="badge badge-A">A</span><span class="rec-text"><strong>15.19</strong> 임신특화 혈당목표 설정 가능한 AID시스템을 1형당뇨 임신부에게 권장</span></li>
+        <li class="rec-item"><span class="badge badge-B">B</span><span class="rec-text"><strong>15.20</strong> 임신특화 목표/알고리즘 없는 AID시스템도 보조기법 사용 + 경험있는 의료팀과 협력 시 선별된 1형당뇨 임신부에서 고려 가능</span></li>
+        <li class="rec-item"><span class="badge badge-A">A</span><span class="rec-text"><strong>15.21</strong> 메트포르민·글리부라이드(단독/병합) — 둘다 태반을 통과해 태아에 도달하고 <span class="badge badge-A" style="margin-left:4px">A</span> 혈당목표달성에 불충분할 수 있어 <span class="badge badge-B" style="margin-left:4px">B</span> 1차약물로 사용해서는 안 됨. 기타 경구/비인슐린주사제는 장기안전성데이터 부족으로 비권장 <span class="badge badge-E" style="margin-left:4px">E</span></span></li>
+        <li class="rec-item"><span class="badge badge-A">A</span><span class="rec-text"><strong>15.22</strong> 다낭성난소증후군 치료·排卵유도용 메트포르민은 1분기 말까지 중단해야 함</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>💉 인슐린 — 임신생리와 용량변화</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="dot">
+        <li>임신초기: 많은 1형당뇨 환자가 인슐린요구량 감소, 저혈당위험 증가</li>
+        <li>약 16주경부터 인슐린저항성 증가 시작, 총일일인슐린용량이 36주까지 주당 약5%씩 선형증가</li>
+        <li>일반적으로 임신전 요구량 대비 2배로 증가</li>
+        <li>기저·볼러스 인슐린 모두 증가하나, 기존당뇨병환자에서는 임신진행에 따라 볼러스 비중이 전체용량 중 더 큰 비율 차지</li>
+        <li>3분기 말경 인슐린요구량 안정화</li>
+        <li>급격하고 유의한 인슐린요구량 감소는 태반기능부전 발생을 시사할 수 있음(단, 데이터 상충)</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <div class="card-header" onclick="toggleCard(this)">
+        <span>💊 기저인슐린 선택</span><span class="toggle">▾</span>
+      </div>
+      <div class="card-body collapsed">
+        <table class="tc-table">
+          <tr><th>약물</th><th>특징</th></tr>
+          <tr><td>Insulin glargine</td><td>장시간작용. 관찰연구에서 NPH 대비 불량태아결과 증거 없음, 임신중 광범위 사용</td></tr>
+          <tr><td>NPH insulin</td><td>중간작용</td></tr>
+          <tr><td>Insulin degludec</td><td>초장시간작용(최소42시간). RCT에서 detemir 비열등성 입증(모성안전성/임신결과 차이검출용으로 설계되지 않음). 긴 반감기로 용량변경간격 3–4일 필요해 임신 중 빈번한 조정에 제약 가능, 산후 인슐린요구량 급감 시 저혈당 위험</td></tr>
+          <tr><td>Insulin detemir</td><td>임신 중 사용을 지지하는 유일한 RCT데이터 보유했었으나, 제조사가 시장에서 철수하여 더이상 사용불가</td></tr>
+        </table>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header" onclick="toggleCard(this)">
+        <span>💊 식전인슐린 선택</span><span class="toggle">▾</span>
+      </div>
+      <div class="card-body collapsed">
+        <ul class="dot">
+          <li>Insulin aspart, insulin lispro — 임신 중 안전·효과적으로 널리 인정됨</li>
+          <li>Faster-acting insulin aspart(faster aspart) — 1형/2형당뇨 임신부에서 일반aspart와 유사한 태아성장·A1C</li>
+          <li>1형당뇨 하위분석: faster aspart 사용군에서 더 높은 TIR, 더 적은 중증저혈당(aspart대비)</li>
+        </ul>
+        <div class="alert alert-info" style="margin-top:8px"><span>ℹ️</span><span>현재 사용가능한 인간인슐린제제 중 태반을 통과하는 것으로 입증된 것은 없음. RCT로 연구된 인슐린이 코호트연구로 연구된 것보다, 코호트가 사례보고로만 연구된 것보다 선호됨</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>🤖 AID(자동인슐린전달) — 임신 중 특수 고려사항</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <div class="alert alert-warn"><span>⚠️</span><span>현재 美FDA승인 대부분의 AID시스템(미국시판 중 1개 예외)은 임신특화 혈당목표 달성을 위한 알고리즘이 없으며, 최저혈당목표가 임신 중 권장 공복혈당목표범위보다 높음 — 임신 중 시작/지속 여부를 신중히 평가해야 함</span></div>
+
+      <table class="tc-table" style="margin-top:10px">
+        <tr><th>연구</th><th>설계</th><th>주요결과</th></tr>
+        <tr><td><strong>AiDAPT</strong></td><td>124명 1형당뇨, 임신특화목표(81–90mg/dL 16주이후) 설정가능 AID vs 표준관리(CGM+MDI 또는 표준펌프)</td><td>AID군 TIR↑10.5%p, TAR↓10.2%p, A1C↓0.31%. 임신향유도↑·수면개선·걱정감소 보고. 美FDA승인되었으나 현재 미국 미시판</td></tr>
+        <tr><td>95명 연구(비임신특화목표AID)</td><td>목표100mg/dL 설정 AID vs 표준관리</td><td>24h TIR 유사, 야간TIR↑6.58%p, 24h·야간 TBR↓. 치료만족도↑, 저혈당인지저하 적음(Gold점수)</td></tr>
+        <tr><td>파일럿(n=23, 비임신특화목표AID)</td><td>2분기 무작위, 목표120mg/dL AID vs 센서증강펌프(SAP)</td><td>&lt;63mg/dL 시간 1분기→3분기 유의감소(AID군), 단 3분기 평균센서혈당은 AID군이 더 높음</td></tr>
+      </table>
+
+      <div class="alert alert-info" style="margin-top:10px"><span>ℹ️</span><span>비임신특화 AID 연구들은 가상탄수화물볼러스 투여 등 보조기법과 경험있는 인터프로페셔널팀의 전문가지침을 활용 — 신중히 선별된 1형당뇨 임신부에서 보조기법+전문가지침과 함께 비임신특화 AID 지속/시작이 적절할 수 있음. 후보자 평가에는 혈당수준, 중증저혈당/고혈당사건 유무, 기술참여능력/편안함, 심리사회적결정요인, 비용, 개인선호 등을 포함해야 함</span></div>
+    </div>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <div class="card-header" onclick="toggleCard(this)">
+        <span>🤰 분만·산후 AID 근거</span><span class="toggle">▾</span>
+      </div>
+      <div class="card-body collapsed">
+        <ul class="dot">
+          <li>지속피하인슐린주입 vs 정맥인슐린주입(분만중, RCT 70명) — 신생아저혈당 등 1차·2차결과 차이 없음</li>
+          <li>산후12주 AID vs SAP(RCT 18명) — AID군에서 저혈당사건 더 적음</li>
+          <li>분만중/산후초기 AID지속 관찰분석 — 분만중TIR개선, 산후초기TIR유사, 중증저혈당없음</li>
+          <li>AiDAPT 연장연구(산후6개월) — AID군 TIR더높음·평균혈당더낮음, 저혈당차이없음</li>
+        </ul>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header" onclick="toggleCard(this)">
+        <span>🚫 경구/비인슐린제 — 사용 제한 근거</span><span class="toggle">▾</span>
+      </div>
+      <div class="card-body collapsed">
+        <p style="margin-bottom:6px">2개 대규모 RCT에서 GDM의 생활습관+인슐린치료가 주산기예후 개선을 입증(美예방서비스특별위원회 검토에 요약) — 미국에서 인슐린이 GDM 1차치료제</p>
+        <ul class="dot">
+          <li>메트포르민·글리부라이드는 GDM혈당강하에 제한적 효능 지지 근거 있으나, 태반통과·후손장기안전성우려로 1차치료로 비권장</li>
+          <li>별도RCT: 글리부라이드는 23%, 메트포르민은 25–28%에서 적절한 혈당결과 달성 실패</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>⚠️ 설폰요소제(Glyburide) — 위험 근거</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="dot">
+        <li>태반을 통과, 신생아저혈당 위험증가와 연관됨이 알려짐</li>
+        <li>제대혈장 글리부라이드 농도는 모성수준의 약 50–70%</li>
+        <li>체계적문헌고찰·메타분석: 인슐린/메트포르민 대비 신생아저혈당·거대아 비율 더 높음, 신생아복부둘레 증가</li>
+        <li>신생아저혈당·거대아·고빌리루빈혈증 복합결과 기준 인슐린에 대한 비열등성 입증 못함</li>
+        <li>경구혈당강하 전략(메트포르민+글리부라이드추가, 목표미달시 인슐린대체) vs 인슐린 비열등성시험 — 부당중량아 예방에서 비열등성기준 충족 못함, 모성저혈당위험도 더 높음</li>
+        <li>글리부라이드 노출 후손의 장기안전성데이터 부재</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>⚠️ 메트포르민 — 효과와 후손 장기추적 우려</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="dot">
+        <li>체계적문헌고찰·RCT: 인슐린 대비 신생아저혈당위험 낮음, 모성체중증가 적음. 단 단독치료실패율 14–46%</li>
+        <li>11개RCT 메타분석: 비만·다낭성난소증후군·기존인슐린저항성 등 고위험군에서 메트포르민이 GDM위험을 감소시키지 못함</li>
+        <li>기존2형당뇨 RCT(인슐린단독 vs 인슐린+메트포르민) — 복합신생아건강결과 차이없음. 메트포르민군 출생체중 더 작았으나, 한 연구에서 약물불내성 더 많고 다른 연구에서 부당경량아 2배 증가</li>
+        <li>메트포르민은 태반을 쉽게 통과 — 제대혈농도가 동시기 모성수준과 같거나 더 높음</li>
+        <li>영장류모델: 임신초기 메트포르민 시작 시 태아내 생체축적·성장제한·신장형태이상</li>
+        <li>MiG TOFU연구(7–9세 후손분석) — Auckland코호트의 9세 아동(Adelaide코호트는 아님)에서 메트포르민노출군이 인슐린노출군보다 체중·허리/키비율·허리둘레 더 큼</li>
+        <li>PCOS RCT 4세후속연구 — 메트포르민노출 후손에서 더높은 BMI·비만증가, 5–10년 후속연구도 유사소견(체지방량 경계성증가)</li>
+        <li>메타분석: 메트포르민노출은 더 작은 신생아 + 출생후 성장가속 → 소아기 더높은 BMI로 귀결</li>
+        <li>MiTy Kids 연구(24개월 추적) — 인체측정학적 차이 없음</li>
+      </ul>
+      <div class="alert alert-warn" style="margin-top:8px"><span>⚠️</span><span>임신전 메트포르민복용을 임신초기까지 지속한 경우, 기관형성 이후인 1분기 말에 중단하여 갑작스러운 혈당악화 및 관련 고혈당으로 인한 기형위험 증가를 피할 수 있다. 1분기 메트포르민지속은 안전한 것으로 간주됨(주요선천기형위험증가와 연관 없음, 임신초기 모태-태아간 전달도 미미)</span></div>
+      <div class="alert alert-danger" style="margin-top:8px"><span>🚫</span><span>태반기능부전 상황에서의 성장제한·산증 가능성으로, 메트포르민은 고혈압/자간전증이 있거나 자궁내성장제한 위험이 있는 임신부에게 사용해서는 안 됨</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ PREECLAMPSIA & NON-GLUCOSE DRUGS ═══ -->
+<div id="tab-preeclampsia" class="panel">
+  <div class="alert alert-orange"><span>🩺</span><span>임신 중 당뇨병은 자간전증 위험 증가와 연관된다. 혈압관리·지질약물 등 비혈당강하 약물에도 임신 특화 고려사항이 적용된다.</span></div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>📋 자간전증·아스피린 — 핵심 권고</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="rec-list">
+        <li class="rec-item"><span class="badge badge-E">E</span><span class="rec-text"><strong>15.23</strong> 1형·2형당뇨 임신부 — 임신 12–16주부터 저용량아스피린 100–150mg/일 처방으로 자간전증위험 감소. 162mg/일도 허용가능 <span class="badge badge-E" style="margin-left:4px">E</span>. 미국 내 저용량아스피린은 81mg 정제로 시판</span></li>
+      </ul>
+      <div class="alert alert-warn" style="margin-top:8px"><span>⚠️</span><span>메타분석·추가시험에서 저용량아스피린 &lt;100mg은 자간전증 감소에 효과없음 — <strong>100mg 초과 용량</strong>이 필요함</span></div>
+      <div class="alert alert-info" style="margin-top:8px"><span>ℹ️</span><span>비용-이득분석은 이 접근이 모병률을 낮추고 생명을 구하며 의료비를 절감할 것으로 결론. 단, 기존당뇨병 임신부에서 아스피린이 궁극적으로 자간전증 발생률을 낮추는지에 대한 데이터는 충분하지 않음(전반적 고위험군에서는 메타분석상 자간전증감소 확인됨)</span></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span>📊 GDM에서 아스피린 적응증 (美예방서비스특별위원회 기준)</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body collapsed">
+      <p style="margin-bottom:6px">GDM 환자가 다음 중 하나에 해당하면 자간전증예방을 위한 아스피린요법 후보가 될 수 있음:</p>
+      <table class="tc-table">
+        <tr><th>위험요인 분류</th><th>예시</th></tr>
+        <tr><td>단일 고위험요인</td><td>만성고혈압, 자가면역질환</td></tr>
+        <tr><td>다중 중등도위험요인</td><td>초산모, 비만, 연령≥35세, 기타요인</td></tr>
+      </table>
+      <p style="font-size: calc(11px * var(--fscale, 1));color:var(--text2);margin-top:6px">산전아스피린노출의 후손에 대한 장기효과를 평가하기 위한 추가연구가 필요하다.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>📋 혈압·지질 — 핵심 권고</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="rec-list">
+        <li class="rec-item"><span class="badge badge-A">A</span><span class="rec-text"><strong>15.24</strong> 당뇨병+만성고혈압 임신부 — 더 나은 임신결과를 위해 혈압&lt;140/90mmHg를 치료시작/적정 임계치로 권장. 혈압&lt;90/60mmHg면 치료강도 완화 <span class="badge badge-E" style="margin-left:4px">E</span></span></li>
+        <li class="rec-item"><span class="badge badge-B">B</span><span class="rec-text"><strong>15.25a</strong> 잠재적 유해약물(ACE억제제, ARB, 무기질코르티코이드수용체길항제)은 임신전 중단, 신뢰가능한 피임 미사용 가임가능 성생활자에서 회피</span></li>
+        <li class="rec-item"><span class="badge badge-B">B</span><span class="rec-text"><strong>15.25b</strong> 대부분의 경우 지질저하약물은 임신전 중단, 신뢰가능한 피임 미사용 가임가능 당뇨병환자에서 회피. 일부상황(가족성고콜레스테롤혈증, 중증고중성지방혈증, 기존ASCVD사건)에서는 이득&gt;위험일 때 지속 가능 <span class="badge badge-E" style="margin-left:4px">E</span></span></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>📊 CHAP 시험 — 혈압목표 근거</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <p style="margin-bottom:8px"><strong>CHAP(Chronic Hypertension and Pregnancy) 시험</strong>: 경미한 만성고혈압 임신부에서 혈압140/90mmHg를 치료시작/적정 임계치로 설정 시 불량한 임신결과 발생률 감소, 태아성장 손상없음 입증. 당뇨병환자는 비당뇨군보다 더 나은 복합결과점수를 보임.</p>
+      <table class="tc-table">
+        <tr><th>분석</th><th>비교</th><th>주요결과</th></tr>
+        <tr><td>CHAP 2차분석 (당뇨병+만성고혈압 434명)</td><td>&lt;130/80mmHg vs 130–139/80–89mmHg 목표</td><td>1차복합주산기예후 19.3% vs 46.5%(보정RR 0.43) — 자간전증중증징후·35주미만조산도 유의히 적음. 부당경량아·NICU입원·NICU재원일수도 더 적음</td></tr>
+      </table>
+      <div class="alert alert-warn" style="margin-top:8px"><span>⚠️</span><span>참가자가 &lt;130/80mmHg 목표에 무작위배정되지 않았으므로, 개선된 결과가 더 낮은 달성혈압 때문인지 다른 기저특성차이 때문인지는 불확실함. 단, &lt;130/80mmHg군에서 더 나쁜 결과의 증거는 없었음</span></div>
+      <p style="font-size: calc(11px * var(--fscale, 1));color:var(--text2);margin-top:8px">CHAP 연구결과로 ACOG는 임신중 만성고혈압 치료시작/적정 임계치를 기존 160/110mmHg에서 140/90mmHg로 변경하는 실무권고를 발표했다.</p>
+    </div>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <div class="card-header" onclick="toggleCard(this)">
+        <span>🚫 ACE억제제·ARB — 임신 중 금기</span><span class="toggle">▾</span>
+      </div>
+      <div class="card-body collapsed">
+        <ul class="dot">
+          <li>태아신장형성이상·양수과소증·폐형성저하증·자궁내성장제한 유발가능 — 임신중 사용 금기</li>
+          <li>대규모연구: 교란요인보정 후 1분기 ACE억제제노출은 선천기형과 연관없음으로 나타남</li>
+          <li>그러나 2·3분기 태아병증을 피하기 위해 임신전 또는 1분기 중 가능한 빨리 중단해야 함</li>
+        </ul>
+        <p style="margin-top:8px;font-size: calc(11px * var(--fscale, 1))"><strong>안전·효과적 항고혈압제</strong>: methyldopa, nifedipine, labetalol, clonidine. Atenolol은 비권장(다른 베타차단제는 필요시 사용가능). 이용제는 일반적으로 비권장이나 특정상황(CKD·낮은GFR)에서 저용량으로 안전하게 사용 가능</p>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header" onclick="toggleCard(this)">
+        <span>🚫 지질저하제 — 임신 중 고려사항</span><span class="toggle">▾</span>
+      </div>
+      <div class="card-body collapsed">
+        <ul class="dot">
+          <li>대부분 환자: bempedoic acid, PCSK9치료제, fibrate 등은 임신전 또는 첫임신방문시 중단</li>
+          <li>스타틴도 대부분의 경우 임신중 회피 권장 — 기형유발위험은 낮은 것으로 보이나 데이터 제한적</li>
+          <li>고위험군(기존ASCVD병력, 가족성고콜레스테롤혈증[동형/중증이형])에서는 공유의사결정과정에서 고려 가능</li>
+          <li>친수성스타틴(예: pravastatin)이 친유성스타틴보다 태아위해가 적을 가능성 — 다수 임신시험에서 자간전증위험감소 목적으로 연구되었으나 효과는 아직 결론나지 않음, 신생아사망률/병태율 증가 증거는 없음</li>
+          <li>중증고중성지방혈증 병력자는 중성지방수치 모니터링, 췌장염위험 감소 위해 영양중재±약물치료 시행</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ POSTPARTUM CARE ═══ -->
+<div id="tab-postpartum" class="panel">
+  <div class="alert alert-orange"><span>👶</span><span>분만과 함께 태반이 배출되면 인슐린감수성이 극적으로 증가한다. GDM 환자는 산후 당뇨약물이 보통 불필요하나, 평생에 걸친 2형당뇨 발생위험 모니터링이 필수적이다.</span></div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>📋 산후관리 — 핵심 권고</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="rec-list">
+        <li class="rec-item"><span class="badge badge-C">C</span><span class="rec-text"><strong>15.26</strong> 분만후 인슐린저항성이 급격히 감소하므로, 분만후 인슐린이 필요한 환자는 인슐린요구량을 평가·조정해야 함</span></li>
+        <li class="rec-item"><span class="badge badge-A">A</span><span class="rec-text"><strong>15.27</strong> 가임가능 모든 당뇨병환자와 피임계획을 논의·실행해야 함</span></li>
+        <li class="rec-item"><span class="badge badge-A">A</span><span class="rec-text"><strong>15.28</strong> 모든 당뇨병환자에게 모유수유 시도 권장. GDM병력자는 다양한 이득(추후2형당뇨위험감소 포함 <span class="badge badge-B" style="margin-left:4px">B</span>) 때문에 모유수유 권장</span></li>
+        <li class="rec-item"><span class="badge badge-E">E</span><span class="rec-text"><strong>15.29</strong> 산후관리에 심리사회평가·자가관리지지를 포함해야 함</span></li>
+        <li class="rec-item"><span class="badge badge-B">B</span><span class="rec-text"><strong>15.30</strong> 최근 GDM병력자 — 산후4–12주에 75g OGTT 및 임상적으로 적절한 비임신진단기준으로 선별</span></li>
+        <li class="rec-item"><span class="badge badge-B">B</span><span class="rec-text"><strong>15.31</strong> GDM병력자 — 2형당뇨/전당뇨 발생에 대한 평생 1–3년 간격 선별</span></li>
+        <li class="rec-item"><span class="badge badge-A">A</span><span class="rec-text"><strong>15.32</strong> 과체중/비만+GDM병력자 중 전당뇨 발견 시 — 집중생활습관중재 및/또는 메트포르민으로 당뇨예방</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>💉 인슐린·피임 — 산후 핵심사항</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="dot">
+        <li>한 연구: 분만직후 인슐린요구량이 임신전 대비 약34% 낮음, 이후 1–2주에 걸쳐 임신전수준으로 회복</li>
+        <li>인슐린복용자는 모유수유와 불규칙한 수면/식사일정 상황에서 저혈당예방에 특별한 주의 필요</li>
+        <li>GDM환자는 통상 산후 당뇨약물이 불필요함</li>
+        <li>임신전상담의 주요장벽은 많은 임신이 계획되지 않는다는 점 — 모든 가임가능 당뇨병환자는 정기적으로 가족계획옵션을 재검토해야 하며 이는 분만직후기간에도 적용됨</li>
+        <li>당뇨병환자도 비당뇨군과 동일한 피임옵션·권고를 가지나, 당뇨합병증/혈관질환 존재시 권장옵션이 달라질 수 있음</li>
+        <li>장기지속형 가역적 피임이 가임가능 당뇨병환자에게 이상적일 수 있음 — 계획되지않은 임신의 위험이 현재 사용가능한 모든 피임옵션의 위험을 상회함</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>🤱 모유수유 — 아동·모성 이득</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <div class="grid2">
+        <div>
+          <h4 style="font-size: calc(12px * var(--fscale, 1));margin-bottom:6px;color:var(--accent2)">아동 이득</h4>
+          <ul class="dot">
+            <li>생후6개월미만 감염성질환 사망률 감소(OR 0.22–0.59)</li>
+            <li>2세미만 호흡기감염 감소</li>
+            <li>5–18세 천식/喘鳴 감소(OR 0.91)</li>
+          </ul>
+        </div>
+        <div>
+          <h4 style="font-size: calc(12px * var(--fscale, 1));margin-bottom:6px;color:var(--accent2)">모성 이득</h4>
+          <ul class="dot">
+            <li>유방암 위험 감소(OR 0.81)</li>
+            <li>난소암 위험 감소(OR 0.70)</li>
+            <li>2형당뇨 위험 감소(OR 0.68) — 특히 GDM병력 산모</li>
+          </ul>
+        </div>
+      </div>
+      <div class="alert alert-warn" style="margin-top:10px"><span>⚠️</span><span>모유수유는 야간저혈당위험을 증가시킬 수 있어 인슐린용량 조정이 필요할 수 있음</span></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>🔬 GDM 산후 선별 — OGTT 우선 사용 근거</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="dot">
+        <li>GDM은 흔히 이전에 미진단된 전당뇨·2형당뇨·MODY 또는 진행중인 1형당뇨를 나타낼 수 있음</li>
+        <li>산후4–12주 공복75g OGTT(비임신기준)로 지속성당뇨/전당뇨 검사 권장</li>
+        <li>이 시기 A1C보다 OGTT가 권장되는 이유: 임신관련 적혈구회전율증가, 분만시 출혈, 또는 선행 3개월 혈당프로필로 A1C가 지속적으로 영향받을(낮아질) 수 있음</li>
+        <li>OGTT가 내당능장애(전당뇨·당뇨 모두 포함) 검출에 더 민감</li>
+        <li>입원중 즉시시행 OGTT는 검사참여율은 개선하나 공복혈당장애·내당능장애·2형당뇨 진단민감도는 다양하게 감소시킴</li>
+      </ul>
+      <div class="alert alert-info" style="margin-top:8px"><span>ℹ️</span><span>경구당부하검사를 견디지 못하거나 거부하는 소수 환자는 산후6–12개월 A1C 검사를 고려할 수 있음. 한 후향연구에서 A1C 5.7%가 2시간혈당≥200mg/dL 검출에 민감도80%·특이도80.8% — 단 선택편향 가능성 있음</span></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>📈 GDM 후 2형당뇨 — 평생 위험 궤적</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <table class="tc-table">
+        <tr><th>추적기간</th><th>2형당뇨 발생 절대위험(누적)</th></tr>
+        <tr><td>10년</td><td>~20%</td></tr>
+        <tr><td>20년</td><td>~30%</td></tr>
+        <tr><td>30년</td><td>~40%</td></tr>
+        <tr><td>40년</td><td>~50%</td></tr>
+        <tr><td>50년</td><td>~60%</td></tr>
+      </table>
+      <ul class="dot" style="margin-top:8px">
+        <li>GDM병력자의 평생 산모당뇨위험은 50–60%로 추정, 非GDM군 대비 2형당뇨 발생위험 10배 증가</li>
+        <li>대규모후향코호트: 1회임신 GDM병력보다 2회임신 GDM병력에서 위험비가 훨씬 높음(임신횟수·순서에 따라 위험비 4.35–15.8배)</li>
+        <li>Nurses' Health Study II(전향연구): GDM병력 후 건강한식이패턴 실천군에서 후속당뇨위험이 유의하게 낮음(BMI보정 시 연관성 다소 약화)</li>
+        <li>임신간 체중증가는 불량한임신결과 위험 증가 및 GDM위험 증가와 연관, BMI&gt;25kg/m² 환자의 체중감량은 다음임신 GDM위험 감소와 연관</li>
+        <li>임신전BMI 대비 추적시점 BMI 1단위 증가당 2형당뇨발생 18% 증가 — GDM 후 효과적 체중관리의 중요성 강조</li>
+        <li>분만후 생활습관중재는 2형당뇨위험 감소에 효과적</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span>💊 전당뇨+GDM병력 — 예방중재 효과</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body collapsed">
+      <ul class="dot">
+        <li>메트포르민·집중생활습관중재 모두 GDM병력+전당뇨 환자의 당뇨진행을 예방/지연</li>
+        <li>3년간 당뇨 1건 예방을 위해 치료가 필요한 환자수(NNT)는 단 5–6명</li>
+        <li>10년 추적: 생활습관중재·메트포르민이 위약대비 당뇨진행을 각각 35%·40% 감소</li>
+        <li>임신이 건강한영양채택의 동기가 되었다면, 산후기간에 이러한 성과를 바탕으로 체중감량을 지지하는 것이 권장됨</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ SPECIAL SITUATIONS ═══ -->
+<div id="tab-special" class="panel">
+  <div class="alert alert-orange"><span>⚠️</span><span>임신은 케톤생성 상태이며, 1형당뇨(및 정도는 덜하지만 2형당뇨) 환자는 비임신상태보다 더 낮은 혈당수치에서도 DKA위험에 처할 수 있다. 망막병증·체중관리에도 임신 특화 고려사항이 적용된다.</span></div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>📉 저혈당 — 1분기·분만후 위험 증가</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="dot">
+        <li>1형당뇨 임신부는 1분기와 분만후 저혈당위험 증가</li>
+        <li>모든 임신부와 마찬가지로 임신중 반조절반응이 변화하여 저혈당인지능력을 저하시킬 수 있음</li>
+        <li>저혈당의 예방·인지·치료에 대한 본인·가족교육이 임신전·중·후 저혈당위험 예방/관리에 중요</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>🚨 당뇨병성 케토산증(DKA) — 임신 중 특수성</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <div class="alert alert-danger"><span>🚨</span><span>임신은 케톤생성상태 — 1형당뇨(및 정도는 덜하지만 2형당뇨) 환자는 비임신상태보다 <strong>더 낮은 혈당수치</strong>에서도 DKA위험에 처할 수 있다. DKA는 <strong>태아사망 고위험</strong>을 동반한다.</span></div>
+      <ul class="dot" style="margin-top:8px">
+        <li>1형당뇨 임신부는 케톤검사스트립을 구비하고 DKA예방·발견에 대한 교육을 받아야 함</li>
+        <li>식사를 못하는 DKA환자는 3분기 태반·태아의 높은 탄수화물요구를 충족하고 케토시스를 해소하기 위해, 포도당함유 정맥수액+인슐린주입이 필요한 경우가 많음</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>👁️ 망막병증 — 임신 중 특별한 관심</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="dot">
+        <li>망막병증 존재 상황에서 필요한 급속한 정상혈당화는 망막병증 악화와 연관됨</li>
+        <li>메타분석: 1형·2형당뇨 임신부에서 신규망막병증발생·기존망막병증진행의 높은 위험 입증</li>
+        <li>권고: 기존당뇨병환자는 임신전, 임신 각 분기, 그리고 망막병증정도·안과전문의권고에 따라 산후1년까지 산동안검사 시행</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>⚖️ 비만 임신부 — 체중관리 특수고려</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="dot">
+        <li>임신전평가시 체중평가 필요</li>
+        <li>당뇨병상태와 무관하게, 임신중비만의 구체적위험과 비만예방/치료를 위한 생활습관중재(영양사의뢰포함) 상담 권장</li>
+        <li>RCT: 과체중/비만+GDM병력자에서 다음임신전 체중감량이 GDM재발위험감소와 연관, 특히 체중감량≥5%일 때(OR 0.18)</li>
+        <li>체중관리상담은 체중감량달성·유지를 위한 다양한 전략의 알려진 이득·위험을 포함해야 함</li>
+        <li>약물치료를 포함하는 전략의 경우, 임신전 약물변경시점에 대한 권고가 제공되어야 함</li>
+      </ul>
+      <div class="alert alert-warn" style="margin-top:8px"><span>⚠️</span><span>2형당뇨 관련 고혈압·기타동반질환 위험은 1형당뇨만큼 또는 그 이상일 수 있음 — 당뇨관리가 더 양호하고 유병기간이 더 짧게 보여도 마찬가지. 2형당뇨에서는 임신소실이 3분기에 더 많이 나타나는 경향(1형당뇨는 1분기)</span></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span>🩺 미세혈관 합병증 동반 — 위험 증가</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body collapsed">
+      <p>기존당뇨병환자에서 미세혈관합병증의 존재는 질병진행 및 불량한임신결과의 더 높은 위험과 연관된다. 당뇨특이검사로는 A1C, 크레아티닌, 요알부민-크레아티닌비를 포함해야 한다. 잠재적유해약물(ACE억제제, ARB, 일부경우 스타틴포함 지질저하제) 복용목록을 특별히 주의해서 검토해야 한다.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ TABLES ═══ -->
+<div id="tab-tables" class="panel">
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>🎯 표 — 임신 중 혈당목표 요약</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <table class="tc-table">
+        <tr><th>측정시점</th><th>1형·2형당뇨</th><th>GDM(인슐린)</th><th>GDM(비인슐린)</th></tr>
+        <tr><td>공복</td><td>70–95mg/dL</td><td>70–95mg/dL</td><td>&lt;95mg/dL</td></tr>
+        <tr><td>1시간 식후</td><td>110–140mg/dL</td><td>110–140mg/dL</td><td>&lt;140mg/dL</td></tr>
+        <tr><td>2시간 식후</td><td>100–120mg/dL</td><td>100–120mg/dL</td><td>&lt;120mg/dL</td></tr>
+        <tr><td>A1C</td><td>&lt;6%(이상적)~&lt;7%</td><td>—</td><td>—</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span>📱 표 — 1형당뇨 임신 CGM 목표</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body collapsed">
+      <table class="tc-table">
+        <tr><th>지표</th><th>범위</th><th>목표</th></tr>
+        <tr><td>TIR</td><td>63–140mg/dL</td><td>&gt;70%</td></tr>
+        <tr><td>Level 1 TBR</td><td>&lt;63mg/dL</td><td>&lt;4%</td></tr>
+        <tr><td>Level 2 TBR</td><td>&lt;54mg/dL</td><td>&lt;1%</td></tr>
+        <tr><td>TAR</td><td>&gt;140mg/dL</td><td>&lt;25%</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span>💊 표 — 임신 중 인슐린 선택</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body collapsed">
+      <table class="tc-table">
+        <tr><th>구분</th><th>약물</th></tr>
+        <tr><td>기저(장시간)</td><td>insulin glargine, insulin degludec</td></tr>
+        <tr><td>기저(중간)</td><td>NPH insulin</td></tr>
+        <tr><td>식전(속효성)</td><td>insulin aspart, insulin lispro, faster aspart</td></tr>
+        <tr><td>사용중단</td><td>insulin detemir(시장철수)</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span>🚫 표 — 임신 중 회피 약물</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body collapsed">
+      <table class="tc-table">
+        <tr><th>약물군</th><th>예시</th><th>회피이유</th></tr>
+        <tr><td>혈당강하제(비인슐린)</td><td>메트포르민, 글리부라이드</td><td>태반통과, 1차치료로 비권장</td></tr>
+        <tr><td>RAAS차단제</td><td>ACE억제제, ARB</td><td>태아신장형성이상·양수과소증·폐형성저하증</td></tr>
+        <tr><td>지질저하제</td><td>스타틴, PCSK9치료제, fibrate, bempedoic acid</td><td>임신전 중단(일부 고위험군 예외)</td></tr>
+        <tr><td>GLP-1 기반제제</td><td>GLP-1 RA, GIP/GLP-1 RA</td><td>임신전 중단(세마글루타이드 2개월전)</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span>📈 표 — GDM 후 2형당뇨 평생위험</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body collapsed">
+      <table class="tc-table">
+        <tr><th>추적기간</th><th>누적위험</th></tr>
+        <tr><td>10년</td><td>~20%</td></tr>
+        <tr><td>20년</td><td>~30%</td></tr>
+        <tr><td>30년</td><td>~40%</td></tr>
+        <tr><td>40년</td><td>~50%</td></tr>
+        <tr><td>50년</td><td>~60%</td></tr>
+      </table>
+    </div>
+  </div>
+</div>
+</div><!-- /main -->
+
+<!-- ═══ MODAL: 임신전 A1C 목표 ═══ -->
+<div id="a1cPreModal" class="modal-overlay" onclick="closeModalOutside(event,'a1cPreModal')">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal('a1cPreModal')">✕</button>
+    <div class="modal-title">🎯 임신전 권장 A1C &lt;6.5%(&lt;48mmol/mol) — 근거</div>
+
+    <div class="alert alert-info" style="margin:0 0 12px"><span>💡</span><span>기관형성(organogenesis)은 주로 임신 5–8주에 발생하므로, 이 시기 이전에 혈당을 최적화하는 것이 선천기형 예방의 핵심이다.</span></div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">A1C와 선천기형 위험의 관계</div>
+      <ul class="dot">
+        <li>관찰연구: 임신 첫 10주 A1C 상승에 직접 비례하여 당뇨병성 배아병증 위험 증가</li>
+        <li>주요 기형: 무뇌증, 소두증, 선천성심장병, 신장이상, 미골퇴행</li>
+        <li>관찰연구는 임신전후 A1C상승과 다른 자가관리행동 간 연관성으로 교란될 수 있으나, 데이터의 양과 일관성이 충분히 설득력 있음</li>
+      </ul>
+    </div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">A1C&lt;6.5%와 연관된 가장 낮은 위험</div>
+      <table class="modal-table">
+        <tr><th>결과</th><th>비고</th></tr>
+        <tr><td>선천기형</td><td>기관형성기(5–8주) 이전 최적화가 핵심</td></tr>
+        <tr><td>자간전증</td><td>A1C상승에 비례하여 위험 증가</td></tr>
+        <tr><td>조산</td><td>혈당관리불량과 연관</td></tr>
+      </table>
+    </div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">임신전 혈당목표 (보조지표)</div>
+      <table class="modal-table">
+        <tr><th>지표</th><th>목표</th></tr>
+        <tr><td>식전혈당</td><td>80–110mg/dL (4.4–6.1mmol/L)</td></tr>
+        <tr><td>2시간 식후혈당</td><td>&lt;155mg/dL (&lt;8.6mmol/L)</td></tr>
+      </table>
+      <p style="font-size: calc(11px * var(--fscale, 1));color:var(--text2);margin-top:6px">식후혈당&lt;100mg/dL 시 식전인슐린용량 감량 고려.</p>
+    </div>
+
+    <div class="alert alert-warn" style="margin-top:4px"><span>⚠️</span><span>임신전 혈당목표는 임신에 승인된 치료법을 사용해 달성해야 한다. 임상시험으로 이 목표의 위험·이득이 평가되지는 않았으나, 다수의 일관된 관찰데이터가 이 권고를 지지한다.</span></div>
+  </div>
+</div>
+
+<!-- ═══ MODAL: 표15.1 임신전관리 체크리스트 ═══ -->
+<div id="checklistModal" class="modal-overlay" onclick="closeModalOutside(event,'checklistModal')">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal('checklistModal')">✕</button>
+    <div class="modal-title">📋 표 15.1 — 전당뇨·당뇨·GDM병력자 임신전관리 체크리스트</div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">① 임신전 교육</div>
+      <ul class="dot">
+        <li>종합영양평가 — 과체중/비만/저체중, 식사계획, 영양결핍교정, 카페인섭취, 안전한식품조리법</li>
+        <li>생활습관권고 — 규칙적중등도운동, 고열회피(온수욕), 충분한수면</li>
+        <li>종합당뇨자가관리교육</li>
+        <li>임신중당뇨상담 — 임신중·산후 인슐린저항성 자연경과, 임신전혈당목표, DKA/중증고혈당회피, 중증저혈당회피, 기존당뇨병자의 망막병증진행, PCOS(해당시), 당뇨병환자의 가임력, 당뇨병유전학, 임신위험(유산·사산·선천기형·거대아·조산·임신중고혈압질환)</li>
+        <li>보충제 — 엽산(일상400–800μg/일), 일반의약품/보충제의 적절한 사용</li>
+      </ul>
+    </div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">② 건강평가 및 계획</div>
+      <ul class="dot">
+        <li>전반적건강 종합평가</li>
+        <li>당뇨병평가 — 동반질환·합병증(DKA/중증고혈당, 중증저혈당/저혈당인지저하, 진료장벽, 이상지질혈증·고혈압·MASLD·PCOS·갑상선기능이상 등 동반질환, 대혈관질환·신증·신경병증(자율신경성장/방광기능장애 포함)·망막병증 등 합병증)</li>
+        <li>산과/부인과력 — 제왕절개, 선천기형/태아손실, 현재피임법, 임신중고혈압질환, 산후출혈, 조산, 과거거대아, Rh부적합, 혈전사건(DVT/PE)</li>
+        <li>현재 복용약물 검토 및 임신중 적절성</li>
+      </ul>
+    </div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">③ 선별검사</div>
+      <ul class="dot">
+        <li>당뇨합병증·동반질환 — 종합발검사, 종합안과검사, 35세이상이거나 심장증상/위험인자 있으면 ECG(비정상시 추가평가), 지질패널, 혈청크레아티닌, TSH, 요알부민-크레아티닌비</li>
+        <li>빈혈</li>
+        <li>유전자보유자상태(병력기반) — 낭성섬유증, 겸상적혈구빈혈, Tay-Sachs병, 지중해빈혈, 기타 필요시</li>
+        <li>감염성질환(ACOG가이드라인기준)</li>
+      </ul>
+    </div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">④ 임신전 계획</div>
+      <ul class="dot">
+        <li>예방접종(ACOG가이드라인기준)</li>
+        <li>임신전 혈당목표달성을 위한 영양·약물계획(혈당측정·CGM·펌프기술의 적절한 도입 포함)</li>
+        <li>혈당목표달성까지 임신예방을 위한 피임계획</li>
+        <li>전반적건강·부인과문제·동반질환/합병증(고혈압·신증·망막병증, Rh부적합, 갑상선기능이상 등) 관리계획</li>
+      </ul>
+    </div>
+
+    <p style="font-size: calc(10.5px * var(--fscale, 1));color:var(--text2);margin-top:8px">ACOG(美산부인과학회) 및 기타 자료 기반으로 작성됨</p>
+  </div>
+</div>
+
+<!-- ═══ MODAL: GLP-1 RA 중단 지침 ═══ -->
+<div id="glp1Modal" class="modal-overlay" onclick="closeModalOutside(event,'glp1Modal')">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal('glp1Modal')">✕</button>
+    <div class="modal-title">💊 GLP-1 RA·GIP/GLP-1 RA — 임신전 중단 지침</div>
+
+    <div class="alert alert-warn" style="margin:0 0 12px"><span>⚠️</span><span>GLP-1 수용체작용제 및 이중 GIP/GLP-1 수용체작용제는 임신을 계획 중이거나 가능성이 있는 경우 중단해야 하며, 복용 중에는 효과적 피임을 사용해야 한다.</span></div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">약물별 권장 중단 시점</div>
+      <table class="modal-table">
+        <tr><th>약물</th><th>권장 중단시점</th><th>근거</th></tr>
+        <tr><td>세마글루타이드(semaglutide)</td><td>계획임신 최소 2개월 전</td><td>긴 반감기 — 미국 제조사 처방정보 권고</td></tr>
+        <tr><td>티르제파타이드(tirzepatide)</td><td>계획임신 최소 1개월 전</td><td>캐나다 제조사 처방정보 권고(미국 처방정보에는 명시 없음)</td></tr>
+      </table>
+    </div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">중단 후 절차</div>
+      <ul class="dot">
+        <li>약물 중단 후, 필요시 임신에 승인된 인슐린요법을 시작·적정하여 임신전 혈당목표를 달성</li>
+        <li>약물제거와 새로운 치료법 적정 모두에 보통 <strong>수개월</strong>이 필요함을 상담</li>
+        <li>이 기간 동안 효과적 피임을 지속해야 함</li>
+      </ul>
+    </div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">추가 상담 사항</div>
+      <p>약물 중단 후 체중재증가(weight regain) 위험에 대해서도 환자에게 상담해야 한다. 이는 비만관리목적으로 해당 약물을 사용하던 환자에서 특히 중요한 고려사항이다.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ MODAL: 권장 진료팀 구성 ═══ -->
+<div id="teamModal" class="modal-overlay" onclick="closeModalOutside(event,'teamModal')">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal('teamModal')">✕</button>
+    <div class="modal-title">👥 임신 중 당뇨병 — 인터프로페셔널 진료팀 구성</div>
+
+    <div class="alert alert-info" style="margin:0 0 12px"><span>💡</span><span>인슐린관리의 복잡성으로 인해, 가능하다면 팀기반진료를 제공하는 전문센터로의 의뢰가 권장된다.</span></div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">권장 팀 구성원</div>
+      <table class="modal-table">
+        <tr><th>구성원</th><th>역할</th></tr>
+        <tr><td>모체태아의학전문의</td><td>고위험임신 산과관리</td></tr>
+        <tr><td>내분비내과의 또는 임신·기존당뇨관리경험 있는 의료진</td><td>혈당관리 전반</td></tr>
+        <tr><td>등록영양사(RDN)</td><td>의학영양치료, 체중증가목표 설정</td></tr>
+        <tr><td>당뇨관리교육전문가(CDCES)</td><td>자가관리교육·기술훈련</td></tr>
+        <tr><td>사회복지사(필요시)</td><td>심리사회적지지</td></tr>
+      </table>
+    </div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">단일 전문센터가 없는 경우</div>
+      <p>단일 전문센터를 이용할 수 없는 경우, 여러 센터에 분산된 인터프로페셔널 팀구성원을 통한 접근도 여전히 유익할 수 있다.</p>
+    </div>
+
+    <div class="alert alert-warn" style="margin-top:4px"><span>⚠️</span><span>임신전관리에서 가장 중요한 당뇨특이적 요소는 임신전 혈당목표 달성이다. 당뇨특이상담에는 모성·태아 위험에 대한 설명과 위험감소방법(혈당목표설정, 생활습관·행동관리, 의학영양치료)이 포함되어야 한다.</span></div>
+  </div>
+</div>
+
+<script>
+const FONT_ZOOM_LEVELS = [1, 1.25, 1.5];
+let fontZoomIndex = 0;
+
+function applyFontZoom(scale) {
+  document.documentElement.style.setProperty('--fscale', scale);
+  const label = document.getElementById('font-zoom-label');
+  if (label) label.textContent = Math.round(scale * 100) + '%';
+}
+
+function cycleFontZoom() {
+  fontZoomIndex = (fontZoomIndex + 1) % FONT_ZOOM_LEVELS.length;
+  applyFontZoom(FONT_ZOOM_LEVELS[fontZoomIndex]);
+}
+
+function showTab(id){
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('tab-'+id).classList.add('active');
+  event.target.classList.add('active');
+}
+function toggleCard(el){
+  el.classList.toggle('open');
+  el.nextElementSibling.classList.toggle('collapsed');
+}
+function toggleAcc(el){
+  const b=el.nextElementSibling;
+  b.style.display=b.style.display==='block'?'none':'block';
+  el.querySelector('span:last-child').textContent=b.style.display==='block'?'▴':'▾';
+}
+
+function openModal(id){document.getElementById(id).classList.add('open');}
+function closeModal(id){document.getElementById(id).classList.remove('open');}
+function closeModalOutside(e,id){if(e.target===document.getElementById(id))closeModal(id);}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')document.querySelectorAll('.modal-overlay.open').forEach(m=>m.classList.remove('open'));});
+
+const abbrs=[
+  ['GDM','Gestational Diabetes Mellitus (임신성 당뇨병) — 임신 중 진단된 당뇨, 산모 평생 2형당뇨 위험 50–60%와 연관.'],
+  ['HAPO','Hyperglycemia and Adverse Pregnancy Outcome study — 모성혈당과 불량한임신결과의 연속적 연관성을 입증한 대규모 연구.'],
+  ['CONCEPTT','Continuous Glucose Monitoring in Pregnant Women with Type 1 Diabetes Trial — 1형당뇨 임신 CGM 효과를 입증한 핵심 RCT.'],
+  ['TOBOGM','Treatment of Booking Gestational Diabetes Mellitus trial — 임신초기 경미한 고혈당 조기치료를 평가한 대규모 RCT.'],
+  ['AiDAPT','Automated insulin Delivery Among Pregnant women with Type 1 diabetes trial — 임신특화목표 AID시스템 효과를 입증한 RCT.'],
+  ['CHAP','Chronic Hypertension and Pregnancy Trial Consortium — 임신중 경미한만성고혈압 치료임계치(140/90mmHg)를 정립한 RCT.'],
+  ['MiG TOFU','Metformin in Gestational Diabetes: The Offspring Follow-Up study — 메트포르민 노출 자녀의 장기추적 연구.'],
+  ['MiTy Kids','Metformin in Women with Type 2 Diabetes in Pregnancy 연구의 자녀추적 연구.'],
+  ['ACOG','American College of Obstetricians and Gynecologists (美산부인과학회) — 임신전관리·GDM 진단 가이드라인 발행기구.'],
+  ['CGM','Continuous Glucose Monitoring (연속혈당측정) — 1형당뇨 임신에 강력히 권장, TIR/TAR 개선과 신생아예후 개선 연관.'],
+  ['TIR','Time in Range (목표범위시간) — 임신중 1형당뇨 목표범위 63–140mg/dL, 목표 &gt;70%.'],
+  ['TBR','Time Below Range (목표이하시간) — Level 1(&lt;63mg/dL) 목표&lt;4%, Level 2(&lt;54mg/dL) 목표&lt;1%.'],
+  ['TAR','Time Above Range (목표초과시간) — &gt;140mg/dL, 목표&lt;25%.'],
+  ['AID','Automated Insulin Delivery (자동인슐린전달시스템) — 임신특화목표 설정가능시스템을 1형당뇨 임신부에 권장.'],
+  ['SAP','Sensor-Augmented Pump (센서증강펌프) — AID 대조군으로 흔히 사용되는 인슐린펌프요법.'],
+  ['DKA','Diabetic Ketoacidosis (당뇨병성 케토산증) — 임신은 케톤생성상태로 더 낮은 혈당에서도 발생가능, 태아사망 고위험.'],
+  ['NPH','Neutral Protamine Hagedorn insulin — 중간작용 기저인슐린, 임신중 사용 가능.'],
+  ['MODY','Maturity-Onset Diabetes of the Young — GDM이 실제로는 MODY를 나타낼 수 있어 산후 감별 필요.'],
+  ['UACR','Urinary Albumin-to-Creatinine Ratio (요알부민-크레아티닌비) — 임신전 당뇨특이검사 항목.'],
+  ['OGTT','Oral Glucose Tolerance Test (경구당부하검사) — 산후4–12주 GDM 선별의 권장검사(A1C보다 우선).'],
+  ['MASLD','Metabolic Dysfunction-Associated Steatotic Liver Disease — 임신전관리에서 평가할 동반질환 중 하나.'],
+  ['PCOS','Polycystic Ovary Syndrome (다낭성난소증후군) — 메트포르민은 배란유도목적 사용시 1분기말 중단.'],
+  ['ARB','Angiotensin Receptor Blocker — 임신중 금기, 태아신장형성이상 등 위험.'],
+  ['GLP-1 RA','Glucagon-Like Peptide-1 Receptor Agonist — 임신전 중단 필요(세마글루타이드 2개월전).'],
+  ['GIP','Glucose-dependent Insulinotropic Polypeptide — 티르제파타이드 등 이중작용제의 표적, 임신전 중단 필요.'],
+  ['NICU','Neonatal Intensive Care Unit (신생아중환자실) — 임신전관리로 입원위험 감소.'],
+  ['DVT/PE','Deep Vein Thrombosis/Pulmonary Embolism (심부정맥혈전증/폐색전증) — 임신전관리 산과력 평가항목.'],
+  ['ECG','Electrocardiogram (심전도) — 35세이상 심장증상/위험인자 있는 임신전평가 대상자에게 시행.'],
+  ['ASCVD','Atherosclerotic Cardiovascular Disease (죽상경화성 심혈관질환) — 지질저하제 지속여부 결정의 고위험 기준.'],
+  ['RDN','Registered Dietitian Nutritionist (등록영양사) — 임신전·중 영양치료의 핵심 인터프로페셔널팀 구성원.'],
+  ['CDCES','Certified Diabetes Care and Education Specialist — 임신당뇨관리팀의 핵심 구성원.'],
+];
+
+function buildAbbr(){
+  const sorted=abbrs.slice().sort((a,b)=>a[0].localeCompare(b[0]));
+  document.getElementById('abbr-grid-drop').innerHTML=sorted.map(a=>
+    `<div style="background:var(--surface2);border:1px solid var(--border);border-radius:5px;padding:6px 10px;margin-bottom:4px;" data-term="${a[0].toLowerCase()}" data-def="${a[1].toLowerCase()}">
+       <span style="font-weight:700;color:var(--accent2);font-size: calc(12px * var(--fscale, 1));font-family:'Courier New',monospace">${a[0]}</span>
+       <div style="font-size: calc(11px * var(--fscale, 1));color:var(--text2);line-height:1.45;margin-top:2px">${a[1]}</div>
+     </div>`).join('');
+}
+function filterAbbr(val){
+  const v=val.toLowerCase().trim();
+  const drop=document.getElementById('abbr-dropdown');
+  const items=document.querySelectorAll('#abbr-grid-drop [data-term]');
+  if(!v){drop.style.display='none';return;}
+  const inp=document.getElementById('abbr-input');
+  const rect=inp.getBoundingClientRect();
+  const w=440;
+  let left=rect.right-w;if(left<8)left=8;
+  drop.style.top=(rect.bottom+4)+'px';drop.style.left=left+'px';
+  drop.style.display='block';
+  items.forEach(el=>{
+    const show=el.dataset.term.startsWith(v)||el.dataset.def.includes(v);
+    el.style.display=show?'':'none';
+  });
+}
+document.addEventListener('click',e=>{
+  const inp=document.getElementById('abbr-input');
+  const drop=document.getElementById('abbr-dropdown');
+  if(inp&&!inp.contains(e.target)&&drop&&!drop.contains(e.target))drop.style.display='none';
+});
+buildAbbr();
+</script>
+</body>
+</html>

@@ -1,0 +1,1029 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ADA 2026 당뇨병의 예방 또는 지연</title>
+<style>
+  :root {
+    --bg:#f6f8fa;--surface:#fff;--surface2:#f0f2f5;--border:#d0d7de;
+    --accent:#0969da;--accent2:#0550ae;--green:#1a7f37;--yellow:#9a6700;
+    --red:#cf222e;--orange:#bc4c00;--text:#1f2328;--text2:#57606a;
+    --teal:#0a7c8a;--purple:#5a3ea0;--fscale:1;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'Pretendard','Noto Sans KR',-apple-system,sans-serif;background:var(--bg);color:var(--text);font-size: calc(13px * var(--fscale, 1));line-height:1.5;}
+  header{background:var(--surface);border-bottom:1px solid var(--border);padding:12px 16px 8px;display:flex;flex-direction:column;align-items:center;gap:4px;position:sticky;top:0;z-index:100;}
+  .header-inner{width:100%;max-width:960px;display:flex;flex-direction:column;align-items:center;gap:4px;}
+  .logo-badge{background:var(--accent2);color:#fff;font-size: calc(10px * var(--fscale, 1));font-weight:700;padding:3px 8px;border-radius:4px;letter-spacing:.5px;}
+  .tab-bar{display:flex;justify-content:center;background:var(--surface);border-bottom:1px solid var(--border);overflow-x:auto;scrollbar-width:none;}
+  .tab-bar::-webkit-scrollbar{display:none;}
+  .font-zoom-btn{display:flex;align-items:center;gap:3px;flex-shrink:0;margin:4px 4px 4px 6px;padding:5px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:6px;color:var(--accent2);font-size:calc(11px * var(--fscale, 1));font-weight:700;cursor:pointer;user-select:none;white-space:nowrap;transition:background .15s;}
+  .font-zoom-btn:hover{background:var(--border);}
+  .font-zoom-btn .fz-icon{font-size:calc(12px * var(--fscale, 1));}
+  .tab-bar-inner{width:100%;max-width:960px;display:flex;align-items:center;gap:2px;padding:0 4px;}
+  .tab{padding:7px 11px;font-size: calc(11.5px * var(--fscale, 1));color:var(--text2);cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;transition:color .15s,border-color .15s;user-select:none;flex-shrink:0;}
+  .tab:hover{color:var(--text);}
+  .tab.active{color:var(--accent2);border-bottom-color:var(--accent2);}
+  .tab-abbr-wrap{display:flex;align-items:center;padding:4px 4px;margin-left:4px;flex-shrink:0;position:relative;}
+  .main{padding:12px 16px;max-width:960px;margin:0 auto;}
+  .panel{display:none;}
+  .panel.active{display:block;}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+  .grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;}
+  @media(max-width:680px){.grid2,.grid3{grid-template-columns:1fr;}}
+  .card{background:var(--surface);border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-bottom:10px;}
+  .card-header{background:var(--surface2);padding:8px 12px;font-size: calc(12px * var(--fscale, 1));font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.5px;border-bottom:1px solid var(--border);cursor:pointer;display:flex;align-items:center;justify-content:space-between;user-select:none;}
+  .card-header .toggle{font-size: calc(13px * var(--fscale, 1));transition:transform .2s;}
+  .card-header.open .toggle{transform:rotate(180deg);}
+  .card-body{padding:10px 12px;}
+  .card-body.collapsed{display:none;}
+  .stat-row{display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap;}
+  .stat-box{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:10px 14px;flex:1;min-width:90px;text-align:center;}
+  .stat-box.clickable{cursor:pointer;transition:box-shadow .15s,border-color .15s;}
+  .stat-box.clickable:hover{border-color:var(--accent2);box-shadow:0 2px 8px rgba(5,80,174,.15);}
+  .stat-val{font-size: calc(18px * var(--fscale, 1));font-weight:700;color:var(--accent2);}
+  .stat-lbl{font-size: calc(10px * var(--fscale, 1));color:var(--text2);margin-top:2px;}
+  .stat-hint{font-size: calc(9px * var(--fscale, 1));color:var(--accent2);margin-top:4px;opacity:.7;}
+  /* Modal */
+  .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:500;align-items:center;justify-content:center;}
+  .modal-overlay.open{display:flex;}
+  .modal-box{background:var(--surface);border-radius:12px;padding:20px;max-width:680px;width:92%;max-height:84vh;overflow-y:auto;box-shadow:0 16px 48px rgba(0,0,0,.22);position:relative;}
+  .modal-close{position:absolute;top:12px;right:14px;background:none;border:none;font-size: calc(18px * var(--fscale, 1));cursor:pointer;color:var(--text2);line-height:1;}
+  .modal-title{font-size: calc(15px * var(--fscale, 1));font-weight:700;color:var(--text);margin-bottom:12px;padding-right:20px;line-height:1.4;}
+  .modal-section{margin-bottom:12px;}
+  .modal-section-title{font-size: calc(11px * var(--fscale, 1));font-weight:700;color:var(--accent2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;border-bottom:1px solid var(--border);padding-bottom:4px;}
+  .modal-table{width:100%;border-collapse:collapse;font-size: calc(11.5px * var(--fscale, 1));}
+  .modal-table th{background:var(--surface2);color:var(--text2);padding:4px 8px;font-size: calc(10.5px * var(--fscale, 1));font-weight:600;text-align:left;border-bottom:1px solid var(--border);}
+  .modal-table td{padding:5px 8px;border-bottom:1px solid var(--border);vertical-align:top;}
+  .modal-table tr:last-child td{border-bottom:none;}
+  .rec-list{list-style:none;}
+  .rec-item{padding:7px 0;border-bottom:1px solid var(--border);display:flex;gap:8px;align-items:flex-start;}
+  .rec-item:last-child{border-bottom:none;}
+  .rec-text{font-size: calc(12px * var(--fscale, 1));color:var(--text);line-height:1.65;}
+  .rec-text strong{color:#1f2328;}
+  .badge{display:inline-flex;align-items:center;padding:2px 8px;border-radius:10px;font-size: calc(10px * var(--fscale, 1));font-weight:700;white-space:nowrap;flex-shrink:0;margin-top:1px;}
+  .badge-A{background:#dafbe1;color:#116329;border:1px solid #1a7f37;}
+  .badge-B{background:#ddf4ff;color:var(--accent2);border:1px solid var(--accent2);}
+  .badge-C{background:#fff8c5;color:#7a4b00;border:1px solid #d4a017;}
+  .badge-E{background:#f3e5f5;color:#5a3ea0;border:1px solid #5a3ea0;}
+  .alert{padding:8px 12px;border-radius:6px;font-size: calc(12px * var(--fscale, 1));margin:8px 0;display:flex;gap:8px;align-items:flex-start;}
+  .alert-info{background:#ddf4ff;border-left:3px solid var(--accent2);color:#0550ae;}
+  .alert-warn{background:#fff8c5;border-left:3px solid #d4a017;color:#7a4b00;}
+  .alert-danger{background:#ffebe9;border-left:3px solid var(--red);color:#82071e;}
+  .alert-success{background:#dafbe1;border-left:3px solid var(--green);color:#116329;}
+  .alert-teal{background:#e0f5f5;border-left:3px solid var(--teal);color:#075050;}
+  .alert-orange{background:#fff3e0;border-left:3px solid var(--orange);color:#7a3500;}
+  .alert-purple{background:#f3e5f5;border-left:3px solid var(--purple);color:#5a3ea0;}
+  .tc-table{width:100%;border-collapse:collapse;font-size: calc(11.5px * var(--fscale, 1));}
+  .tc-table th{background:var(--surface2);color:var(--text2);padding:5px 8px;font-size: calc(10.5px * var(--fscale, 1));text-transform:uppercase;letter-spacing:.3px;font-weight:600;text-align:left;border-bottom:1px solid var(--border);}
+  .tc-table td{padding:5px 8px;border-bottom:1px solid var(--border);vertical-align:top;}
+  .tc-table tr:last-child td{border-bottom:none;}
+  .tc-table tr:hover td{background:rgba(0,0,0,.02);}
+  .acc{border:1px solid var(--border);border-radius:6px;margin-bottom:6px;overflow:hidden;}
+  .acc-hdr{background:var(--surface2);padding:7px 12px;font-size: calc(12px * var(--fscale, 1));font-weight:600;color:var(--text);cursor:pointer;display:flex;justify-content:space-between;align-items:center;user-select:none;}
+  .acc-hdr:hover{background:#e8eaec;}
+  .acc-body{display:none;padding:10px 12px;font-size: calc(12px * var(--fscale, 1));line-height:1.65;}
+  .flow-box{border:1px solid var(--border);border-radius:6px;background:var(--surface);padding:8px 12px;margin-bottom:6px;font-size: calc(12px * var(--fscale, 1));line-height:1.6;}
+  .flow-arrow{text-align:center;color:var(--text2);font-size: calc(14px * var(--fscale, 1));margin:2px 0;}
+  .step-num{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;background:var(--accent2);color:#fff;font-size: calc(10px * var(--fscale, 1));font-weight:700;flex-shrink:0;margin-right:6px;}
+  ul.dot{padding-left:18px;}
+  ul.dot li{margin-bottom:3px;font-size: calc(12px * var(--fscale, 1));line-height:1.6;}
+  ol.num{padding-left:18px;}
+  ol.num li{margin-bottom:4px;font-size: calc(12px * var(--fscale, 1));line-height:1.6;}
+  ::-webkit-scrollbar{width:5px;height:5px;}
+  ::-webkit-scrollbar-track{background:var(--bg);}
+  ::-webkit-scrollbar-thumb{background:#c8d0d9;border-radius:3px;}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div style="display:flex;align-items:center;gap:10px">
+      <span class="logo-badge">ADA 2026</span>
+      <h1 style="font-size:17px;font-weight:700;color:var(--text)">당뇨병 및 동반질환의 예방 또는 지연</h1>
+    </div>
+    <div style="text-align:center;line-height:1.5">
+      <span style="color:var(--text2);font-size: calc(11px * var(--fscale, 1))">Standards of Care in Diabetes—2026, Section 3 — American Diabetes Association</span><br>
+      <span style="font-size: calc(10px * var(--fscale, 1));color:var(--text2)">Diabetes Care 2026;49(Suppl. 1):S50–S60 · doi: 10.2337/dc26-S003</span>
+    </div>
+    <div style="font-size: calc(10px * var(--fscale, 1));color:var(--text2);font-style:italic;">This tool is not officially endorsed by the American Diabetes Association (ADA).</div>
+  </div>
+</header>
+
+<div class="tab-bar">
+  <div class="tab-bar-inner">
+    <div id="font-zoom-btn" class="font-zoom-btn" onclick="cycleFontZoom()"><span class="fz-icon">🔠</span><span id="font-zoom-label">100%</span></div>
+    <div class="tab active" onclick="showTab('overview')">🏠 개요</div>
+    <div class="tab" onclick="showTab('monitoring')">🔬 모니터링</div>
+    <div class="tab" onclick="showTab('lifestyle')">🥗 생활습관·DPP</div>
+    <div class="tab" onclick="showTab('pharm')">💊 약물치료</div>
+    <div class="tab" onclick="showTab('cv')">🫀 심혈관·사망률</div>
+    <div class="tab" onclick="showTab('goals')">🎯 개인맞춤 목표</div>
+    <div class="tab" onclick="showTab('t1d')">🧬 1형당뇨 예방</div>
+    <div class="tab" onclick="showTab('tables')">📁 표·요약 모음</div>
+    <div class="tab-abbr-wrap">
+      <div style="position:relative;display:flex;align-items:center;flex-shrink:0">
+        <span style="position:absolute;left:8px;color:var(--text2);font-size: calc(12px * var(--fscale, 1));pointer-events:none">🔍</span>
+        <input id="abbr-input" type="text" placeholder="약어" oninput="filterAbbr(this.value)"
+          style="background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:4px 8px 4px 26px;color:var(--text);font-size: calc(12px * var(--fscale, 1));width:90px;outline:none;"
+          onfocus="this.style.borderColor='var(--accent2)'" onblur="this.style.borderColor='var(--border)'">
+      </div>
+      <div id="abbr-dropdown" style="display:none;position:fixed;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:8px;width:440px;max-height:360px;overflow-y:auto;z-index:300;box-shadow:0 8px 24px rgba(0,0,0,.12)">
+        <div id="abbr-grid-drop"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="main">
+
+<!-- ═══ OVERVIEW ═══ -->
+<div id="tab-overview" class="panel active">
+  <div class="stat-row">
+    <div class="stat-box clickable" onclick="openModal('dppModal')"><div class="stat-val">−58%</div><div class="stat-lbl">DPP 생활습관중재 3년 위험감소</div><div class="stat-hint">▸ 클릭하여 상세 보기</div></div>
+    <div class="stat-box clickable" onclick="openModal('metforminModal')"><div class="stat-val">메트포르민</div><div class="stat-lbl">근거 가장 강력한 약물중재</div><div class="stat-hint">▸ 클릭하여 상세 보기</div></div>
+    <div class="stat-box clickable" onclick="openModal('teplizumabModal')"><div class="stat-val">테플리주맙</div><div class="stat-lbl">1형당뇨 Stage 2→3 지연</div><div class="stat-hint">▸ 클릭하여 상세 보기</div></div>
+    <div class="stat-box clickable" onclick="openModal('highRiskModal')"><div class="stat-val">BMI≥35</div><div class="stat-lbl">고위험군 정의·집중관리 기준</div><div class="stat-hint">▸ 클릭하여 상세 보기</div></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>📋 2형당뇨 예방 — 단계적 접근 흐름</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <div class="flow-box" style="border-left:3px solid var(--accent2)">
+        <strong>① 위험평가</strong><br>
+        <span style="color:var(--text2);font-size: calc(11px * var(--fscale, 1))">위험인자 평가(Table 2.5) 또는 ADA 위험검사(diabetes.org/diabetes-risk-test)로 선별 대상 결정</span>
+      </div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-box" style="border-left:3px solid var(--green)">
+        <strong>② 전당뇨 진단 확인</strong><br>
+        <span style="font-size: calc(11.5px * var(--fscale, 1))">A1C 5.7–6.4%, IFG, 또는 IGT(75g OGTT) — 적어도 연 1회 당뇨 진행 모니터링(E)</span>
+      </div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-box" style="border-left:3px solid var(--yellow)">
+        <strong>③ 생활습관중재 — 1차 전략</strong><br>
+        <span style="font-size: calc(11.5px * var(--fscale, 1))">체중 5–7%↓ 목표, 주 150분 이상 중강도 운동, 근거기반 식이패턴 처방(A/B)</span>
+      </div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-box" style="border-left:3px solid var(--orange)">
+        <strong>④ 고위험군 — 약물치료 고려</strong><br>
+        <span style="font-size: calc(11.5px * var(--fscale, 1))">25–59세, BMI≥35, FPG≥110mg/dL, A1C≥6.0%, GDM 과거력 → 메트포르민 고려(A)</span>
+      </div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-box" style="border-left:3px solid var(--teal)">
+        <strong>⑤ 심혈관 위험 동시 관리</strong><br>
+        <span style="font-size: calc(11.5px * var(--fscale, 1))">전당뇨는 심혈관위험 증가와 연관 — 흡연·혈압·지질 평가 및 치료 병행(B)</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <div class="card-header open" onclick="toggleCard(this)">
+        <span>📌 핵심 권고문 요약</span><span class="toggle">▾</span>
+      </div>
+      <div class="card-body">
+        <ul class="rec-list">
+          <li class="rec-item"><span class="badge badge-E">E</span><span class="rec-text"><strong>3.1</strong> 전당뇨에서 최소 연 1회 당뇨 발생 모니터링, 개인 위험도에 따라 빈도 조정</span></li>
+          <li class="rec-item"><span class="badge badge-E">E</span><span class="rec-text"><strong>3.2</strong> 무증상 1형당뇨에서 A1C 6개월·OGTT 연 1회 모니터링, 위험도 따라 조정</span></li>
+          <li class="rec-item"><span class="badge badge-A">A</span><span class="rec-text"><strong>3.3</strong> 과체중·비만 고위험 성인을 당뇨예방프로그램에 의뢰 — 체중 5–7%↓, 주 150분 운동</span></li>
+          <li class="rec-item"><span class="badge badge-B">B</span><span class="rec-text"><strong>3.4</strong> 전당뇨에 근거기반 식이패턴(지중해식, 저탄수화물 등) 처방</span></li>
+          <li class="rec-item"><span class="badge badge-A">A</span><span class="rec-text"><strong>3.5</strong> 고위험 성인에게 당뇨예방프로그램 제공, 보험적용·접근성 격차 해결(E)</span></li>
+          <li class="rec-item"><span class="badge badge-B">B</span><span class="rec-text"><strong>3.6</strong> 스마트폰·웹·원격의료 기반 인증 기술지원 DPP 고려 가능</span></li>
+          <li class="rec-item"><span class="badge badge-A">A</span><span class="rec-text"><strong>3.7</strong> 고위험 성인(25–59세, BMI≥35, FPG≥110, A1C≥6.0%, GDM 과거력)에 메트포르민 고려</span></li>
+          <li class="rec-item"><span class="badge badge-B">B</span><span class="rec-text"><strong>3.8/3.9</strong> PI3Kα억제제·고용량 글루코코르티코이드 치료 시 메트포르민으로 고혈당 예방 고려</span></li>
+          <li class="rec-item"><span class="badge badge-B">B</span><span class="rec-text"><strong>3.10</strong> 메트포르민 장기복용 시 비타민 B12 주기적 평가(빈혈·말초신경병증 동반 시 특히)</span></li>
+          <li class="rec-item"><span class="badge badge-B">B</span><span class="rec-text"><strong>3.11</strong> 전당뇨의 심혈관 위험인자 선별·치료 권고</span></li>
+          <li class="rec-item"><span class="badge badge-B">B</span><span class="rec-text"><strong>3.12</strong> 스타틴이 당뇨위험 높일 수 있으나 중단/회피 권고하지 않음</span></li>
+          <li class="rec-item"><span class="badge badge-A">A</span><span class="rec-text"><strong>3.13</strong> 뇌졸중 과거력+인슐린저항성+전당뇨 시 피오글리타존 고려(C: 저용량)</span></li>
+          <li class="rec-item"><span class="badge badge-B">B</span><span class="rec-text"><strong>3.14</strong> 과체중·비만 고위험군 치료목표 — 체중관리·고혈당 진행 최소화·심혈관위험 주목</span></li>
+          <li class="rec-item"><span class="badge badge-A">A</span><span class="rec-text"><strong>3.15/3.16</strong> 약물치료(체중관리·심혈관위험감소) 고려, 고위험군에 더 집중적 예방 접근</span></li>
+          <li class="rec-item"><span class="badge badge-B">B</span><span class="rec-text"><strong>3.17</strong> 8세 이상 Stage 2 1형당뇨 선별군에서 테플리주맙 논의 — 숙련 인력 환경에서 시행</span></li>
+        </ul>
+      </div>
+    </div>
+
+    <div>
+      <div class="card">
+        <div class="card-header open" onclick="toggleCard(this)">
+          <span>⚠️ 권고 등급 체계 (Evidence Grading)</span><span class="toggle">▾</span>
+        </div>
+        <div class="card-body">
+          <table class="tc-table">
+            <tr><th>등급</th><th>의미</th></tr>
+            <tr><td><span class="badge badge-A">A</span></td><td>명확한 근거 — 잘 수행된 다기관 RCT 또는 메타분석</td></tr>
+            <tr><td><span class="badge badge-B">B</span></td><td>뒷받침되는 근거 — 잘 수행된 코호트 연구 등</td></tr>
+            <tr><td><span class="badge badge-C">C</span></td><td>뒷받침되는 근거 부족 — 대조군 없는 연구, 사례 보고</td></tr>
+            <tr><td><span class="badge badge-E">E</span></td><td>전문가 합의 또는 임상 경험 (Expert consensus)</td></tr>
+          </table>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header open" onclick="toggleCard(this)">
+          <span>🔑 핵심 개념</span><span class="toggle">▾</span>
+        </div>
+        <div class="card-body">
+          <div class="alert alert-info"><span>ℹ️</span><span>현재 2형당뇨 예방만을 목적으로 미국 FDA에 승인된 약물은 <strong>없다</strong> — 메트포르민이 가장 근거 강력한 옵션</span></div>
+          <div class="alert alert-warn"><span>⚠️</span><span>전당뇨 진행 효과는 <strong>체중감소가 핵심 매개</strong> — DPP에서 체중 1kg 감소당 진행위험 16%↓ (3.2년 추적)</span></div>
+          <div class="alert alert-danger"><span>🚫</span><span>발살탄·테스토스테론은 2형당뇨 예방 목적으로 <strong>권고하지 않음</strong> — 근거 불충분 또는 효과 부재</span></div>
+          <div class="alert alert-teal"><span>💡</span><span>DPP 21년 추적에서 효과의 대부분은 <strong>초기 중재기간</strong>에서 나타남 — 조기 개입의 중요성 강조</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ MONITORING ═══ -->
+<div id="tab-monitoring" class="panel">
+  <div class="alert alert-orange"><span>🔬</span><span>전당뇨 및 무증상(presymptomatic) 1형당뇨 모두 정기적 모니터링이 필요하며, 위험도에 따라 빈도와 방법을 개별화한다.</span></div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>📊 모니터링 프로토콜 비교</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <table class="tc-table">
+        <tr><th>대상</th><th>검사</th><th>빈도</th><th>등급</th></tr>
+        <tr><td>전당뇨</td><td>당뇨 발생 여부(A1C/FPG/2hPG)</td><td>최소 연 1회, 개인위험도 따라 조정</td><td>E (3.1)</td></tr>
+        <tr><td>무증상 1형당뇨</td><td>A1C</td><td>약 6개월마다</td><td>E (3.2)</td></tr>
+        <tr><td>무증상 1형당뇨</td><td>75g OGTT(공복+2시간)</td><td>연 1회</td><td>E (3.2)</td></tr>
+        <tr><td>무증상 1형당뇨(보조)</td><td>CGM 등 추가 혈당평가도구</td><td>연령·항체수·종류·혈당지표 따라 개별화</td><td>E (3.2)</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="acc">
+    <div class="acc-hdr" onclick="toggleAcc(this)">
+      <span>1형당뇨 진행 예측인자 — OGTT vs CGM</span><span>▾</span>
+    </div>
+    <div class="acc-body">
+      <ul class="dot">
+        <li>Stage 3 진행 가속 인자: 어린 연령에서 항체전환(특히 3세 미만), 자가항체 총 개수, <strong>IA-2 항체</strong> 발현</li>
+        <li>CGM은 자가항체 양성 소아·청소년의 Stage 3 진행을 예측할 수 있음</li>
+        <li>그러나 <strong>OGTT 기반 지표가 CGM보다 더 우수한 예측력</strong>을 보임(다중 자가항체 양성군 비교 연구)</li>
+        <li>OGTT 시행 결정은 단계별 치료 적격성·임상연구 참여 관심·검사 가용성·검사 부담 등을 고려</li>
+        <li>1형당뇨 인구집단 선별검사의 비용효과성은 아직 확립되지 않았으나, 미국 외 지역에서는 이미 시행 중</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ LIFESTYLE / DPP ═══ -->
+<div id="tab-lifestyle" class="panel">
+  <div class="alert alert-orange"><span>🥗</span><span>DPP·핀란드 DPS·다칭(Da Qing) 연구 모두 생활습관중재가 2형당뇨 예방에 매우 효과적임을 입증했으며, 효과는 수십 년간 지속된다.</span></div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>📊 3대 생활습관중재 RCT — 장기 추적 결과</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <table class="tc-table">
+        <tr><th>연구</th><th>추적기간</th><th>당뇨 진행위험 감소</th></tr>
+        <tr><td>DPP(미국)</td><td>3년</td><td>58%</td></tr>
+        <tr><td>DPPOS</td><td>10년</td><td>34%</td></tr>
+        <tr><td>DPPOS</td><td>15년</td><td>27%</td></tr>
+        <tr><td>DPPOS</td><td>21년</td><td>24%</td></tr>
+        <tr><td>핀란드 DPS</td><td>7년</td><td>43%</td></tr>
+        <tr><td>다칭(Da Qing) 연구</td><td>30년</td><td>39%</td></tr>
+      </table>
+      <div class="alert alert-success" style="margin-top:8px"><span>✅</span><span>21년 추적 시 생활습관군·메트포르민군 모두 위약군 대비 당뇨없는 생존기간 증가 — 생활습관 <strong>+3.5년</strong>, 메트포르민 <strong>+2.5년</strong></span></div>
+    </div>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <div class="card-header open" onclick="toggleCard(this)">
+        <span>🎯 DPP 핵심 목표</span><span class="toggle">▾</span>
+      </div>
+      <div class="card-body">
+        <ul class="dot">
+          <li>최소 <strong>체중 7% 감량</strong> 달성·유지 (7–10%↓에서 더 큰 효과)</li>
+          <li>주 <strong>150분</strong> 중강도 운동(빠르게 걷기 등)</li>
+          <li>권장 체중감량 속도: 주 1–2 lb</li>
+          <li>주당 700 kcal 에너지 결핍 설계</li>
+          <li>운동만으로(체중목표 미달성) 당뇨발생 44%↓</li>
+          <li>저항운동 최대 75분까지 150분 목표에 포함 가능</li>
+        </ul>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header open" onclick="toggleCard(this)">
+        <span>📚 DPP 핵심 커리큘럼 구성</span><span class="toggle">▾</span>
+      </div>
+      <div class="card-body">
+        <ul class="dot">
+          <li><strong>1단계(첫 6개월)</strong>: 16회 구조화 핵심 커리큘럼</li>
+          <li>칼로리 감소, 운동량 증가, 자가 모니터링</li>
+          <li>외식 시 건강한 선택 등 생활습관 유지법</li>
+          <li>심리·사회·동기 관련 도전 관리 교육</li>
+          <li><strong>2단계(다음 6개월)</strong>: 유연한 유지 프로그램</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="acc">
+    <div class="acc-hdr" onclick="toggleAcc(this)">
+      <span>영양 — 식이패턴과 식품 질</span><span>▾</span>
+    </div>
+    <div class="acc-body">
+      <ul class="dot">
+        <li>탄수화물·단백질·지방의 <strong>이상적 비율은 없음</strong> — 개인 식습관·선호·대사목표에 따라 개별화</li>
+        <li>적용 가능한 패턴: 지중해식, 식물성(완전·비완전), DASH, 저탄수화물 등</li>
+        <li>전곡류·콩류·견과류·과일·채소 중심, 가공식품 최소화 식품 질이 2형당뇨 위험 감소와 연관</li>
+        <li>개별화된 의학적영양치료(MNT)는 A1C 감소에 효과적</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="acc">
+    <div class="acc-hdr" onclick="toggleAcc(this)">
+      <span>신체활동 — 효과와 권장사항</span><span>▾</span>
+    </div>
+    <div class="acc-body">
+      <ul class="dot">
+        <li>중강도 운동(빠르게 걷기 등) 주 150분 — 인슐린감수성 개선, 복부지방 감소(소아·청소년·청년 포함)</li>
+        <li>유산소 운동 외 <strong>저항운동</strong>도 예방계획에 포함 가능</li>
+        <li>장시간 좌식 행동 중단(break up sedentary time) — 식후 혈당 감소</li>
+        <li>규칙적 신체활동은 임신성 당뇨(GDM) 예방 효과로도 확장됨</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span>📡 National DPP — 전달·확산 체계</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body collapsed">
+      <table class="tc-table">
+        <tr><th>항목</th><th>내용</th></tr>
+        <tr><td>운영기관</td><td>CDC National Diabetes Prevention Program (cdc.gov/diabetes-prevention)</td></tr>
+        <tr><td>일반 참여조건</td><td>과체중 BMI + 검사기반 위험 또는 GDM 과거력 또는 위험검사 양성</td></tr>
+        <tr><td>Medicare 적용조건</td><td>BMI&gt;25(아시안 자가식별 시 &gt;23) + 최근 1년 내 전당뇨 검사결과</td></tr>
+        <tr><td>인증 프로그램(DPRP)</td><td>승인된 커리큘럼+코치 상호작용+참여·운동·체중감량 결과 달성 요건</td></tr>
+        <tr><td>전달 경로</td><td>그룹(지역사회·1차의료), 직장 프로그램, 기술기반(스마트폰·웹·원격의료)</td></tr>
+        <tr><td>제한점</td><td>청년층·소외 인종민족 집단에서 <strong>유지율(retention) 낮음</strong> — 다른 양식도 고려 필요</td></tr>
+      </table>
+      <div class="alert alert-info" style="margin-top:8px"><span>💡</span><span>커뮤니티 건강관리자(CHW) 활용은 SDOH 장벽 해소에 비용효과적이나, 제3자 보험 적용은 아직 제한적이다.</span></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span>😴 수면 특성과 2형당뇨 위험</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body collapsed">
+      <table class="tc-table">
+        <tr><th>수면 특성</th><th>당뇨 위험과의 연관성</th></tr>
+        <tr><td>수면시간(양)</td><td>U자형 연관 — 최저위험 7시간/일, &lt;6시간 또는 &gt;9시간 시 위험 최대 50%↑</td></tr>
+        <tr><td>수면질(quality)</td><td>불량한 전반적 수면질 — 당뇨 위험 40%↑(메타분석)</td></tr>
+        <tr><td>일주기유형(chronotype)</td><td>저녁형(늦게자고 늦게 일어남) — 아침형 대비 당뇨 오즈비 2.5배↑ (수면시간·충분성과 독립적)</td></tr>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ PHARM ═══ -->
+<div id="tab-pharm" class="panel">
+  <div class="alert alert-orange"><span>💊</span><span>메트포르민이 가장 근거가 강력하지만, 2형당뇨 예방만을 위한 FDA 승인 약물은 현재 없다. 비만치료제는 예방 부수효과로 유효하다.</span></div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>📊 당뇨예방 평가 약물 — 효과 요약</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <table class="tc-table">
+        <tr><th>약물군</th><th>예시</th><th>비고</th></tr>
+        <tr><td>비구아니드</td><td>메트포르민</td><td>가장 강력한 근거, DPP/DPPOS 핵심 약물</td></tr>
+        <tr><td>α-글루코시다아제 억제제</td><td>아카보스(STOP-NIDDM)</td><td>당뇨발생률 감소 입증</td></tr>
+        <tr><td>인크레틴 수용체 작용제</td><td>리라글루타이드, 세마글루타이드, 티르제파타이드</td><td>비만치료 부수효과로 당뇨예방, 별도 섹션 8 참조</td></tr>
+        <tr><td>티아졸리딘디온</td><td>피오글리타존, 로시글리타존</td><td>당뇨발생률 감소(ACT NOW, DREAM)</td></tr>
+        <tr><td>인슐린</td><td>기저인슐린(ORIGIN)</td><td>이상혈당에서 일부 효과</td></tr>
+      </table>
+      <div class="alert alert-danger" style="margin-top:8px"><span>🚫</span><span>장기간 정상혈당 유지를 위한 조기 약물치료가 <strong>건강결과를 개선하는지는 불명확</strong> — 효과·부작용·치료부담·비용을 개별적으로 따져야 함</span></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>💊 메트포르민 — 적용 시나리오</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <table class="tc-table">
+        <tr><th>시나리오</th><th>권고</th><th>등급</th></tr>
+        <tr><td>고위험 2형당뇨 예방(25–59세, BMI≥35, FPG≥110, A1C≥6.0%, GDM 과거력)</td><td>고려</td><td>A (3.7)</td></tr>
+        <tr><td>PI3Kα억제제(알펠리시브·이나볼리시브) 치료 시 고혈당 예방</td><td>고려</td><td>B (3.8)</td></tr>
+        <tr><td>고용량 글루코코르티코이드 치료 시 고혈당 예방</td><td>고려</td><td>B (3.9)</td></tr>
+        <tr><td>장기복용 시 비타민B12 결핍 모니터링(빈혈·말초신경병증 동반)</td><td>주기적 평가 고려</td><td>B (3.10)</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <div class="card-header open" onclick="toggleCard(this)">
+        <span>🧬 메트포르민 — DPP/DPPOS 효과 특이점</span><span class="toggle">▾</span>
+      </div>
+      <div class="card-body">
+        <ul class="dot">
+          <li>전체적으로 생활습관중재보다 <strong>효과 낮음</strong>, 단 시간이 지나며 그룹간 차이 줄어듦(DPPOS)</li>
+          <li>BMI≥35, 25–44세 젊은 연령층에서는 생활습관과 <strong>동등한 효과</strong></li>
+          <li>GDM 과거력자 — 메트포르민·집중생활습관 모두 당뇨위험 동일하게 50%↓</li>
+          <li>15년 추적 시 고위험 하위군(높은 FPG·A1C·GDM과거력)에서 더 큰 위험감소 확인</li>
+          <li>생활습관: $12,878/QALY(매우 비용효과적), 메트포르민: 위약 대비 비용절감</li>
+        </ul>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header open" onclick="toggleCard(this)">
+        <span>⚠️ PI3Kα억제제 고혈당 — 고위험 인자</span><span class="toggle">▾</span>
+      </div>
+      <div class="card-body">
+        <ul class="dot">
+          <li>고령(≥70세)</li>
+          <li>비만(BMI≥30)</li>
+          <li>글루코코르티코이드 동시투여</li>
+          <li>기저 고혈당(A1C≥5.7% 또는 FPG≥100mg/dL)</li>
+        </ul>
+        <div class="alert alert-warn" style="margin-top:8px"><span>⚠️</span><span>고혈당은 PI3Kα억제제 치료중단으로 이어지는 <strong>가장 흔한 부작용</strong> — 메트포르민이 grade 3–4 고혈당을 효과적으로 예방</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="acc">
+    <div class="acc-hdr" onclick="toggleAcc(this)">
+      <span>비타민 B12 모니터링 — 세부 기준</span><span>▾</span>
+    </div>
+    <div class="acc-body">
+      <ul class="dot">
+        <li>고용량(≥1,500mg/일) 복용자에서 결핍위험 더 높음</li>
+        <li>치료기간 4–5년 이상 시 위험 증가</li>
+        <li>4년 이상 복용 또는 기타 위험인자(비건 식이, 위/소장 수술 과거력) 보유자 — <strong>연 1회 모니터링</strong></li>
+        <li>의심 시점: 빈혈, 말초신경병증, 만성신질환 동반 시</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="acc">
+    <div class="acc-hdr" onclick="toggleAcc(this)">
+      <span>효과 없거나 권고하지 않는 약물</span><span>▾</span>
+    </div>
+    <div class="acc-body">
+      <table class="tc-table">
+        <tr><th>약물</th><th>연구</th><th>결론</th></tr>
+        <tr><td>발살탄</td><td>NAVIGATOR</td><td>당뇨발생률 경미한 감소, 심혈관결과 차이 없음 — <strong>권고하지 않음</strong></td></tr>
+        <tr><td>테스토스테론(T4DM)</td><td>중심성비만+전당뇨 남성(50–74세)</td><td>구조화된 생활습관과 병용 시에만 41%↓ 효과</td></tr>
+        <tr><td>테스토스테론(TRAVERSE)</td><td>저성선기능증 남성(45–80세)</td><td>전당뇨→당뇨 진행/당뇨 관해에 <strong>효과 없음</strong> — 예방목적 권고하지 않음</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span>☀️ 비타민D — 신중한 접근 필요</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body collapsed">
+      <table class="tc-table">
+        <tr><th>연구</th><th>국가</th><th>참여자수</th><th>결과</th></tr>
+        <tr><td>Tromsø</td><td>노르웨이</td><td>511</td><td>위험 경미 감소, 통계적 유의성 없음</td></tr>
+        <tr><td>D2d</td><td>미국</td><td>2,423</td><td>위험 경미 감소, 통계적 유의성 없음</td></tr>
+        <tr><td>DPVD</td><td>일본</td><td>1,256</td><td>위험 경미 감소, 통계적 유의성 없음</td></tr>
+      </table>
+      <div class="alert alert-warn" style="margin-top:8px"><span>⚠️</span><span>메타분석에서는 10–15% 위험감소 가능성 제시(고령자·기저 비타민D 낮은 경우·비비만군) — 그러나 사용된 용량이 권장량(600–800 IU/일)보다 높았고, 광범위 적용 시 고칼슘혈증·신석증 등 <strong>이상반응 위험 증가 우려</strong></span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ CV / MORTALITY ═══ -->
+<div id="tab-cv" class="panel">
+  <div class="alert alert-orange"><span>🫀</span><span>전당뇨는 심혈관질환·사망률 증가와 독립적으로 연관되어 있으며, 스타틴의 당뇨위험 증가 효과보다 심혈관 이득이 훨씬 크다.</span></div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>📊 스타틴과 당뇨위험 — 균형잡힌 접근</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <table class="tc-table">
+        <tr><th>항목</th><th>내용</th></tr>
+        <tr><td>DPP 코호트 내 위험비</td><td>HR 1.36 (95% CI 1.17–1.58) — 치료군 무관</td></tr>
+        <tr><td>심혈관 이득 vs 당뇨위험</td><td>심혈관·사망률 이득이 당뇨위험을 상회 — 유리한 위험-이득 균형</td></tr>
+        <tr><td>권고</td><td>당뇨위험 우려로 <strong>스타틴 중단·회피 권고하지 않음</strong>(3.12, B)</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>🧪 IRIS 시험 — 피오글리타존(뇌졸중/TIA + 인슐린저항성)</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <table class="tc-table">
+        <tr><th>항목</th><th>결과</th></tr>
+        <tr><td>대상</td><td>최근(&lt;6개월) 뇌졸중/TIA, 비당뇨, HOMA-IR≥3.0</td></tr>
+        <tr><td>중재</td><td>피오글리타존(목표 45mg/일) vs 위약</td></tr>
+        <tr><td>추적기간</td><td>4.8년</td></tr>
+        <tr><td>뇌졸중·심근경색 위험</td><td>피오글리타존군에서 더 낮음</td></tr>
+        <tr><td>당뇨발생 위험</td><td>피오글리타존군에서 더 낮음</td></tr>
+        <tr><td>부작용</td><td>체중증가, 부종, 골절 — 피오글리타존군에서 더 높음</td></tr>
+      </table>
+      <div class="alert alert-warn" style="margin-top:8px"><span>⚠️</span><span>저용량 사용 시 부작용 완화 가능하나 효과도 감소할 수 있음(3.13, A/저용량 시 C)</span></div>
+    </div>
+  </div>
+
+  <div class="acc">
+    <div class="acc-hdr" onclick="toggleAcc(this)">
+      <span>흡연·금연과 당뇨위험</span><span>▾</span>
+    </div>
+    <div class="acc-body">
+      <ul class="dot">
+        <li>당뇨 위험군 일상관리에 흡연평가·금연 의뢰 포함</li>
+        <li><strong>금연 직후 기간은 당뇨위험이 오히려 증가</strong>할 수 있는 시기 — 이 기간 당뇨발생 모니터링 및 생활습관중재 강화 필요</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="acc">
+    <div class="acc-hdr" onclick="toggleAcc(this)">
+      <span>다칭(Da Qing) 연구 — 장기 심혈관 효과</span><span>▾</span>
+    </div>
+    <div class="acc-body">
+      <ul class="dot">
+        <li>23년·30년 관찰추적에서 생활습관중재가 심혈관질환·사망률 감소와 연관</li>
+        <li>IGT에서 정상혈당으로 회복 또는 IGT 유지(당뇨 미진행)군 — 30년 후 심혈관·미세혈관질환 위험 유의하게 낮음</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ PERSON-CENTERED GOALS ═══ -->
+<div id="tab-goals" class="panel">
+  <div class="alert alert-orange"><span>🎯</span><span>전당뇨 진행 위험은 연령·BMI·혈당수치에 따라 크게 다르므로, 위험-이득 비율을 개별화하고 고위험군에 더 집중적인 접근이 필요하다.</span></div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>📊 고위험군 정의 — 집중 예방접근 대상(3.16)</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <table class="tc-table">
+        <tr><th>지표</th><th>고위험 기준</th></tr>
+        <tr><td>BMI</td><td>≥35 kg/m²</td></tr>
+        <tr><td>공복혈당(FPG)</td><td>110–125 mg/dL (6.1–6.9 mmol/L)</td></tr>
+        <tr><td>2시간 부하후 혈당</td><td>173–199 mg/dL (9.6–11.0 mmol/L)</td></tr>
+        <tr><td>A1C</td><td>≥6.0% (≥42 mmol/mol)</td></tr>
+        <tr><td>병력</td><td>임신성당뇨(GDM) 과거력</td></tr>
+      </table>
+      <p style="font-size: calc(12px * var(--fscale, 1));margin-top:6px;color:var(--text2)">DPP/DPPOS에서 이 기준에 해당하는 군은 당뇨 진행 발생률 100인년당 14–22건으로 특히 높았다.</p>
+    </div>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <div class="card-header open" onclick="toggleCard(this)">
+        <span>📊 DPP 위약군 vs ARIC 연구 — 연령에 따른 진행률 차이</span><span class="toggle">▾</span>
+      </div>
+      <div class="card-body">
+        <table class="tc-table">
+          <tr><th>연구</th><th>대상</th><th>진행률</th></tr>
+          <tr><td>DPP 위약군</td><td>IGT+높은FPG+높은BMI 성인</td><td>100인년당 11건, 3년 누적 29%</td></tr>
+          <tr><td>ARIC 연구</td><td>평균 75세, A1C/FPG 기준 전당뇨(BMI기준 미적용)</td><td>6년 추적 8–9%</td></tr>
+        </table>
+        <div class="alert alert-info" style="margin-top:8px"><span>💡</span><span>70세 이후 신규 전당뇨 진단은 당뇨로의 진행보다 정상혈당 회복 또는 사망이 더 흔함(ARIC 연구) — 고령층에서 치료 이득이 확립되지 않음</span></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header open" onclick="toggleCard(this)">
+        <span>✅ 혈당 정상화의 장기적 가치</span><span class="toggle">▾</span>
+      </div>
+      <div class="card-body">
+        <ul class="dot">
+          <li>DPP중 단 한 번이라도 정상혈당 도달 — 치료군 무관하게 당뇨위험·미세혈관합병증 위험 ↓</li>
+          <li>다칭 연구: IGT→정상 회복 또는 IGT 유지(미진행)군은 30년 후 심혈관·미세혈관 위험 유의하게 ↓</li>
+          <li>진행여부·당뇨이병기간·평균혈당수준이 미세혈관합병증 발생의 핵심 결정인자(DPP/DPPOS)</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span>🎯 개인맞춤 치료목표 — 권고 3.14–3.16 요약</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body collapsed">
+      <ul class="dot">
+        <li>과체중·비만 고위험 성인 — 체중관리·고혈당 진행 최소화·심혈관위험 주목 (3.14, B)</li>
+        <li>체중관리·고혈당진행 억제·심혈관위험감소 약물치료 고려 (3.15, A)</li>
+        <li>BMI≥35, 고혈당(상기 기준), GDM 과거력군 — <strong>더 집중적인 예방접근</strong> 고려 (3.16, A)</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ T1D PREVENTION ═══ -->
+<div id="tab-t1d" class="panel">
+  <div class="alert alert-orange"><span>🧬</span><span>1형당뇨는 자가면역 진행 과정으로 이해되며, 테플리주맙은 Stage 2에서 Stage 3로의 진행을 지연시키는 최초의 승인된 면역치료제다.</span></div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>💊 테플리주맙(Teplizumab) — 핵심 임상시험 결과</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <table class="tc-table">
+        <tr><th>항목</th><th>내용</th></tr>
+        <tr><td>기전</td><td>CD3 표적 인간화 단클론항체, Fc수용체 결합 감소 설계</td></tr>
+        <tr><td>적응증</td><td>8세 이상 Stage 2 1형당뇨에서 Stage 3 발병 지연</td></tr>
+        <tr><td>시험설계</td><td>1형당뇨 환자 친족 대상, 14일 투여 vs 위약</td></tr>
+        <tr><td>대상자 수</td><td>테플리주맙 44명, 위약 32명</td></tr>
+        <tr><td>Stage 3 진단까지 중간 기간</td><td>테플리주맙 48.4개월 vs 위약 24.4개월</td></tr>
+        <tr><td>Stage 3 진단율</td><td>테플리주맙 43%(19명) vs 위약 72%(23명), HR 0.41 (95% CI 0.22–0.78)</td></tr>
+        <tr><td>흔한 부작용</td><td>일시적 림프구감소증(73%), 발진(36%)</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <div class="card-header open" onclick="toggleCard(this)">
+        <span>🧬 치료반응 예측인자</span><span class="toggle">▾</span>
+      </div>
+      <div class="card-body">
+        <table class="tc-table">
+          <tr><th>인자</th><th>HR (95% CI)</th></tr>
+          <tr><td>HLA-DR4 존재</td><td>0.20 (0.09–0.45)</td></tr>
+          <tr><td>HLA-DR3 부재</td><td>0.18 (0.07–0.45)</td></tr>
+          <tr><td>항-ZnT8항체 부재</td><td>0.07 (0.02–0.26)</td></tr>
+        </table>
+        <p style="font-size: calc(11px * var(--fscale, 1));color:var(--text2);margin-top:6px">사전 지정 분석(prespecified analysis) 결과 — 낮을수록 치료반응 더 좋음을 의미</p>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header open" onclick="toggleCard(this)">
+        <span>🏃 생활습관과 1형당뇨 진행 — 관찰연구 근거</span><span class="toggle">▾</span>
+      </div>
+      <div class="card-body">
+        <ul class="dot">
+          <li><strong>TEDDY 연구</strong>: 중-고강도 운동 10분 증가당 진행위험 HR 0.92 (95% CI 0.86–0.99)</li>
+          <li><strong>DAISY 연구</strong>: 고혈당지수 식이 HR 2.20, 총당류섭취 HR 1.75 — 진행위험 증가와 연관</li>
+          <li>이 요인들은 <strong>자가항체 발현(seroconversion) 자체와는 연관 없음</strong> — 이미 항체양성인 사람의 진행속도에만 영향</li>
+          <li>비만당뇨모델(NOD mice)에서 고농도 당분섭취가 췌도염증 악화·발병 가속</li>
+          <li>단, Stage 1·2 환자에서 이 요인 변경을 통한 중재 효과는 <strong>아직 보고되지 않음</strong></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="acc">
+    <div class="acc-hdr" onclick="toggleAcc(this)">
+      <span>1형당뇨 예방 연구 동향</span><span>▾</span>
+    </div>
+    <div class="acc-body">
+      <ul class="dot">
+        <li>무증상 자가면역 단계에서 Stage 3 진행 예방/지연을 위한 다양한 임상시험 진행 중</li>
+        <li>Stage 3 발병 후 인슐린분비능 소실 지연을 위한 연구도 병행</li>
+        <li>일부 연구에서 유망한 결과 — ClinicalTrials.gov, TrialNet.org에서 최신 정보 확인 가능</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ TABLES SUMMARY ═══ -->
+<div id="tab-tables" class="panel">
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>📊 핵심 수치 요약표</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <table class="tc-table">
+        <tr><th>항목</th><th>수치</th></tr>
+        <tr><td>DPP 생활습관중재 3년 당뇨위험감소</td><td>58%</td></tr>
+        <tr><td>DPP 21년 추적 당뇨위험감소</td><td>24% (생활습관) / 추적지속 (메트포르민)</td></tr>
+        <tr><td>다칭 연구 30년 당뇨위험감소</td><td>39%</td></tr>
+        <tr><td>핀란드 DPS 7년 당뇨위험감소</td><td>43%</td></tr>
+        <tr><td>운동만으로(체중목표 미달성) 당뇨예방 효과</td><td>44%</td></tr>
+        <tr><td>체중 1kg 감소당 진행위험 감소</td><td>16% (3.2년)</td></tr>
+        <tr><td>생활습관중재 비용효과성(QALY당)</td><td>$12,878</td></tr>
+        <tr><td>테플리주맙 Stage3 진단위험 HR</td><td>0.41 (95% CI 0.22–0.78)</td></tr>
+        <tr><td>피오글리타존(IRIS) 추적기간</td><td>4.8년</td></tr>
+        <tr><td>스타틴-당뇨위험 HR(DPP)</td><td>1.36 (95% CI 1.17–1.58)</td></tr>
+        <tr><td>고위험군 진행률(DPP/DPPOS)</td><td>100인년당 14–22건</td></tr>
+        <tr><td>저녁형 vs 아침형 당뇨 오즈비</td><td>2.5배</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span>📋 메트포르민 처방 전 체크리스트</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body collapsed">
+      <ul class="dot">
+        <li>☐ 연령 25–59세, BMI≥35 kg/m² 여부 확인</li>
+        <li>☐ FPG≥110 mg/dL 또는 A1C≥6.0% 여부 확인</li>
+        <li>☐ GDM 과거력 여부 확인</li>
+        <li>☐ PI3Kα억제제 또는 고용량 글루코코르티코이드 동시 치료 여부 확인</li>
+        <li>☐ 비타민B12 기저수치 평가 고려(장기치료 예정 시)</li>
+        <li>☐ 위장관 부작용(설사 등) 사전 안내</li>
+        <li>☐ 4년 이상 복용 예정 시 연 1회 B12 모니터링 계획 수립</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span>📁 참고 — 유용한 외부 리소스</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body collapsed">
+      <table class="tc-table">
+        <tr><th>리소스</th><th>용도</th></tr>
+        <tr><td>diabetes.org/diabetes-risk-test</td><td>ADA 당뇨위험 자가검사(일반인·의료진 공용)</td></tr>
+        <tr><td>cdc.gov/diabetes-prevention</td><td>CDC National Diabetes Prevention Program</td></tr>
+        <tr><td>coveragetoolkit.org/about-national-dpp/ndpp-overview</td><td>National DPP 상세 설명·접근법</td></tr>
+        <tr><td>nccd.cdc.gov/toolkit/diabetesimpact</td><td>Diabetes Prevention Impact Tool Kit(경제성 평가)</td></tr>
+        <tr><td>innovation.cms.gov (MDPP map)</td><td>Medicare DPP 제공기관 지도</td></tr>
+        <tr><td>ClinicalTrials.gov / TrialNet.org</td><td>1형당뇨 예방 임상연구 최신정보</td></tr>
+      </table>
+    </div>
+  </div>
+</div>
+
+</div><!-- /main -->
+
+<!-- ═══ MODAL: DPP ═══ -->
+<div id="dppModal" class="modal-overlay" onclick="closeModalOutside(event,'dppModal')">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal('dppModal')">✕</button>
+    <div class="modal-title">📋 Diabetes Prevention Program (DPP) — 상세</div>
+
+    <div class="alert alert-info" style="margin:0 0 12px"><span>💡</span><span>DPP는 미국에서 당뇨예방에 대한 가장 강력한 근거를 제공하는 대규모 RCT로, 집중 생활습관중재가 3년간 당뇨발생 위험을 58% 감소시켰다.</span></div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">중재 구조</div>
+      <table class="modal-table">
+        <tr><th>단계</th><th>내용</th></tr>
+        <tr><td>1단계(0–6개월)</td><td>16회 구조화 핵심 커리큘럼 — 칼로리 감소, 운동, 자가모니터링, 생활습관 유지법, 심리사회적 동기관리</td></tr>
+        <tr><td>2단계(6–12개월)</td><td>유연한 유지 프로그램</td></tr>
+      </table>
+    </div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">핵심 목표</div>
+      <table class="modal-table">
+        <tr><th>목표</th><th>세부사항</th></tr>
+        <tr><td>체중감량</td><td>최소 7% 감량·유지 (7–10%↓에서 더 큰 효과)</td></tr>
+        <tr><td>운동량</td><td>주 150분 중강도 운동(분산: 최소 주 3회, 회당 10분 이상)</td></tr>
+        <tr><td>에너지결핍</td><td>주당 700 kcal 결핍 설계</td></tr>
+        <tr><td>저항운동</td><td>최대 75분까지 150분 목표에 포함 가능</td></tr>
+      </table>
+    </div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">장기 추적 — 위험감소율</div>
+      <table class="modal-table">
+        <tr><th>추적기간</th><th>위험감소율</th></tr>
+        <tr><td>3년(DPP 원본)</td><td>58%</td></tr>
+        <tr><td>10년(DPPOS)</td><td>34%</td></tr>
+        <tr><td>15년(DPPOS)</td><td>27%</td></tr>
+        <tr><td>21년(DPPOS)</td><td>24%</td></tr>
+      </table>
+      <p style="font-size: calc(11px * var(--fscale, 1));color:var(--text2);margin-top:6px">당뇨없는 생존기간(median diabetes-free survival) 증가: 생활습관군 +3.5년, 메트포르민군 +2.5년 (위약 대비)</p>
+    </div>
+
+    <div class="alert alert-warn" style="margin-top:4px"><span>⚠️</span><span>21년 시점에 주요 심혈관사건은 군간 유의한 차이 없음 — 이는 모든 참여자에서 광범위한 스타틴·항고혈압제·메트포르민 사용이 확산된 결과로 추정됨. 치료효과의 대부분은 <strong>초기 DPP 단계</strong>에서 발생했다.</span></div>
+  </div>
+</div>
+
+<!-- ═══ MODAL: METFORMIN ═══ -->
+<div id="metforminModal" class="modal-overlay" onclick="closeModalOutside(event,'metforminModal')">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal('metforminModal')">✕</button>
+    <div class="modal-title">💊 메트포르민 — 당뇨예방 근거 상세</div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">고위험군 정의(권고 3.7, 등급 A)</div>
+      <table class="modal-table">
+        <tr><th>기준</th><th>값</th></tr>
+        <tr><td>연령</td><td>25–59세 (DPP 모집단 기준)</td></tr>
+        <tr><td>BMI</td><td>≥35 kg/m²</td></tr>
+        <tr><td>FPG</td><td>≥110 mg/dL (≥6 mmol/L)</td></tr>
+        <tr><td>A1C</td><td>≥6.0% (≥42 mmol/mol)</td></tr>
+        <tr><td>병력</td><td>임신성당뇨(GDM) 과거력</td></tr>
+      </table>
+    </div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">생활습관 대비 효과</div>
+      <ul class="dot">
+        <li>전체적으로 생활습관중재보다 효과가 낮음 (DPP 원본)</li>
+        <li>BMI≥35, 25–44세 연령군에서는 생활습관과 동등한 효과</li>
+        <li>GDM 과거력자 — 메트포르민·집중생활습관 모두 50%↓ 동등 효과, 10년 지속</li>
+        <li>15년 추적 — 높은 기저 FPG·A1C, GDM 과거력군에서 메트포르민 효과가 더 큼</li>
+      </ul>
+    </div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">특수 적용 — PI3Kα억제제·글루코코르티코이드 동반 고혈당 예방</div>
+      <table class="modal-table">
+        <tr><th>상황</th><th>근거</th></tr>
+        <tr><td>알펠리시브(유방암) 병용</td><td>1주 전 시작·치료 기간 지속 — grade 3–4 고혈당을 대부분 예방, 치료중단 회피</td></tr>
+        <tr><td>고용량 프레드니솔론(40명 RCT)</td><td>고혈당 예방 + 감염률·전체 재입원율 감소</td></tr>
+      </table>
+    </div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">비타민B12 모니터링</div>
+      <ul class="dot">
+        <li>고용량(≥1,500mg/일), 장기치료(4–5년 이상) 시 결핍위험 증가</li>
+        <li>빈혈, 말초신경병증, 만성신질환 동반 시 결핍 의심</li>
+        <li>4년 이상 복용자 또는 기타 위험인자(비건식이, 위/소장수술력) — 연 1회 모니터링 권고</li>
+      </ul>
+    </div>
+
+    <div class="alert alert-info" style="margin-top:4px"><span>💡</span><span>현재 2형당뇨 예방만을 목적으로 한 FDA 승인 약물은 없으나, 메트포르민이 가장 풍부한 효능·안전성 데이터를 보유한다.</span></div>
+  </div>
+</div>
+
+<!-- ═══ MODAL: TEPLIZUMAB ═══ -->
+<div id="teplizumabModal" class="modal-overlay" onclick="closeModalOutside(event,'teplizumabModal')">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal('teplizumabModal')">✕</button>
+    <div class="modal-title">🧬 테플리주맙(Teplizumab) — 상세</div>
+
+    <div class="alert alert-info" style="margin:0 0 12px"><span>💡</span><span>CD3 표적 인간화 단클론항체로, Fc수용체 결합이 감소되도록 설계됨. 8세 이상 Stage 2 1형당뇨에서 Stage 3 발병을 지연시키기 위해 승인되었다(권고 3.17, 등급 B).</span></div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">핵심 임상시험 결과</div>
+      <table class="modal-table">
+        <tr><th>항목</th><th>테플리주맙군</th><th>위약군</th></tr>
+        <tr><td>참여자 수</td><td>44명</td><td>32명</td></tr>
+        <tr><td>Stage 3 진단까지 중간기간</td><td>48.4개월</td><td>24.4개월</td></tr>
+        <tr><td>Stage 3 진단율</td><td>43% (19명)</td><td>72% (23명)</td></tr>
+      </table>
+      <p style="font-size: calc(11px * var(--fscale, 1));color:var(--text2);margin-top:6px">HR 0.41 (95% CI 0.22–0.78) — 14일간 투여, 1형당뇨 환자의 친족(고위험군) 대상 시행</p>
+    </div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">치료반응 예측인자 (사전 지정 분석)</div>
+      <table class="modal-table">
+        <tr><th>인자</th><th>HR (95% CI)</th></tr>
+        <tr><td>HLA-DR4 존재</td><td>0.20 (0.09–0.45)</td></tr>
+        <tr><td>HLA-DR3 부재</td><td>0.18 (0.07–0.45)</td></tr>
+        <tr><td>항-ZnT8항체 부재</td><td>0.07 (0.02–0.26)</td></tr>
+      </table>
+    </div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">흔한 부작용</div>
+      <table class="modal-table">
+        <tr><th>부작용</th><th>발생률</th></tr>
+        <tr><td>일시적 림프구감소증</td><td>73%</td></tr>
+        <tr><td>발진</td><td>36%</td></tr>
+      </table>
+    </div>
+
+    <div class="alert alert-warn" style="margin-top:4px"><span>⚠️</span><span>투여는 적절히 훈련된 의료인력이 있는 환경에서 시행해야 하며, 8세 이상 선별된 Stage 2 1형당뇨 환자에서 논의되어야 한다.</span></div>
+  </div>
+</div>
+
+<!-- ═══ MODAL: HIGH-RISK ═══ -->
+<div id="highRiskModal" class="modal-overlay" onclick="closeModalOutside(event,'highRiskModal')">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal('highRiskModal')">✕</button>
+    <div class="modal-title">🎯 고위험군 정의와 개인맞춤 예방전략</div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">집중 예방접근 대상 기준(권고 3.16, 등급 A)</div>
+      <table class="modal-table">
+        <tr><th>지표</th><th>고위험 기준</th></tr>
+        <tr><td>BMI</td><td>≥35 kg/m²</td></tr>
+        <tr><td>공복혈당(FPG)</td><td>110–125 mg/dL (6.1–6.9 mmol/L)</td></tr>
+        <tr><td>2시간 부하후 혈당</td><td>173–199 mg/dL (9.6–11.0 mmol/L)</td></tr>
+        <tr><td>A1C</td><td>≥6.0% (≥42 mmol/mol)</td></tr>
+        <tr><td>병력</td><td>임신성당뇨(GDM) 과거력</td></tr>
+      </table>
+    </div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">DPP/DPPOS 내 고위험군 진행률</div>
+      <table class="modal-table">
+        <tr><th>지표</th><th>진행률(100인년당)</th></tr>
+        <tr><td>고위험 하위군(상기기준 충족)</td><td>14–22건</td></tr>
+        <tr><td>DPP 위약군 전체</td><td>11건 (3년 누적 29%)</td></tr>
+      </table>
+    </div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">연령에 따른 예외 — ARIC 연구(평균 75세)</div>
+      <ul class="dot">
+        <li>BMI 기준 미적용 인구집단에서 6년 진행률: A1C기준 전당뇨 9%, IFG 8%</li>
+        <li>70세 이후 신규 전당뇨 진단은 당뇨 진행보다 <strong>정상혈당 회복 또는 사망이 더 흔함</strong></li>
+        <li>고령(70세 이후) 발병 당뇨는 합병증·사망률이 더 낮고, 치료 이득이 명확히 확립되지 않음</li>
+      </ul>
+    </div>
+
+    <div class="alert alert-success" style="margin-top:4px"><span>✅</span><span>위험모델은 일반적으로 <strong>최고위험군에서 중재의 이득이 가장 크다</strong>는 점을 보여준다 — 개인맞춤 목표 설정과 위험-이득 비율 고려가 핵심이다.</span></div>
+  </div>
+</div>
+
+<script>
+const FONT_ZOOM_LEVELS = [1, 1.25, 1.5];
+let fontZoomIndex = 0;
+
+function applyFontZoom(scale) {
+  document.documentElement.style.setProperty('--fscale', scale);
+  const label = document.getElementById('font-zoom-label');
+  if (label) label.textContent = Math.round(scale * 100) + '%';
+}
+
+function cycleFontZoom() {
+  fontZoomIndex = (fontZoomIndex + 1) % FONT_ZOOM_LEVELS.length;
+  applyFontZoom(FONT_ZOOM_LEVELS[fontZoomIndex]);
+}
+
+function showTab(id){
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('tab-'+id).classList.add('active');
+  event.target.classList.add('active');
+}
+function toggleCard(el){
+  el.classList.toggle('open');
+  el.nextElementSibling.classList.toggle('collapsed');
+}
+function toggleAcc(el){
+  const b=el.nextElementSibling;
+  b.style.display=b.style.display==='block'?'none':'block';
+  el.querySelector('span:last-child').textContent=b.style.display==='block'?'▴':'▾';
+}
+
+function openModal(id){document.getElementById(id).classList.add('open');}
+function closeModal(id){document.getElementById(id).classList.remove('open');}
+function closeModalOutside(e,id){if(e.target===document.getElementById(id))closeModal(id);}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')document.querySelectorAll('.modal-overlay.open').forEach(m=>m.classList.remove('open'));});
+
+const abbrs=[
+  ['DPP','Diabetes Prevention Program — 미국 당뇨예방프로그램 RCT, 생활습관중재 3년 당뇨위험 58%↓'],
+  ['DPPOS','Diabetes Prevention Program Outcomes Study — DPP 장기추적(최대 21년) 관찰연구'],
+  ['DPS','(Finnish) Diabetes Prevention Study — 핀란드 당뇨예방연구, 7년 위험감소 43%'],
+  ['Da Qing study','다칭 당뇨예방연구(중국) — 30년 추적, 당뇨위험 39%↓ 및 심혈관·사망률 개선'],
+  ['IGT','Impaired Glucose Tolerance (내당능장애) — 2-h PG 140–199 mg/dL'],
+  ['IFG','Impaired Fasting Glucose (공복혈당장애) — FPG 100–125 mg/dL'],
+  ['OGTT','Oral Glucose Tolerance Test (경구포도당부하검사) — 75g 부하, 공복+2시간 혈당'],
+  ['CGM','Continuous Glucose Monitoring (연속혈당측정) — 1형당뇨 진행 예측 보조지표'],
+  ['TEDDY','The Environmental Determinants of Diabetes in the Young — 1형당뇨 환경요인 추적 국제코호트'],
+  ['DAISY','Diabetes Autoimmunity Study in the Young — 소아 자가면역 진행 추적 연구'],
+  ['IA-2','Islet Antigen 2 — 췌도자가항체, 1형당뇨 진행 가속과 연관'],
+  ['ZnT8','Zinc Transporter 8 — 췌도자가항체, 테플리주맙 반응예측에 활용'],
+  ['HLA','Human Leukocyte Antigen — 인간백혈구항원, 테플리주맙 반응예측인자(DR3/DR4)'],
+  ['PI3Kα','Phosphoinositide 3-Kinase alpha 억제제 — 알펠리시브·이나볼리시브 등 항암제, 고혈당 부작용 빈번'],
+  ['HOMA-IR','Homeostatic Model Assessment of Insulin Resistance — 인슐린저항성 평가지표'],
+  ['IRIS','Insulin Resistance Intervention after Stroke (시험명) — 뇌졸중/TIA+인슐린저항성에서 피오글리타존 효과 평가'],
+  ['ARIC','Atherosclerosis Risk in Communities (연구명) — 지역사회기반 동맥경화위험 코호트연구'],
+  ['IDPP','Indian Diabetes Prevention Programme — 인도 당뇨예방프로그램(IDPP-1)'],
+  ['GDM','Gestational Diabetes Mellitus (임신성 당뇨병) — 과거력 시 2형당뇨 고위험군으로 분류'],
+  ['QALY','Quality-Adjusted Life-Year (질보정생존년) — 비용효과성 평가단위'],
+  ['DPRP','Diabetes Prevention Recognition Program — CDC의 기술기반 DPP 인증제도'],
+  ['NDPP','National Diabetes Prevention Program — CDC 주관 전국 당뇨예방프로그램'],
+  ['CHW','Community Health Worker (커뮤니티 건강관리자) — DPP유사 중재 전달·SDOH 장벽 해소 지원'],
+  ['MNT','Medical Nutrition Therapy (의학적영양치료) — 등록영양사 제공 개별화 영양중재'],
+  ['DASH','Dietary Approaches to Stop Hypertension — 고혈압예방 식이패턴'],
+  ['D2d','Vitamin D and Type 2 Diabetes (연구명) — 미국 비타민D 당뇨예방 RCT'],
+  ['DPVD','Diabetes Prevention with Active Vitamin D (연구명) — 일본 비타민D 당뇨예방 RCT'],
+  ['TRAVERSE','대규모 다기관 임상시험명 — 저성선기능증 남성 테스토스테론 심혈관결과 평가(부속연구: 당뇨진행)'],
+  ['STOP-NIDDM','아카보스 당뇨예방 RCT 시험명 — α-글루코시다아제 억제제 효과 평가'],
+];
+
+function buildAbbr(){
+  const sorted=abbrs.slice().sort((a,b)=>a[0].localeCompare(b[0]));
+  document.getElementById('abbr-grid-drop').innerHTML=sorted.map(a=>
+    `<div style="background:var(--surface2);border:1px solid var(--border);border-radius:5px;padding:6px 10px;margin-bottom:4px;" data-term="${a[0].toLowerCase()}" data-def="${a[1].toLowerCase()}">
+       <span style="font-weight:700;color:var(--accent2);font-size: calc(12px * var(--fscale, 1));font-family:'Courier New',monospace">${a[0]}</span>
+       <div style="font-size: calc(11px * var(--fscale, 1));color:var(--text2);line-height:1.45;margin-top:2px">${a[1]}</div>
+     </div>`).join('');
+}
+function filterAbbr(val){
+  const v=val.toLowerCase().trim();
+  const drop=document.getElementById('abbr-dropdown');
+  const items=document.querySelectorAll('#abbr-grid-drop [data-term]');
+  if(!v){drop.style.display='none';return;}
+  const inp=document.getElementById('abbr-input');
+  const rect=inp.getBoundingClientRect();
+  const w=440;
+  let left=rect.right-w;if(left<8)left=8;
+  drop.style.top=(rect.bottom+4)+'px';drop.style.left=left+'px';
+  drop.style.display='block';
+  items.forEach(el=>{
+    const show=el.dataset.term.startsWith(v)||el.dataset.def.includes(v);
+    el.style.display=show?'':'none';
+  });
+}
+document.addEventListener('click',e=>{
+  const inp=document.getElementById('abbr-input');
+  const drop=document.getElementById('abbr-dropdown');
+  if(inp&&!inp.contains(e.target)&&drop&&!drop.contains(e.target))drop.style.display='none';
+});
+buildAbbr();
+</script>
+</body>
+</html>

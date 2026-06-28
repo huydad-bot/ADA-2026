@@ -1,0 +1,1127 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ADA 당뇨병 기술(Diabetes Technology) 2026 가이드</title>
+<style>
+  :root {
+    --bg: #f6f8fa;
+    --surface: #ffffff;
+    --surface2: #f0f2f5;
+    --border: #d0d7de;
+    --text: #1f2328;
+    --text2: #57606a;
+    /* 영역 4색 */
+    --bgm:  #c47d00;   /* BGM — 황금 */
+    --cgm:  #1a7f6e;   /* CGM — 청록 */
+    --pump: #0550ae;   /* 인슐린전달/AID — 청 */
+    --digi: #7c3aed;   /* 디지털헬스/기타 — 보라 */
+    --accent: #0550ae;
+    --green: #1a7f37;
+    --red: #cf222e;
+    --yellow: #9a6700;
+    --fscale: 1;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Pretendard', 'Noto Sans KR', -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    font-size: calc(13px * var(--fscale, 1));
+    line-height: 1.5;
+    min-height: 100vh;
+  }
+
+  /* ── HEADER ── */
+  header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 12px 16px 8px;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    gap: 4px; position: sticky; top: 0; z-index: 100;
+  }
+  .header-inner { width: 100%; max-width: 960px; display: flex; flex-direction: column; align-items: center; gap: 4px; }
+  .logo-row { display: flex; align-items: center; gap: 10px; justify-content: center; }
+  .logo-dt {
+    display: flex; align-items: center; gap: 0;
+    font-size: calc(11px * var(--fscale, 1)); font-weight: 800; letter-spacing: 1px;
+  }
+  .logo-dt span:nth-child(1) { background: var(--pump); color:#fff; padding:3px 6px; border-radius:4px 0 0 4px; }
+  .logo-dt span:nth-child(2) { background: var(--cgm);  color:#fff; padding:3px 6px; }
+  .logo-dt span:nth-child(3) { background: var(--bgm);  color:#fff; padding:3px 6px; border-radius:0 4px 4px 0; }
+  header h1 { font-size: 19px; font-weight: 700; color: var(--text); }
+  .meta-line { color: var(--text2); font-size: calc(11px * var(--fscale, 1)); text-align: center; line-height: 1.6; }
+  .source-link { color: var(--accent); font-size: calc(11px * var(--fscale, 1)); text-decoration: none; }
+  .source-link:hover { text-decoration: underline; }
+
+  /* ── TABS ── */
+  .tab-bar {
+    display: flex; justify-content: center;
+    background: var(--surface); border-bottom: 1px solid var(--border);
+    overflow-x: auto; scrollbar-width: none;
+  }
+  .tab-bar::-webkit-scrollbar { display: none; }
+  .font-zoom-btn {
+    display: flex; align-items: center; gap: 3px; flex-shrink: 0;
+    margin: 4px 4px 4px 6px; padding: 5px 10px;
+    background: var(--surface2); border: 1px solid var(--border); border-radius: 6px;
+    color: var(--text2); font-size: calc(11px * var(--fscale, 1)); font-weight: 700;
+    cursor: pointer; user-select: none; white-space: nowrap; transition: background .15s;
+  }
+  .font-zoom-btn:hover { background: var(--border); }
+  .font-zoom-btn .fz-icon { font-size: calc(12px * var(--fscale, 1)); }
+  .tab-bar-inner { width: 100%; max-width: 960px; display: flex; align-items: center; justify-content: center; gap: 2px; }
+  .tab {
+    padding: 8px 13px; font-size: calc(12px * var(--fscale, 1)); color: var(--text2);
+    cursor: pointer; border-bottom: 2px solid transparent;
+    white-space: nowrap; transition: color .15s, border-color .15s; user-select: none;
+  }
+  .tab:hover { color: var(--text); }
+  .tab.active { color: var(--pump); border-bottom-color: var(--pump); font-weight: 600; }
+  .tab-abbr-wrap { display: flex; align-items: center; padding: 4px 6px; margin-left: 4px; flex-shrink: 0; position: relative; }
+
+  /* ── MAIN ── */
+  .main { padding: 12px 16px; max-width: 960px; margin: 0 auto; }
+  .panel { display: none; }
+  .panel.active { display: block; }
+
+  /* ── GRID ── */
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .grid3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
+  @media (max-width: 680px) { .grid2, .grid3 { grid-template-columns: 1fr; } }
+
+  /* ── CARD ── */
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; margin-bottom: 10px; }
+  .card-header {
+    background: var(--surface2); padding: 8px 12px;
+    font-size: calc(12px * var(--fscale, 1)); font-weight: 600; color: var(--text2);
+    text-transform: uppercase; letter-spacing: 0.5px;
+    border-bottom: 1px solid var(--border); cursor: pointer;
+    display: flex; align-items: center; justify-content: space-between; user-select: none;
+  }
+  .card-header .ch-title { display: flex; align-items: center; gap: 8px; }
+  .card-header .toggle { font-size: calc(14px * var(--fscale, 1)); transition: transform .2s; }
+  .card-header.open .toggle { transform: rotate(180deg); }
+  .card-body { padding: 10px 12px; }
+  .card-body.collapsed { display: none; }
+
+  /* ── STAT ── */
+  .stat-row { display: flex; gap: 8px; margin-bottom: 10px; flex-wrap: wrap; }
+  .stat-box { background: var(--surface2); border: 1px solid var(--border); border-radius: 6px; padding: 10px 14px; flex: 1; text-align: center; min-width: 90px; }
+  .stat-val { font-size: calc(20px * var(--fscale, 1)); font-weight: 700; }
+  .stat-lbl { font-size: calc(10px * var(--fscale, 1)); color: var(--text2); margin-top: 2px; line-height: 1.35; }
+
+  /* ── ALERT ── */
+  .alert { padding: 8px 12px; border-radius: 6px; font-size: calc(12px * var(--fscale, 1)); margin: 8px 0; display: flex; gap: 8px; align-items: flex-start; line-height: 1.55; }
+  .alert-danger  { background: #ffebe9; border-left: 3px solid var(--red);    color: #82071e; }
+  .alert-info    { background: #ddf4ff; border-left: 3px solid var(--accent); color: #0550ae; }
+  .alert-warn    { background: #fff8c5; border-left: 3px solid var(--yellow); color: #7d4e00; }
+  .alert-success { background: #dafbe1; border-left: 3px solid var(--green);  color: #116329; }
+  .alert-bgm     { background: #fff3cd; border-left: 3px solid var(--bgm); color: #7d4e00; }
+  .alert-cgm     { background: #e0f4f1; border-left: 3px solid var(--cgm); color: #0f5549; }
+  .alert-pump    { background: #ddf4ff; border-left: 3px solid var(--pump); color: var(--pump); }
+  .alert-digi    { background: #ede9fe; border-left: 3px solid var(--digi); color: #5b21b6; }
+
+  /* ── TABLE ── */
+  .tbl { width: 100%; border-collapse: collapse; font-size: calc(11px * var(--fscale, 1)); }
+  .tbl th { background: var(--surface2); color: var(--text2); padding: 6px 8px; font-size: calc(10px * var(--fscale, 1)); text-transform: uppercase; letter-spacing: 0.3px; font-weight: 600; text-align: left; }
+  .tbl td { padding: 6px 8px; border-bottom: 1px solid var(--border); vertical-align: top; line-height: 1.45; }
+  .tbl tr:last-child td { border-bottom: none; }
+  .tbl tr:hover td { background: rgba(0,0,0,.02); }
+  .tbl.small-text { font-size: calc(10px * var(--fscale, 1)); }
+
+  /* ── 권고등급 배지 (A/B/C/E) ── */
+  .grade { display: inline-flex; align-items: center; justify-content: center; width: 20px; height: 20px; border-radius: 50%; font-size: calc(10px * var(--fscale, 1)); font-weight: 800; color: #fff; flex-shrink: 0; position: relative; cursor: help; }
+  .grade-A { background: #1a7f37; }
+  .grade-B { background: #0550ae; }
+  .grade-C { background: #c47d00; }
+  .grade-E { background: #6b7280; }
+  .rec-row { display: flex; gap: 8px; align-items: flex-start; padding: 6px 0; border-bottom: 1px solid var(--border); }
+  .rec-row:last-child { border-bottom: none; }
+  .rec-num { font-weight: 700; color: var(--pump); flex-shrink: 0; min-width: 32px; font-size: calc(11px * var(--fscale, 1)); }
+  .rec-text { flex: 1; font-size: calc(12px * var(--fscale, 1)); line-height: 1.6; }
+  .grade-legend { display: flex; gap: 10px; flex-wrap: wrap; font-size: calc(10px * var(--fscale, 1)); color: var(--text2); margin-top: 6px; }
+  .grade-legend span { display: inline-flex; align-items: center; gap: 4px; }
+
+  /* ── ACCORDION ── */
+  .acc { border: 1px solid var(--border); border-radius: 6px; margin-bottom: 6px; overflow: hidden; }
+  .acc-hdr { background: var(--surface2); padding: 7px 12px; font-size: calc(12px * var(--fscale, 1)); font-weight: 600; color: var(--text); cursor: pointer; display: flex; justify-content: space-between; align-items: center; user-select: none; }
+  .acc-hdr:hover { background: #e5e9ef; }
+  .acc-toggle { font-size: calc(11px * var(--fscale, 1)); color: var(--text2); transition: transform .2s; }
+  .acc-hdr.open .acc-toggle { transform: rotate(180deg); }
+  .acc-body { display: none; padding: 10px 12px; font-size: calc(12px * var(--fscale, 1)); line-height: 1.65; }
+  .acc-body ul { padding-left: 16px; margin: 4px 0; }
+  .acc-body li { margin-bottom: 3px; }
+
+  /* ── TYPE BADGE ── */
+  .stage { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: calc(10px * var(--fscale, 1)); font-weight: 700; white-space: nowrap; }
+  .t-bgm  { background: #fff3cd; color: #7d4e00; border: 1px solid var(--bgm); }
+  .t-cgm  { background: #e0f4f1; color: var(--cgm); border: 1px solid var(--cgm); }
+  .t-pump { background: #ddf4ff; color: var(--pump); border: 1px solid var(--pump); }
+  .t-digi { background: #ede9fe; color: var(--digi); border: 1px solid var(--digi); }
+  .t-yes  { background: #dafbe1; color: #116329; border: 1px solid var(--green); }
+  .t-no   { background: #f3f4f6; color: #6b7280; border: 1px solid #9ca3af; }
+
+  /* ── PILL / DEVICE TAG ── */
+  .drug { display: inline-block; padding: 1px 6px; border-radius: 3px; font-size: calc(10px * var(--fscale, 1)); font-weight: 700; margin: 1px; }
+  .drug-rt   { background: #dafbe1; color: #116329; }
+  .drug-otc  { background: #fff3cd; color: #7d4e00; }
+  .drug-pro  { background: #ede9fe; color: #5b21b6; }
+  .drug-aid  { background: #ddf4ff; color: #0550ae; }
+  .drug-os   { background: #fce8eb; color: #9b1c2e; }
+
+  /* ── ABBR ── */
+  .abbr-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 6px; }
+  .abbr-item { background: var(--surface2); border: 1px solid var(--border); border-radius: 5px; padding: 6px 10px; }
+  .abbr-term { font-weight: 700; color: var(--accent); font-size: calc(12px * var(--fscale, 1)); font-family: 'Courier New', monospace; }
+  .abbr-def  { font-size: calc(11px * var(--fscale, 1)); color: var(--text2); line-height: 1.45; }
+
+  /* ── SCROLLBAR ── */
+  ::-webkit-scrollbar { width: 5px; height: 5px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: #c8d0d9; border-radius: 3px; }
+
+  .sec-sep { height: 1px; background: var(--border); margin: 10px 0; }
+  small { color: var(--text2); font-size: calc(10px * var(--fscale, 1)); }
+
+  /* ── CATEGORY TIMELINE ── */
+  .stage-timeline { display: flex; align-items: stretch; gap: 0; margin: 10px 0; overflow-x: auto; }
+  .stage-box {
+    flex: 1; min-width: 130px; padding: 10px 10px 12px;
+    border-right: 2px solid var(--bg); text-align: center;
+    position: relative; cursor: pointer; transition: opacity .15s;
+  }
+  .stage-box:last-child { border-right: none; }
+  .stage-box:hover { opacity: .88; }
+  .stage-box .st-num { font-size: calc(14px * var(--fscale, 1)); font-weight: 800; margin-bottom: 4px; }
+  .stage-box .st-lbl { font-size: calc(10px * var(--fscale, 1)); line-height: 1.4; }
+  .st-bgm  { background: #fff8e1; }
+  .st-cgm  { background: #e0f4f1; }
+  .st-pump { background: #e6f0fb; }
+  .st-digi { background: #f3e8ff; }
+
+  /* ── GEAR ROW ── */
+  .gear-row { display: flex; gap: 8px; margin: 8px 0; flex-wrap: wrap; }
+  .gear-box { flex: 1; min-width: 140px; border-radius: 6px; padding: 10px 12px; font-size: calc(12px * var(--fscale, 1)); }
+  .gear-bgm  { background: #fff8e1; border: 1.5px solid var(--bgm);  color: #7d4e00; }
+  .gear-cgm  { background: #e0f4f1; border: 1.5px solid var(--cgm); color: #0f5549; }
+  .gear-pump { background: #e6f0fb; border: 1.5px solid var(--pump); color: #0550ae; }
+  .gear-title { font-weight: 700; font-size: calc(13px * var(--fscale, 1)); margin-bottom: 4px; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="logo-row">
+      <div class="logo-dt">
+        <span>A</span><span>I</span><span>D</span>
+      </div>
+      <h1>ADA 당뇨병 기술(Diabetes Technology) 2026</h1>
+    </div>
+    <div class="meta-line">
+      <a href="https://doi.org/10.2337/dc26-S007" class="source-link" target="_blank">ADA Standards of Care · Diabetes Care 2026;49(Suppl.1):S150–S165 ↗</a>
+      <span style="color:var(--text2)"> · ADA Professional Practice Committee for Diabetes</span><br>
+      <span style="font-size: calc(10px * var(--fscale, 1));color:var(--text2);font-style:italic">본 도구는 ADA의 공식 승인을 받지 않았습니다 (This tool is not officially endorsed by ADA)</span>
+    </div>
+  </div>
+</header>
+
+<div class="tab-bar">
+  <div class="tab-bar-inner">
+    <div id="font-zoom-btn" class="font-zoom-btn" onclick="cycleFontZoom()"><span class="fz-icon">🔠</span><span id="font-zoom-label">100%</span></div>
+    <div class="tab active" onclick="showTab('overview')">🏠 개요·일반원칙</div>
+    <div class="tab" onclick="showTab('bgm')">🩸 BGM</div>
+    <div class="tab" onclick="showTab('cgm')">📡 CGM</div>
+    <div class="tab" onclick="showTab('insulin')">💉 인슐린전달</div>
+    <div class="tab" onclick="showTab('aid')">🤖 AID 시스템</div>
+    <div class="tab" onclick="showTab('digital')">📱 디지털헬스·입원</div>
+    <div class="tab-abbr-wrap">
+      <div style="position:relative;display:flex;align-items:center;flex-shrink:0">
+        <span style="position:absolute;left:8px;color:var(--text2);font-size: calc(12px * var(--fscale, 1));pointer-events:none">🔍</span>
+        <input id="abbr-input" type="text" placeholder="약어 검색" oninput="filterAbbr(this.value)"
+          style="background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:4px 8px 4px 26px;color:var(--text);font-size: calc(12px * var(--fscale, 1));width:130px;outline:none;"
+          onfocus="this.style.borderColor='var(--pump)'" onblur="this.style.borderColor='var(--border)'">
+        <span id="abbr-count" style="position:absolute;right:7px;font-size: calc(10px * var(--fscale, 1));color:var(--text2);pointer-events:none"></span>
+      </div>
+      <div id="abbr-dropdown" style="display:none;position:fixed;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:8px;width:460px;max-height:360px;overflow-y:auto;z-index:300;box-shadow:0 8px 24px rgba(0,0,0,.12)">
+        <div id="abbr-grid-drop" style="display:grid;grid-template-columns:1fr"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="main">
+
+<!-- ══════════════════ TAB 1: 개요·일반원칙 ══════════════════ -->
+<div id="tab-overview" class="panel active">
+
+  <div class="stat-row">
+    <div class="stat-box"><div class="stat-val" style="color:var(--pump)">3대 요소</div><div class="stat-lbl">AID 시스템<br>(펌프+CGM+알고리즘)</div></div>
+    <div class="stat-box"><div class="stat-val" style="color:var(--cgm)">진단시점부터</div><div class="stat-lbl">CGM·BGM 시작 권고<br>(인슐린 필요 시 특히)</div></div>
+    <div class="stat-box"><div class="stat-val" style="color:var(--digi);font-size:calc(15px * var(--fscale, 1))">사전검사 불필요</div><div class="stat-lbl">CSII/AID 시작 전 C-peptide·<br>자가항체·치료기간 요건 없음</div></div>
+    <div class="stat-box"><div class="stat-val" style="color:var(--bgm)">2026</div><div class="stat-lbl">ADA Standards of Care<br>Section 7</div></div>
+  </div>
+
+  <!-- 정의 -->
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <div class="ch-title"><span>🔑</span> 당뇨병 기술(Diabetes Technology) 정의</div>
+      <span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <div class="alert alert-pump">
+        <span>🧰</span>
+        <div><strong>당뇨병 기술</strong> = 당뇨병 환자의 자가관리를 돕는 하드웨어·소프트웨어 전체를 일컫는 용어. 생활습관 조정부터 혈당 모니터링, 자동화된 치료 조정까지 포괄.<br>
+        전통적 2대 분류: <strong>① 인슐린 투여</strong>(주사기·펜·흡입·패치·펌프) <strong>② 혈당 측정</strong>(BGM·CGM). 최근 <strong>자동인슐린전달(AID) 시스템</strong>, 연결형 인슐린펜, 자가관리 지원 소프트웨어까지 확장됨.</div>
+      </div>
+      <div class="gear-row" style="margin-top:10px">
+        <div class="gear-box gear-bgm">
+          <div class="gear-title">🟡 혈당측정(BGM/CGM)</div>
+          자가혈당측정 + 연속혈당측정<br>
+          <small>치료 반응 평가·저혈당 예방의 핵심</small>
+        </div>
+        <div class="gear-box gear-pump">
+          <div class="gear-title">🔵 인슐린전달</div>
+          주사기·펜·펌프·AID<br>
+          <small>연결형 펜, 자동화 시스템으로 진화 중</small>
+        </div>
+        <div class="gear-box gear-cgm">
+          <div class="gear-title">🟢 디지털헬스</div>
+          앱·온라인 코칭·데이터 통합<br>
+          <small>FDA 인증 디지털 치료제(digiceutical) 등장</small>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 일반 원칙 권고 7.1-7.9 -->
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <div class="ch-title"><span>📋</span> 일반 기기 원칙 — 권고 7.1–7.9</div>
+      <span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <div class="rec-row"><div class="rec-num">7.1</div><div class="rec-text">당뇨병 기기는 모든 당뇨병 환자에게 <strong>제공되어야 함</strong>. <span class="grade grade-A" title="Grade A: 명확한 근거">A</span></div></div>
+      <div class="rec-row"><div class="rec-num">7.2</div><div class="rec-text">기기 종류·선택은 환자의 필요·상황·선호·기술수준에 따라 <strong>개별화</strong>. 보호자가 관리하는 경우(어린 아동, 인지장애 등) 보호자의 기술·선호도 고려. <span class="grade grade-E" title="Grade E: 전문가 합의">E</span></div></div>
+      <div class="rec-row"><div class="rec-num">7.3a</div><div class="rec-text">CGM 처방 시 초기·지속적 교육 제공(데이터 업로드·공유 활용 포함). <span class="grade grade-C" title="Grade C: 중등도 근거">C</span></div></div>
+      <div class="rec-row"><div class="rec-num">7.3b</div><div class="rec-text">AID 처방 시 사용법·문제해결 교육을 정기적으로 제공. <span class="grade grade-C">C</span></div></div>
+      <div class="rec-row"><div class="rec-num">7.4</div><div class="rec-text">의료진은 가용 기술을 숙지하고 필요시 추가 지원을 구해야 함. <span class="grade grade-E">E</span></div></div>
+      <div class="rec-row"><div class="rec-num">7.5</div><div class="rec-text">CGM·CSII·AID 사용자는 <strong>연령·A1C 수준과 무관하게</strong> 모든 제3자 보험에서 지속적 기기 접근권을 가져야 함. <span class="grade grade-E">E</span></div></div>
+      <div class="rec-row"><div class="rec-num">7.6</div><div class="rec-text">학교에서 아동·청소년의 당뇨병 기술(CGM, CSII, 연결형 펜, AID) 사용을 지원해야 함. <span class="grade grade-E">E</span></div></div>
+      <div class="rec-row"><div class="rec-num">7.7</div><div class="rec-text">기기를 사용하는 성인은 교육·직장환경에서 기기 관리·고저혈당 대응에 필요한 충분한 시간·공간을 합리적으로 보장받아야 함. <span class="grade grade-E">E</span></div></div>
+      <div class="rec-row"><div class="rec-num">7.8</div><div class="rec-text"><strong>진단 시점을 포함한 조기</strong> CGM·CSII·AID 시작을 고려. <span class="grade grade-C">C</span></div></div>
+      <div class="rec-row"><div class="rec-num">7.8a</div><div class="rec-text">CSII/AID 시작 전 <strong>C-peptide</strong> <span class="grade grade-B" title="Grade B: 양질의 근거">B</span>, <strong>islet 자가항체</strong> <span class="grade grade-B">B</span>, <strong>인슐린 치료기간</strong> <span class="grade grade-C">C</span> 등의 요구조건이 <strong>없어야 함</strong>.</div></div>
+      <div class="rec-row"><div class="rec-num">7.9</div><div class="rec-text">모든 CGM·CSII·AID·연결형 인슐린기기에 표준화 리포트(최소 1페이지 요약, 표준 CGM 리포트·주간 요약)가 제공·활용되어야 함. <span class="grade grade-E">E</span></div></div>
+      <div class="grade-legend">
+        <span><span class="grade grade-A" style="width:16px;height:16px;font-size:9px">A</span>명확한 근거(고품질 RCT)</span>
+        <span><span class="grade grade-B" style="width:16px;height:16px;font-size:9px">B</span>양질의 근거</span>
+        <span><span class="grade grade-C" style="width:16px;height:16px;font-size:9px">C</span>중등도 근거</span>
+        <span><span class="grade grade-E" style="width:16px;height:16px;font-size:9px">E</span>전문가 합의/임상경험</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 핵심 원칙 비교 타임라인 -->
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <div class="ch-title"><span>📈</span> 영역별 핵심 메시지 한눈에 보기</div>
+      <span class="toggle">▾</span>
+    </div>
+    <div class="card-body collapsed">
+      <div class="stage-timeline">
+        <div class="stage-box st-bgm" onclick="showTab('bgm')">
+          <div class="st-num" style="color:var(--bgm)">BGM</div>
+          <div class="st-lbl" style="color:#7d4e00"><strong>CGM 사용자도 필수</strong><br>FDA 승인 기기만 사용<br>간섭물질 다수 존재</div>
+        </div>
+        <div class="stage-box st-cgm" onclick="showTab('cgm')">
+          <div class="st-num" style="color:var(--cgm)">CGM</div>
+          <div class="st-lbl" style="color:#0f5549"><strong>진단시점부터 권고</strong><br>인슐린·저혈당 위험 약제<br>모든 연령대에서 이득</div>
+        </div>
+        <div class="stage-box st-pump" onclick="showTab('insulin')">
+          <div class="st-num" style="color:var(--pump)">인슐린전달</div>
+          <div class="st-lbl" style="color:#0550ae"><strong>연결형 펜 확대</strong><br>펜 vs 주사기는 개인선택<br>흡입형 인슐린도 선택지</div>
+        </div>
+        <div class="stage-box st-digi" onclick="showTab('aid')">
+          <div class="st-num" style="color:var(--digi)">AID</div>
+          <div class="st-lbl" style="color:#5b21b6"><strong>T1DM 표준치료</strong><br>T2DM도 적응 확대<br>오픈소스 AID도 지지</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 교육/학교/성인 직장 -->
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <div class="ch-title"><span>🎓</span> 교육·훈련 및 환경별 지원</div>
+      <span class="toggle">▾</span>
+    </div>
+    <div class="card-body collapsed">
+      <div class="grid2" style="gap:8px">
+        <div class="acc">
+          <div class="acc-hdr" onclick="toggleAcc(this)"><span>📚 교육·훈련 일반 원칙</span><span class="acc-toggle">▾</span></div>
+          <div class="acc-body">기기 사용 교육이 충분할수록 결과가 좋음. CGM은 일부 환자(OTC 브랜드 등)가 자가교육 가능하나, 자원부족·저연령·고령층은 더 많은 반복·시간 필요. 인슐린펌프·AID는 일반적으로 공인 당뇨교육자의 훈련 필요(일부 청소년은 튜브없는 AID 자가시작 가능 사례 있음). 의료진도 기본·기초·중급·고급 역량체계에 따라 지속적 재교육 필요.</div>
+        </div>
+        <div class="acc">
+          <div class="acc-hdr" onclick="toggleAcc(this)"><span>🏫 학교 환경 지원</span><span class="acc-toggle">▾</span></div>
+          <div class="acc-body">기기 사용 지침은 <strong>당뇨병 의료관리계획(DMMP)</strong>에 명시. 기기 고장 시를 위한 백업 치료계획도 DMMP에 포함. 학교 간호사 등 담당자는 처방된 기술에 대한 최신 교육 이수 필요.</div>
+        </div>
+        <div class="acc">
+          <div class="acc-hdr" onclick="toggleAcc(this)"><span>💼 성인 직장·교육환경</span><span class="acc-toggle">▾</span></div>
+          <div class="acc-body">기기 관리, 고저혈당 대응, 기기 알림·문제 처리에 필요한 시간·공간의 <strong>합리적 편의제공</strong> 보장.</div>
+        </div>
+        <div class="acc">
+          <div class="acc-hdr" onclick="toggleAcc(this)"><span>🚀 조기 도입의 근거</span><span class="acc-toggle">▾</span></div>
+          <div class="acc-body">소아 신규진단 1형당뇨에서 진단 후 <strong>21일 내 AID 시작</strong> 시 12개월 시점 TIR 10%p 향상 + A1C 개선(통상치료 대비, RCT). C-peptide·islet 자가항체 유무, 당뇨병 유병기간은 CSII/AID 반응성과 무관 — <strong>적합성 판단 기준으로 사용해선 안 됨</strong>.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /overview -->
+
+
+<!-- ══════════════════ TAB 2: BGM ══════════════════ -->
+<div id="tab-bgm" class="panel">
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <div class="ch-title"><span>🩸</span> 자가혈당측정(BGM) — 권고 7.10–7.14</div>
+      <span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <div class="rec-row"><div class="rec-num">7.10</div><div class="rec-text">상황·선호·치료에 따라 BGM 기기 제공. <strong>CGM 사용자도 항상 BGM 접근권 필요</strong>. <span class="grade grade-A">A</span></div></div>
+      <div class="rec-row"><div class="rec-num">7.11</div><div class="rec-text">인슐린 사용자는 인슐린요법에 따라 적절한 시점에 혈당 확인 권장(공복·식전후·취침전·새벽·운동 전중후·저혈당 의심시·치료 후 정상화까지·고혈당 의심시·운전 등 중요활동 전후). <span class="grade grade-B">B</span></div></div>
+      <div class="rec-row"><div class="rec-num">7.12</div><div class="rec-text">혈당계 정확도 차이를 인지해야 함. <strong>FDA(또는 해당국 규제기관) 승인 기기만</strong> 사용, 유효기간 내 정품 스트립 사용. <span class="grade grade-E">E</span></div></div>
+      <div class="rec-row"><div class="rec-num">7.13</div><div class="rec-text">비인슐린요법 환자의 BGM은 A1C 개선의 일관된 근거는 부족하나, 치료조정 프로그램과 결합 시 식단·운동·약물(특히 저혈당 유발 약제) 조정에 유용할 수 있음. <span class="grade grade-E">E</span></div></div>
+      <div class="rec-row"><div class="rec-num">7.14</div><div class="rec-text">혈당계 측정값에 대한 약물·물질의 간섭 가능성을 고려해야 함. <span class="grade grade-B">B</span></div></div>
+    </div>
+  </div>
+
+  <!-- 정확도 기준 -->
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <div class="ch-title"><span>📏</span> 혈당계 정확도 기준 — ISO 15197:2013 vs FDA</div>
+      <span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <table class="tbl">
+        <tr><th>환경</th><th>FDA 기준</th><th>ISO 15197:2013 기준</th></tr>
+        <tr><td><strong>병원용</strong></td><td>95%가 ±12% 이내(BG≥75mg/dL)<br>95%가 ±12mg/dL 이내(BG&lt;75mg/dL)<br>98%가 ±15% 이내(BG≥75mg/dL)<br>98%가 ±15mg/dL 이내(BG&lt;75mg/dL)</td><td>95%가 ±15% 이내(BG≥100mg/dL)<br>95%가 ±15mg/dL 이내(BG&lt;100mg/dL)<br>99%가 합의오차격자 A/B영역 이내</td></tr>
+        <tr><td><strong>가정용</strong></td><td>95%가 ±15% 이내(전체 범위)<br>99%가 ±20% 이내(전체 범위)</td><td>(가정용은 별도 표 없음, 위 기준 참조)</td></tr>
+      </table>
+      <div class="alert alert-warn" style="margin-top:8px">
+        <span>⚠️</span>
+        <div>미국 내 현재 판매 중인 혈당계는 <strong>승인 당시 기준</strong>을 충족해야 하며, 이는 현재 기준과 다를 수 있음. 시판 후 정확도 모니터링은 제조사에 맡겨져 있고 독립기관의 정기점검은 없음. 과거 분석에서 18개 혈당계 중 14개만 최소 정확도 기준 충족.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 간섭물질 -->
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <div class="ch-title"><span>🧪</span> 혈당계 측정에 영향을 주는 물질·상태</div>
+      <span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <table class="tbl">
+        <tr><th>물질/상태</th><th>혈당 측정값에 대한 영향</th></tr>
+        <tr><td>말토스*</td><td class="v-up" style="color:var(--red);font-weight:700">거짓 상승</td></tr>
+        <tr><td>갈락토스</td><td style="color:var(--red);font-weight:700">거짓 상승</td></tr>
+        <tr><td>자일로스</td><td style="color:var(--red);font-weight:700">거짓 상승</td></tr>
+        <tr><td>N-아세틸시스테인</td><td>기기 설계에 따라 거짓 상승 또는 하강</td></tr>
+        <tr><td>아세트아미노펜</td><td>기기 설계에 따라 거짓 상승 또는 하강</td></tr>
+        <tr><td>도파민</td><td>기기 설계에 따라 거짓 상승 또는 하강</td></tr>
+        <tr><td>프랄리독심(2-PAM)</td><td>기기 설계에 따라 거짓 상승 또는 하강</td></tr>
+        <tr><td>하이드록시우레아</td><td>기기 설계에 따라 거짓 상승 또는 하강</td></tr>
+        <tr><td>비타민C</td><td>기기 설계에 따라 거짓 상승 또는 하강</td></tr>
+        <tr><td>고헤마토크릿</td><td style="color:var(--accent);font-weight:700">거짓 하강</td></tr>
+        <tr><td>저헤마토크릿</td><td style="color:var(--red);font-weight:700">거짓 상승</td></tr>
+      </table>
+      <small style="display:block;margin-top:6px">* 비변형 GDH-PQQ 효소법에서만 — 현대 BGM 설계는 이 효소를 사용하지 않음. 기기별 행동이 다를 수 있어 제품 라벨링 확인 필요.</small>
+    </div>
+  </div>
+
+  <!-- 측정 정확도 저해 요인 -->
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <div class="ch-title"><span>⚙️</span> 혈당계 부정확성의 물리적 요인</div>
+      <span class="toggle">▾</span>
+    </div>
+    <div class="card-body collapsed">
+      <div class="grid2" style="gap:8px">
+        <div class="acc">
+          <div class="acc-hdr" onclick="toggleAcc(this)"><span>🫁 산소(Oxygen)</span><span class="acc-toggle">▾</span></div>
+          <div class="acc-body">대부분 글루코스 산화효소(glucose oxidase) 또는 글루코스 탈수소효소(glucose dehydrogenase) 기반. <strong>산화효소형은 산소농도에 민감</strong> — 정상 산소포화도의 모세혈에서만 사용. 고산소(동맥혈·산소요법)→거짓 저혈당, 저산소(고지대·저산소증·정맥혈)→거짓 고혈당. 탈수소효소형은 일반적으로 산소에 비민감.</div>
+        </div>
+        <div class="acc">
+          <div class="acc-hdr" onclick="toggleAcc(this)"><span>🌡️ 온도</span><span class="acc-toggle">▾</span></div>
+          <div class="acc-body">반응이 온도에 민감하여 모든 기기에 허용온도 범위 존재. 대부분 부적절한 온도에서 오류 표시하나, 일부는 부정확할 수 있다는 메시지와 함께 값을 표시.</div>
+        </div>
+      </div>
+      <div class="alert alert-info" style="margin-top:8px">
+        <span>📌</span>
+        <div>중환자실 등에서는 중증질환 시 혈당계 측정값 오류 가능성에 특히 유의해야 하며, 의심스러운 경우 <strong>검사실 기반 값</strong>을 사용해야 함.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 사용 최적화 -->
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <div class="ch-title"><span>📊</span> BGM 최적 활용 및 환자군별 빈도</div>
+      <span class="toggle">▾</span>
+    </div>
+    <div class="card-body collapsed">
+      <ul style="font-size: calc(12px * var(--fscale, 1));padding-left:16px;line-height:1.9">
+        <li>2.4만명 코호트: BGM 빈도가 높을수록 A1C 낮음(전 생애주기에 걸쳐 1형당뇨에서 일관됨)</li>
+        <li>소아청소년 2.7만명 데이터베이스: 일일 BGM 1회 추가 시 A1C <strong>−0.2%</strong>, 급성합병증 감소와 연관</li>
+        <li>매일 1회 이상 측정자 중 상당수가 고/저혈당 결과에도 <strong>조치를 취하지 않음</strong> — 데이터를 실제 치료조정에 통합하는 것이 핵심</li>
+        <li>기저인슐린 사용자: 공복혈당 BGM으로 용량조정 시 A1C 개선</li>
+        <li>비인슐린 2형당뇨: 구조화된 임상 프로그램과 결합 시 가장 큰 이득</li>
+        <li>BGM 필요성·빈도는 매 정기방문마다 재평가 권고</li>
+      </ul>
+      <div class="alert alert-warn" style="margin-top:8px">
+        <span>⚠️</span>
+        <div>중고 또는 재판매 혈당시험지는 <strong>구매·재판매 금지</strong> 권고 — 부정확한 결과 가능성. 미개봉·유효기간 내 정품 바이알만 사용.</div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /bgm -->
+
+
+<!-- ══════════════════ TAB 3: CGM ══════════════════ -->
+<div id="tab-cgm" class="panel">
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <div class="ch-title"><span>📡</span> 연속혈당측정(CGM) — 권고 7.15–7.20</div>
+      <span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <div class="rec-row"><div class="rec-num">7.15</div><div class="rec-text">당뇨병 진단 시점부터 이후 언제든, <strong>인슐린요법</strong> <span class="grade grade-A">A</span>, <strong>저혈당 유발 가능 비인슐린요법</strong> <span class="grade grade-C">C</span>, <strong>관리에 CGM이 도움되는 모든 치료</strong> <span class="grade grade-C">C</span>에서 CGM 권고. 기기 선택은 개인 상황·선호·필요에 따름. <span class="grade grade-E">E</span></div></div>
+      <div class="rec-row"><div class="rec-num">7.16</div><div class="rec-text">인슐린요법자는 <strong>최대한 매일 가깝게</strong> CGM 사용해야 최대 이득. <span class="grade grade-A">A</span> 보급품 접근이 끊기지 않도록 보장. <span class="grade grade-A">A</span></div></div>
+      <div class="rec-row"><div class="rec-num">7.17</div><div class="rec-text">1형당뇨 임신 중 CGM은 TIR·TAR 목표 달성에 도움 <span class="grade grade-A">A</span>, A1C 목표 달성에도 도움 <span class="grade grade-B">B</span>, 기타 임신 중 당뇨 유형에도 유익할 수 있음. <span class="grade grade-E">E</span></div></div>
+      <div class="rec-row"><div class="rec-num">7.18</div><div class="rec-text">지속적 CGM 사용이 어려운 상황에서는 개인용 또는 전문가용 CGM의 간헐적 사용을 고려. <span class="grade grade-C">C</span></div></div>
+      <div class="rec-row"><div class="rec-num">7.19</div><div class="rec-text">피부 자극·알레르기 반응을 평가하고 대처해야 함. <span class="grade grade-E">E</span></div></div>
+      <div class="rec-row"><div class="rec-num">7.20</div><div class="rec-text">CGM 착용자는 정확도에 영향을 줄 수 있는 간섭물질·요인에 대한 교육을 받아야 함. <span class="grade grade-C">C</span></div></div>
+    </div>
+  </div>
+
+  <!-- CGM 기기 종류표 -->
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <div class="ch-title"><span>📟</span> CGM 기기 분류 (Table 7.3)</div>
+      <span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <table class="tbl">
+        <tr><th>유형</th><th>브랜드</th><th>구입경로</th><th>알람</th></tr>
+        <tr><td rowspan="5"><span class="stage t-cgm">rtCGM</span><br>(처방형 실시간)</td><td>Libre 2 Plus / Libre 3 Plus</td><td><span class="stage t-pump">처방</span></td><td><span class="stage t-yes">있음</span></td></tr>
+        <tr><td>Dexcom G6 / G7</td><td><span class="stage t-pump">처방</span></td><td><span class="stage t-yes">있음</span></td></tr>
+        <tr><td>Eversense 365</td><td><span class="stage t-pump">처방</span></td><td><span class="stage t-yes">있음</span></td></tr>
+        <tr><td>Guardian 4</td><td><span class="stage t-pump">처방</span></td><td><span class="stage t-yes">있음</span></td></tr>
+        <tr><td>Simplera</td><td><span class="stage t-pump">처방</span></td><td><span class="stage t-yes">있음</span></td></tr>
+        <tr><td rowspan="2"><span class="stage t-bgm">OTC-CGM</span><br>(일반의약품형)</td><td>Dexcom Stelo</td><td><span class="stage t-bgm">OTC</span></td><td><span class="stage t-no">없음</span></td></tr>
+        <tr><td>Abbott Lingo</td><td><span class="stage t-bgm">OTC</span></td><td><span class="stage t-no">없음</span></td></tr>
+        <tr><td rowspan="2"><span class="stage t-digi">전문가용 CGM</span></td><td>Abbott FreeStyle Libre Pro</td><td>병원 내</td><td><span class="stage t-no">없음</span></td></tr>
+        <tr><td>Dexcom G6 Pro</td><td>병원 내</td><td><span class="stage t-no">없음</span></td></tr>
+      </table>
+      <div class="alert alert-info" style="margin-top:8px">
+        <span>📌</span>
+        <div><strong>rtCGM</strong>(처방형, 알람있음) vs <strong>OTC-CGM</strong>(누구나 구매 가능, 알람없음, 저혈당 위험 약제 미사용자용) vs <strong>전문가용 CGM</strong>(의료진이 부착, 맹검/비맹검 단기간 데이터 생성). 대부분 <strong>통합 CGM(iCGM)</strong>으로 FDA Class II 승인, 타 기기(AID·연결형 펜)와 연동 가능.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CGM 이득 - RCT -->
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <div class="ch-title"><span>📊</span> CGM의 이득 — RCT 근거</div>
+      <span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <ul style="font-size: calc(12px * var(--fscale, 1));padding-left:16px;line-height:1.9">
+        <li>연령·성별·교육·소득·기저 당뇨특성과 <strong>무관하게</strong> CGM 이득 입증</li>
+        <li>1형당뇨(펌프 또는 MDI): 성인 전 연령대(고령자 포함) 및 소아에서 A1C·저혈당 개선</li>
+        <li>어린 소아: 저혈당 감소 + 부모의 행동지원 결합 시 저혈당 우려·당뇨디스트레스 감소</li>
+        <li>2형당뇨(MDI 또는 인슐린+비인슐린요법): A1C 감소, TIR 증가, TBR 증가하나 <strong>중증(level 3) 저혈당 감소는 불일치</strong></li>
+        <li>2형당뇨(비인슐린): 최근 메타분석에서 BGM 대비 A1C·TIR·TBR·TAR 모두 더 큰 개선 + 사용자 만족도 향상</li>
+        <li>2형당뇨 청소년 단기사용: A1C·혈당 변화는 제한적이나 <strong>행동변화</strong>(자가측정·인슐린투여 증가, 삶의 질 개선) 보고</li>
+        <li>2형당뇨 기저인슐린 사용자에서 <strong>CGM 중단 시 A1C·TIR 개선 효과가 부분적으로 소실</strong> → 지속 사용이 최대 이득</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 실사용 데이터 -->
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <div class="ch-title"><span>🌍</span> 실사용(Real-world) 데이터</div>
+      <span class="toggle">▾</span>
+    </div>
+    <div class="card-body collapsed">
+      <ul style="font-size: calc(12px * var(--fscale, 1));padding-left:16px;line-height:1.9">
+        <li>1형·2형당뇨 성인에서 급성합병증(DKA, 중증저혈당, 당뇨관련 혼수, 입원) 감소, <strong>CGM 시작 2년 후에도 효과 지속</strong></li>
+        <li>2형당뇨(기저인슐린/비인슐린) 6개월 시점 급성당뇨사건·전체입원 감소</li>
+        <li>rtCGM 실사용: A1C 감소, 응급실방문·저혈당 입원 감소(단, 전체 응급실방문·고혈당 입원 감소는 유의하지 않음)</li>
+        <li>2형당뇨(비인슐린) rtCGM 6·12개월: 평균혈당↓, GMI↓, TIR↑, 타이트목표범위 시간↑, TAR↓</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 임신 -->
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <div class="ch-title"><span>🤰</span> 임신 중 CGM</div>
+      <span class="toggle">▾</span>
+    </div>
+    <div class="card-body collapsed">
+      <div>CGM 적응증이 임신까지 확대된 기기: <strong>Dexcom G7, FreeStyle Libre 2, FreeStyle Libre 3</strong>. 자세한 내용은 ADA Standards Section 15 "임신 중 당뇨병 관리" 참조.</div>
+    </div>
+  </div>
+
+  <!-- 전문가용/간헐적 사용 -->
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <div class="ch-title"><span>🔬</span> 전문가용 CGM 및 개인용 CGM의 간헐적 사용</div>
+      <span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <ul style="font-size: calc(12px * var(--fscale, 1));padding-left:16px;line-height:1.9">
+        <li>전문가용 CGM(맹검/비맹검 후향적 데이터): 고저혈당 패턴 파악에 유용, 개인 CGM 미보유자나 짧은 비맹검 경험을 원하는 경우 특히 유용</li>
+        <li>저혈당 유발 약제 사용자에서 저혈당 기간 평가·용량조정에 유용</li>
+        <li>비인슐린/기저인슐린 2형당뇨에서 간헐적 사용(rtCGM/isCGM) RCT: 조기·후기 모두 A1C 개선</li>
+        <li>실사용 연구: 전문가용 CGM 사용 후 6개월 시점 A1C 개선 + <strong>SGLT2 억제제·GLP-1 RA 등 심대사 이득 약제로의 전환 증가</strong></li>
+        <li>전문가용/간헐적 CGM은 항상 <strong>분석·해석 + 필요시 교육</strong>과 결합되어야 함</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 부작용 -->
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <div class="ch-title"><span>🩹</span> CGM 부작용 — 피부반응</div>
+      <span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <div class="alert alert-warn">
+        <span>⚠️</span>
+        <div>피부 부착형 기기 전체에서 <strong>접촉성 피부염</strong>(자극성·알레르기성) 보고. 일부는 피부감작물질인 <strong>isobornyl acrylate</strong>와 연관(추가 확산성 알레르기 반응 유발 가능). 테이프 제형이 시간에 따라 변할 수 있어 <strong>주기적으로 접착반응 여부 확인</strong> 필요.</div>
+      </div>
+      <ul style="font-size: calc(12px * var(--fscale, 1));padding-left:16px;line-height:1.9;margin-top:8px">
+        <li>패치테스트로 접촉성피부염 원인 식별 가능</li>
+        <li>테이프 알러젠 식별·제거가 편안한 기기 사용·자가관리 증진에 중요</li>
+        <li><strong>PANTHER Program</strong>(www.pantherprogram.org/skin-solutions)에서 영어·스페인어 자료 제공</li>
+        <li>테이프 민감 환자는 <strong>이식형 센서</strong>로 피부반응 회피 가능</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 간섭물질 표 -->
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <div class="ch-title"><span>🧪</span> CGM 간섭물질 (Table 7.4)</div>
+      <span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <table class="tbl small-text">
+        <tr><th>약물</th><th>영향받는 시스템</th><th>효과</th></tr>
+        <tr><td>아세트아미노펜 &gt;4g/day</td><td>Dexcom G6, G7</td><td style="color:var(--red);font-weight:700">센서값이 실제보다 높게 측정</td></tr>
+        <tr><td>아세트아미노펜 (모든 용량)</td><td>Medtronic Guardian 4</td><td style="color:var(--red);font-weight:700">센서값이 실제보다 높게 측정</td></tr>
+        <tr><td>아스코르브산(비타민C) &gt;500mg/day</td><td>FreeStyle Libre 2, 3</td><td style="color:var(--red);font-weight:700">센서값이 실제보다 높게 측정</td></tr>
+        <tr><td>아스코르브산(비타민C) &gt;1000mg/day</td><td>FreeStyle Libre 2 Plus, 3 Plus</td><td style="color:var(--red);font-weight:700">센서값이 실제보다 높게 측정</td></tr>
+        <tr><td>하이드록시우레아</td><td>Dexcom G6, G7, Medtronic Guardian 4</td><td style="color:var(--red);font-weight:700">센서값이 실제보다 높게 측정</td></tr>
+        <tr><td>만니톨(정맥/복막투석액)</td><td>Senseonics Eversense 365</td><td style="color:var(--red);font-weight:700">센서값이 실제보다 높게 측정</td></tr>
+        <tr><td>솔비톨(정맥/복막투석액)</td><td>Senseonics Eversense 365</td><td style="color:var(--red);font-weight:700">센서값이 실제보다 높게 측정</td></tr>
+      </table>
+      <div class="alert alert-info" style="margin-top:8px">
+        <span>📌</span>
+        <div><strong>하이드록시우레아</strong>(골수증식성질환·혈액학적 질환 치료제)는 최근 발견된 주요 간섭물질로 일시적 센서값 상승 유발. 환자의 복용 약물·보충제를 정기적으로 검토하여 간섭 가능성을 확인하고, 신뢰도가 의심될 때 <strong>추가 BGM 사용</strong>을 권고해야 함.</div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /cgm -->
+
+
+<!-- ══════════════════ TAB 4: 인슐린전달 ══════════════════ -->
+<div id="tab-insulin" class="panel">
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <div class="ch-title"><span>💉</span> 인슐린 주사기·펜 — 권고 7.21–7.24</div>
+      <span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <div class="rec-row"><div class="rec-num">7.21</div><div class="rec-text">MDI 환자에서 대부분 <strong>인슐린펜이 선호</strong>되나, 개인·보호자 선호, 인슐린 종류, 바이알 가용성, 투여요법, 비용, 자가관리능력에 따라 주사기도 사용 가능. <span class="grade grade-C">C</span></div></div>
+      <div class="rec-row"><div class="rec-num">7.22</div><div class="rec-text">손기능 문제·시각장애 환자 또는 공동의사결정에 따라 정확한 투여를 위해 펜 또는 주사보조기구 권고. <span class="grade grade-C">C</span></div></div>
+      <div class="rec-row"><div class="rec-num">7.23</div><div class="rec-text">MDI 사용자에게 적절한 경우 <strong>연결형 인슐린펜</strong> 제공. <span class="grade grade-B">B</span></div></div>
+      <div class="rec-row"><div class="rec-num">7.24</div><div class="rec-text">FDA 승인 인슐린 용량계산기/의사결정지원시스템이 용량 계산에 유용할 수 있음. <span class="grade grade-B">B</span></div></div>
+    </div>
+  </div>
+
+  <!-- 주사기/펜 비교 -->
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <div class="ch-title"><span>⚖️</span> 주사기 vs 펜 — 사양 비교</div>
+      <span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <table class="tbl">
+        <tr><th>항목</th><th>주사기(Syringe)</th><th>인슐린펜(Pen)</th></tr>
+        <tr><td>용량 범위</td><td>1mL(최대100단위)/0.5mL(50단위)/0.3mL(30단위), U-100 기준</td><td>0.5단위~2단위 증분(U-200은 2단위, U-500은 5단위 증분)</td></tr>
+        <tr><td>특수 농도</td><td>일부 지역 U-80, U-40(구형/수의용), U-500 전용 주사기</td><td>U-200, U-500 등 고농도 전용 펜 존재</td></tr>
+        <tr><td>재사용</td><td>보통 1회용이나 자원제한 환경에서 적절한 세척·보관 시 재사용 사례 있음</td><td>1회용(프리필드) 또는 카트리지 교체형(재사용형) 존재</td></tr>
+        <tr><td>특수 기능</td><td>없음</td><td>일부 재사용형은 <strong>메모리 기능</strong>(투여량·시점 기록) 탑재</td></tr>
+        <tr><td>사용 기간</td><td>1회성</td><td>개시 후 인슐린 종류에 따라 보통 28일(14–56일 범위)</td></tr>
+      </table>
+      <div class="alert alert-info" style="margin-top:8px">
+        <span>📌</span>
+        <div>펜은 일반적으로 주사기 대비 혈당 결과가 <strong>동등하거나 약간 개선</strong>되는 경향. 다수가 단순함·편의성으로 펜을 선호하나, <strong>인슐린 종류에 따라 펜 또는 바이알 한 형태로만 구입 가능</strong>한 경우가 있고 가격차도 큼(Table 9.4 참조).</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 바늘 -->
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <div class="ch-title"><span>📍</span> 주사바늘 — 게이지·길이 선택</div>
+      <span class="toggle">▾</span>
+    </div>
+    <div class="card-body collapsed">
+      <table class="tbl">
+        <tr><th>항목</th><th>범위</th><th>비고</th></tr>
+        <tr><td>게이지(Gauge)</td><td>22–34</td><td>게이지가 높을수록 바늘이 더 얇음. 굵은 바늘은 더 빠르게 투여, 얇은 바늘은 통증 감소</td></tr>
+        <tr><td>길이</td><td>4–12.7 mm</td><td>짧은 바늘(4–5mm)은 근육내 주사·불규칙 흡수·지방비대증 위험 감소 가능성 시사</td></tr>
+      </table>
+      <div class="alert alert-warn" style="margin-top:8px">
+        <span>⚠️</span>
+        <div>바늘 재사용 시 둔화되어 주사 시 통증이 더 클 수 있음. 정확한 주사기법은 매 투여마다 전체 용량을 받기 위한 필수 전제조건 — 상세 기법은 ADA Standards Section 9 "혈당치료 약물요법" 참조.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 연결형 펜 -->
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <div class="ch-title"><span>📲</span> 연결형 인슐린펜(Connected Insulin Pens)</div>
+      <span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <div class="alert alert-pump">
+        <span>🔗</span>
+        <div><strong>연결형 인슐린펜</strong> = 인슐린 투여 데이터를 기록·전송하는 펜. <strong>펜캡</strong> 형태로 기존 펜에 부착해 용량계산·메모리 기능을 추가하는 제품도 있음. 일부는 CGM과 동기화되어 다운로드 가능한 데이터 리포트 제공.</div>
+      </div>
+      <ul style="font-size: calc(12px * var(--fscale, 1));padding-left:16px;line-height:1.9;margin-top:8px">
+        <li>정량적 연구: 환자들은 투여량·혈당을 자동 기록하는 능력 때문에 연결형 펜을 선호</li>
+        <li>1형당뇨 다기관 RCT: 펜캡 사용군이 <strong>6주 시점 TIR 증가, GMI·TAR 감소</strong></li>
+        <li>체계적 문헌고찰: A1C 감소, TIR 증가, 저혈당 감소 등 일관된 혈당개선 확인</li>
+        <li>3,954명 다국가 실사용 데이터: 연결형 펜 치료참여도와 혈당결과가 양의 상관 — <strong>14일간 기저인슐린 2회 또는 볼루스 4회 누락만으로도 TIR ≥5%p 임상적으로 의미있는 감소</strong>와 연관</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 볼루스 계산기 -->
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <div class="ch-title"><span>🧮</span> 볼루스 계산기 / 용량결정지원시스템</div>
+      <span class="toggle">▾</span>
+    </div>
+    <div class="card-body collapsed">
+      <div>투여결정을 돕기 위해 개발된 시스템들로, 사용된 알고리즘과 그에 따른 투여 권고의 안전성·유효성을 보장하기 위해 <strong>FDA 승인 대상</strong>. 사용 희망자는 <strong>FDA 승인 제품</strong> 사용을 권장받아야 함. 초기 용량계산 설정과 이후 조정에는 의료진의 입력·교육이 도움이 됨.</div>
+    </div>
+  </div>
+
+</div><!-- /insulin -->
+
+
+<!-- ══════════════════ TAB 5: AID 시스템 ══════════════════ -->
+<div id="tab-aid" class="panel">
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <div class="ch-title"><span>🤖</span> AID 시스템 — 권고 7.25a–7.27</div>
+      <span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <div class="rec-row"><div class="rec-num">7.25a</div><div class="rec-text">AID 시스템은 MDI·CSII·센서증강펌프보다 선호되는 인슐린전달법: <strong>1형당뇨</strong> <span class="grade grade-A">A</span>, <strong>2형당뇨 성인</strong> <span class="grade grade-A">A</span>, <strong>2형당뇨 소아청소년</strong> <span class="grade grade-E">E</span>, <strong>기타 인슐린결핍형 당뇨</strong> <span class="grade grade-B">B</span><span class="grade grade-C">C</span><span class="grade grade-D" style="background:#9b1c2e">D</span><span class="grade grade-E">E</span>. 선택은 개인 상황·선호·필요에 따름. <span class="grade grade-E">E</span></div></div>
+      <div class="rec-row"><div class="rec-num">7.25b</div><div class="rec-text">기저인슐린 치료 중 개별화된 혈당목표에 미달하는 일부 2형당뇨 환자에서 AID 고려. <span class="grade grade-B">B</span></div></div>
+      <div class="rec-row"><div class="rec-num">7.26</div><div class="rec-text">CSII·AID 사용자는 모든 제3자 보험에서 지속적 접근권을 가져야 함. <span class="grade grade-E">E</span></div></div>
+      <div class="rec-row"><div class="rec-num">7.27</div><div class="rec-text"><strong>오픈소스 AID(OS-AID)</strong>를 선택한 환자에게도 당뇨병 관리 지원·조언을 제공해야 함. <span class="grade grade-B">B</span></div></div>
+    </div>
+  </div>
+
+  <!-- AID 구조 -->
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <div class="ch-title"><span>⚙️</span> AID 시스템 구조 및 작동원리</div>
+      <span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <div class="gear-row">
+        <div class="gear-box gear-pump">
+          <div class="gear-title">1️⃣ 인슐린펌프</div>
+          펌프 본체·인슐린포드 또는 폰앱에 알고리즘 탑재
+        </div>
+        <div class="gear-box gear-cgm">
+          <div class="gear-title">2️⃣ CGM 시스템</div>
+          하나 이상의 CGM과 통합, 실시간 혈당 피드백 제공
+        </div>
+        <div class="gear-box gear-bgm">
+          <div class="gear-title">3️⃣ 알고리즘</div>
+          예측 혈당방향·변화속도에 따라 인슐린 증가·감소·일시정지
+        </div>
+      </div>
+      <ul style="font-size: calc(12px * var(--fscale, 1));padding-left:16px;line-height:1.9;margin-top:8px">
+        <li>기저율 조절 또는 <strong>5분마다 마이크로볼루스</strong>로 기저율을 대체하는 방식</li>
+        <li>예측 시점: 보통 <strong>30분 또는 1시간</strong> 후 혈당 예측에 기반</li>
+        <li>혈당목표: 고정형 또는 조정형(<strong>87–180 mg/dL</strong> 범위, 시스템별 다름), 24시간 기준이나 일부는 하루 최대 8구간 설정 가능</li>
+        <li>모든 AID는 자동 교정용량 제공(마이크로도즈 내 포함 또는 별도 교정볼루스)</li>
+        <li><strong>수동모드 사용은 일반적으로 권장되지 않음</strong>(CGM 조절 이득 부분/전체 소실) — 단 일부 상황에서 필요할 수 있어 주기적 설정 재검토 필요</li>
+        <li>현재 시스템은 식사 시 <strong>탄수화물 수동입력</strong>(정량 또는 정성적 추정) 필요</li>
+        <li>운동 모드: 혈당목표 상향 + 보수적 인슐린전달(저혈당 위험 감소), 장기공복·시술전 금식 등에도 활용 가능 — 단 모드 활성 중에도 일정 임계치 초과 시 자동교정 볼루스가 나갈 수 있음</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 부분 폐쇄루프(SAP) -->
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <div class="ch-title"><span>📜</span> 부분 폐쇄루프 시스템(SAP) — 역사적 배경</div>
+      <span class="toggle">▾</span>
+    </div>
+    <div class="card-body collapsed">
+      <div><strong>센서증강펌프(SAP)</strong>는 현재 AID의 전신으로, 펌프+CGM+저혈당 시(또는 30분 내 예측 시) 인슐린 자동중단 알고리즘으로 구성. 현재는 더 완전한 기능의 AID로 대체되어 <strong>더 이상 흔히 사용되지 않음</strong>. 6주 교차연구에서 예측저혈당중단(PLGS) 시스템이 반동성 고혈당 없이 &lt;70mg/dL 체류시간을 감소시킴 — 다양한 연령대에서 확인.</div>
+    </div>
+  </div>
+
+  <!-- 중추 임상시험 데이터 -->
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <div class="ch-title"><span>🔬</span> 중추(Pivotal) 임상시험 데이터</div>
+      <span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <ul style="font-size: calc(12px * var(--fscale, 1));padding-left:16px;line-height:1.9">
+        <li>현재 FDA 승인 모든 AID 시스템은 소아·청소년·성인 1형당뇨 및 2형당뇨 성인에서 안전성·유효성 검증</li>
+        <li><strong>2세 이상 모든 연령</strong>(고령자 포함)에서 표준 인슐린전달·SAP·통상치료보다 <strong>일관되게 우수</strong> — A1C 개선, TIR 증가(특히 야간), 저혈당 시간 감소</li>
+        <li><strong>기저 A1C가 가장 높거나 TIR이 가장 낮은 환자</strong>에서 개선효과가 가장 큼</li>
+        <li>운동관련 저혈당 위험 감소 효과 + 심리사회적 이득(불안·당뇨디스트레스 감소 등) 다수 보고</li>
+        <li>건강경제성 분석: AID는 <strong>비용효과적(cost-effective)</strong></li>
+      </ul>
+      <div class="alert alert-success" style="margin-top:8px">
+        <span>✅</span>
+        <div>AID는 안전하게 사용할 수 있는 1형당뇨 환자에서 <strong>표준치료(Standard of Care)</strong>이자 <strong>선호되는 인슐린전달방법</strong>. 결정은 환자(/보호자)의 선호와 훈련·접근성·지원 자원의 가용성에 기반해야 함.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 실사용 데이터 -->
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <div class="ch-title"><span>🌍</span> AID 실사용(Real-world) 데이터</div>
+      <span class="toggle">▾</span>
+    </div>
+    <div class="card-body collapsed">
+      <ul style="font-size: calc(12px * var(--fscale, 1));padding-left:16px;line-height:1.9">
+        <li>실사용 연구는 중추시험 대비 <strong>최대 30배</strong> 많은 사용자 데이터 포함</li>
+        <li>일부 시스템은 데이터가 자동으로 데이터베이스에 수집, 다른 시스템은 자발적 공유 기반</li>
+        <li>20개 연구·171,209명 분석 체계적 문헌고찰: 중추시험 결과 입증 + 신규 시스템에서 <strong>자동화 사용시간 증가</strong>, 평균 추적기간 9개월(대부분 6개월 이상)</li>
+        <li>이득: A1C·TIR 등 혈당지표 개선 + 심리사회적 이득</li>
+        <li>Medicare·Medicaid 수급자에서도 1형·2형당뇨 모두 <strong>동일한 혈당개선 효과</strong> 확인 → 접근성은 A1C 수준과 무관하게 보장되어야 함</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 임신 중 AID -->
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <div class="ch-title"><span>🤰</span> 임신 중 AID 시스템</div>
+      <span class="toggle">▾</span>
+    </div>
+    <div class="card-body collapsed">
+      <div class="alert alert-warn">
+        <span>⚠️</span>
+        <div>현재 FDA 승인 AID 시스템(상업적으로 출시되지 않은 1개 예외 제외)은 <strong>임신 특이적 혈당목표가 아니며</strong>, 임신 특이적 목표를 달성하도록 설계된 알고리즘도 아님. 임신 중 AID 시작·지속은 신중한 평가가 필요하며, 1형당뇨 환자 중 일부는 전문가 지침 하에 AID 후보로 평가될 수 있음. 자세한 내용은 Section 15 참조.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 펌프 합병증 -->
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <div class="ch-title"><span>⚠️</span> 인슐린 주입 관련 합병증·중단 이유</div>
+      <span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <div class="grid2" style="gap:8px">
+        <div class="acc">
+          <div class="acc-hdr" onclick="toggleAcc(this)"><span>💧 주입세트 문제</span><span class="acc-toggle">▾</span></div>
+          <div class="acc-body">탈착·막힘으로 인해 케톤증·DKA 위험 — 조기 인지·대응 필수. 기타 피부 문제: 지방비대증, (드물게) 지방위축증, 주입부위 감염.</div>
+        </div>
+        <div class="acc">
+          <div class="acc-hdr" onclick="toggleAcc(this)"><span>🛑 펌프치료 중단 이유(현재)</span><span class="acc-toggle">▾</span></div>
+          <div class="acc-body">비용·착용감 문제, 보험상실, 펌프에 대한 거부감, 혈당조절 불충분, 심리사회적 요인(불안·우울 등). 소아·청소년에서는 신체간섭 우려, 몸에 기기를 부착하는 것에 대한 불편함, 치료효과 의문, 경제적 부담이 주요 장벽. 전체적으로 중단 빈도는 <strong>과거보다 감소</strong>.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2형당뇨/기타 전달방식 -->
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <div class="ch-title"><span>🩹</span> 2형당뇨 등 기타 인슐린전달 옵션</div>
+      <span class="toggle">▾</span>
+    </div>
+    <div class="card-body collapsed">
+      <div>2형당뇨에서는 <strong>일회용 패치형 기기</strong>도 옵션 — 속효성 인슐린(기저) 지속주입 + 버튼 누름으로 2단위 증분 볼루스, 또는 기저인슐린 주사와 병용하는 볼루스 전용(2단위 증분) 기기. 기술 사용 여부는 <strong>안전하게 사용 가능한 환자의 개인 선택</strong> 사항으로 고려되어야 함.</div>
+    </div>
+  </div>
+
+  <!-- 오픈소스 AID -->
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <div class="ch-title"><span>🔓</span> 오픈소스 자동인슐린투여(OS-AID)</div>
+      <span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <div class="alert alert-digi">
+        <span>💻</span>
+        <div><strong>OS-AID</strong> = 작동을 관리하는 정밀 코드가 공개된 자동인슐린투여 알고리즘. 의료진·환자 모두 위험·이득을 더 완전히 이해할 수 있음. 어떤 상업업체도 코드를 공개할 수 있으나 대부분 비공개를 선택. <strong>OS-AID는 환자·보호자 커뮤니티가 설계·관리·정비</strong> — <strong>"DIY"라는 용어는 적절하지 않음</strong>(누구도 전체 코드를 작성하지 않으며, 대다수 사용자는 직접 소프트웨어를 만들지 않음).</div>
+      </div>
+      <table class="tbl" style="margin-top:8px">
+        <tr><th>알고리즘</th><th>구현 플랫폼</th><th>근거 수준</th></tr>
+        <tr><td><span class="drug drug-os">OpenAPS</span></td><td>전용칩(OpenAPS), Android(AndroidAPS), iPhone(iAPS/Trio)</td><td>대규모 실사용 연구 + 다기관 RCT 지지, <strong>예고없는 식사도 지원</strong></td></tr>
+        <tr><td><span class="drug drug-os">Loop</span></td><td>iPhone 앱</td><td>558명 전향적 실사용 데이터로 상업화 변형판 <strong>Tidepool Loop</strong>의 FDA 승인 지지</td></tr>
+      </table>
+      <div class="alert alert-info" style="margin-top:8px">
+        <span>📌</span>
+        <div>두 알고리즘 모두 펌프 설정(기저율, 인슐린:탄수화물 비율, 인슐린감수성인자 등)을 통해 <strong>알고리즘의 적극성을 직접 조정</strong> 가능 — 의료진은 이러한 설정 조정을 이해하고 지원할 것이 권장됨. 모든 AID와 마찬가지로 <strong>백업 인슐린치료계획</strong> 권고.</div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /aid -->
+
+
+<!-- ══════════════════ TAB 6: 디지털헬스·입원 ══════════════════ -->
+<div id="tab-digital" class="panel">
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <div class="ch-title"><span>📱</span> 디지털 헬스 기술 — 권고 7.28</div>
+      <span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <div class="rec-row"><div class="rec-num">7.28</div><div class="rec-text">당뇨병 또는 전당뇨 환자의 혈당개선을 위해 기술(CGM·인슐린펌프·당뇨앱)과 온라인/가상 면허 코칭의 <strong>결합</strong>을 고려. <span class="grade grade-B">B</span></div></div>
+      <div class="alert alert-digi" style="margin-top:8px">
+        <span>💻</span>
+        <div>FDA는 의학적·심리적 상태 치료를 목적으로 한 임상검증된 디지털 건강기술을 승인·모니터링하며, 이를 <strong>"디지셰티컬(digiceutical)"</strong>이라 부름. 그 외 데이터 표시·저장, 건강한 생활습관 독려, 제한적 임상데이터를 제공하는 앱들도 존재 — <strong>FDA 승인 외 앱은 RCT·검증 데이터가 부족</strong>하여 특정 앱에 대한 권고를 제공하기에 근거 불충분.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 데이터 보안 -->
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <div class="ch-title"><span>🔒</span> 온라인 개인정보보호 및 데이터 보안</div>
+      <span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <ul style="font-size: calc(12px * var(--fscale, 1));padding-left:16px;line-height:1.9">
+        <li><strong>Tidepool, Glooko</strong> 등 클라우드 기반 데이터 통합 플랫폼은 적절한 데이터보안 기능을 갖추고 <strong>HIPAA(미국 의료정보보호법)</strong>를 준수하도록 개발됨</li>
+        <li>이러한 플랫폼은 환자 모니터링과 의료진 접근 지원에 도움</li>
+        <li>소비자는 앱에 데이터 입력 전 <strong>개인정보보호·공유 정책</strong>을 읾어야 하며, 데이터 사용 방식을 직접 관리하는 방법(레지스트리/데이터저장소 참여 여부 선택 등)을 알아야 함</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 디지털 프로그램 종류 -->
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <div class="ch-title"><span>🖥️</span> 디지털 프로그램 유형</div>
+      <span class="toggle">▾</span>
+    </div>
+    <div class="card-body collapsed">
+      <div class="grid2" style="gap:8px">
+        <div class="acc">
+          <div class="acc-hdr" onclick="toggleAcc(this)"><span>🏃 생활습관 코칭형</span><span class="acc-toggle">▾</span></div>
+          <div class="acc-body">체중감량·신체활동 증가를 위한 생활습관 상담 제공. 건강코치 + 유사 참가자 소셜네트워크 소그룹 구성 다수.</div>
+        </div>
+        <div class="acc">
+          <div class="acc-hdr" onclick="toggleAcc(this)"><span>🛡️ 전당뇨 예방형</span><span class="acc-toggle">▾</span></div>
+          <div class="acc-body">당뇨병으로의 진행 예방을 목표 — 대개 당뇨병예방프로그램(Diabetes Prevention Program) 모델을 따름.</div>
+        </div>
+        <div class="acc">
+          <div class="acc-hdr" onclick="toggleAcc(this)"><span>📊 원격 모니터링형</span><span class="acc-toggle">▾</span></div>
+          <div class="acc-body">혈당·체중·혈압의 무선 모니터링 + 피드백·코칭 제공으로 당뇨결과 개선 지원.</div>
+        </div>
+        <div class="acc">
+          <div class="acc-hdr" onclick="toggleAcc(this)"><span>💬 문자메시지 기반형</span><span class="acc-toggle">▾</span></div>
+          <div class="acc-body">다양한 생활습관·치료 프로그램과 연계된 문자메시지 접근법 — 효과는 프로그램별로 다양.</div>
+        </div>
+      </div>
+      <div class="alert alert-success" style="margin-top:8px">
+        <span>✅</span>
+        <div>실사용 관찰연구(기저인슐린/비인슐린/약물미사용 2형당뇨): 디지털헬스+rtCGM 결합 사용 시 GMI·TAR 감소, <strong>TIR 15%p 증가</strong>, 주 1회 이상 참여활동 — RCT 데이터는 제한적이나 <strong>선택 가능한 지원 옵션</strong>으로 가치 있음.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 입원 환자 -->
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <div class="ch-title"><span>🏥</span> 입원 환자 관리 — 권고 7.29–7.30</div>
+      <span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <div class="rec-row"><div class="rec-num">7.29</div><div class="rec-text">개인 CGM 착용자는 임상적으로 적절한 경우 <strong>입원 중에도 CGM 사용을 지속</strong>해야 하며, 인슐린 투여·저혈당 평가·치료를 위한 <strong>확인용 시점혈당(point-of-care) 측정</strong>을 기관 프로토콜에 따라 병행. <span class="grade grade-B">B</span></div></div>
+      <div class="rec-row"><div class="rec-num">7.30</div><div class="rec-text">입원 환자에서 임상적으로 적절한 경우 인슐린펌프 또는 AID 사용을 지속. 필요 보급품·자원·훈련·지속적 역량평가 가용성 및 기관 프로토콜 시행을 전제로 함. <span class="grade grade-C">C</span></div></div>
+      <div class="alert alert-info" style="margin-top:8px">
+        <span>📌</span>
+        <div>입원 환경에서의 기술 사용에 대한 상세 내용은 ADA Standards Section 16 "병원에서의 당뇨병 관리" 참조.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 미래 전망 -->
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <div class="ch-title"><span>🔮</span> 향후 전망</div>
+      <span class="toggle">▾</span>
+    </div>
+    <div class="card-body collapsed">
+      <div class="alert alert-pump">
+        <span>🚀</span>
+        <div>당뇨병 기술의 발전 속도는 <strong>매우 빠름</strong> — 연구가 신제품 출시 속도를 따라가기 어려운 실정. 핵심은 언제나 <strong>당뇨병 환자 그 자체</strong> — 기기·앱 보유만으로는 결과가 바뀌지 않으며, <strong>적절히 참여(engage)</strong>해야 긍정적 건강이득 창출 가능. 의료팀은 기기·프로그램 선택을 지원하고 지속적 교육·훈련으로 사용을 뒷받침해야 함. 아직 자가관리 부담을 완전히 없애는 기술은 없으나, 형평성 있게 보급된다면 관리를 더 쉽게 만들 수 있음.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 약어 -->
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <div class="ch-title"><span>📚</span> 주요 약어 모음</div>
+      <span class="toggle">▾</span>
+    </div>
+    <div class="card-body collapsed">
+      <div id="abbr-main-grid" class="abbr-grid"></div>
+    </div>
+  </div>
+
+</div><!-- /digital -->
+
+</div><!-- /main -->
+
+<!-- ════ 약어 데이터 ════ -->
+<script>
+const FONT_ZOOM_LEVELS = [1, 1.25, 1.5];
+let fontZoomIndex = 0;
+
+function applyFontZoom(scale) {
+  document.documentElement.style.setProperty('--fscale', scale);
+  const label = document.getElementById('font-zoom-label');
+  if (label) label.textContent = Math.round(scale * 100) + '%';
+}
+
+function cycleFontZoom() {
+  fontZoomIndex = (fontZoomIndex + 1) % FONT_ZOOM_LEVELS.length;
+  applyFontZoom(FONT_ZOOM_LEVELS[fontZoomIndex]);
+}
+
+const ABBR_DATA = [
+  { term:"AID",   def:"Automated Insulin Delivery — 자동인슐린전달 시스템 (펌프+CGM+알고리즘)" },
+  { term:"BGM",   def:"Blood Glucose Monitoring — 자가혈당측정" },
+  { term:"CGM",   def:"Continuous Glucose Monitoring — 연속혈당측정" },
+  { term:"CSII",  def:"Continuous Subcutaneous Insulin Infusion — 지속피하인슐린주입(인슐린펌프)" },
+  { term:"DKA",   def:"Diabetic Ketoacidosis — 당뇨병성 케톤산증" },
+  { term:"DMMP",  def:"Diabetes Medical Management Plan — 당뇨병 의료관리계획(학교용)" },
+  { term:"GMI",   def:"Glucose Management Indicator — 혈당관리지표 (CGM 평균혈당 기반 추정 A1C)" },
+  { term:"iCGM",  def:"integrated CGM — 통합 CGM (타 기기와 연동 가능, FDA Class II)" },
+  { term:"isCGM", def:"intermittently scanned CGM — 간헐적 스캔형 CGM" },
+  { term:"MDI",   def:"Multiple Daily Injections — 다회 인슐린 주사요법" },
+  { term:"OS-AID",def:"Open-Source Automated Insulin Delivery — 오픈소스 자동인슐린전달 시스템" },
+  { term:"OTC",   def:"Over-The-Counter — 처방없이 구매 가능한(일반의약품형)" },
+  { term:"PLGS",  def:"Predictive Low-Glucose Suspend — 예측적 저혈당 인슐린중단 기능" },
+  { term:"rtCGM", def:"real-time CGM — 실시간 CGM (알람 포함, 처방형)" },
+  { term:"SAP",   def:"Sensor-Augmented Pump — 센서증강펌프 (AID의 전신, 현재는 드물게 사용)" },
+  { term:"TAR",   def:"Time Above Range — 목표범위 초과시간 (보통 >180mg/dL)" },
+  { term:"TBR",   def:"Time Below Range — 목표범위 미달시간 (저혈당 시간)" },
+  { term:"TIR",   def:"Time In Range — 목표범위 내 시간 (보통 70–180mg/dL)" },
+];
+
+// 약어 초기 렌더
+function renderAbbrMain() {
+  const g = document.getElementById('abbr-main-grid');
+  if (g) g.innerHTML = ABBR_DATA.map(a =>
+    `<div class="abbr-item"><div class="abbr-term">${a.term}</div><div class="abbr-def">${a.def}</div></div>`
+  ).join('');
+}
+renderAbbrMain();
+
+// 탭 전환
+function showTab(id) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  document.querySelectorAll('.tab').forEach(t => {
+    if (t.getAttribute('onclick') === `showTab('${id}')`) t.classList.add('active');
+  });
+}
+
+// 카드 토글
+function toggleCard(hdr) {
+  hdr.classList.toggle('open');
+  const body = hdr.nextElementSibling;
+  body.classList.toggle('collapsed');
+}
+
+// 아코디언 토글
+function toggleAcc(hdr) {
+  hdr.classList.toggle('open');
+  const body = hdr.nextElementSibling;
+  body.style.display = body.style.display === 'block' ? 'none' : 'block';
+}
+
+// 약어 검색
+function filterAbbr(q) {
+  const drop = document.getElementById('abbr-dropdown');
+  const grid = document.getElementById('abbr-grid-drop');
+  const cnt  = document.getElementById('abbr-count');
+  q = q.trim().toLowerCase();
+  if (!q) { drop.style.display = 'none'; cnt.textContent = ''; return; }
+  const hits = ABBR_DATA.filter(a =>
+    a.term.toLowerCase().includes(q) || a.def.toLowerCase().includes(q)
+  );
+  cnt.textContent = hits.length || '';
+  if (!hits.length) { drop.style.display = 'none'; return; }
+  drop.style.display = 'block';
+  const inp = document.getElementById('abbr-input');
+  const rect = inp.getBoundingClientRect();
+  drop.style.top  = (rect.bottom + 4) + 'px';
+  drop.style.left = Math.max(8, rect.right - 460) + 'px';
+  grid.innerHTML = hits.map(a =>
+    `<div class="abbr-item"><div class="abbr-term">${a.term}</div><div class="abbr-def">${a.def}</div></div>`
+  ).join('');
+}
+
+document.addEventListener('click', e => {
+  if (!e.target.closest('.tab-abbr-wrap')) {
+    document.getElementById('abbr-dropdown').style.display = 'none';
+    document.getElementById('abbr-count').textContent = '';
+  }
+});
+
+// 초기 카드 상태
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('.card-header:not(.open)').forEach(h => {
+    const b = h.nextElementSibling;
+    if (b) b.classList.add('collapsed');
+  });
+});
+</script>
+</body>
+</html>

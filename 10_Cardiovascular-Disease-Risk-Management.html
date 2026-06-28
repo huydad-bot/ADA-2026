@@ -1,0 +1,1493 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ADA 2026 심혈관질환과 위험관리</title>
+<style>
+  :root {
+    --bg:#f6f8fa;--surface:#fff;--surface2:#f0f2f5;--border:#d0d7de;
+    --accent:#0969da;--accent2:#0550ae;--green:#1a7f37;--yellow:#9a6700;
+    --red:#cf222e;--orange:#bc4c00;--text:#1f2328;--text2:#57606a;
+    --teal:#0a7c8a;--purple:#5a3ea0;--fscale:1;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'Pretendard','Noto Sans KR',-apple-system,sans-serif;background:var(--bg);color:var(--text);font-size: calc(13px * var(--fscale, 1));line-height:1.5;}
+  header{background:var(--surface);border-bottom:1px solid var(--border);padding:12px 16px 8px;display:flex;flex-direction:column;align-items:center;gap:4px;position:sticky;top:0;z-index:100;}
+  .header-inner{width:100%;max-width:960px;display:flex;flex-direction:column;align-items:center;gap:4px;}
+  .logo-badge{background:var(--accent2);color:#fff;font-size: calc(10px * var(--fscale, 1));font-weight:700;padding:3px 8px;border-radius:4px;letter-spacing:.5px;}
+  .tab-bar{display:flex;justify-content:center;background:var(--surface);border-bottom:1px solid var(--border);overflow-x:auto;scrollbar-width:none;}
+  .tab-bar::-webkit-scrollbar{display:none;}
+  .font-zoom-btn{display:flex;align-items:center;gap:3px;flex-shrink:0;margin:4px 4px 4px 6px;padding:5px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:6px;color:var(--accent2);font-size:calc(11px * var(--fscale, 1));font-weight:700;cursor:pointer;user-select:none;white-space:nowrap;transition:background .15s;}
+  .font-zoom-btn:hover{background:var(--border);}
+  .font-zoom-btn .fz-icon{font-size:calc(12px * var(--fscale, 1));}
+  .tab-bar-inner{width:100%;max-width:960px;display:flex;align-items:center;gap:2px;padding:0 4px;}
+  .tab{padding:7px 11px;font-size: calc(11.5px * var(--fscale, 1));color:var(--text2);cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;transition:color .15s,border-color .15s;user-select:none;flex-shrink:0;}
+  .tab:hover{color:var(--text);}
+  .tab.active{color:var(--accent2);border-bottom-color:var(--accent2);}
+  .tab-abbr-wrap{display:flex;align-items:center;padding:4px 4px;margin-left:4px;flex-shrink:0;position:relative;}
+  .main{padding:12px 16px;max-width:960px;margin:0 auto;}
+  .panel{display:none;}
+  .panel.active{display:block;}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+  .grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;}
+  @media(max-width:680px){.grid2,.grid3{grid-template-columns:1fr;}}
+  .card{background:var(--surface);border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-bottom:10px;}
+  .card-header{background:var(--surface2);padding:8px 12px;font-size: calc(12px * var(--fscale, 1));font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.5px;border-bottom:1px solid var(--border);cursor:pointer;display:flex;align-items:center;justify-content:space-between;user-select:none;}
+  .card-header .toggle{font-size: calc(13px * var(--fscale, 1));transition:transform .2s;}
+  .card-header.open .toggle{transform:rotate(180deg);}
+  .card-body{padding:10px 12px;}
+  .card-body.collapsed{display:none;}
+  .stat-row{display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap;}
+  .stat-box{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:10px 14px;flex:1;min-width:90px;text-align:center;}
+  .stat-box.clickable{cursor:pointer;transition:box-shadow .15s,border-color .15s;}
+  .stat-box.clickable:hover{border-color:var(--accent2);box-shadow:0 2px 8px rgba(5,80,174,.15);}
+  .stat-val{font-size: calc(18px * var(--fscale, 1));font-weight:700;color:var(--accent2);}
+  .stat-lbl{font-size: calc(10px * var(--fscale, 1));color:var(--text2);margin-top:2px;}
+  .stat-hint{font-size: calc(9px * var(--fscale, 1));color:var(--accent2);margin-top:4px;opacity:.7;}
+  /* Modal */
+  .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:500;align-items:center;justify-content:center;}
+  .modal-overlay.open{display:flex;}
+  .modal-box{background:var(--surface);border-radius:12px;padding:20px;max-width:680px;width:92%;max-height:84vh;overflow-y:auto;box-shadow:0 16px 48px rgba(0,0,0,.22);position:relative;}
+  .modal-close{position:absolute;top:12px;right:14px;background:none;border:none;font-size: calc(18px * var(--fscale, 1));cursor:pointer;color:var(--text2);line-height:1;}
+  .modal-title{font-size: calc(15px * var(--fscale, 1));font-weight:700;color:var(--text);margin-bottom:12px;padding-right:20px;line-height:1.4;}
+  .modal-section{margin-bottom:12px;}
+  .modal-section-title{font-size: calc(11px * var(--fscale, 1));font-weight:700;color:var(--accent2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;border-bottom:1px solid var(--border);padding-bottom:4px;}
+  .modal-table{width:100%;border-collapse:collapse;font-size: calc(11.5px * var(--fscale, 1));}
+  .modal-table th{background:var(--surface2);color:var(--text2);padding:4px 8px;font-size: calc(10.5px * var(--fscale, 1));font-weight:600;text-align:left;border-bottom:1px solid var(--border);}
+  .modal-table td{padding:5px 8px;border-bottom:1px solid var(--border);vertical-align:top;}
+  .modal-table tr:last-child td{border-bottom:none;}
+  .rec-list{list-style:none;}
+  .rec-item{padding:7px 0;border-bottom:1px solid var(--border);display:flex;gap:8px;align-items:flex-start;}
+  .rec-item:last-child{border-bottom:none;}
+  .rec-text{font-size: calc(12px * var(--fscale, 1));color:var(--text);line-height:1.65;}
+  .rec-text strong{color:#1f2328;}
+  .badge{display:inline-flex;align-items:center;padding:2px 8px;border-radius:10px;font-size: calc(10px * var(--fscale, 1));font-weight:700;white-space:nowrap;flex-shrink:0;margin-top:1px;}
+  .badge-A{background:#dafbe1;color:#116329;border:1px solid #1a7f37;}
+  .badge-B{background:#ddf4ff;color:var(--accent2);border:1px solid var(--accent2);}
+  .badge-C{background:#fff8c5;color:#7a4b00;border:1px solid #d4a017;}
+  .badge-E{background:#f3e5f5;color:#5a3ea0;border:1px solid #5a3ea0;}
+  .alert{padding:8px 12px;border-radius:6px;font-size: calc(12px * var(--fscale, 1));margin:8px 0;display:flex;gap:8px;align-items:flex-start;}
+  .alert-info{background:#ddf4ff;border-left:3px solid var(--accent2);color:#0550ae;}
+  .alert-warn{background:#fff8c5;border-left:3px solid #d4a017;color:#7a4b00;}
+  .alert-danger{background:#ffebe9;border-left:3px solid var(--red);color:#82071e;}
+  .alert-success{background:#dafbe1;border-left:3px solid var(--green);color:#116329;}
+  .alert-teal{background:#e0f5f5;border-left:3px solid var(--teal);color:#075050;}
+  .alert-orange{background:#fff3e0;border-left:3px solid var(--orange);color:#7a3500;}
+  .alert-purple{background:#f3e5f5;border-left:3px solid var(--purple);color:#5a3ea0;}
+  .tc-table{width:100%;border-collapse:collapse;font-size: calc(11.5px * var(--fscale, 1));}
+  .tc-table th{background:var(--surface2);color:var(--text2);padding:5px 8px;font-size: calc(10.5px * var(--fscale, 1));text-transform:uppercase;letter-spacing:.3px;font-weight:600;text-align:left;border-bottom:1px solid var(--border);}
+  .tc-table td{padding:5px 8px;border-bottom:1px solid var(--border);vertical-align:top;}
+  .tc-table tr:last-child td{border-bottom:none;}
+  .tc-table tr:hover td{background:rgba(0,0,0,.02);}
+  .acc{border:1px solid var(--border);border-radius:6px;margin-bottom:6px;overflow:hidden;}
+  .acc-hdr{background:var(--surface2);padding:7px 12px;font-size: calc(12px * var(--fscale, 1));font-weight:600;color:var(--text);cursor:pointer;display:flex;justify-content:space-between;align-items:center;user-select:none;}
+  .acc-hdr:hover{background:#e8eaec;}
+  .acc-body{display:none;padding:10px 12px;font-size: calc(12px * var(--fscale, 1));line-height:1.65;}
+  .flow-box{border:1px solid var(--border);border-radius:6px;background:var(--surface);padding:8px 12px;margin-bottom:6px;font-size: calc(12px * var(--fscale, 1));line-height:1.6;}
+  .flow-arrow{text-align:center;color:var(--text2);font-size: calc(14px * var(--fscale, 1));margin:2px 0;}
+  .step-num{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;background:var(--accent2);color:#fff;font-size: calc(10px * var(--fscale, 1));font-weight:700;flex-shrink:0;margin-right:6px;}
+  ul.dot{padding-left:18px;}
+  ul.dot li{margin-bottom:3px;font-size: calc(12px * var(--fscale, 1));line-height:1.6;}
+  ol.num{padding-left:18px;}
+  ol.num li{margin-bottom:4px;font-size: calc(12px * var(--fscale, 1));line-height:1.6;}
+  ::-webkit-scrollbar{width:5px;height:5px;}
+  ::-webkit-scrollbar-track{background:var(--bg);}
+  ::-webkit-scrollbar-thumb{background:#c8d0d9;border-radius:3px;}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div style="display:flex;align-items:center;gap:10px">
+      <span class="logo-badge">ADA 2026</span>
+      <h1 style="font-size:17px;font-weight:700;color:var(--text)">심혈관질환과 위험관리</h1>
+    </div>
+    <div style="text-align:center;line-height:1.5">
+      <span style="color:var(--text2);font-size: calc(11px * var(--fscale, 1))">Standards of Care in Diabetes—2026, Section 10 — American Diabetes Association</span><br>
+      <span style="font-size: calc(10px * var(--fscale, 1));color:var(--text2)">Diabetes Care 2026;49(Suppl. 1):S216–S245 · doi: 10.2337/dc26-S010 · American College of Cardiology 승인</span>
+    </div>
+    <div style="font-size: calc(10px * var(--fscale, 1));color:var(--text2);font-style:italic;">This tool is not officially endorsed by the American Diabetes Association (ADA).</div>
+  </div>
+</header>
+
+<div class="tab-bar">
+  <div class="tab-bar-inner">
+    <div id="font-zoom-btn" class="font-zoom-btn" onclick="cycleFontZoom()"><span class="fz-icon">🔠</span><span id="font-zoom-label">100%</span></div>
+    <div class="tab active" onclick="showTab('overview')">🏠 개요</div>
+    <div class="tab" onclick="showTab('htn')">🩺 고혈압</div>
+    <div class="tab" onclick="showTab('statin')">💊 지질관리·스타틴</div>
+    <div class="tab" onclick="showTab('lipidother')">🧪 지질관리·기타</div>
+    <div class="tab" onclick="showTab('antiplatelet')">🩸 항혈소판제</div>
+    <div class="tab" onclick="showTab('screen')">🔬 선별검사</div>
+    <div class="tab" onclick="showTab('sglt')">💉 SGLT·GLP-1RA</div>
+    <div class="tab" onclick="showTab('hf')">❤️ 심부전</div>
+    <div class="tab" onclick="showTab('tables')">📁 기준표 모음</div>
+    <div class="tab-abbr-wrap">
+      <div style="position:relative;display:flex;align-items:center;flex-shrink:0">
+        <span style="position:absolute;left:8px;color:var(--text2);font-size: calc(12px * var(--fscale, 1));pointer-events:none">🔍</span>
+        <input id="abbr-input" type="text" placeholder="약어" oninput="filterAbbr(this.value)"
+          style="background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:4px 8px 4px 26px;color:var(--text);font-size: calc(12px * var(--fscale, 1));width:90px;outline:none;"
+          onfocus="this.style.borderColor='var(--accent2)'" onblur="this.style.borderColor='var(--border)'">
+      </div>
+      <div id="abbr-dropdown" style="display:none;position:fixed;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:8px;width:440px;max-height:360px;overflow-y:auto;z-index:300;box-shadow:0 8px 24px rgba(0,0,0,.12)">
+        <div id="abbr-grid-drop"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="main">
+
+<!-- ═══════════ TAB: 개요 ═══════════ -->
+<div id="tab-overview" class="panel active">
+  <div class="stat-row">
+    <div class="stat-box clickable" onclick="openModal('bpGoalModal')"><div class="stat-val">&lt;130/80<br>(&lt;120 SBP)</div><div class="stat-lbl">혈압 목표</div><div class="stat-hint">▸ 클릭하여 상세 보기</div></div>
+    <div class="stat-box clickable" onclick="openModal('ldlGoalModal')"><div class="stat-val">&lt;70 / &lt;55<br>mg/dL</div><div class="stat-lbl">LDL-C 목표(1차/2차예방)</div><div class="stat-hint">▸ 클릭하여 상세 보기</div></div>
+    <div class="stat-box clickable" onclick="openModal('sgltGlpModal')"><div class="stat-val">SGLT2i / GLP-1RA</div><div class="stat-lbl">심·신장보호 핵심약물</div><div class="stat-hint">▸ 클릭하여 상세 보기</div></div>
+    <div class="stat-box clickable" onclick="openModal('hfScreenModal')"><div class="stat-val">BNP≥50<br>NT-proBNP≥125</div><div class="stat-lbl">심부전 선별 임계값</div><div class="stat-hint">▸ 클릭하여 상세 보기</div></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>📋 Section 10 — 다인자적 위험감소 접근(Fig 10.1)</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <div class="flow-box" style="border-left:3px solid var(--accent2)">
+        <strong>기반 — 생활습관 교정·당뇨교육</strong><br>
+        <span style="color:var(--text2);font-size: calc(11px * var(--fscale, 1))">체중감량, DASH/지중해식, 나트륨제한, 금연, 신체활동 — 모든 약물치료의 토대</span>
+      </div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-box" style="border-left:3px solid var(--green)">
+        <strong>4대 기둥 — 동시 접근</strong><br>
+        <span style="font-size: calc(11.5px * var(--fscale, 1))">① 혈당관리 ② 혈압관리 ③ 지질관리 ④ 심·신장보호 약물(SGLT2i/GLP-1RA)</span>
+      </div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-box" style="border-left:3px solid var(--teal)">
+        <strong>목표 — 당뇨 합병증 위험 감소</strong><br>
+        <span style="font-size: calc(11.5px * var(--fscale, 1))">모든 주요 위험인자를 목표범위로 관리 시 2형당뇨 환자의 사망·MI·뇌졸중 위험이 일반인구 수준에 근접</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <div class="card-header open" onclick="toggleCard(this)">
+        <span>📌 핵심 권고문 요약</span><span class="toggle">▾</span>
+      </div>
+      <div class="card-body">
+        <ul class="rec-list">
+          <li class="rec-item"><span class="badge badge-A">A</span><span class="rec-text"><strong>10.1</strong> 매 방문 또는 최소 6개월마다 혈압 측정, 확진은 2회 이상 평균</span></li>
+          <li class="rec-item"><span class="badge badge-A">A</span><span class="rec-text"><strong>10.4</strong> 혈압목표 &lt;130/80mmHg, 고위험군은 수축기 &lt;120mmHg 장려</span></li>
+          <li class="rec-item"><span class="badge badge-A">A</span><span class="rec-text"><strong>10.8/10.10</strong> 알부민뇨·관상동맥질환 동반 시 ACEi/ARB 1차약제</span></li>
+          <li class="rec-item"><span class="badge badge-A">A</span><span class="rec-text"><strong>10.20/10.27</strong> 고위험군 고강도스타틴 — LDL-C &lt;70(1차예방)/&lt;55mg/dL(2차예방)</span></li>
+          <li class="rec-item"><span class="badge badge-A">A</span><span class="rec-text"><strong>10.24</strong> 스타틴불내성 — bempedoic acid 대체 권장</span></li>
+          <li class="rec-item"><span class="badge badge-A">A</span><span class="rec-text"><strong>10.33</strong> ASCVD 병력자 아스피린(75–162mg/day) 2차예방</span></li>
+          <li class="rec-item"><span class="badge badge-B">B</span><span class="rec-text"><strong>10.38a</strong> 성인 당뇨환자 나트륨이용펩타이드(BNP/NT-proBNP) 선별 고려</span></li>
+          <li class="rec-item"><span class="badge badge-B">B</span><span class="rec-text"><strong>10.39</strong> 65세 이상·미세혈관질환 동반자 ABI로 PAD 선별</span></li>
+          <li class="rec-item"><span class="badge badge-A">A</span><span class="rec-text"><strong>10.40a–c</strong> ASCVD/CKD 동반 2형당뇨 — SGLT2i 또는 GLP-1RA(심혈관이득 입증) 권장</span></li>
+          <li class="rec-item"><span class="badge badge-A">A</span><span class="rec-text"><strong>10.41a/b</strong> 심부전(HFpEF/HFrEF) 동반 시 SGLT2i 권장</span></li>
+          <li class="rec-item"><span class="badge badge-A">A</span><span class="rec-text"><strong>10.44d/e</strong> 비만+증상성 HFpEF — dual GIP/GLP-1RA 또는 GLP-1RA 포함</span></li>
+        </ul>
+      </div>
+    </div>
+
+    <div>
+      <div class="card">
+        <div class="card-header open" onclick="toggleCard(this)">
+          <span>⚠️ 권고 등급 체계 (Evidence Grading)</span><span class="toggle">▾</span>
+        </div>
+        <div class="card-body">
+          <table class="tc-table">
+            <tr><th>등급</th><th>의미</th></tr>
+            <tr><td><span class="badge badge-A">A</span></td><td>명확한 근거 — 잘 수행된 다기관 RCT 또는 메타분석</td></tr>
+            <tr><td><span class="badge badge-B">B</span></td><td>뒷받침되는 근거 — 잘 수행된 코호트 연구 등</td></tr>
+            <tr><td><span class="badge badge-C">C</span></td><td>뒷받침되는 근거 부족 — 대조군 없는 연구, 사례 보고</td></tr>
+            <tr><td><span class="badge badge-E">E</span></td><td>전문가 합의 또는 임상 경험 (Expert consensus)</td></tr>
+          </table>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header open" onclick="toggleCard(this)">
+          <span>🔑 핵심 개념 — Cardiovascular-Kidney-Metabolic(CKM)</span><span class="toggle">▾</span>
+        </div>
+        <div class="card-body">
+          <div class="alert alert-info"><span>ℹ️</span><span>ASCVD·심부전·CKD는 공통적으로 대사위험(흔히 비만 매개)에서 비롯 — 3대 질환 발생률 모두 A1C 상승과 함께 증가하는 "심장-신장-대사 질환(CKM)" 개념</span></div>
+          <div class="alert alert-warn"><span>⚠️</span><span>혈당·혈압·지질을 모두 목표범위로 관리해도, 일부 핵심 약제(SGLT2i/GLP-1RA)는 혈당강하와 무관한 독립적 심·신장 보호효과를 가짐 — 별도로 평가해 처방해야 함</span></div>
+          <div class="alert alert-teal"><span>💡</span><span>SGLT2i·GLP-1RA는 metformin 사용 여부, 추가 혈당강하 필요성과 무관하게 ASCVD·심부전·CKD 위험감소를 위한 <strong>핵심 약물전략</strong>으로 간주됨</span></div>
+          <div class="alert alert-danger"><span>🚫</span><span>1형당뇨 환자의 심혈관 위험감소 전략에 특화된 RCT는 없음 — 현재 권고는 2형당뇨 데이터를 외삽한 것</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ TAB: 고혈압 ═══════════ -->
+<div id="tab-htn" class="panel">
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>📌 진단 및 목표 — 핵심 권고문</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="rec-list">
+        <li class="rec-item"><span class="badge badge-A">A</span><span class="rec-text"><strong>10.1</strong> 매 방문 또는 최소 6개월마다 혈압 측정. 상승혈압(120–129/&lt;80)은 별도일 포함 복수측정으로 확인. 고혈압 = 수축기≥130 또는 이완기≥80(2회 이상 평균). <span class="badge badge-E">E</span> ≥180/110+CVD는 단회 진단 가능</span></li>
+        <li class="rec-item"><span class="badge badge-A">A</span><span class="rec-text"><strong>10.2</strong> 교육 후 가정 자가혈압측정 권장</span></li>
+        <li class="rec-item"><span class="badge badge-B">B</span><span class="rec-text"><strong>10.3</strong> 혈압목표는 공유의사결정으로 개별화(심혈관위험·약물부작용·개인선호 고려)</span></li>
+        <li class="rec-item"><span class="badge badge-A">A</span><span class="rec-text"><strong>10.4</strong> 안전하게 달성 가능하면 목표 &lt;130/80mmHg, 고심혈관·신장위험군은 수축기 &lt;120mmHg 장려</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>📊 강화 vs 표준 혈압관리 — 핵심 RCT 비교</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <table class="tc-table">
+        <tr><th>시험</th><th>대상</th><th>목표(강화 vs 표준)</th><th>주요 결과</th></tr>
+        <tr><td><strong>BPROAD</strong></td><td>2형당뇨 12,821명, CVD고위험</td><td>&lt;120 vs &lt;140 SBP</td><td>1차결과(뇌졸중·MI·심부전·CV사망) 21%감소(HR 0.79), 달성 121.6 vs 133.2mmHg</td></tr>
+        <tr><td><strong>ESPRIT</strong></td><td>11,255명(39% 당뇨), 고위험</td><td>&lt;120 vs &lt;140 SBP</td><td>1차결과(MI·재개통·심부전입원·뇌졸중·CV사망) 12%감소(HR 0.88)</td></tr>
+        <tr><td><strong>SPRINT</strong>(당뇨제외)</td><td>9,361명, 고위험</td><td>&lt;120 vs &lt;140 SBP</td><td>1차결과 25%감소, 단 저혈압·실신·AKI 더 빈번</td></tr>
+        <tr><td><strong>STEP</strong></td><td>8,511명(60–80세, 19%당뇨)</td><td>110–&lt;130 vs 130–&lt;150 SBP</td><td>1차결과 HR 0.74(P=0.007)</td></tr>
+        <tr><td><strong>ACCORD BP</strong></td><td>2형당뇨 4,733명</td><td>&lt;120 vs &lt;140 SBP</td><td>1차결과 차이 없음(검정력부족 평가), 단 뇌졸중 41%감소(2차결과)</td></tr>
+        <tr><td><strong>ADVANCE</strong></td><td>2형당뇨 11,140명</td><td>perindopril+indapamide vs 위약</td><td>1차결과 9%감소</td></tr>
+        <tr><td><strong>HOT</strong></td><td>18,790명</td><td>이완기 &lt;90/&lt;85/&lt;80</td><td>당뇨군에서 &lt;80목표가 &lt;90대비 MI·뇌졸중·CV사망 51%감소</td></tr>
+      </table>
+      <div class="alert alert-teal" style="margin-top:8px"><span>💡</span><span><strong>BPROAD·ESPRIT</strong>이 수축기 &lt;120mmHg 목표를 지지하는 가장 강력한 근거 — SPRINT(당뇨 제외)도 동일 방향성을 뒷받침</span></div>
+      <div class="alert alert-warn"><span>⚠️</span><span>강화치료군에서 저혈압·실신·전해질이상 등 이상반응이 더 빈번 — 기립성저혈압, 다중동반질환, 기능적제한, 다약제복용이 있는 고령자에서 특히 주의, 일부는 삶의 질을 위해 더 높은 목표를 선호할 수 있음</span></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>🥗 생활습관 중재 (Rec 10.5)</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="rec-list">
+        <li class="rec-item"><span class="badge badge-A">A</span><span class="rec-text"><strong>10.5</strong> 혈압&gt;120/80인 사람에게 체중감량(해당시), DASH식이패턴(나트륨감소 포함), 절주, 신체활동 증가, 금연 권고</span></li>
+      </ul>
+      <table class="tc-table" style="margin-top:8px">
+        <tr><th>구성요소</th><th>구체적 목표</th></tr>
+        <tr><td>체중감량</td><td>칼로리 제한을 통한 과체중 감소</td></tr>
+        <tr><td>신체활동</td><td>중강도 유산소운동 주 150분 이상</td></tr>
+        <tr><td>나트륨 제한</td><td>&lt;2,300 mg/day</td></tr>
+        <tr><td>과일·채소</td><td>1일 8–10회분</td></tr>
+        <tr><td>저지방 유제품/대체식품</td><td>1일 2–3회분</td></tr>
+        <tr><td>알코올 제한</td><td>남성 ≤2회분/day, 여성 ≤1회분/day</td></tr>
+      </table>
+      <div class="alert alert-info" style="margin-top:8px"><span>ℹ️</span><span>DASH식이패턴 메타분석(RCT 10건) — 대조식이 대비 수축기 −3.26mmHg, 이완기 −2.07mmHg 감소</span></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>📐 Fig 10.2 — 확진된 고혈압 치료 알고리즘</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <div class="flow-box" style="border-left:3px solid var(--accent2)">
+        <strong>초기 혈압 130/80–&lt;150/90</strong><br>
+        <span style="font-size: calc(11.5px * var(--fscale, 1))">알부민뇨/CAD 없음 → ACEi/ARB/CCB/이뇨제 중 1제. 알부민뇨/CAD 있음 → ACEi/ARB 1제</span>
+      </div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-box" style="border-left:3px solid var(--orange)">
+        <strong>초기 혈압 ≥150/90</strong><br>
+        <span style="font-size: calc(11.5px * var(--fscale, 1))">알부민뇨/CAD 없음 → 2제(ACEi/ARB+CCB or 이뇨제). 알부민뇨/CAD 있음 → ACEi/ARB+CCB 또는 이뇨제</span>
+      </div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-box" style="border-left:3px solid var(--teal)">
+        <strong>목표·부작용 평가 (3–6개월마다 재평가)</strong><br>
+        <span style="font-size: calc(11.5px * var(--fscale, 1))">달성+내약 → 지속. 미달성 → 보완계열 약물 추가. 부작용 → 대체약물 고려</span>
+      </div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-box" style="border-left:3px solid var(--red)">
+        <strong>3계열 약물에도 미달성/부작용</strong><br>
+        <span style="font-size: calc(11.5px * var(--fscale, 1))">MRA(미네랄로코르티코이드수용체대항제) 추가 고려, 혈압관리 전문가 의뢰</span>
+      </div>
+      <div style="font-size: calc(10px * var(--fscale, 1));color:var(--text2);margin-top:8px;line-height:1.6">ACEi/ARB는 CAD 또는 UACR 30–299mg/g에서 권장, UACR≥300mg/g에서는 강력권장. CCB=디하이드로피리딘계, 이뇨제=장기작용 thiazide계열(chlorthalidone·indapamide 선호)</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>📌 약물치료 — 핵심 권고문</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="rec-list">
+        <li class="rec-item"><span class="badge badge-A">A</span><span class="rec-text"><strong>10.6</strong> 확진 혈압≥130/80 → 약물치료 시작·개별목표까지 적정</span></li>
+        <li class="rec-item"><span class="badge badge-A">A</span><span class="rec-text"><strong>10.7</strong> 확진 혈압≥150/90 → 생활습관+심혈관이득 입증된 2제(또는 단일정복합제) 신속 시작·적정</span></li>
+        <li class="rec-item"><span class="badge badge-A">A</span><span class="rec-text"><strong>10.8</strong> 심혈관이득 입증 계열 사용, 알부민뇨/CAD 동반 시 ACEi/ARB 1차</span></li>
+        <li class="rec-item"><span class="badge badge-A">A</span><span class="rec-text"><strong>10.9</strong> 다제요법 필요하나 ACEi+ARB(+네프릴리신억제제), 직접레닌억제제 병용은 피할 것</span></li>
+        <li class="rec-item"><span class="badge badge-A">A</span><span class="rec-text"><strong>10.10</strong> UACR 30–299 ACEi/ARB <span class="badge badge-B">B</span>, UACR≥300 또는 eGFR&lt;60은 최대내약용량까지 강력권장 <span class="badge badge-A">A</span></span></li>
+        <li class="rec-item"><span class="badge badge-B">B</span><span class="rec-text"><strong>10.11</strong> ACEi/ARB/MRA — eGFR하락·K+상승 모니터링. 이뇨제 — 시작 7–14일·용량변경 후 저칼륨혈증 모니터링</span></li>
+        <li class="rec-item"><span class="badge badge-A">A</span><span class="rec-text"><strong>10.12</strong> 비신뢰피임중인 가임기 성에서 ACEi/ARB/MRA/직접레닌억제제/네프릴리신억제제 회피(임신금기)</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <div class="card-header open" onclick="toggleCard(this)">
+        <span>💊 항고혈압제 계열 선택</span><span class="toggle">▾</span>
+      </div>
+      <div class="card-body">
+        <ul class="dot">
+          <li>초기치료 4계열 모두 가능: ACEi, ARB, thiazide계 이뇨제, 디하이드로피리딘계 CCB</li>
+          <li>CAD 동반 시 ACEi/ARB가 1차요법으로 권장</li>
+          <li>UACR≥30 알부민뇨 시 신질환 진행위험 감소 위해 ACEi/ARB 초기치료에 포함</li>
+          <li>eGFR&lt;30까지 진행해도 ACEi/ARB 지속이 신부전위험 큰 증가 없이 심혈관이득 제공 가능</li>
+          <li>알부민뇨 없으면 신질환진행 위험 낮고, ACEi/ARB가 thiazide·CCB보다 우월한 심보호효과를 보이지 않음</li>
+          <li>β차단제는 MI병력·활동성협심증·HFrEF에서 적응증, 그 외 상황에서 혈압강하제로서 사망률감소 근거 없음</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header open" onclick="toggleCard(this)">
+        <span>⚠️ AKI·고칼륨혈증 모니터링</span><span class="toggle">▾</span>
+      </div>
+      <div class="card-body">
+        <ul class="dot">
+          <li>ACEi/ARB/MRA — AKI·고칼륨혈증 유발가능. 이뇨제 — AKI·저/고칼륨혈증(기전에 따라) 유발가능</li>
+          <li>ACEi/ARB로 인한 크레아티닌 상승(기저치 30%까지)을 AKI로 오인하지 말 것</li>
+          <li>AKI = 단기간(시간~일) 내 급격한 신기능저하(크레아티닌상승 및/또는 요량감소)</li>
+          <li>시작·용량증량 후, 특히 사구체여과율 저하자에서 크레아티닌·칼륨 모니터링 필요</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>🤰 임신 중 항고혈압제</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <div class="alert alert-danger"><span>🚫</span><span>임신 중 <strong>ACEi, ARB, 직접레닌억제제, MRA, 네프릴리신억제제는 태아손상 위험으로 금기</strong> — 임신계획자는 임신 전 대체약물로 전환</span></div>
+      <table class="tc-table" style="margin-top:8px">
+        <tr><th>안전성</th><th>약물</th></tr>
+        <tr><td>임신 중 효과·안전성 확인됨</td><td>methyldopa, labetalol, 장시간형 nifedipine</td></tr>
+        <tr><td>급성기 관리에 고려 가능</td><td>hydralazine(중증전자간증 포함)</td></tr>
+        <tr><td>임신 중 비권장(단, 후기 체액관리 필요시 사용가능)</td><td>이뇨제</td></tr>
+      </table>
+      <div class="alert alert-info" style="margin-top:8px"><span>ℹ️</span><span>ACOG는 임신성고혈압·전자간증 환자에서 산후 72시간 입원관찰 + 산후 7–10일 추적, 평생 심혈관위험 증가로 장기추적을 권장</span></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>🛑 저항성 고혈압 (Resistant Hypertension)</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <div class="alert alert-warn"><span>⚠️</span><span><strong>정의</strong> — 적절한 생활습관관리 + 이뇨제 포함 상호보완적 기전의 항고혈압제 3계열 최대내약용량 사용에도 혈압≥130/80mmHg</span></div>
+      <ul class="dot" style="margin-top:8px">
+        <li>진단 전 배제할 것: 약물 미복용, 백의고혈압, 1차/2차 고혈압, 치료계획 이행의 어려움</li>
+        <li>국제고혈압학회 가이드라인은 약국기록 검토·약물개수확인·혈액/요화학분석 등 객관적 측정을 권장(임상현장에서 항상 가능하지는 않음)</li>
+        <li>이차성고혈압 평가 필요: <strong>원발성알도스테론증, 신동맥협착, CKD, 폐쇄성수면무호흡</strong></li>
+        <li>비용·부작용 등 복약장벽 파악·해소 필요</li>
+      </ul>
+      <div class="alert alert-teal" style="margin-top:8px"><span>💡</span><span>Spironolactone·eplerenone(MRA)는 ACEi/ARB+thiazide계 또는 CCB에 추가 시 효과적, 알부민뇨도 감소시킴. 단 ACEi/ARB와 병용 시 고칼륨혈증 위험 증가로 정기 모니터링 필수</span></div>
+      <div class="alert alert-info"><span>ℹ️</span><span><strong>Rec 10.13</strong> <span class="badge badge-A">A</span> 이뇨제 포함 3계열 약물에도 목표 미달성 시 MRA 치료 고려</span></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══════════ TAB: 지질관리·스타틴 ═══════════ -->
+<div id="tab-statin" class="panel">
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>📌 모니터링 및 생활습관 — 핵심 권고문</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="rec-list">
+        <li class="rec-item"><span class="badge badge-A">A</span><span class="rec-text"><strong>10.14</strong> 체중감량·지중해식/DASH·포화지방·트랜스지방 감소, n-3지방산·수용성섬유·식물스탄올/스테롤 증가, 신체활동 증가로 지질개선·ASCVD위험감소</span></li>
+        <li class="rec-item"><span class="badge badge-C">C</span><span class="rec-text"><strong>10.15</strong> 중성지방≥150 또는 HDL&lt;40(남)/&lt;50(여) — 생활습관강화·혈당관리 최적화</span></li>
+        <li class="rec-item"><span class="badge badge-E">E</span><span class="rec-text"><strong>10.16</strong> 스타틴 미복용자 — 진단시·최초평가시·이후 매년(또는 더 자주) 지질패널</span></li>
+        <li class="rec-item"><span class="badge badge-A">A</span><span class="rec-text"><strong>10.17</strong> 스타틴 시작·용량변경 시 4–12주 후, 이후 매년 지질패널(치료반응·복약행동 모니터링)</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>💊 Table 10.1 — 고강도·중강도 스타틴 요법</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <table class="tc-table">
+        <tr><th>고강도(LDL-C ≥50% 감소)</th><th>중강도(LDL-C 30–49% 감소)</th></tr>
+        <tr><td>Atorvastatin 40–80mg</td><td>Atorvastatin 10–20mg</td></tr>
+        <tr><td>Rosuvastatin 20–40mg</td><td>Rosuvastatin 5–10mg</td></tr>
+        <tr><td>—</td><td>Simvastatin 20–40mg</td></tr>
+        <tr><td>—</td><td>Pravastatin 40–80mg</td></tr>
+        <tr><td>—</td><td>Lovastatin 40mg</td></tr>
+        <tr><td>—</td><td>Fluvastatin XL 80mg</td></tr>
+        <tr><td>—</td><td>Pitavastatin 1–4mg</td></tr>
+      </table>
+      <div style="font-size: calc(10px * var(--fscale, 1));color:var(--text2);margin-top:6px">모두 1일1회 투여. 저강도스타틴은 당뇨에서 일반적으로 권장되지 않으나 일부에서 유일하게 견딜 수 있는 용량일 수 있음</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>📐 Fig 10.3 — 1차예방(ASCVD 없음) 지질관리 알고리즘</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <table class="tc-table">
+        <tr><th>연령군</th><th>권고</th></tr>
+        <tr><td><strong>20–39세</strong></td><td>추가 ASCVD위험인자* 있으면 스타틴 고려</td></tr>
+        <tr><td><strong>40–75세, 위험인자 없음</strong></td><td>중강도 스타틴</td></tr>
+        <tr><td><strong>40–75세, ASCVD위험인자≥1개*</strong></td><td>고강도 스타틴, LDL-C 목표 &lt;70mg/dL(&lt;1.8mmol/L). 미달성시 ezetimibe 또는 anti-PCSK9 추가 고려</td></tr>
+        <tr><td><strong>&gt;75세</strong></td><td>기존 스타틴 지속, 또는 이득·위험 논의 후 중강도 스타틴 시작 고려</td></tr>
+        <tr><td><strong>스타틴 불내성(모든 연령)</strong></td><td>Bempedoic acid 사용</td></tr>
+      </table>
+      <div style="font-size: calc(10px * var(--fscale, 1));color:var(--text2);margin-top:6px">*ASCVD 위험인자: 고령, 고혈압, 이상지질혈증, 흡연, CKD, 비만</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>📌 1차예방 — 핵심 권고문</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="rec-list">
+        <li class="rec-item"><span class="badge badge-A">A</span><span class="rec-text"><strong>10.18</strong> 40–75세 ASCVD없음 — 생활습관+중강도 스타틴</span></li>
+        <li class="rec-item"><span class="badge badge-C">C</span><span class="rec-text"><strong>10.19</strong> 20–39세 추가위험인자 있으면 스타틴 시작 고려 가능</span></li>
+        <li class="rec-item"><span class="badge badge-A">A</span><span class="rec-text"><strong>10.20</strong> 40–75세 고위험(위험인자≥1) — 고강도스타틴으로 LDL-C ≥50%감소 + 목표 &lt;70mg/dL</span></li>
+        <li class="rec-item"><span class="badge badge-B">B</span><span class="rec-text"><strong>10.21</strong> 다중위험인자+LDL-C≥70 — 최대내약 스타틴에 ezetimibe/PCSK9i 추가 고려</span></li>
+        <li class="rec-item"><span class="badge badge-B">B</span><span class="rec-text"><strong>10.22</strong> &gt;75세 기존 스타틴 복용자 — 지속 합리적</span></li>
+        <li class="rec-item"><span class="badge badge-C">C</span><span class="rec-text"><strong>10.23</strong> &gt;75세 — 이득·위험 논의 후 중강도 스타틴 시작 고려 가능</span></li>
+        <li class="rec-item"><span class="badge badge-A">A</span><span class="rec-text"><strong>10.24</strong> 스타틴불내성 — bempedoic acid로 심혈관사건감소</span></li>
+        <li class="rec-item"><span class="badge badge-B">B</span><span class="rec-text"><strong>10.25</strong> 대부분 임신 전 지질강하제 중단, 비신뢰피임 가임기 회피. 일부 고위험상황(가족성고콜레스테롤혈증 등)은 이득&gt;위험시 지속 가능 <span class="badge badge-E">E</span></span></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>📐 Fig 10.4 — 2차예방(ASCVD 동반) 지질관리 알고리즘</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <div class="flow-box" style="border-left:3px solid var(--accent2)">
+        <strong>① 생활습관 + 고강도스타틴</strong><br>
+        <span style="font-size: calc(11.5px * var(--fscale, 1))">LDL-C ≥50%감소, 목표 &lt;55mg/dL(&lt;1.4mmol/L)</span>
+      </div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-box" style="border-left:3px solid var(--orange)">
+        <strong>② 목표 미달성 시</strong><br>
+        <span style="font-size: calc(11.5px * var(--fscale, 1))">심혈관이득 입증된 ezetimibe 또는 anti-PCSK9 요법 추가</span>
+      </div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-box" style="border-left:3px solid var(--red)">
+        <strong>③ 스타틴 불내성 시 대체요법</strong><br>
+        <span style="font-size: calc(11.5px * var(--fscale, 1))">PCSK9 단클론항체(심혈관이득입증) / Bempedoic acid / PCSK9억제 siRNA(inclisiran)</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>📌 2차예방 — 핵심 권고문</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="rec-list">
+        <li class="rec-item"><span class="badge badge-A">A</span><span class="rec-text"><strong>10.26</strong> 모든 연령 ASCVD동반자 — 생활습관+고강도스타틴</span></li>
+        <li class="rec-item"><span class="badge badge-B">B</span><span class="rec-text"><strong>10.27</strong> LDL-C ≥50%감소+목표 &lt;55mg/dL, 미달성시 ezetimibe/PCSK9i(이득입증) 추가</span></li>
+        <li class="rec-item"><span class="badge badge-E">E</span><span class="rec-text"><strong>10.28a</strong> 의도한 강도 불내성 시 최대내약용량 사용</span></li>
+        <li class="rec-item"><span class="badge badge-A">A</span><span class="rec-text"><strong>10.28b</strong> ASCVD+스타틴불내성 — PCSK9단클론항체 또는 bempedoic acid <span class="badge badge-A">A</span>, 또는 inclisiran siRNA <span class="badge badge-E">E</span> 고려</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <div class="card-header open" onclick="toggleCard(this)">
+        <span>🧪 핵심 근거 — 스타틴·LDL강하</span><span class="toggle">▾</span>
+      </div>
+      <div class="card-body">
+        <ul class="dot">
+          <li>14개 RCT 메타분석(당뇨 18,000명+) — LDL-C 1mmol/L(39mg/dL) 감소당 전체사망 9%, 혈관사망 13% 감소</li>
+          <li>이득은 기저 LDL-C 수치와 무관, 낮은 임계점 없이 선형관계</li>
+          <li>스타틴 효과는 성별 무관하게 동등</li>
+          <li>2차예방 — 26개 스타틴시험 통합분석(5개 고강도vs중강도 비교) LDL-C 39mg/dL 감소당 주요심혈관사건 21%감소(당뇨군)</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header open" onclick="toggleCard(this)">
+        <span>🧬 1형당뇨·40세 미만 — 제한된 근거</span><span class="toggle">▾</span>
+      </div>
+      <div class="card-body">
+        <ul class="dot">
+          <li>Heart Protection Study(1형당뇨 ~600명) — 2형당뇨와 비례적(단 통계적유의성 없음) 위험감소</li>
+          <li>40세 미만은 10년 위험은 낮으나 생애위험은 높음 — 추가위험인자 있으면 중강도스타틴 논의 권장</li>
+          <li><strong>FOURIER</strong> 1형당뇨 하위분석(197명) — 위약군 사건율(20.4%)이 2형당뇨(15.2%)·비당뇨(11.0%)보다 높음. Evolocumab의 상대위험감소는 당뇨유형 무관하게 유사(1형 HR 0.66) — 절대위험감소는 1형당뇨에서 최소 동등 이상</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>🔬 병용요법 — Ezetimibe, PCSK9 단클론항체, siRNA</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <table class="tc-table">
+        <tr><th>약물</th><th>핵심시험</th><th>결과</th></tr>
+        <tr><td>Ezetimibe+스타틴</td><td>IMPROVE-IT</td><td>주요심혈관사건 상대6.4%/절대2%감소, 당뇨하위군(27%)에서 유의한 추가이득</td></tr>
+        <tr><td>Evolocumab(PCSK9 mAb)</td><td>FOURIER</td><td>LDL-C ~60%감소, 주요심혈관사건 15%감소(당뇨하위군 40%)</td></tr>
+        <tr><td>Alirocumab(PCSK9 mAb)</td><td>ODYSSEY OUTCOMES</td><td>주요심혈관사건 15–20%감소, 당뇨군(28.8%)에서 절대위험감소 더 큼(2.3% vs 전당뇨1.2%/정상혈당1.2%)</td></tr>
+        <tr><td>Inclisiran(PCSK9 siRNA)</td><td>ORION-1/3</td><td>LDL-C 49–52%감소, 4년까지 효과 유지(ORION-3, 23%당뇨). 심혈관결과시험 진행중 — 현재 PCSK9 mAb가 선호됨</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>🧪 스타틴 불내성 — 대체 옵션</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <table class="tc-table">
+        <tr><th>약물</th><th>핵심시험</th><th>LDL-C 감소</th><th>비고</th></tr>
+        <tr><td>Alirocumab vs ezetimibe</td><td>ODYSSEY ALTERNATIVE</td><td>54.8% vs 20.1%</td><td>골격근관련 이상반응 더 적음(~24%가 2형당뇨)</td></tr>
+        <tr><td>Evolocumab vs ezetimibe</td><td>GAUSS 1/2/3, OSLER</td><td>55–56% vs 16–19%</td><td>근골격계 이상반응 더 적음</td></tr>
+        <tr><td><strong>Bempedoic acid</strong></td><td>CLEAR Outcomes</td><td>스타틴병용 15%/단독 24%<br>+ezetimibe 19%추가</td><td>4점 MACE 13%감소(전체), 당뇨하위군 17%감소, 1차예방 30%감소(근육에 작용하지 않아 근육관련 부작용 적음)</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <div class="card-header" onclick="toggleCard(this)">
+        <span>🤰 가임기 지질관리 특별 고려사항</span><span class="toggle">▾</span>
+      </div>
+      <div class="card-body collapsed">
+        <ul class="dot">
+          <li>가임기 환자는 스타틴 치료·LDL-C 목표달성률이 낮은 경향 — 임신 중 사용에 대한 우려·익숙치 않음이 원인</li>
+          <li>대부분 임신 중 지질강하제 중단 권장하나, 가족성고콜레스테롤혈증·기존ASCVD 고위험자는 중단 위험을 재검토</li>
+          <li>가족성고콜레스테롤혈증 환자에서 스타틴이 기형발생 증가시키지 않음을 보인 연구 존재, pravastatin 메타분석은 전자간증·조산·신생아중환자실입원 감소 보임</li>
+          <li>알 수 없는 위험이 있는 약물 사용 시 피임 권장, 가임기 당뇨환자 진료에 임신전상담을 routine으로 포함</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header" onclick="toggleCard(this)">
+        <span>🧠 스타틴과 당뇨위험·인지기능</span><span class="toggle">▾</span>
+      </div>
+      <div class="card-body collapsed">
+        <ul class="dot">
+          <li>스타틴 사용 시 신규 2형당뇨 위험 경미하게 증가(당뇨위험인자/내당능장애군에 국한될 수 있음)</li>
+          <li>13개 RCT 메타분석(91,140명) — OR 1.09, 즉 255명을 4년 치료 시 당뇨 1례 추가 발생하나 동시에 5.4건의 혈관사건 예방</li>
+          <li>3개 대형 RCT 인지기능검사 — 스타틴군과 위약군 차이 없음. Ezetimibe·PCSK9 mAb 추가에서도 인지기능 변화 없음</li>
+          <li>현재 근거는 스타틴이 인지기능장애·치매를 유발한다는 우려를 지지하지 않음 — 고위험 당뇨환자에서 사용을 제한할 이유 없음</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══════════ TAB: 지질관리·기타 ═══════════ -->
+<div id="tab-lipidother" class="panel">
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>📌 기타 지질단백분획·목표 — 핵심 권고문</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="rec-list">
+        <li class="rec-item"><span class="badge badge-C">C</span><span class="rec-text"><strong>10.29</strong> 공복중성지방≥500mg/dL — 이차성 원인 평가, 췌장염위험 감소 위한 약물치료 고려</span></li>
+        <li class="rec-item"><span class="badge badge-C">C</span><span class="rec-text"><strong>10.30</strong> 중성지방&gt;150(공복)/&gt;175(비공복) — 생활습관요인(비만·대사증후군), 이차요인(당뇨·간/신질환·신증후군·갑상선저하증), 중성지방상승 약물 평가·치료</span></li>
+        <li class="rec-item"><span class="badge badge-B">B</span><span class="rec-text"><strong>10.31</strong> ASCVD/위험인자 동반 + 스타틴으로 LDL-C 관리됨 + 중성지방 150–499 — icosapent ethyl 추가 고려</span></li>
+        <li class="rec-item"><span class="badge badge-A">A</span><span class="rec-text"><strong>10.32</strong> 스타틴 복용자에 fibrate, niacin, n-3지방산 보충제 추가는 권장하지 않음(추가 심혈관이득 없음)</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>⚠️ 중증 고중성지방혈증 관리</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <table class="tc-table">
+        <tr><th>중성지방</th><th>주요 위험</th><th>관리</th></tr>
+        <tr><td>≥500mg/dL(≥5.7mmol/L)</td><td>췌장염 위험 시작</td><td>이차원인평가, 약물치료(fibric acid 유도체·어유), 지방섭취 감소</td></tr>
+        <tr><td>&gt;1,000mg/dL(&gt;11.3mmol/L)</td><td>급성췌장염 고위험</td><td>위와 동일, 더욱 적극적 관리</td></tr>
+      </table>
+      <ul class="dot" style="margin-top:8px">
+        <li>영양·생활습관 변화(체중감량, 절주) 우선 시행</li>
+        <li>중강도·고강도 스타틴도 심혈관위험감소 위해 적응증대로 사용</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>🐟 Icosapent Ethyl — REDUCE-IT 시험</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="dot">
+        <li>대상: ASCVD 또는 위험인자 동반 + 스타틴최적화 후에도 중성지방 150–499mg/dL</li>
+        <li>1차결과(CV사망·비치명MI·비치명뇌졸중·관상동맥재개통·불안정형협심증) — 상대위험 <strong>25%감소</strong>(P&lt;0.001)</li>
+        <li>CV사망·비치명MI·비치명뇌졸중 복합결과 — <strong>26%감소</strong></li>
+        <li>CV사망 단독 — <strong>20%감소</strong>(P=0.03)</li>
+        <li>당뇨 유무와 무관하게 일관된 위험감소</li>
+      </ul>
+      <div class="alert alert-danger" style="margin-top:8px"><span>🚫</span><span>현재 RCT 근거는 다른 n-3지방산 제제의 심혈관위험감소를 지지하지 않음 — REDUCE-IT 결과를 다른 제품에 외삽해서는 안 됨</span></div>
+      <div class="alert alert-info"><span>ℹ️</span><span><strong>STRENGTH 시험</strong> — n-3 carboxylic acid(EPA+DHA) 4g/day 추가가 콘오일 비교군 대비 주요심혈관사건 감소시키지 못함(70%가 당뇨)</span></div>
+    </div>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <div class="card-header open" onclick="toggleCard(this)">
+        <span>🚫 스타틴+Fibrate 병용 — 비권장</span><span class="toggle">▾</span>
+      </div>
+      <div class="card-body">
+        <ul class="dot">
+          <li>병용 시 transaminase 이상, 근염, 횡문근융해 위험 증가</li>
+          <li>고용량 스타틴·신기능저하 시 위험 더 큼, gemfibrozil 병용 시 fenofibrate보다 위험 높음</li>
+          <li><strong>ACCORD-lipid</strong> — fenofibrate+simvastatin이 simvastatin단독 대비 CV사망·MI·뇌졸중 감소시키지 못함</li>
+          <li><strong>PROMINENT</strong> — pemafibrate가 중성지방 26%감소시켰으나 1차결과(MI·뇌졸중·재개통·CV사망) 감소시키지 못함</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header open" onclick="toggleCard(this)">
+        <span>🚫 스타틴+Niacin 병용 — 비권장</span><span class="toggle">▾</span>
+      </div>
+      <div class="card-body">
+        <ul class="dot">
+          <li>주요 ASCVD결과 개선 효능 부족 + 부작용 증가로 niacin 단독·병용 모두 비권장</li>
+          <li><strong>AIM-HIGH</strong> — 적절한 스타틴치료군에 niacin 추가 이득 없음, 허혈성뇌졸중 위험 증가 가능성</li>
+          <li><strong>HPS2-THRIVE</strong> — niacin병용군에서 신규당뇨 발생 증가(절대초과 1.3%p, P&lt;0.001) + 당뇨관리 악화</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>📊 흔한 이상지질혈증 패턴 — 저HDL/고중성지방</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="dot">
+        <li>2형당뇨에서 가장 흔한 이상지질혈증 패턴은 저HDL-C+고중성지방</li>
+        <li>이 분획을 표적으로 하는 약물의 근거는 스타틴보다 훨씬 약함</li>
+        <li>ACCORD-lipid·PROMINENT 모두 스타틴 복용 2형당뇨에서 fibrate(fenofibrate/pemafibrate) 추가가 심혈관결과를 개선하지 못함을 확인</li>
+      </ul>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══════════ TAB: 항혈소판제 ═══════════ -->
+<div id="tab-antiplatelet" class="panel">
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>📌 핵심 권고문</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="rec-list">
+        <li class="rec-item"><span class="badge badge-A">A</span><span class="rec-text"><strong>10.33</strong> ASCVD병력 동반 당뇨 — 아스피린(75–162mg/day) 2차예방 사용</span></li>
+        <li class="rec-item"><span class="badge badge-B">B</span><span class="rec-text"><strong>10.34a</strong> 아스피린알레르기 — clopidogrel(75mg/day) 사용</span></li>
+        <li class="rec-item"><span class="badge badge-E">E</span><span class="rec-text"><strong>10.34b</strong> 급성관동맥증후군/급성허혈성뇌졸중/TIA 후 이중항혈소판요법 기간 — 심혈관·신경과 전문가 포함 다학제팀이 결정</span></li>
+        <li class="rec-item"><span class="badge badge-A">A</span><span class="rec-text"><strong>10.35</strong> 안정형 관상동맥/PAD + 출혈위험 낮음 — 아스피린81mg/day + rivaroxaban 2.5mg bid 병용 고려</span></li>
+        <li class="rec-item"><span class="badge badge-A">A</span><span class="rec-text"><strong>10.36</strong> 심혈관위험 증가된 당뇨 — 출혈위험 증가와의 충분한 논의 후 1차예방으로 아스피린 고려 가능</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>📊 아스피린 1차예방 — 핵심 RCT 비교</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <table class="tc-table">
+        <tr><th>시험</th><th>대상</th><th>1차결과</th><th>출혈위험</th></tr>
+        <tr><td><strong>ASCEND</strong></td><td>당뇨 15,480명, CVD없음</td><td>혈관사망·MI·뇌졸중·TIA 12%감소(8.5% vs 9.6%, P=0.01)</td><td>주요출혈 3.2%→4.1%증가(주로 위장관)</td></tr>
+        <tr><td><strong>ARRIVE</strong>(비당뇨)</td><td>12,546명</td><td>차이없음(4.29% vs 4.48%)</td><td>위장관출혈 0.97% vs 0.46% 증가</td></tr>
+        <tr><td><strong>ASPREE</strong>(고령, 11%당뇨)</td><td>19,114명</td><td>차이없음(10.7 vs 11.3/1000인년)</td><td>주요출혈 8.6 vs 6.2/1000인년 증가</td></tr>
+      </table>
+      <div class="alert alert-info" style="margin-top:8px"><span>ℹ️</span><span>Antithrombotic Trialists' Collaboration 메타분석(6개 시험, ~95,000명, 당뇨 4,000명) — 주요혈관사건 12%감소(RR 0.88), 가장 큰 효과는 비치명MI, CHD사망·총뇌졸중에는 효과 미미</span></div>
+      <div class="alert alert-warn"><span>⚠️</span><span>아스피린의 허혈성혈관사건 감소효과는 적당한 수준 — 절대감소량은 기저ASCVD위험에 따라 결정됨. 주된 부작용은 위장관출혈위험증가(실세계에서 연간 1,000명당 최대 5건 초과)</span></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>🎯 1차예방 — 아스피린 적용 기준</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <table class="tc-table">
+        <tr><th>대상군</th><th>권고</th></tr>
+        <tr><td>50세 이상 + 추가위험인자≥1개(고혈압·이상지질혈증·흡연·비만·CKD) + 출혈위험 증가 없음</td><td>공유의사결정 하에 아스피린 1차예방 고려 가능</td></tr>
+        <tr><td>50세 미만 + 다른 ASCVD위험인자 없음</td><td>권장하지 않음(낮은 이득&lt;출혈위험)</td></tr>
+        <tr><td>중간위험군(위험인자 있는 젊은층 or 위험인자 없는 고령층)</td><td>추가연구까지 임상판단 적용</td></tr>
+        <tr><td>&gt;70세(당뇨유무 무관)</td><td>위험&gt;이득 — 일반적으로 권장하지 않음</td></tr>
+        <tr><td>&lt;21세</td><td>Reye증후군 위험으로 일반적으로 금기</td></tr>
+      </table>
+      <div class="alert alert-teal" style="margin-top:8px"><span>💡</span><span>관상동맥석회화점수(CAC) 등 비침습영상이 특히 저위험군에서 아스피린 치료를 더 정교하게 맞추는 데 도움될 수 있음</span></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>💊 아스피린 용량</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="dot">
+        <li>임상시험 평균용량 범위 50–650mg/day(대부분 100–325mg/day)</li>
+        <li>특정용량을 지지하는 근거는 적으나, 최저가능용량이 부작용 감소에 도움</li>
+        <li><strong>ADAPTABLE 시험</strong>(38%당뇨) — 81mg vs 325mg 간 심혈관사건·주요출혈 유의차 없음</li>
+        <li>미국에서 가장 흔한 저용량 정제는 81mg, <strong>75–162mg/day가 최적</strong>으로 보임</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>💉 P2Y12 수용체 대항제 — 이중항혈소판요법</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="dot">
+        <li>급성관동맥증후군·스텐트시술 후 적응증 — PCI 미시행시 ticagrelor 또는 clopidogrel, PCI 시행시 clopidogrel/ticagrelor/prasugrel</li>
+        <li><strong>PEGASUS-TIMI 54</strong> — 당뇨+이전MI(1–3년전)에 ticagrelor추가가 재발허혈사건(CV사망·CHD사망포함) 유의감소</li>
+        <li><strong>THEMIS</strong> — 당뇨+안정형CAD에서 ticagrelor추가가 허혈성심혈관사건 감소(단 중대출혈·두개내출혈 증가)</li>
+        <li><strong>THEMIS-PCI 하위군</strong> — 이전PCI병력자에서 순이익(허혈이득 vs 출혈위험) 개선, 이전PCI없는 군은 순이익 없음</li>
+        <li><strong>TWILIGHT 사전계획분석</strong>(당뇨군) — 스텐트시술후 조기아스피린중단+이중요법지속이 사망·허혈사건 증가없이 출혈위험 감소 가능</li>
+      </ul>
+      <div class="alert alert-info" style="margin-top:8px"><span>ℹ️</span><span>고위험TIA·경증뇌졸중 후 단기 이중항혈소판요법 권장 — 적응증·치료기간은 빠르게 진화 중이며 심혈관/신경과 전문가 포함 다학제팀이 결정해야 함</span></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>🩸 항혈소판제+항응고제 병용 — COMPASS/VOYAGER PAD</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <table class="tc-table">
+        <tr><th>시험</th><th>대상</th><th>중재</th><th>결과</th></tr>
+        <tr><td><strong>COMPASS</strong></td><td>27,395명, CAD/PAD(당뇨10,341명)</td><td>아스피린+rivaroxaban2.5mg bid vs 아스피린+위약</td><td>허혈성심혈관사건·주요사지사건 감소, 당뇨군에서 절대이득 더 큼</td></tr>
+        <tr><td><strong>VOYAGER PAD</strong></td><td>6,564명, PAD+혈관재개통후</td><td>rivaroxaban2.5mg bid+아스피린 vs 위약+아스피린</td><td>허혈성심혈관사건·주요사지사건 유의감소</td></tr>
+      </table>
+      <div class="alert alert-warn" style="margin-top:8px"><span>⚠️</span><span>두 시험 모두 rivaroxaban추가 시 주요출혈 위험 증가 — 이중항혈소판/항혈소판+항응고 전략의 이득·위험을 적격환자와 충분히 논의 후 공유의사결정으로 결정해야 함. 이 분야는 빠르게 발전 중</span></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══════════ TAB: 선별검사 ═══════════ -->
+<div id="tab-screen" class="panel">
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>📌 핵심 권고문</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="rec-list">
+        <li class="rec-item"><span class="badge badge-A">A</span><span class="rec-text"><strong>10.37a</strong> 무증상자 — 관상동맥질환 정기선별은 비권장(ASCVD위험인자 관리 시 결과개선 없음)</span></li>
+        <li class="rec-item"><span class="badge badge-E">E</span><span class="rec-text"><strong>10.37b</strong> 심·혈관질환 증상/징후(경동맥잡음·TIA·뇌졸중·간헐성파행·PAD) 또는 심전도이상(병적Q파 등) — 관상동맥질환 평가 고려</span></li>
+        <li class="rec-item"><span class="badge badge-B">B</span><span class="rec-text"><strong>10.38a</strong> 무증상 성인당뇨 — 나트륨이용펩타이드(BNP/NT-proBNP) 선별로 stage C 심부전 예방 촉진 고려</span></li>
+        <li class="rec-item"><span class="badge badge-A">A</span><span class="rec-text"><strong>10.38b</strong> 나트륨이용펩타이드 이상 시 — 심초음파로 stage B 심부전 식별 권장</span></li>
+        <li class="rec-item"><span class="badge badge-B">B</span><span class="rec-text"><strong>10.39</strong> 무증상+65세이상/미세혈관질환/족부합병증/말단기관손상 — PAD진단이 관리를 변경시킬 경우 발목상완지수(ABI) 선별 권장</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>🫀 무증상 관상동맥질환 선별 — 비권장 근거</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="dot">
+        <li>고위험 무증상자는 이미 집중내과치료를 받고 있어야 하며, 이는 침습적 재개통술과 유사한 이득을 제공</li>
+        <li><strong>RCT</strong> — 무증상 2형당뇨·정상심전도자에서 아데노신부하 방사성동위원소 심근혈류영상 정기선별이 임상이득 없음</li>
+        <li><strong>FACTOR-64</strong> — 관상동맥CT혈관조영술 정기선별이 무증상 1형/2형당뇨에서 전체사망·비치명MI·불안정형협심증 복합율 감소시키지 못함</li>
+        <li><strong>DIAD 연구</strong> — 위험인자 기반 초기진단평가·추적이 무증상 관상동맥질환 선별검사상 무증상허혈을 가질 환자를 식별하지 못함</li>
+      </ul>
+      <div class="alert alert-warn" style="margin-top:8px"><span>⚠️</span><span>관상동맥석회화점수 등 비침습적 선별의 이득은 무증상 당뇨환자에서 아직 입증되지 않음(연구진행중) — 위험계층화·치료강화 근거 제공 가능하나, 정기사용은 방사선노출·불필요한 침습검사(관상동맥조영술·재개통술)로 이어질 수 있어 이득·비용·위험의 균형이 여전히 논쟁적</span></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>🫁 무증상 심부전 선별 — 단계적 접근</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="dot">
+        <li>당뇨는 심부전 위험을 증가시킴 — 1형·2형당뇨 모두에서 관찰됨(다수 종적관찰연구)</li>
+        <li>75만명 규모 다국적코호트(기존CVD없는 당뇨) — 심부전·CKD가 심혈관/신장질환의 가장 흔한 첫 발현형태</li>
+        <li>당뇨환자는 무증상 stage A·B에서 증상성 stage C·D로 진행할 위험이 특히 높음</li>
+        <li>BNP/NT-proBNP는 심부전발생·증상진행·심부전관련사망 위험군을 식별 — 1형당뇨에서도 NT-proBNP상승이 심혈관·전체사망률 증가와 연관됨이 보고됨</li>
+        <li>여러 RCT — 나트륨이용펩타이드 상승군에서 더 집중적인 위험인자치료가 증상성심부전·심부전입원·신규좌심실기능장애 위험 감소</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>🔬 나트륨이용펩타이드 임계값 및 해석</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <table class="tc-table">
+        <tr><th>표지자</th><th>이상치 임계값</th></tr>
+        <tr><td>BNP</td><td>≥50 pg/mL</td></tr>
+        <tr><td>NT-proBNP</td><td>≥125 pg/mL</td></tr>
+      </table>
+      <div class="alert alert-warn" style="margin-top:8px"><span>⚠️</span><span><strong>상승시킬 수 있는 경쟁진단</strong> — 신부전, 폐고혈압, 만성폐쇄성폐질환, 폐쇄성수면무호흡, 허혈성/출혈성뇌졸중, 빈혈</span></div>
+      <div class="alert alert-info"><span>ℹ️</span><span><strong>저하시킬 수 있는 상태</strong> — 비만(검사 민감도를 저하시킴)</span></div>
+      <ul class="dot" style="margin-top:8px">
+        <li>이상치 평가 시 임상판단 필요, 경쟁진단 가능성 고려</li>
+        <li>이상 시 → 다음 단계로 <strong>심초음파</strong> 시행(구조적심질환, 확장기능장애·충만압상승의 도플러지표 확인)</li>
+        <li>이 단계에서 심혈관질환전문가 포함 다학제접근으로 가이드라인기반약물치료 시행 → 증상성심부전 진행위험 감소</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>🦵 무증상 말초동맥질환(PAD) 선별</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="dot">
+        <li>당뇨환자 PAD위험은 비당뇨보다 높음 — PARTNERS프로그램에서 50–69세 흡연/당뇨 또는 70세이상은 <strong>30%</strong>가 PAD, 다른 선별연구는 당뇨환자 <strong>26%</strong>가 PAD, 당뇨가 PAD 발생확률 <strong>85%</strong> 증가</li>
+        <li>고전적 파행 증상은 흔하지 않음 — 신규진단PAD의 거의 절반이 무증상(활동제한 또는 동반질환으로 증상유발 임계활동량 도달 못함)</li>
+        <li><strong>위험인자</strong> — 연령, 흡연, 고혈압, 이상지질혈증, 혈당관리불량, 긴유병기간, 신경병증, 망막병증, CVD병력</li>
+        <li>미세혈관질환 동반 시 PAD의 향후 절단위험 등 불량한 결과와 연관</li>
+      </ul>
+      <div class="alert alert-teal" style="margin-top:8px"><span>💡</span><span><strong>VIVA 시험</strong>(50,156명, ~10%당뇨) — 복부대동맥류·PAD·고혈압 통합혈관선별 시 1명 사망예방 위한 선별초청필요수는 ~170으로 높았으나, 약물치료(항혈소판·지질강하·항고혈압) 증가, 입원기간감소, 사망률감소와 연관됨</span></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>🎯 PAD 선별 대상 및 후속 관리</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <table class="tc-table">
+        <tr><th>선별 대상</th></tr>
+        <tr><td>연령 ≥65세</td></tr>
+        <tr><td>당뇨 유병기간 ≥10년</td></tr>
+        <tr><td>미세혈관질환 동반</td></tr>
+        <tr><td>족부합병증의 임상적 증거</td></tr>
+        <tr><td>당뇨로 인한 말단기관손상</td></tr>
+      </table>
+      <div class="alert alert-info" style="margin-top:8px"><span>ℹ️</span><span>진단이 약물치료강화·결과개선에 도움될 경우 발목상완지수(ABI)로 선별 — 진단 후 LDL강하요법강화, 저용량rivaroxaban시작, GLP-1RA시작(<strong>STRIDE시험</strong>에서 당뇨+PAD환자에 증상이득 입증됨) 등을 고려할 수 있음</span></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══════════ TAB: SGLT·GLP-1RA ═══════════ -->
+<div id="tab-sglt" class="panel">
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>📌 ASCVD 위험감소 — 핵심 권고문</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="rec-list">
+        <li class="rec-item"><span class="badge badge-A">A</span><span class="rec-text"><strong>10.40a</strong> ASCVD 또는 CKD 동반 2형당뇨 — 심혈관이득 입증된 SGLT2i 또는 GLP-1RA를 종합적 위험감소/혈당강하 계획의 일부로 권장</span></li>
+        <li class="rec-item"><span class="badge badge-A">A</span><span class="rec-text"><strong>10.40b</strong> ASCVD 또는 다중위험인자, 또는 CKD — 심혈관이득 입증된 SGLT2i로 심혈관사건위험 감소</span></li>
+        <li class="rec-item"><span class="badge badge-A">A</span><span class="rec-text"><strong>10.40c</strong> 同上 — 심혈관이득 입증된 GLP-1RA로 심혈관사건위험 감소</span></li>
+        <li class="rec-item"><span class="badge badge-B">B</span><span class="rec-text"><strong>10.40d</strong> ASCVD 또는 다중위험인자 — SGLT2i+GLP-1RA 병용으로 심혈관·신장사건 부가적 감소 고려 가능</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>💊 SGLT2 억제제 — 핵심 심혈관결과시험</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <table class="tc-table">
+        <tr><th>약물</th><th>시험</th><th>주요 결과</th></tr>
+        <tr><td>Empagliflozin</td><td>EMPA-REG OUTCOME</td><td>MI·뇌졸중·CV사망 감소, 심부전입원 35%감소</td></tr>
+        <tr><td>Canagliflozin</td><td>CANVAS Program</td><td>MI·뇌졸중·CV사망 감소, 심부전입원 33%감소(단 하지절단위험 증가 — 한 시험에서)</td></tr>
+        <tr><td>Dapagliflozin</td><td>DECLARE-TIMI 58</td><td>1차결과(MI·뇌졸중·CV사망) 차이없음, 심부전입원/CV사망 복합결과 17%감소</td></tr>
+        <tr><td>Sotagliflozin(SGLT1/2i)</td><td>SCORED</td><td>CV사망·심부전입원/응급방문 감소(CKD+심혈관위험 2형당뇨)</td></tr>
+        <tr><td>Ertugliflozin</td><td>VERTIS CV</td><td>심혈관위험감소 근거 미입증</td></tr>
+        <tr><td>Bexagliflozin</td><td>메타분석</td><td>심혈관위험감소 근거 미입증</td></tr>
+      </table>
+      <div class="alert alert-info" style="margin-top:8px"><span>ℹ️</span><span>FDA승인 SGLT2i 3종(empagliflozin·canagliflozin·dapagliflozin)이 통계적으로 유의한 심혈관사건 감소를 보고함</span></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>💊 GLP-1 수용체작용제 — 핵심 심혈관결과시험</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <table class="tc-table">
+        <tr><th>약물</th><th>시험</th><th>결과</th></tr>
+        <tr><td>Liraglutide(1일1회)</td><td>LEADER</td><td>주요죽상경화심혈관결과(MI·뇌졸중·CV사망) 감소</td></tr>
+        <tr><td>Semaglutide(주1회, 피하)</td><td>SUSTAIN-6</td><td>동일</td></tr>
+        <tr><td>Semaglutide(경구)</td><td>SOUL</td><td>심혈관이득 입증</td></tr>
+        <tr><td>Dulaglutide(주1회)</td><td>REWIND</td><td>동일</td></tr>
+        <tr><td>Albiglutide(주1회)</td><td>Harmony Outcomes</td><td>동일(사업적 이유로 시장철수)</td></tr>
+        <tr><td>Efpeglenatide(주1회)</td><td>AMPLITUDE-O</td><td>동일</td></tr>
+        <tr><td>Lixisenatide</td><td>—</td><td>위약 대비 우월성 미입증 — 비권장</td></tr>
+        <tr><td>Exenatide ER</td><td>EXSCEL</td><td>위약 대비 우월성 미입증 — 비권장</td></tr>
+        <tr><td>Tirzepatide(dual GIP/GLP-1RA)</td><td>SURPASS-CVOT</td><td>진행중</td></tr>
+      </table>
+      <div class="alert alert-teal" style="margin-top:8px"><span>💡</span><span>FDA승인 GLP-1RA 4종(liraglutide·albiglutide·semaglutide[피하+경구]·dulaglutide)이 통계적으로 유의한 심혈관사건 감소를 보고함</span></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>📐 Fig 10.6 — 2형당뇨 ASCVD 예방 알고리즘</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <div class="flow-box" style="border-left:3px solid var(--accent2)">
+        <strong>기반 — 영양·생활습관, 혈압관리</strong>
+      </div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-box" style="border-left:3px solid var(--red)">
+        <strong>기존 ASCVD 있음</strong><br>
+        <span style="font-size: calc(11.5px * var(--fscale, 1))">고강도스타틴 + GLP-1RA + SGLT2i.<br>2혈관계 이상 침범 또는 1혈관계+65세초과 → 아스피린81mg+rivaroxaban2.5mg bid 고려(전신항응고/이중항혈소판 불필요 + 금기없는 경우)<br>그 외 → 아스피린81mg 또는 clopidogrel75mg</span>
+      </div>
+      <div class="flow-arrow">↓ (ASCVD 없는 경우)</div>
+      <div class="flow-box" style="border-left:3px solid var(--orange)">
+        <strong>고ASCVD위험군*</strong><br>
+        <span style="font-size: calc(11.5px * var(--fscale, 1))">고강도스타틴 + GLP-1RA + SGLT2i</span>
+      </div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-box" style="border-left:3px solid var(--teal)">
+        <strong>저위험군</strong><br>
+        <span style="font-size: calc(11.5px * var(--fscale, 1))">중강도 또는 고강도 스타틴</span>
+      </div>
+      <div style="font-size: calc(10px * var(--fscale, 1));color:var(--text2);margin-top:8px">*고ASCVD위험 = 말단기관손상(좌심실비대·망막병증) 또는 다중심혈관위험인자(고령·고혈압·흡연·이상지질혈증·CKD·비만) 동반</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>📊 SGLT2i·GLP-1RA — 메타분석 종합</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="dot">
+        <li>GLP-1RA와 SGLT2i는 ASCVD 동반 2형당뇨에서 유사한 정도로 죽상경화 주요심혈관사건위험 감소</li>
+        <li>두 계열 모두 ASCVD동반/다중위험인자/알부민뇨성신질환 동반자에서 심부전입원·신질환진행 위험 감소</li>
+        <li>병용요법(SGLT2i+GLP-1RA)은 두 계열의 상호보완적 이득을 부가적으로 제공할 가능성 — 대부분 혈당관리와 독립적</li>
+      </ul>
+      <div class="alert alert-danger" style="margin-top:8px"><span>🚫</span><span>1형당뇨에서 SGLT2i의 심·신장사건 감소 효능·안전성은 연구중이며, <strong>당뇨병성케토산증·정상혈당케톤산증 위험의 유의한 증가</strong>로 현재 권장되지 않음</span></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span>💊 기타 계열 — DPP-4 억제제</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body collapsed">
+      <ul class="dot">
+        <li>DPP-4억제제의 심혈관결과시험은 위약 대비 심혈관이득을 보이지 않음</li>
+        <li><strong>CAROLINA</strong> — linagliptin이 glimepiride(설폰요소제)와 심혈관결과에서 비열등성 입증, linagliptin군에서 저혈당률은 더 낮음</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>🏥 임상적 접근 — 도입 우선순위</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="dot">
+        <li>ASCVD·심부전·CKD 위험이 있거나 동반된 2형당뇨 — 심보호 SGLT억제제 및/또는 GLP-1RA로 치료해야 함 (Section 9 Fig 9.4 참조)</li>
+        <li><strong>핵심 원칙</strong> — 추가혈당강하 필요성, metformin 사용여부와 무관하게 치료계획에 포함되어야 함</li>
+        <li>기존 약물 중 일부/전체를 대체하여 저혈당위험·부작용·약값을 최소화할 필요가 있을 수 있음</li>
+        <li>1차진료-전문진료 협업, 약사·영양사 등 의료팀 전반의 긴밀한 협력이 치료전환을 용이하게 하고 고위험군 결과 개선에 기여</li>
+      </ul>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══════════ TAB: 심부전 ═══════════ -->
+<div id="tab-hf" class="panel">
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>📌 핵심 권고문 — 예방</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="rec-list">
+        <li class="rec-item"><span class="badge badge-A">A</span><span class="rec-text"><strong>10.41a/b</strong> ASCVD또는 다중위험인자 동반 2형당뇨 — stage B(무증상)에서 입증된 SGLT억제제/GLP-1RA로 심부전입원위험 감소</span></li>
+        <li class="rec-item"><span class="badge badge-A">A</span><span class="rec-text"><strong>10.43</strong> 55세 이상+ASCVD/다중위험인자 — ACEi/ARB로 심혈관사건위험 감소</span></li>
+        <li class="rec-item"><span class="badge badge-A">A</span><span class="rec-text"><strong>10.44a/b</strong> Stage B(무증상)심부전 — 심혈관전문가 포함 다학제팀의 가이드라인기반치료 최적화, ACEi/ARB+β차단제로 stage C진행위험 감소</span></li>
+        <li class="rec-item"><span class="badge badge-A">A</span><span class="rec-text"><strong>10.44c</strong> Stage B 또는 고위험/기존CVD — 심부전예방이득 입증된 SGLT억제제 <span class="badge badge-A">A</span> 또는 GLP-1RA <span class="badge badge-B">B</span>로 심부전입원위험 감소</span></li>
+        <li class="rec-item"><span class="badge badge-A">A</span><span class="rec-text"><strong>10.44f</strong> CKD동반 — 비스테로이드성MRA(입증된)로 심부전입원위험 감소</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>📐 Fig 10.5 — 증상성 심부전 예방·치료 알고리즘</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <div class="flow-box" style="border-left:3px solid var(--accent2)">
+        <strong>증상성 HF? — No → 심초음파(TTE) 가능여부 확인</strong><br>
+        <span style="font-size: calc(11.5px * var(--fscale, 1))">TTE불가 → BNP/NT-proBNP선별 고려. 이상치(BNP≥50/NT-proBNP≥125) → 심초음파 고려. 정상 → CKD있으면 SGLT2i/SGLT1·2i+nsMRA 고려</span>
+      </div>
+      <div class="flow-arrow">↓ (TTE 가능)</div>
+      <div class="flow-box" style="border-left:3px solid var(--green)">
+        <strong>EF≤40% → 심장내과 의뢰, β차단제(입증된)+ACEi/ARB</strong><br>
+        <strong>EF&gt;40% → 고혈압/CKD 있으면 ACEi/ARB</strong><br>
+        <span style="font-size: calc(11.5px * var(--fscale, 1))">예방전략 공통: SGLT2i, GLP-1RA, CKD있으면 nsMRA·SGLT1/2i 고려</span>
+      </div>
+      <div class="flow-arrow">↓ (증상성 HF — Yes)</div>
+      <div class="flow-box" style="border-left:3px solid var(--red)">
+        <strong>EF≤40% — HFrEF GDMT</strong><br>
+        <span style="font-size: calc(11.5px * var(--fscale, 1))">심장내과의뢰, SGLT2i/SGLT1·2i(입증), ARNI(또는 불내성시 ACEi/ARB), β차단제(입증), MRA(입증)</span>
+      </div>
+      <div class="flow-box" style="border-left:3px solid var(--orange)">
+        <strong>EF&gt;40% — HFmrEF/HFpEF GDMT</strong><br>
+        <span style="font-size: calc(11.5px * var(--fscale, 1))">심장내과의뢰, SGLT2i/SGLT1·2i(입증), 비만시 dual GIP/GLP-1RA 또는 GLP-1RA(입증), 고혈압·이전MI·CKD시 ACEi/ARB, nsMRA</span>
+      </div>
+      <div style="font-size: calc(10px * var(--fscale, 1));color:var(--text2);margin-top:8px;line-height:1.6">SGLT2i 사용기준: eGFR≥20. SGLT1/2i는 eGFR≥30일때 SGLT2i대안. nsMRA는 UACR≥30, K+&lt;5.0mEq/L 조건. SGLT2i·GLP-1RA의 절대이득은 절대위험이 가장 높은 군에서 최대</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>🏛️ 고혈압관리 — 심부전 예방의 핵심 기반</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="dot">
+        <li>대부분의 신규심부전은 고혈압이 선행 — Framingham코호트에서 신규심부전 발생의 <strong>최대 91%</strong>가 이전 고혈압진단자에서 발생</li>
+        <li><strong>UKPDS</strong> — 2형당뇨 집중혈압관리가 심부전위험 <strong>56% 감소</strong></li>
+        <li><strong>BPROAD</strong> — 집중치료가 심부전 치료/입원 <strong>34% 감소</strong>(HR 0.66)</li>
+        <li><strong>SPRINT</strong> — 신규심부전발생 위험 36% 감소(유사한 방향성 확인)</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>💊 ACEi/ARB+β차단제 — Stage B 심부전 핵심 근거</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <table class="tc-table">
+        <tr><th>시험</th><th>대상</th><th>결과</th></tr>
+        <tr><td>SOLVD(15%당뇨)</td><td>무증상좌심실기능장애</td><td>Enalapril이 신규심부전 20%감소</td></tr>
+        <tr><td>SAVE(23%당뇨)</td><td>MI후 무증상LVEF저하</td><td>Captopril이 심부전발생 37%감소</td></tr>
+        <tr><td>CAPRICORN(23%당뇨)</td><td>MI후 LVEF저하(절반 무증상)</td><td>Carvedilol이 사망률23%감소, 심부전입원14%감소</td></tr>
+        <tr><td>REVERT(45%당뇨)</td><td>무증상LVEF&lt;40%</td><td>Metoprolol이 좌심실역리모델링 개선</td></tr>
+      </table>
+      <div class="alert alert-info" style="margin-top:8px"><span>ℹ️</span><span>SOLVD·SAVE 후속 후향분석 — β차단제 동시사용이 증상성심부전 진행위험 감소와 연관됨을 확인</span></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>💊 SGLT억제제 — 심부전 예방·치료 핵심 근거</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <table class="tc-table">
+        <tr><th>시험</th><th>약물</th><th>대상</th><th>결과</th></tr>
+        <tr><td>EMPA-REG OUTCOME</td><td>Empagliflozin</td><td>HF병력10%</td><td>심부전입원위험 35%감소</td></tr>
+        <tr><td>CANVAS Program</td><td>Canagliflozin</td><td>HF병력14%</td><td>심부전입원 33%감소</td></tr>
+        <tr><td>DECLARE-TIMI 58</td><td>Dapagliflozin</td><td>HF병력10%</td><td>CV사망·심부전입원 17%감소(하위군무관일관)</td></tr>
+        <tr><td>SCORED</td><td>Sotagliflozin(SGLT1/2i)</td><td>CKD+심혈관위험</td><td>CV사망·심부전입원/응급방문 감소</td></tr>
+        <tr><td><strong>DAPA-HF</strong></td><td>Dapagliflozin</td><td>증상성HFrEF(NYHA II-IV, EF≤40%)</td><td>1차결과(악화HF/CV사망) HR0.74, 당뇨유무무관 일관</td></tr>
+        <tr><td><strong>EMPEROR-Reduced</strong></td><td>Empagliflozin</td><td>증상성HFrEF</td><td>CV사망/심부전입원 감소</td></tr>
+        <tr><td><strong>EMPEROR-Preserved</strong></td><td>Empagliflozin</td><td>HFpEF(EF&gt;40%)</td><td>1차결과(CV사망/심부전입원) 감소, 당뇨유무무관</td></tr>
+        <tr><td><strong>DELIVER</strong></td><td>Dapagliflozin</td><td>HFmrEF/HFpEF</td><td>유사한 심부전결과 이득</td></tr>
+        <tr><td><strong>SOLOIST-WHF</strong></td><td>Sotagliflozin</td><td>심부전악화입원직후</td><td>CV사망/입원/응급방문 1차결과 위험감소</td></tr>
+      </table>
+      <div class="alert alert-success" style="margin-top:8px"><span>✅</span><span>5개시험 통합메타분석(EMPEROR-Reduced·EMPEROR-Preserved·DAPA-HF·DELIVER·SOLOIST-WHF, 21,947명) — CV사망/심부전입원 복합결과, CV사망단독, 첫심부전입원, 전체사망률 모두 위험감소, HFmrEF/HFpEF에서도 일관됨</span></div>
+      <div class="alert alert-teal"><span>💡</span><span>SGLT2i는 사망률·입원이득 외에도 심부전환자의 임상적안정성·기능상태를 개선 — 혈당강하효과와 독립적으로 광범위한 심부전환자군에서 입원·CV사망위험을 감소시킴</span></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>🧪 미네랄로코르티코이드수용체대항제(MRA) — 스테로이드성·비스테로이드성</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="dot">
+        <li>HFrEF(EF≤40%)+2형당뇨 — Spironolactone·eplerenone 같은 MRA 권장(심부전가이드라인 일치)</li>
+        <li><strong>FINEARTS-HF</strong>(비스테로이드성 finerenone, 증상성HFpEF, EF≥40%, 41%당뇨) — 악화심부전사건/CV사망 16%감소(rate ratio 0.84)</li>
+        <li><strong>FIDELIO-DKD</strong>(2형당뇨+CKD) — 2차결과(CV사망·비치명MI·뇌졸중·심부전입원) 13%감소, 심부전입원율 감소(7.7%만 HF병력)</li>
+        <li><strong>FIGARO-DKD</strong>(同上) — 1차결과 HR 0.87(P=0.03), 심부전입원 HR 0.71(7.8%만 HF병력)</li>
+      </ul>
+      <div class="alert alert-info" style="margin-top:8px"><span>ℹ️</span><span><strong>Rec 10.42</strong> — UACR양성+ACEi/ARB최대내약용량 치료중인 2형당뇨+CKD에 비스테로이드성MRA 추가로 심혈관결과개선·CKD진행위험감소 권장 <span class="badge badge-A">A</span></span></div>
+      <div class="alert alert-warn"><span>⚠️</span><span><strong>Rec 10.44h</strong> EF&gt;40% 증상성stage C심부전에 비스테로이드성MRA 사용 권장(악화심부전사건감소 입증) <span class="badge badge-A">A</span> — 단 비스테로이드성MRA와 (스테로이드성)MRA를 동시병용해서는 안 됨</span></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>💊 GLP-1RA·Dual GIP/GLP-1RA — HFpEF+비만 핵심 시험</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <table class="tc-table">
+        <tr><th>시험</th><th>약물</th><th>대상</th><th>결과</th></tr>
+        <tr><td><strong>STEP-HFpEF DM</strong></td><td>Semaglutide 2.4mg 주1회</td><td>2형당뇨+BMI≥30+HFpEF, 616명</td><td>1년시점 KCCQ-CSS +13.7점(위약+6.4점), 체중 −9.8%(위약−3.4%), 6분보행거리 개선</td></tr>
+        <tr><td><strong>SUMMIT</strong></td><td>Tirzepatide(dual GIP/GLP-1RA)</td><td>HFpEF+비만(48%당뇨)</td><td>악화심부전/CV사망 9.9% vs 위약15.3%(HR0.62), KCCQ-CSS 19.5 vs 12.7점 개선</td></tr>
+      </table>
+      <div class="alert alert-success" style="margin-top:8px"><span>✅</span><span>이 결과들로 <strong>Rec 10.44d/e</strong> — 비만+증상성HFpEF 2형당뇨에서 심부전사건·증상감소가 입증된 dual GIP/GLP-1RA <span class="badge badge-A">A</span> 또는 GLP-1RA <span class="badge badge-B">B</span>를 치료계획에 포함하도록 권장</span></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>📌 증상성 심부전 치료 — 핵심 권고문</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="rec-list">
+        <li class="rec-item"><span class="badge badge-A">A</span><span class="rec-text"><strong>10.44g</strong> MI·증상성stage C심부전 — ACEi/ARB(또는ARNI), MRA, β차단제, SGLT2i를 포함한 가이드라인기반의학치료(GDMT)</span></li>
+        <li class="rec-item"><span class="badge badge-B">B</span><span class="rec-text"><strong>10.45</strong> 안정형심부전 — eGFR&gt;30 유지되면 metformin 지속 가능, 불안정/입원시는 회피</span></li>
+        <li class="rec-item"><span class="badge badge-E">E</span><span class="rec-text"><strong>10.46</strong> SGLT억제제 사용+DKA위험군 — 케토산증징후·위험완화법 교육, 케톤측정도구(혈청β-hydroxybutyrate) 제공, 케토제닉식이 권장하지 않음</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>⚠️ SGLT억제제와 케토산증 위험관리</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="dot">
+        <li>드물지만 심각한 위험 — DKA, 비정형 발현인 정상혈당케톤산증 포함</li>
+        <li>여러 경로가 제안됨(글루카곤상승 등) — 일반적으로 추가위험인자/상황이 필요해 촉발됨: 전신질환, 인슐린펌프오작동, 인슐린용량의 현저한 감소, 장기간금식/탄수화물제한</li>
+        <li>심혈관·심부전결과시험에서는 케토산증 발생률이 낮았으나, 이들 연구는 1형당뇨 및/또는 최근DKA병력자를 제외함</li>
+        <li><strong>위험완화 핵심전략</strong> — 기저민감성평가, 위험·증상·예방전략 교육, β-hydroxybutyrate 가정모니터링 도구 처방 — SGLT억제제 치료기간 전체에 걸쳐 반복 시행</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span>💊 기타 혈당강하제와 심부전</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body collapsed">
+      <ul class="dot">
+        <li><strong>Thiazolidinedione</strong> — 심부전위험증가와 강력하고 일관된 연관성, 심부전환자에서 회피해야 함</li>
+        <li><strong>Metformin</strong> — 신기능이 권장범위 내이면 안정형심부전관리에 사용 가능</li>
+        <li><strong>DPP-4 억제제</strong> — 일반적으로 심부전에서 안전하다고 간주됨. 단 SAVOR-TIMI 53에서 saxagliptin군이 위약군보다 심부전입원 더 많음. EXAMINE(alogliptin)·TECOS(sitagliptin)·CARMELINA(linagliptin) 3개시험은 심부전입원위험의 유의한 증가를 발견하지 못함</li>
+      </ul>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══════════ TAB: 기준표 모음 ═══════════ -->
+<div id="tab-tables" class="panel">
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>📁 전체 권고문 표 (Rec 10.1–10.46)</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <table class="tc-table">
+        <tr><th>번호</th><th>권고 내용</th><th>등급</th></tr>
+        <tr><td>10.1</td><td>매방문/6개월마다 혈압측정, 복수측정 확진</td><td><span class="badge badge-A">A</span></td></tr>
+        <tr><td>10.2</td><td>교육후 가정자가혈압측정 권장</td><td><span class="badge badge-A">A</span></td></tr>
+        <tr><td>10.3</td><td>혈압목표 공유의사결정으로 개별화</td><td><span class="badge badge-B">B</span></td></tr>
+        <tr><td>10.4</td><td>목표&lt;130/80, 고위험군 수축기&lt;120 장려</td><td><span class="badge badge-A">A</span></td></tr>
+        <tr><td>10.5</td><td>생활습관(DASH·절주·운동·금연)</td><td><span class="badge badge-A">A</span></td></tr>
+        <tr><td>10.6</td><td>확진≥130/80 — 약물치료 시작·적정</td><td><span class="badge badge-A">A</span></td></tr>
+        <tr><td>10.7</td><td>확진≥150/90 — 2제 신속시작</td><td><span class="badge badge-A">A</span></td></tr>
+        <tr><td>10.8</td><td>알부민뇨/CAD — ACEi/ARB 1차</td><td><span class="badge badge-A">A</span></td></tr>
+        <tr><td>10.9</td><td>ACEi+ARB+직접레닌억제제 병용 회피</td><td><span class="badge badge-A">A</span></td></tr>
+        <tr><td>10.10</td><td>UACR 30–299 ACEi/ARB, ≥300 강력권장</td><td><span class="badge badge-B">B</span>/<span class="badge badge-A">A</span></td></tr>
+        <tr><td>10.11</td><td>eGFR·K+ 모니터링</td><td><span class="badge badge-B">B</span></td></tr>
+        <tr><td>10.12</td><td>가임기 ACEi/ARB/MRA 등 회피</td><td><span class="badge badge-A">A</span></td></tr>
+        <tr><td>10.13</td><td>3계열 미달성 — MRA 고려</td><td><span class="badge badge-A">A</span></td></tr>
+        <tr><td>10.14</td><td>생활습관(지중해/DASH)으로 지질개선</td><td><span class="badge badge-A">A</span></td></tr>
+        <tr><td>10.15</td><td>중성지방·HDL이상 — 생활습관강화</td><td><span class="badge badge-C">C</span></td></tr>
+        <tr><td>10.16/10.17</td><td>지질패널 진단시·연1회, 스타틴시작후4–12주</td><td><span class="badge badge-E">E</span>/<span class="badge badge-A">A</span></td></tr>
+        <tr><td>10.18</td><td>40–75세ASCVD없음 — 중강도스타틴</td><td><span class="badge badge-A">A</span></td></tr>
+        <tr><td>10.19</td><td>20–39세+위험인자 — 스타틴고려</td><td><span class="badge badge-C">C</span></td></tr>
+        <tr><td>10.20</td><td>40–75세고위험 — 고강도스타틴, LDL&lt;70</td><td><span class="badge badge-A">A</span></td></tr>
+        <tr><td>10.21</td><td>다중위험인자+LDL≥70 — ezetimibe/PCSK9i추가</td><td><span class="badge badge-B">B</span></td></tr>
+        <tr><td>10.22/10.23</td><td>&gt;75세 — 지속 또는 중강도시작 고려</td><td><span class="badge badge-B">B</span>/<span class="badge badge-C">C</span></td></tr>
+        <tr><td>10.24</td><td>스타틴불내성 — bempedoic acid</td><td><span class="badge badge-A">A</span></td></tr>
+        <tr><td>10.25</td><td>임신전 지질강하제 중단</td><td><span class="badge badge-B">B</span>/<span class="badge badge-E">E</span></td></tr>
+        <tr><td>10.26/10.27</td><td>ASCVD동반 — 고강도스타틴, LDL&lt;55</td><td><span class="badge badge-A">A</span>/<span class="badge badge-B">B</span></td></tr>
+        <tr><td>10.28a/b</td><td>스타틴불내성 — 최대내약용량, PCSK9mAb/bempedoic/inclisiran</td><td><span class="badge badge-E">E</span>/<span class="badge badge-A">A</span></td></tr>
+        <tr><td>10.29</td><td>중성지방≥500 — 이차원인평가·약물치료</td><td><span class="badge badge-C">C</span></td></tr>
+        <tr><td>10.30</td><td>고중성지방혈증 — 생활습관·이차요인 치료</td><td><span class="badge badge-C">C</span></td></tr>
+        <tr><td>10.31</td><td>중성지방150–499 — icosapent ethyl고려</td><td><span class="badge badge-B">B</span></td></tr>
+        <tr><td>10.32</td><td>fibrate·niacin·n-3보충제 추가 비권장</td><td><span class="badge badge-A">A</span></td></tr>
+        <tr><td>10.33</td><td>ASCVD — 아스피린 2차예방</td><td><span class="badge badge-A">A</span></td></tr>
+        <tr><td>10.34a/b</td><td>아스피린알레르기 — clopidogrel, DAPT기간은 다학제결정</td><td><span class="badge badge-B">B</span>/<span class="badge badge-E">E</span></td></tr>
+        <tr><td>10.35</td><td>안정형CAD/PAD — 아스피린+저용량rivaroxaban</td><td><span class="badge badge-A">A</span></td></tr>
+        <tr><td>10.36</td><td>고위험 — 아스피린 1차예방 고려가능</td><td><span class="badge badge-A">A</span></td></tr>
+        <tr><td>10.37a/b</td><td>무증상 CAD정기선별 비권장, 증상시 평가</td><td><span class="badge badge-A">A</span>/<span class="badge badge-E">E</span></td></tr>
+        <tr><td>10.38a/b</td><td>BNP/NT-proBNP선별, 이상시 심초음파</td><td><span class="badge badge-B">B</span>/<span class="badge badge-A">A</span></td></tr>
+        <tr><td>10.39</td><td>고위험군 ABI로 PAD선별</td><td><span class="badge badge-B">B</span></td></tr>
+        <tr><td>10.40a–d</td><td>ASCVD/CKD — SGLT2i·GLP-1RA(병용가능)</td><td><span class="badge badge-A">A</span>/<span class="badge badge-B">B</span></td></tr>
+        <tr><td>10.41a/b</td><td>심부전동반 — SGLT2i로 악화·사망·삶의질개선</td><td><span class="badge badge-A">A</span></td></tr>
+        <tr><td>10.42</td><td>CKD+알부민뇨 — 비스테로이드성MRA추가</td><td><span class="badge badge-A">A</span></td></tr>
+        <tr><td>10.43</td><td>55세이상 — ACEi/ARB</td><td><span class="badge badge-A">A</span></td></tr>
+        <tr><td>10.44a–h</td><td>Stage B/C심부전 단계별 GDMT(SGLT/ARNI/β차단제/MRA/GLP-1RA)</td><td><span class="badge badge-A">A</span> 위주</td></tr>
+        <tr><td>10.45</td><td>안정형심부전 metformin지속가능(eGFR&gt;30)</td><td><span class="badge badge-B">B</span></td></tr>
+        <tr><td>10.46</td><td>SGLT억제제 — 케토산증 교육·모니터링</td><td><span class="badge badge-E">E</span></td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span>📊 LDL-C 목표 한눈에 보기</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body collapsed">
+      <table class="tc-table">
+        <tr><th>상황</th><th>LDL-C 목표</th></tr>
+        <tr><td>1차예방, 고위험(40–75세+위험인자)</td><td>&lt;70 mg/dL(&lt;1.8mmol/L), ≥50%감소</td></tr>
+        <tr><td>2차예방(ASCVD동반)</td><td>&lt;55 mg/dL(&lt;1.4mmol/L), ≥50%감소</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span>📊 혈압 목표 한눈에 보기</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body collapsed">
+      <table class="tc-table">
+        <tr><th>대상</th><th>목표</th></tr>
+        <tr><td>일반적 목표(안전달성가능시)</td><td>&lt;130/80 mmHg</td></tr>
+        <tr><td>고심혈관·신장위험군</td><td>수축기 &lt;120 mmHg 장려</td></tr>
+        <tr><td>저항성고혈압 정의</td><td>3계열(이뇨제포함) 최대내약용량에도 ≥130/80</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span>📊 나트륨이용펩타이드 임계값</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body collapsed">
+      <table class="tc-table">
+        <tr><th>표지자</th><th>이상치</th></tr>
+        <tr><td>BNP</td><td>≥50 pg/mL</td></tr>
+        <tr><td>NT-proBNP</td><td>≥125 pg/mL</td></tr>
+      </table>
+    </div>
+  </div>
+</div>
+</div><!-- /main -->
+
+<!-- ═══ MODAL: 혈압 목표 ═══ -->
+<div id="bpGoalModal" class="modal-overlay" onclick="closeModalOutside(event,'bpGoalModal')">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal('bpGoalModal')">✕</button>
+    <div class="modal-title">🩺 혈압 목표 — 개별화 원칙 및 근거</div>
+
+    <div class="alert alert-info" style="margin:0 0 12px"><span>💡</span><span>안전하게 달성 가능하면 치료 중 혈압목표는 &lt;130/80mmHg이며, 고심혈관·신장위험군에서는 수축기 &lt;120mmHg를 장려한다. 목표는 공유의사결정으로 개별화해야 한다.</span></div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">강화목표(&lt;120 SBP)를 지지하는 핵심 시험</div>
+      <table class="modal-table">
+        <tr><th>시험</th><th>대상</th><th>결과</th></tr>
+        <tr><td>BPROAD</td><td>2형당뇨 12,821명</td><td>1차결과 21%감소(HR 0.79)</td></tr>
+        <tr><td>ESPRIT</td><td>11,255명(39%당뇨)</td><td>1차결과 12%감소(HR 0.88)</td></tr>
+        <tr><td>SPRINT(당뇨제외)</td><td>9,361명</td><td>1차결과 25%감소</td></tr>
+      </table>
+    </div>
+
+    <div class="alert alert-warn" style="margin-top:4px"><span>⚠️</span><span>강화치료군에서 저혈압·실신·전해질이상·AKI가 더 빈번 — 기립성저혈압, 다중동반질환, 기능적제한, 다약제복용이 있는 고령자에서 특히 주의가 필요하며, 일부는 삶의 질을 위해 더 높은 목표를 선호할 수 있다.</span></div>
+    <div class="alert alert-teal"><span>💡</span><span>혈압강하의 절대이득은 절대기저심혈관위험과 상관관계가 있다 — 고위험군일수록 강화치료의 순이익이 커진다.</span></div>
+  </div>
+</div>
+
+<!-- ═══ MODAL: LDL-C 목표 ═══ -->
+<div id="ldlGoalModal" class="modal-overlay" onclick="closeModalOutside(event,'ldlGoalModal')">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal('ldlGoalModal')">✕</button>
+    <div class="modal-title">💊 LDL-C 목표 — 1차예방 vs 2차예방</div>
+
+    <div class="modal-section">
+      <table class="modal-table">
+        <tr><th>상황</th><th>스타틴강도</th><th>LDL-C 목표</th></tr>
+        <tr><td>40–75세, ASCVD없음, 위험인자없음</td><td>중강도</td><td>표준화된 목표 없음</td></tr>
+        <tr><td>40–75세, ASCVD없음, 위험인자≥1개</td><td>고강도</td><td>&lt;70 mg/dL(&lt;1.8mmol/L), ≥50%감소</td></tr>
+        <tr><td>모든 연령, ASCVD동반(2차예방)</td><td>고강도</td><td>&lt;55 mg/dL(&lt;1.4mmol/L), ≥50%감소</td></tr>
+      </table>
+    </div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">목표 미달성 시 추가요법</div>
+      <ul class="dot">
+        <li>최대내약 스타틴에 ezetimibe 또는 PCSK9억제제(심혈관이득입증) 추가</li>
+        <li>스타틴 불내성 시 — PCSK9단클론항체, bempedoic acid, 또는 PCSK9 siRNA(inclisiran)</li>
+      </ul>
+    </div>
+
+    <div class="alert alert-info" style="margin-top:4px"><span>ℹ️</span><span>14개RCT메타분석 — LDL-C 39mg/dL(1mmol/L) 감소당 전체사망 9%, 혈관사망 13% 감소. 이득은 기저LDL-C수치와 무관하게 선형적이며, 낮은 임계점 없이 지속됨.</span></div>
+  </div>
+</div>
+
+<!-- ═══ MODAL: SGLT2i/GLP-1RA ═══ -->
+<div id="sgltGlpModal" class="modal-overlay" onclick="closeModalOutside(event,'sgltGlpModal')">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal('sgltGlpModal')">✕</button>
+    <div class="modal-title">💉 SGLT2 억제제 · GLP-1RA — 심·신장보호 핵심약물</div>
+
+    <div class="alert alert-info" style="margin:0 0 12px"><span>💡</span><span>ASCVD·심부전·CKD 위험이 있거나 동반된 2형당뇨에서는 심보호 SGLT억제제 및/또는 GLP-1RA가 추가혈당강하 필요성, metformin 사용여부와 무관하게 치료계획에 포함되어야 하는 핵심 약물전략이다.</span></div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">FDA승인 심혈관이득 입증 약물</div>
+      <table class="modal-table">
+        <tr><th>계열</th><th>약물</th></tr>
+        <tr><td>SGLT2 억제제</td><td>Empagliflozin, Canagliflozin, Dapagliflozin</td></tr>
+        <tr><td>GLP-1RA</td><td>Liraglutide, Semaglutide(피하·경구), Dulaglutide, Albiglutide</td></tr>
+      </table>
+    </div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">효과 범위</div>
+      <ul class="dot">
+        <li>죽상경화 주요심혈관사건(MI·뇌졸중·CV사망) 감소 — 두 계열 유사한 정도</li>
+        <li>심부전입원·신질환진행 위험감소(ASCVD/다중위험인자/알부민뇨성신질환 동반자)</li>
+        <li>병용 시 상호보완적 부가이득 가능 — 대부분 혈당관리와 독립적</li>
+      </ul>
+    </div>
+
+    <div class="alert alert-danger" style="margin-top:4px"><span>🚫</span><span>1형당뇨에서 SGLT2i는 당뇨병성케토산증·정상혈당케톤산증 위험의 유의한 증가로 현재 권장되지 않음(연구 진행중).</span></div>
+  </div>
+</div>
+
+<!-- ═══ MODAL: 심부전 선별 ═══ -->
+<div id="hfScreenModal" class="modal-overlay" onclick="closeModalOutside(event,'hfScreenModal')">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal('hfScreenModal')">✕</button>
+    <div class="modal-title">❤️ 심부전 선별 — 나트륨이용펩타이드 기반 단계적 접근</div>
+
+    <div class="alert alert-info" style="margin:0 0 12px"><span>💡</span><span>당뇨환자는 무증상 stage A·B에서 증상성 stage C·D 심부전으로 진행할 위험이 특히 높다. BNP/NT-proBNP 선별로 조기식별·치료강화가 진행위험을 감소시킬 수 있다.</span></div>
+
+    <div class="modal-section">
+      <table class="modal-table">
+        <tr><th>표지자</th><th>이상치 임계값</th></tr>
+        <tr><td>BNP</td><td>≥50 pg/mL</td></tr>
+        <tr><td>NT-proBNP</td><td>≥125 pg/mL</td></tr>
+      </table>
+    </div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">해석 시 주의 — 경쟁진단</div>
+      <ul class="dot">
+        <li><strong>상승시킬 수 있는 상태</strong>: 신부전, 폐고혈압, COPD, 폐쇄성수면무호흡, 허혈성/출혈성뇌졸중, 빈혈</li>
+        <li><strong>저하시킬 수 있는 상태</strong>: 비만(검사 민감도 저하)</li>
+      </ul>
+    </div>
+
+    <div class="alert alert-teal" style="margin-top:4px"><span>💡</span><span>이상치 확인 시 다음 단계는 심초음파(구조적심질환·확장기능장애 평가) — 이후 심혈관전문가 포함 다학제접근으로 가이드라인기반의학치료를 시작해야 한다.</span></div>
+  </div>
+</div>
+
+<script>
+const FONT_ZOOM_LEVELS = [1, 1.25, 1.5];
+let fontZoomIndex = 0;
+
+function applyFontZoom(scale) {
+  document.documentElement.style.setProperty('--fscale', scale);
+  const label = document.getElementById('font-zoom-label');
+  if (label) label.textContent = Math.round(scale * 100) + '%';
+}
+
+function cycleFontZoom() {
+  fontZoomIndex = (fontZoomIndex + 1) % FONT_ZOOM_LEVELS.length;
+  applyFontZoom(FONT_ZOOM_LEVELS[fontZoomIndex]);
+}
+
+function showTab(id){
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('tab-'+id).classList.add('active');
+  event.target.classList.add('active');
+}
+function toggleCard(el){
+  el.classList.toggle('open');
+  el.nextElementSibling.classList.toggle('collapsed');
+}
+function toggleAcc(el){
+  const b=el.nextElementSibling;
+  b.style.display=b.style.display==='block'?'none':'block';
+  el.querySelector('span:last-child').textContent=b.style.display==='block'?'▴':'▾';
+}
+
+function openModal(id){document.getElementById(id).classList.add('open');}
+function closeModal(id){document.getElementById(id).classList.remove('open');}
+function closeModalOutside(e,id){if(e.target===document.getElementById(id))closeModal(id);}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')document.querySelectorAll('.modal-overlay.open').forEach(m=>m.classList.remove('open'));});
+
+const abbrs=[
+  ['ASCVD','Atherosclerotic Cardiovascular Disease(죽상경화성심혈관질환) — 급성관동맥증후군·MI·협심증·뇌졸중·PAD를 포함하는 광범위 용어.'],
+  ['CVD','Cardiovascular Disease(심혈관질환) — ASCVD와 심부전을 모두 포함하는 상위개념.'],
+  ['MI','Myocardial Infarction(심근경색).'],
+  ['PAD','Peripheral Artery Disease(말초동맥질환) — 대동맥류 포함, 당뇨에서 위험 증가.'],
+  ['CKD','Chronic Kidney Disease(만성콩팥병) — CKM증후군의 핵심 구성요소.'],
+  ['CKM','Cardiovascular-Kidney-Metabolic(심장-신장-대사) 증후군 — ASCVD·심부전·CKD가 공통 대사위험에서 비롯된다는 통합개념.'],
+  ['HFpEF','Heart Failure with preserved Ejection Fraction(박출률보존심부전, EF&gt;40%).'],
+  ['HFmrEF','Heart Failure with mildly reduced Ejection Fraction(경도감소박출률심부전).'],
+  ['HFrEF','Heart Failure with reduced Ejection Fraction(박출률감소심부전, EF≤40%).'],
+  ['BNP','B-type Natriuretic Peptide — 심부전 선별표지자, 이상치≥50 pg/mL.'],
+  ['NT-proBNP','N-terminal pro-B-type Natriuretic Peptide — 심부전 선별표지자, 이상치≥125 pg/mL.'],
+  ['GDMT','Guideline-Directed Medical Therapy(가이드라인기반의학치료) — 증상성심부전의 표준약물치료.'],
+  ['ARNI','Angiotensin Receptor-Neprilysin Inhibitor — HFrEF 1차 치료약물(sacubitril/valsartan).'],
+  ['ACEi','ACE inhibitor(안지오텐신전환효소억제제).'],
+  ['ARB','Angiotensin Receptor Blocker(안지오텐신수용체차단제).'],
+  ['MRA','Mineralocorticoid Receptor Antagonist(미네랄로코르티코이드수용체대항제) — spironolactone·eplerenone(스테로이드성), finerenone(비스테로이드성).'],
+  ['nsMRA','nonsteroidal MRA(비스테로이드성 MRA) — finerenone, CKD·HFpEF에서 심혈관·신장이득 입증.'],
+  ['CCB','Calcium Channel Blocker(칼슘채널차단제) — 디하이드로피리딘계가 항고혈압 1차약제.'],
+  ['SGLT2i','Sodium-Glucose Cotransporter 2 inhibitor — empagliflozin·canagliflozin·dapagliflozin 등.'],
+  ['SGLT1/2i','SGLT1/2 동시억제제 — sotagliflozin, eGFR≥30에서 SGLT2i 대안.'],
+  ['GLP-1 RA','Glucagon-Like Peptide 1 Receptor Agonist — liraglutide·semaglutide·dulaglutide 등.'],
+  ['GIP','Glucose-dependent Insulinotropic Polypeptide — tirzepatide의 이중작용 표적 중 하나.'],
+  ['PCSK9','Proprotein Convertase Subtilisin/Kexin type 9 — LDL수용체분해를 매개, 억제제(단클론항체·siRNA)가 LDL-C를 크게 낮춤.'],
+  ['UACR','Urine Albumin-to-Creatinine Ratio(요알부민/크레아티닌비) — 알부민뇨 평가지표, ACEi/ARB 적응증 결정.'],
+  ['eGFR','estimated Glomerular Filtration Rate(추정사구체여과율).'],
+  ['AKI','Acute Kidney Injury(급성신손상).'],
+  ['ABI','Ankle-Brachial Index(발목상완지수) — PAD 선별검사.'],
+  ['DAPT','Dual Antiplatelet Therapy(이중항혈소판요법) — 아스피린+P2Y12억제제.'],
+  ['TIA','Transient Ischemic Attack(일시적허혈발작).'],
+  ['KCCQ-CSS','Kansas City Cardiomyopathy Questionnaire Clinical Summary Score — 심부전 증상·삶의질 평가도구.'],
+  ['NYHA','New York Heart Association(심부전 기능분류, class I–IV).'],
+  ['DKA','Diabetic Ketoacidosis(당뇨병성케토산증) — SGLT억제제 사용 시 드물지만 중요한 위험.'],
+  ['CAD','Coronary Artery Disease(관상동맥질환).'],
+];
+
+function buildAbbr(){
+  const sorted=abbrs.slice().sort((a,b)=>a[0].localeCompare(b[0]));
+  document.getElementById('abbr-grid-drop').innerHTML=sorted.map(a=>
+    `<div style="background:var(--surface2);border:1px solid var(--border);border-radius:5px;padding:6px 10px;margin-bottom:4px;" data-term="${a[0].toLowerCase()}" data-def="${a[1].toLowerCase()}">
+       <span style="font-weight:700;color:var(--accent2);font-size: calc(12px * var(--fscale, 1));font-family:'Courier New',monospace">${a[0]}</span>
+       <div style="font-size: calc(11px * var(--fscale, 1));color:var(--text2);line-height:1.45;margin-top:2px">${a[1]}</div>
+     </div>`).join('');
+}
+function filterAbbr(val){
+  const v=val.toLowerCase().trim();
+  const drop=document.getElementById('abbr-dropdown');
+  const items=document.querySelectorAll('#abbr-grid-drop [data-term]');
+  if(!v){drop.style.display='none';return;}
+  const inp=document.getElementById('abbr-input');
+  const rect=inp.getBoundingClientRect();
+  const w=440;
+  let left=rect.right-w;if(left<8)left=8;
+  drop.style.top=(rect.bottom+4)+'px';drop.style.left=left+'px';
+  drop.style.display='block';
+  items.forEach(el=>{
+    const show=el.dataset.term.startsWith(v)||el.dataset.def.includes(v);
+    el.style.display=show?'':'none';
+  });
+}
+document.addEventListener('click',e=>{
+  const inp=document.getElementById('abbr-input');
+  const drop=document.getElementById('abbr-dropdown');
+  if(inp&&!inp.contains(e.target)&&drop&&!drop.contains(e.target))drop.style.display='none';
+});
+buildAbbr();
+</script>
+</body>
+</html>

@@ -1,0 +1,1303 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ADA 2026 혈당 목표·저혈당·고혈당 위기</title>
+<style>
+  :root {
+    --bg:#f6f8fa;--surface:#fff;--surface2:#f0f2f5;--border:#d0d7de;
+    --accent:#0969da;--accent2:#0550ae;--green:#1a7f37;--yellow:#9a6700;
+    --red:#cf222e;--orange:#bc4c00;--text:#1f2328;--text2:#57606a;
+    --teal:#0a7c8a;--purple:#5a3ea0;--fscale:1;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'Pretendard','Noto Sans KR',-apple-system,sans-serif;background:var(--bg);color:var(--text);font-size: calc(13px * var(--fscale, 1));line-height:1.5;}
+  header{background:var(--surface);border-bottom:1px solid var(--border);padding:12px 16px 8px;display:flex;flex-direction:column;align-items:center;gap:4px;position:sticky;top:0;z-index:100;}
+  .header-inner{width:100%;max-width:960px;display:flex;flex-direction:column;align-items:center;gap:4px;}
+  .logo-badge{background:var(--accent2);color:#fff;font-size: calc(10px * var(--fscale, 1));font-weight:700;padding:3px 8px;border-radius:4px;letter-spacing:.5px;}
+  .tab-bar{display:flex;justify-content:center;background:var(--surface);border-bottom:1px solid var(--border);overflow-x:auto;scrollbar-width:none;}
+  .tab-bar::-webkit-scrollbar{display:none;}
+  .font-zoom-btn{display:flex;align-items:center;gap:3px;flex-shrink:0;margin:4px 4px 4px 6px;padding:5px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:6px;color:var(--accent2);font-size:calc(11px * var(--fscale, 1));font-weight:700;cursor:pointer;user-select:none;white-space:nowrap;transition:background .15s;}
+  .font-zoom-btn:hover{background:var(--border);}
+  .font-zoom-btn .fz-icon{font-size:calc(12px * var(--fscale, 1));}
+  .tab-bar-inner{width:100%;max-width:960px;display:flex;align-items:center;gap:2px;padding:0 4px;}
+  .tab{padding:7px 11px;font-size: calc(11.5px * var(--fscale, 1));color:var(--text2);cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;transition:color .15s,border-color .15s;user-select:none;flex-shrink:0;}
+  .tab:hover{color:var(--text);}
+  .tab.active{color:var(--accent2);border-bottom-color:var(--accent2);}
+  .tab-abbr-wrap{display:flex;align-items:center;padding:4px 4px;margin-left:4px;flex-shrink:0;position:relative;}
+  .main{padding:12px 16px;max-width:960px;margin:0 auto;}
+  .panel{display:none;}
+  .panel.active{display:block;}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+  .grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;}
+  @media(max-width:680px){.grid2,.grid3{grid-template-columns:1fr;}}
+  .card{background:var(--surface);border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-bottom:10px;}
+  .card-header{background:var(--surface2);padding:8px 12px;font-size: calc(12px * var(--fscale, 1));font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.5px;border-bottom:1px solid var(--border);cursor:pointer;display:flex;align-items:center;justify-content:space-between;user-select:none;}
+  .card-header .toggle{font-size: calc(13px * var(--fscale, 1));transition:transform .2s;}
+  .card-header.open .toggle{transform:rotate(180deg);}
+  .card-body{padding:10px 12px;}
+  .card-body.collapsed{display:none;}
+  .stat-row{display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap;}
+  .stat-box{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:10px 14px;flex:1;min-width:90px;text-align:center;}
+  .stat-box.clickable{cursor:pointer;transition:box-shadow .15s,border-color .15s;}
+  .stat-box.clickable:hover{border-color:var(--accent2);box-shadow:0 2px 8px rgba(5,80,174,.15);}
+  .stat-val{font-size: calc(18px * var(--fscale, 1));font-weight:700;color:var(--accent2);}
+  .stat-lbl{font-size: calc(10px * var(--fscale, 1));color:var(--text2);margin-top:2px;}
+  .stat-hint{font-size: calc(9px * var(--fscale, 1));color:var(--accent2);margin-top:4px;opacity:.7;}
+  /* Modal */
+  .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:500;align-items:center;justify-content:center;}
+  .modal-overlay.open{display:flex;}
+  .modal-box{background:var(--surface);border-radius:12px;padding:20px;max-width:680px;width:92%;max-height:84vh;overflow-y:auto;box-shadow:0 16px 48px rgba(0,0,0,.22);position:relative;}
+  .modal-close{position:absolute;top:12px;right:14px;background:none;border:none;font-size: calc(18px * var(--fscale, 1));cursor:pointer;color:var(--text2);line-height:1;}
+  .modal-title{font-size: calc(15px * var(--fscale, 1));font-weight:700;color:var(--text);margin-bottom:12px;padding-right:20px;line-height:1.4;}
+  .modal-section{margin-bottom:12px;}
+  .modal-section-title{font-size: calc(11px * var(--fscale, 1));font-weight:700;color:var(--accent2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;border-bottom:1px solid var(--border);padding-bottom:4px;}
+  .modal-table{width:100%;border-collapse:collapse;font-size: calc(11.5px * var(--fscale, 1));}
+  .modal-table th{background:var(--surface2);color:var(--text2);padding:4px 8px;font-size: calc(10.5px * var(--fscale, 1));font-weight:600;text-align:left;border-bottom:1px solid var(--border);}
+  .modal-table td{padding:5px 8px;border-bottom:1px solid var(--border);vertical-align:top;}
+  .modal-table tr:last-child td{border-bottom:none;}
+  .rec-list{list-style:none;}
+  .rec-item{padding:7px 0;border-bottom:1px solid var(--border);display:flex;gap:8px;align-items:flex-start;}
+  .rec-item:last-child{border-bottom:none;}
+  .rec-text{font-size: calc(12px * var(--fscale, 1));color:var(--text);line-height:1.65;}
+  .rec-text strong{color:#1f2328;}
+  .badge{display:inline-flex;align-items:center;padding:2px 8px;border-radius:10px;font-size: calc(10px * var(--fscale, 1));font-weight:700;white-space:nowrap;flex-shrink:0;margin-top:1px;}
+  .badge-A{background:#dafbe1;color:#116329;border:1px solid #1a7f37;}
+  .badge-B{background:#ddf4ff;color:var(--accent2);border:1px solid var(--accent2);}
+  .badge-C{background:#fff8c5;color:#7a4b00;border:1px solid #d4a017;}
+  .badge-E{background:#f3e5f5;color:#5a3ea0;border:1px solid #5a3ea0;}
+  .alert{padding:8px 12px;border-radius:6px;font-size: calc(12px * var(--fscale, 1));margin:8px 0;display:flex;gap:8px;align-items:flex-start;}
+  .alert-info{background:#ddf4ff;border-left:3px solid var(--accent2);color:#0550ae;}
+  .alert-warn{background:#fff8c5;border-left:3px solid #d4a017;color:#7a4b00;}
+  .alert-danger{background:#ffebe9;border-left:3px solid var(--red);color:#82071e;}
+  .alert-success{background:#dafbe1;border-left:3px solid var(--green);color:#116329;}
+  .alert-teal{background:#e0f5f5;border-left:3px solid var(--teal);color:#075050;}
+  .alert-orange{background:#fff3e0;border-left:3px solid var(--orange);color:#7a3500;}
+  .alert-purple{background:#f3e5f5;border-left:3px solid var(--purple);color:#5a3ea0;}
+  .tc-table{width:100%;border-collapse:collapse;font-size: calc(11.5px * var(--fscale, 1));}
+  .tc-table th{background:var(--surface2);color:var(--text2);padding:5px 8px;font-size: calc(10.5px * var(--fscale, 1));text-transform:uppercase;letter-spacing:.3px;font-weight:600;text-align:left;border-bottom:1px solid var(--border);}
+  .tc-table td{padding:5px 8px;border-bottom:1px solid var(--border);vertical-align:top;}
+  .tc-table tr:last-child td{border-bottom:none;}
+  .tc-table tr:hover td{background:rgba(0,0,0,.02);}
+  .acc{border:1px solid var(--border);border-radius:6px;margin-bottom:6px;overflow:hidden;}
+  .acc-hdr{background:var(--surface2);padding:7px 12px;font-size: calc(12px * var(--fscale, 1));font-weight:600;color:var(--text);cursor:pointer;display:flex;justify-content:space-between;align-items:center;user-select:none;}
+  .acc-hdr:hover{background:#e8eaec;}
+  .acc-body{display:none;padding:10px 12px;font-size: calc(12px * var(--fscale, 1));line-height:1.65;}
+  .flow-box{border:1px solid var(--border);border-radius:6px;background:var(--surface);padding:8px 12px;margin-bottom:6px;font-size: calc(12px * var(--fscale, 1));line-height:1.6;}
+  .flow-arrow{text-align:center;color:var(--text2);font-size: calc(14px * var(--fscale, 1));margin:2px 0;}
+  .step-num{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;background:var(--accent2);color:#fff;font-size: calc(10px * var(--fscale, 1));font-weight:700;flex-shrink:0;margin-right:6px;}
+  ul.dot{padding-left:18px;}
+  ul.dot li{margin-bottom:3px;font-size: calc(12px * var(--fscale, 1));line-height:1.6;}
+  ol.num{padding-left:18px;}
+  ol.num li{margin-bottom:4px;font-size: calc(12px * var(--fscale, 1));line-height:1.6;}
+  ::-webkit-scrollbar{width:5px;height:5px;}
+  ::-webkit-scrollbar-track{background:var(--bg);}
+  ::-webkit-scrollbar-thumb{background:#c8d0d9;border-radius:3px;}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div style="display:flex;align-items:center;gap:10px">
+      <span class="logo-badge">ADA 2026</span>
+      <h1 style="font-size:17px;font-weight:700;color:var(--text)">혈당 목표·저혈당·고혈당 위기</h1>
+    </div>
+    <div style="text-align:center;line-height:1.5">
+      <span style="color:var(--text2);font-size: calc(11px * var(--fscale, 1))">Standards of Care in Diabetes—2026, Section 6 — American Diabetes Association</span><br>
+      <span style="font-size: calc(10px * var(--fscale, 1));color:var(--text2)">Diabetes Care 2026;49(Suppl. 1):S132–S149 · doi: 10.2337/dc26-S006</span>
+    </div>
+    <div style="font-size: calc(10px * var(--fscale, 1));color:var(--text2);font-style:italic;">This tool is not officially endorsed by the American Diabetes Association (ADA).</div>
+  </div>
+</header>
+
+<div class="tab-bar">
+  <div class="tab-bar-inner">
+    <div id="font-zoom-btn" class="font-zoom-btn" onclick="cycleFontZoom()"><span class="fz-icon">🔠</span><span id="font-zoom-label">100%</span></div>
+    <div class="tab active" onclick="showTab('overview')">🏠 개요</div>
+    <div class="tab" onclick="showTab('assess')">🩸 혈당 평가</div>
+    <div class="tab" onclick="showTab('goals')">🎯 혈당 목표</div>
+    <div class="tab" onclick="showTab('evidence')">📈 합병증 근거</div>
+    <div class="tab" onclick="showTab('hypo')">⚠️ 저혈당</div>
+    <div class="tab" onclick="showTab('illness')">🤒 간헐성 질환</div>
+    <div class="tab" onclick="showTab('crisis')">🚨 고혈당 위기</div>
+    <div class="tab" onclick="showTab('tables')">📁 기준표 모음</div>
+    <div class="tab-abbr-wrap">
+      <div style="position:relative;display:flex;align-items:center;flex-shrink:0">
+        <span style="position:absolute;left:8px;color:var(--text2);font-size: calc(12px * var(--fscale, 1));pointer-events:none">🔍</span>
+        <input id="abbr-input" type="text" placeholder="약어" oninput="filterAbbr(this.value)"
+          style="background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:4px 8px 4px 26px;color:var(--text);font-size: calc(12px * var(--fscale, 1));width:90px;outline:none;"
+          onfocus="this.style.borderColor='var(--accent2)'" onblur="this.style.borderColor='var(--border)'">
+      </div>
+      <div id="abbr-dropdown" style="display:none;position:fixed;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:8px;width:440px;max-height:360px;overflow-y:auto;z-index:300;box-shadow:0 8px 24px rgba(0,0,0,.12)">
+        <div id="abbr-grid-drop"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="main">
+
+<div id="tab-overview" class="panel active">
+  <div class="stat-row">
+    <div class="stat-box clickable" onclick="openModal('a1cGoalModal')"><div class="stat-val">&lt;7.0%</div><div class="stat-lbl">대부분 비임신 성인 A1C 목표</div><div class="stat-hint">▸ 클릭하여 상세 보기</div></div>
+    <div class="stat-box clickable" onclick="openModal('cgmGoalModal')"><div class="stat-val">TIR &gt;70%</div><div class="stat-lbl">CGM 목표 범위 시간</div><div class="stat-hint">▸ 클릭하여 상세 보기</div></div>
+    <div class="stat-box clickable" onclick="openModal('hypoLevelModal')"><div class="stat-val">Level 1·2·3</div><div class="stat-lbl">저혈당 분류 체계</div><div class="stat-hint">▸ 클릭하여 상세 보기</div></div>
+    <div class="stat-box clickable" onclick="openModal('crisisModal')"><div class="stat-val">DKA / HHS</div><div class="stat-lbl">고혈당 위기 2형태</div><div class="stat-hint">▸ 클릭하여 상세 보기</div></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>📋 Section 6 전체 흐름</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <div class="flow-box" style="border-left:3px solid var(--accent2)">
+        <strong>① 혈당 상태 평가</strong><br>
+        <span style="color:var(--text2);font-size: calc(11px * var(--fscale, 1))">A1C ± CGM 지표(TIR/TAR/TBR)로 평가, A1C 부적합 시 fructosamine/glycated albumin 고려</span>
+      </div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-box" style="border-left:3px solid var(--green)">
+        <strong>② 개별화된 혈당 목표 설정</strong><br>
+        <span style="font-size: calc(11.5px * var(--fscale, 1))">건강·기능 상태, 저혈당 위험, 치료 부담, 동반질환, 기대수명을 고려해 Fig 6.1 프레임워크로 목표 설정</span>
+      </div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-box" style="border-left:3px solid var(--yellow)">
+        <strong>③ 저혈당 위험 평가 및 예방</strong><br>
+        <span style="font-size: calc(11.5px * var(--fscale, 1))">매 방문 시 저혈당 병력 확인, 고위험군은 CGM·글루카곤 처방, 인지기능·각성저하 평가</span>
+      </div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-box" style="border-left:3px solid var(--orange)">
+        <strong>④ 간헐성 질환(Sick Day) 관리</strong><br>
+        <span style="font-size: calc(11.5px * var(--fscale, 1))">질병·수술 등 스트레스 상황에서 metformin/SGLT2i 보류, 기저인슐린 유지, 약물상호작용(설폰요소제+항균제) 주의</span>
+      </div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-box" style="border-left:3px solid var(--teal)">
+        <strong>⑤ 고혈당 위기 예방·조기 대응</strong><br>
+        <span style="font-size: calc(11.5px * var(--fscale, 1))">DKA/HHS 위험인자 평가, 케톤 모니터링 교육(sick day advice), SGLT2i 사용 1형당뇨에서 특히 주의</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <div class="card-header open" onclick="toggleCard(this)">
+        <span>📌 핵심 권고문 요약</span><span class="toggle">▾</span>
+      </div>
+      <div class="card-body">
+        <ul class="rec-list">
+          <li class="rec-item"><span class="badge badge-A">A</span><span class="rec-text"><strong>6.1</strong> A1C 및/또는 CGM(TIR/TAR/TBR)으로 혈당 상태 평가</span></li>
+          <li class="rec-item"><span class="badge badge-E">E</span><span class="rec-text"><strong>6.2</strong> 최소 연 2회, 목표 미달·치료변경 시 3개월마다 평가</span></li>
+          <li class="rec-item"><span class="badge badge-A">A</span><span class="rec-text"><strong>6.3a</strong> A1C &lt;7% 목표가 대부분 비임신 성인에 적절</span></li>
+          <li class="rec-item"><span class="badge badge-B">B</span><span class="rec-text"><strong>6.3b/c</strong> TIR &gt;70%, TBR&lt;70 &lt;4%, TBR&lt;54 &lt;1% 목표</span></li>
+          <li class="rec-item"><span class="badge badge-B">B</span><span class="rec-text"><strong>6.4/6.5</strong> 건강·저위험군은 &lt;6.5%까지, 복합질환·기능저하군은 완화된 목표</span></li>
+          <li class="rec-item"><span class="badge badge-B">B</span><span class="rec-text"><strong>6.6/6.7</strong> 고위험 저혈당 약물(인슐린·SU·메글리티니드) 디인텐시피케이션</span></li>
+          <li class="rec-item"><span class="badge badge-A">A</span><span class="rec-text"><strong>6.9</strong> 진료 시마다 혈당 목표 설정</span></li>
+          <li class="rec-item"><span class="badge badge-C">C</span><span class="rec-text"><strong>6.10</strong> 매 방문 시 저혈당 병력 검토</span></li>
+          <li class="rec-item"><span class="badge badge-A">A</span><span class="rec-text"><strong>6.11/6.12</strong> 저혈당 인지 저하·공포 매년 선별, 전문가 의뢰</span></li>
+          <li class="rec-item"><span class="badge badge-A">A</span><span class="rec-text"><strong>6.14</strong> 고위험군에 CGM 사용 권장</span></li>
+          <li class="rec-item"><span class="badge badge-B">B</span><span class="rec-text"><strong>6.15</strong> 포도당이 의식 있는 저혈당의 선호 치료</span></li>
+          <li class="rec-item"><span class="badge badge-A">A</span><span class="rec-text"><strong>6.16</strong> 인슐린 사용자·고위험군 전원 글루카곤 처방</span></li>
+          <li class="rec-item"><span class="badge badge-B">B</span><span class="rec-text"><strong>6.19</strong> Level 2·3 저혈당 발생 시 치료계획 재평가</span></li>
+          <li class="rec-item"><span class="badge badge-C">C</span><span class="rec-text"><strong>6.21</strong> 매 방문 시 고혈당 위기(DKA/HHS) 병력 검토</span></li>
+          <li class="rec-item"><span class="badge badge-B">B</span><span class="rec-text"><strong>6.22</strong> 1형당뇨·고위험군에 고혈당 위기 인지·예방 교육</span></li>
+        </ul>
+      </div>
+    </div>
+
+    <div>
+      <div class="card">
+        <div class="card-header open" onclick="toggleCard(this)">
+          <span>⚠️ 권고 등급 체계 (Evidence Grading)</span><span class="toggle">▾</span>
+        </div>
+        <div class="card-body">
+          <table class="tc-table">
+            <tr><th>등급</th><th>의미</th></tr>
+            <tr><td><span class="badge badge-A">A</span></td><td>명확한 근거 — 잘 수행된 다기관 RCT 또는 메타분석</td></tr>
+            <tr><td><span class="badge badge-B">B</span></td><td>뒷받침되는 근거 — 잘 수행된 코호트 연구 등</td></tr>
+            <tr><td><span class="badge badge-C">C</span></td><td>뒷받침되는 근거 부족 — 대조군 없는 연구, 사례 보고</td></tr>
+            <tr><td><span class="badge badge-E">E</span></td><td>전문가 합의 또는 임상 경험 (Expert consensus)</td></tr>
+          </table>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header open" onclick="toggleCard(this)">
+          <span>🔑 핵심 개념</span><span class="toggle">▾</span>
+        </div>
+        <div class="card-body">
+          <div class="alert alert-info"><span>ℹ️</span><span>혈당 목표는 개인의 건강·기능·치료 부담·기대수명을 반영해 <strong>개별화</strong>되어야 함 — 일률적 목표 적용 지양</span></div>
+          <div class="alert alert-warn"><span>⚠️</span><span>ACCORD 시험은 근치료(near-normal A1C) 추구 시 <strong>총사망률 증가</strong>로 3.5년에 중단됨 — 과도한 강화요법 주의</span></div>
+          <div class="alert alert-danger"><span>🚫</span><span>중증(Level 3) 저혈당은 심혈관 사건·사망률과 강하게 연관 — 저혈당 위험이 큰 경우 근치료 목표를 무리하게 추구하지 말 것</span></div>
+          <div class="alert alert-teal"><span>💡</span><span>SGLT2i·GLP-1RA 등 심·신장 보호 약물의 효과는 A1C 강하와 무관 — A1C 목표 달성 여부와 별개로 적응증에 따라 도입</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ TAB: 혈당 평가 ═══════════ -->
+<div id="tab-assess" class="panel">
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>🩸 ASSESSMENT OF GLYCEMIC STATUS</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="rec-list">
+        <li class="rec-item"><span class="badge badge-A">A</span><span class="rec-text"><strong>6.1</strong> A1C 및/또는 CGM 지표(TIR·TAR·TBR)로 혈당 상태 평가. <span class="badge badge-B">B</span> A1C 대체가 필요할 때 fructosamine 또는 CGM 사용 가능</span></li>
+        <li class="rec-item"><span class="badge badge-E">E</span><span class="rec-text"><strong>6.2</strong> 최소 연 2회 평가. 목표 미달, 최근 치료 변경, 빈번/중증 저혈당·고혈당, 건강상태 변화, 소아·청소년 급성장기에는 더 자주(예: 3개월마다) 평가</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <div class="card-header open" onclick="toggleCard(this)">
+        <span>🧪 A1C에 의한 평가</span><span class="toggle">▾</span>
+      </div>
+      <div class="card-body">
+        <ul class="dot">
+          <li>A1C는 약 <strong>2–3개월</strong> 평균 혈당을 반영하는 1차 평가도구이며 합병증과 강한 연관성</li>
+          <li>NGSP 인증 검사실 검사 성능 우수 → 초진·계속 진료 시 정기 시행</li>
+          <li>목표 도달·유지 중인 성인 → 연 2회로 충분; 불안정·집중관리·목표 미달 시 3개월마다</li>
+          <li>POC A1C는 신속하지만 정확도가 검사실 검사보다 낮을 수 있음</li>
+        </ul>
+        <div class="alert alert-warn" style="margin-top:8px"><span>⚠️</span><span>적혈구 회전율에 영향을 주는 상태(용혈성빈혈, G6PD결핍, 최근 수혈, 적혈구생성자극제, 신부전, 임신)는 A1C 정확도를 떨어뜨림</span></div>
+        <div class="alert alert-danger"><span>🚫</span><span>겸상적혈구병(HbSS) 등 동형접합 혈색소 변이는 HbA가 없어 <strong>A1C 측정 불가</strong> — BGM·CGM·glycated protein 대체 필요</span></div>
+        <div class="alert alert-info"><span>ℹ️</span><span>인종·민족은 A1C-혈당 관계의 유전적 차이를 대표하지 못함 → 임상적으로 A1C 해석에 인종·민족을 고려해서는 안 됨</span></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header open" onclick="toggleCard(this)">
+        <span>🧬 Glycated Protein (A1C 대체 지표)</span><span class="toggle">▾</span>
+      </div>
+      <div class="card-body">
+        <table class="tc-table">
+          <tr><th>지표</th><th>반영 기간</th><th>비고</th></tr>
+          <tr><td>Fructosamine</td><td>2–4주</td><td>총 당화 혈청단백(주로 알부민) 반영</td></tr>
+          <tr><td>Glycated albumin</td><td>2–4주</td><td>총 알부민 중 당화 비율, fructosamine과 高상관</td></tr>
+        </table>
+        <ul class="dot" style="margin-top:8px">
+          <li>현대 검사 성능은 우수하나 RCT 근거는 A1C보다 훨씬 약함(주로 관찰연구)</li>
+          <li>A1C 해석이 어렵거나 측정 불가(동형접합 혈색소변이 등) 상황에서 유용한 대안</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>📊 A1C ↔ 평균혈당(eAG) 상관표 (ADAG 연구, Table 6.1)</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <table class="tc-table">
+        <tr><th>A1C (%)</th><th>A1C (mmol/mol)</th><th>eAG mg/dL (95%CI)</th><th>eAG mmol/L (95%CI)</th></tr>
+        <tr><td>5</td><td>31</td><td>97 (76–120)</td><td>5.4 (4.2–6.7)</td></tr>
+        <tr><td>6</td><td>42</td><td>126 (100–152)</td><td>7.0 (5.5–8.5)</td></tr>
+        <tr><td>7</td><td>53</td><td>154 (123–185)</td><td>8.6 (6.8–10.3)</td></tr>
+        <tr><td>8</td><td>64</td><td>183 (147–217)</td><td>10.2 (8.1–12.1)</td></tr>
+        <tr><td>9</td><td>75</td><td>212 (170–249)</td><td>11.8 (9.4–13.9)</td></tr>
+        <tr><td>10</td><td>86</td><td>240 (193–282)</td><td>13.4 (10.7–15.7)</td></tr>
+        <tr><td>11</td><td>97</td><td>269 (217–314)</td><td>14.9 (12.0–17.5)</td></tr>
+        <tr><td>12</td><td>108</td><td>298 (240–347)</td><td>16.5 (13.3–19.3)</td></tr>
+      </table>
+      <div class="alert alert-info" style="margin-top:8px"><span>ℹ️</span><span>507명 대상 ADAG 연구(상관계수 r=0.92) 기반, A1C 측정당 ~2,700회 혈당 측정값으로 산출. 83%가 비히스패닉 백인이었고 2008년 발표된 구형 CGM 시스템 자료라는 한계가 있음</span></div>
+      <div class="alert alert-warn"><span>⚠️</span><span>현대 CGM과의 비교는 착용일수, A1C 측정 시점, 보정 정확도, 간질액-정맥혈 지연시간 등에 따라 달라질 수 있어 해석에 주의 필요</span></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span>💧 BGM (자가혈당측정)에 의한 평가</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body collapsed">
+      <ul class="dot">
+        <li>인슐린 치료자에서 효과적 치료의 핵심 구성요소 — 다요인 중재 임상시험에서 합병증 감소 입증에 활용</li>
+        <li>개인의 필요와 목표에 따라 BGM 빈도·시점 결정</li>
+        <li>최근 CGM이 1형당뇨 대부분, 인슐린치료 2형당뇨의 표준 혈당 모니터링 방법으로 자리잡음 (자세한 내용은 Section 7 "Diabetes Technology")</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>📡 CGM (연속혈당측정)에 의한 평가</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="dot">
+        <li>저혈당 위험군·1형당뇨에서 특히 유용; 2형당뇨(특히 인슐린 치료자)에서도 사용 증가</li>
+        <li><strong>10–14일</strong> CGM 평가, 착용시간 <strong>≥70%</strong> 권장 — TIR 등 지표를 임상관리에 활용</li>
+        <li>TIR, 특히 평균 CGM 혈당은 A1C와 상관관계 — TIR &gt;70%가 A1C ~7%(~53 mmol/mol)에 대응</li>
+        <li>변동계수(CV) &gt;36%는 저혈당 발생과 연관됨</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>📐 Table 6.2 — 비임신 1형·2형당뇨 CGM 임상지표</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <table class="tc-table">
+        <tr><th>지표</th><th>해석</th><th>목표</th></tr>
+        <tr><td>착용시간</td><td>CGM 기기 착용 일수</td><td>패턴 관리에는 ≥14일 착용</td></tr>
+        <tr><td>활성 착용률</td><td>기기 작동 시간 비율</td><td>14일 중 70% 이상</td></tr>
+        <tr><td>평균 혈당</td><td>혈당값 평균</td><td>표준화되지 않음*</td></tr>
+        <tr><td>GMI</td><td>A1C 근사 계산값(완전히 동일하지 않음)</td><td>표준화되지 않음*</td></tr>
+        <tr><td>변동계수(CV)</td><td>혈당값 분산도</td><td>≤36%†</td></tr>
+        <tr><td>TAR &gt;250 mg/dL</td><td>Level 2 고혈당 시간 비율</td><td>&lt;5%(대부분 성인); &lt;10%(복합/중간건강 고령자)</td></tr>
+        <tr><td>TAR &gt;180 mg/dL</td><td>Level 1 고혈당 시간 비율</td><td>&lt;25%(대부분 성인); &lt;50%(고령자)‡</td></tr>
+        <tr><td>TIR 70–180 mg/dL</td><td>목표범위 내 시간 비율</td><td>&gt;70%(대부분 성인); &gt;50%(고령자)</td></tr>
+        <tr><td>TBR &lt;70 mg/dL</td><td>Level 1 저혈당 시간 비율</td><td>&lt;4%(대부분 성인); &lt;1%(고령자)§</td></tr>
+        <tr><td>TBR &lt;54 mg/dL</td><td>Level 2 저혈당 시간 비율</td><td>&lt;1%</td></tr>
+      </table>
+      <div style="font-size: calc(10px * var(--fscale, 1));color:var(--text2);margin-top:6px;line-height:1.5">*목표 비표준화 †일부 연구는 인슐린/SU 사용자에서 &lt;33%가 저혈당 예방에 추가 도움 시사 ‡Level 1+2 합산 §Level 1+2 합산 · Battelino et al. 국제 CGM 합의 기준 인용</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span>👵 고령자(복합/중간건강) CGM 목표 특이사항</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body collapsed">
+      <ul class="dot">
+        <li>70–180 mg/dL 목표범위 시간 <strong>50%(하루 12시간)</strong> 권장</li>
+        <li>&lt;70 mg/dL 저혈당 시간은 <strong>1% 미만(하루 15분 이내)</strong>로 제한 — 저혈당 위험 최소화 목적</li>
+        <li>저혈당 예방을 위해 필요시 더 관대한 고혈당(하루 최대 50%) 허용</li>
+      </ul>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══════════ TAB: 혈당 목표 ═══════════ -->
+<div id="tab-goals" class="panel">
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>🎯 Table 6.3 — 대부분 비임신 성인의 혈당 목표 요약</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <table class="tc-table">
+        <tr><th>지표</th><th>목표</th></tr>
+        <tr><td>A1C</td><td>&lt;7.0% (&lt;53 mmol/mol)*†</td></tr>
+        <tr><td>식전 모세혈관 혈장혈당</td><td>80–130 mg/dL* (4.4–7.2 mmol/L)</td></tr>
+        <tr><td>식후 최고 모세혈관 혈장혈당‡</td><td>&lt;180 mg/dL* (&lt;10.0 mmol/L)</td></tr>
+      </table>
+      <div style="font-size: calc(10px * var(--fscale, 1));color:var(--text2);margin-top:6px;line-height:1.6">*개인에 따라 더 엄격하거나 완화된 목표가 적절할 수 있음 †CGM도 혈당 상태 평가에 사용 가능(Rec 6.3b/6.3c). 당뇨병 유병기간, 연령·기대수명, 동반질환, 심혈관질환·진행된 미세혈관합병증 여부, 저혈당 인지 저하, 개인별 고려사항(Fig 6.1)에 따라 목표를 개별화해야 함 ‡식후혈당이 식전목표 달성에도 A1C 목표 미달 시 특별히 주의 필요. 식사 시작 후 1–2시간에 측정(일반적 최고치 시점)</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>📌 GLYCEMIC GOALS 핵심 권고문</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="rec-list">
+        <li class="rec-item"><span class="badge badge-A">A</span><span class="rec-text"><strong>6.3a</strong> 중증/삶의질 저하 저혈당이 없는 많은 비임신 성인에 A1C &lt;7%(&lt;53 mmol/mol) 목표가 적절</span></li>
+        <li class="rec-item"><span class="badge badge-B">B</span><span class="rec-text"><strong>6.3b</strong> CGM 사용 성인에서 TIR &gt;70% 목표가 적절</span></li>
+        <li class="rec-item"><span class="badge badge-B">B</span><span class="rec-text"><strong>6.3c</strong> TBR&lt;70 &lt;4%(고령자 &lt;1%), TBR&lt;54 &lt;1% 목표. 미달 시 치료 디인텐시피케이션/조정</span></li>
+        <li class="rec-item"><span class="badge badge-B">B</span><span class="rec-text"><strong>6.4</strong> 건강·기능 양호, 저위험·저부담 치료군은 A1C &lt;6.5%(&lt;48 mmol/mol)도 가능(Fig 6.1 참조)</span></li>
+        <li class="rec-item"><span class="badge badge-B">B</span><span class="rec-text"><strong>6.5</strong> 인지·기능 제한, 노쇠, 중증 동반질환, 치료 위해(저혈당 등)가 이득보다 큰 경우 완화된 목표 적용</span></li>
+        <li class="rec-item"><span class="badge badge-B">B</span><span class="rec-text"><strong>6.6</strong> 고위험 저혈당군에서 인슐린·SU·메글리티니드 디인텐시피케이션 또는 저위험 약물군으로 전환</span></li>
+        <li class="rec-item"><span class="badge badge-B">B</span><span class="rec-text"><strong>6.7</strong> 치료의 위해/부담이 이득보다 큰 경우 개별화된 목표 내에서 디인텐시피케이션</span></li>
+        <li class="rec-item"><span class="badge badge-E">E</span><span class="rec-text"><strong>6.8</strong> Fig 6.1의 개별화 기준에 따라 혈당 목표 재평가</span></li>
+        <li class="rec-item"><span class="badge badge-A">A</span><span class="rec-text"><strong>6.9</strong> 진료 상담 중 혈당 목표를 설정하면 치료 결과가 개선됨</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>📐 Fig 6.1 — 비임신 성인 개별화 A1C·CGM 목표</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <table class="tc-table">
+        <tr><th>건강 상태</th><th>A1C 목표</th><th>TIR</th><th>TBR&lt;70</th><th>TBR&lt;54</th><th>TAR&gt;180</th><th>TAR&gt;250</th></tr>
+        <tr><td>양호한 건강·기능, 저치료위험/부담</td><td>&lt;6.5%</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+        <tr><td>대부분 성인 (건강한 고령자 포함)</td><td>&lt;7.0%</td><td>&gt;70%</td><td>&lt;4%</td><td>&lt;1%</td><td>&lt;25%</td><td>&lt;5%</td></tr>
+        <tr><td>고령자, 복합/중간 건강</td><td>&lt;7.5%</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+        <tr><td>고령자, 매우 복합/저조한 건강</td><td>&lt;8.0%</td><td>&gt;50%</td><td>&lt;1%</td><td>&lt;1%</td><td>&lt;50%</td><td>&lt;10%</td></tr>
+        <tr><td>기대수명 제한된 모든 성인</td><td>목표 없음</td><td>—</td><td>&lt;1%</td><td>&lt;1%</td><td colspan="2">증상성 고혈당 회피</td></tr>
+      </table>
+      <div class="alert alert-info" style="margin-top:8px"><span>ℹ️</span><span>고령자 분류 — <strong>건강</strong>(동반질환 적음, 인지·기능 양호) / <strong>복합·중간건강</strong>(다중 동반질환, 일상생활 도구적 활동 장애 2개 이상, 경~중등도 인지장애) / <strong>매우 복합·저조한 건강</strong>(장기요양·말기질환, 중등도~중증 인지장애, 일상생활 장애 2개 이상)</span></div>
+      <div class="alert alert-teal"><span>💡</span><span>이 프레임워크는 경직된 적용이 아니라 임상적 의사결정을 돕는 가이드 — 공유 의사결정(shared decision-making)으로 개인의 선호·목표 반영</span></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>⚖️ 목표 개별화 — 조정 요인</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <table class="tc-table">
+        <tr><th>더 엄격한 목표를 선호</th><th>덜 엄격한 목표를 선호</th></tr>
+        <tr><td>짧은 당뇨병 유병기간</td><td>긴 당뇨병 유병기간</td></tr>
+        <tr><td>저저혈당 위험</td><td>고저혈당 위험</td></tr>
+        <tr><td>낮은 치료 위험·부담</td><td>높은 치료 위험·부담</td></tr>
+        <tr><td>심혈관·신장·체중 등 비혈당 이득 있는 약물치료</td><td>비혈당 이득 없는 약물치료</td></tr>
+        <tr><td>심혈관 합병증 없음</td><td>확립된 심혈관 합병증</td></tr>
+        <tr><td>적거나 경미한 동반질환</td><td>중증·생명을 제한하는 동반질환</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span>🔄 목표 설정·조정 원칙 (Setting and Modifying Glycemic Goals)</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body collapsed">
+      <ul class="dot">
+        <li>당뇨병은 진행성 질환 — 혈당 목표는 시간에 따라 변화할 수 있음</li>
+        <li>신규 진단·기대수명 제한 동반질환 없는 경우 → 미세혈관 합병증 예방이 입증된 강화 목표가 유리</li>
+        <li><strong>DCCT/EDIC, UKPDS</strong> 모두 "metabolic memory(대사 기억)" 또는 "legacy effect(유산 효과)" 시사 — 일정 기간 강화혈당관리의 이득이 종료 후에도 수십 년 지속</li>
+        <li>현대 치료전략을 이용한 초기 장기간 혈당강하의 장기 효과 데이터는 아직 부족함</li>
+        <li>저혈당은 인슐린·SU·메글리티니드 치료자의 주요 위험 — 고위험 시 디인텐시피케이션 적절</li>
+        <li>심부전·CKD에서 SGLT2i, CVD·비만에서 GLP-1RA 등 근거기반 적응증에 따라 약물 전환 고려</li>
+        <li>내약성, 투여 난이도, 교육·취업에 미치는 영향, 비용 등 저혈당 외 치료 부담도 함께 고려</li>
+        <li>여러 임상시험에서 디인텐시피케이션이 안전하게 시행될 수 있음을 입증 — 환자와 협력하여 목표·모니터링 합의 필요</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span>💊 심혈관 보호 약물과 A1C 목표 — 2가지 전략</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body collapsed">
+      <ol class="num">
+        <li>이미 이중치료 또는 다중 혈당강하제 사용 중이며 SGLT2i/GLP-1RA/dual GIP·GLP-1RA 미사용 시 → 심혈관 이득이 입증된 약물로 전환 고려</li>
+        <li>CVD 동반 환자가 A1C 목표 도달 상태라도 → metformin 사용 여부·기존 A1C와 무관하게 SGLT2i/GLP-1RA/dual GIP·GLP-1RA 도입 (심혈관 이득 목적)</li>
+      </ol>
+      <div class="alert alert-teal" style="margin-top:8px"><span>💡</span><span>SGLT2i·GLP-1RA의 심혈관·신장 이득은 A1C 강하 정도에 좌우되지 않음 — CVD·CKD·심부전·비만 동반 2형당뇨에서는 현재 A1C나 목표와 무관하게 도입을 고려해야 함</span></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══════════ TAB: 합병증 근거 ═══════════ -->
+<div id="tab-evidence" class="panel">
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>👁️ 혈당강하와 미세혈관 합병증</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <table class="tc-table">
+        <tr><th>연구</th><th>대상</th><th>비교군 A1C</th><th>주요 결과</th></tr>
+        <tr><td><strong>DCCT</strong></td><td>1형당뇨</td><td>강화 ~7% vs 표준 ~9%</td><td>망막병증·신경병증·CKD <strong>50–76% 감소</strong></td></tr>
+        <tr><td><strong>EDIC</strong>(DCCT 후속)</td><td>DCCT 코호트</td><td>—</td><td>두 군 간 A1C 차이 소실 후에도 미세혈관 이득 <strong>20년 이상 지속</strong>(legacy effect)</td></tr>
+        <tr><td><strong>Kumamoto</strong></td><td>2형당뇨(단기 유병)</td><td>7.1% vs 9.4%</td><td>미세혈관 합병증 감소</td></tr>
+        <tr><td><strong>UKPDS</strong></td><td>2형당뇨(단기 유병)</td><td>7.0% vs 7.9%</td><td>미세혈관 합병증 감소, 장기추적에서도 지속 효과</td></tr>
+      </table>
+      <div class="alert alert-info" style="margin-top:8px"><span>ℹ️</span><span>DCCT·UKPDS는 도달 A1C와 미세혈관 합병증 사이에 <strong>곡선형(curvilinear) 관계</strong> 입증 — 인구집단 수준에서는 매우 높은 A1C를 중간 수준으로 낮출 때 가장 많은 합병증 예방</span></div>
+      <div class="alert alert-warn"><span>⚠️</span><span>A1C를 7%→6%로 추가 강하 시 미세혈관 위험은 더 감소하지만 <strong>절대위험감소는 훨씬 작아지고</strong>, 인슐린·인슐린분비촉진제 사용 시 저혈당 위험 증가로 상쇄될 수 있음</span></div>
+      <div class="alert alert-teal"><span>💡</span><span>저저혈당 위험·낮은 치료 부담·충분한 기대수명이 있다면 <strong>A1C 6–7% 목표가 적절</strong>하며, 디인텐시피케이션이 반드시 필요하지는 않음</span></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>❤️ 혈당강하와 심혈관질환(CVD) 결과</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <table class="tc-table">
+        <tr><th>연구</th><th>대상 특징</th><th>주요 CVD 결과</th></tr>
+        <tr><td><strong>ACCORD</strong></td><td>고령, 유병 8–11년, CVD/다중위험인자</td><td>복합 CVD 사건 차이 없음 — <strong>3.5년에 총사망률 증가로 중단</strong></td></tr>
+        <tr><td><strong>ADVANCE</strong></td><td>同上</td><td>복합 CVD 사건 차이 없음, 신증 경도 감소</td></tr>
+        <tr><td><strong>VADT</strong></td><td>同上</td><td>복합 CVD 사건 차이 없음, 신증 경도 감소</td></tr>
+      </table>
+      <div class="alert alert-danger" style="margin-top:8px"><span>🚫</span><span><strong>ACCORD</strong> 중단 원인 — 급속한 치료 강화, 초기 고용량 인슐린 사용, 현저한 체중증가, 빈번한 저혈당 등이 위험요인으로 지목됨. 총사망률 증가는 주로 급성 심혈관사 증가에 기인</span></div>
+      <div class="alert alert-info"><span>ℹ️</span><span>이들 시험은 모두 <strong>GLP-1RA·SGLT2i 승인 이전</strong> 시행 — 강화요법이 주로 인슐린·기타 약물 증량으로 이뤄짐</span></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>📈 장기 추적 연구 — CVD 이득의 재발견</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <table class="tc-table">
+        <tr><th>연구</th><th>추적 결과</th></tr>
+        <tr><td>UKPDS·ACCORD·ADVANCE·VADT 통합 메타분석</td><td>심근경색·주요 CVD 사건 유의 감소(뇌졸중·심부전·사망률은 차이 없음)</td></tr>
+        <tr><td>DCCT/EDIC 30년 추적</td><td>비치명 심근경색·뇌졸중·심혈관사 복합결과 <strong>57% 감소</strong>(post-DCCT), 30년 지속 시 <strong>32% CVD 사건 감소</strong></td></tr>
+        <tr><td>UKPDS 20년 추적</td><td>심근경색·총사망률 감소(metformin군·SU/인슐린군 모두)</td></tr>
+        <tr><td>VADT 10년 추적</td><td>주요 CVD 사건(특히 MI·심부전) 유의 감소</td></tr>
+        <tr><td>ADVANCE-ON 10년 추적</td><td>CVD 사건에 유의한 효과 없음</td></tr>
+        <tr><td>ACCORDION(ACCORD 후속, 9년)</td><td>일반관리 복귀 후 초과 총사망률 소실 — 총 9년 추적 시 군간 사망률 차이 없음</td></tr>
+      </table>
+      <div class="alert alert-teal" style="margin-top:8px"><span>💡</span><span>결과의 이질성은 연구 치료법·대상군의 차이에서 비롯된 것으로 보이며, 장기적으로는 강화 혈당관리가 (특히 심근경색을 중심으로) CVD 위험을 감소시킬 가능성을 시사</span></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span>🆕 최신 약물(SGLT2i·GLP-1RA)의 위치</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body collapsed">
+      <ul class="dot">
+        <li>ACCORD·ADVANCE·VADT·UKPDS 모두 SGLT2i, GLP-1RA, dual GIP/GLP-1RA <strong>도입 이전</strong> 시행됨 — 이들 약물 사용군에서의 "고 vs 저 A1C" 비교 근거는 제한적</li>
+        <li>SGLT2i·GLP-1RA·dual GIP/GLP-1RA의 심·신장 보호 효과는 체중감소·혈류역학적 효과·혈압강하·항염증 작용 등 <strong>혈당강하 외 기전</strong>에 의해 매개될 가능성</li>
+        <li>중증 저혈당은 심혈관 사건·사망률과 강하게 연관 — 안전하게 달성 불가능한 근치료 목표를 무리하게 추구해서는 안 됨</li>
+      </ul>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══════════ TAB: 저혈당 ═══════════ -->
+<div id="tab-hypo" class="panel">
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>📌 HYPOGLYCEMIA 핵심 권고문</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="rec-list">
+        <li class="rec-item"><span class="badge badge-C">C</span><span class="rec-text"><strong>6.10</strong> 저혈당 위험군 전원, 매 진료 시 저혈당 병력 검토 및 필요시 사건 평가</span></li>
+        <li class="rec-item"><span class="badge badge-E">E</span><span class="rec-text"><strong>6.11</strong> 저혈당 인지 저하 매년·필요시 선별, <span class="badge badge-A">A</span> 전문가에게 근거기반 중재 의뢰</span></li>
+        <li class="rec-item"><span class="badge badge-E">E</span><span class="rec-text"><strong>6.12</strong> 고위험군·중증/빈번 저혈당 시 저혈당 공포 매년·필요시 선별, <span class="badge badge-A">A</span> 전문가 의뢰</span></li>
+        <li class="rec-item"><span class="badge badge-B">B</span><span class="rec-text"><strong>6.13</strong> 약물·목표 설정 시 개인의 저혈당 위험(Table 6.5) 고려</span></li>
+        <li class="rec-item"><span class="badge badge-A">A</span><span class="rec-text"><strong>6.14</strong> 고위험군에 CGM 사용 권장</span></li>
+        <li class="rec-item"><span class="badge badge-B">B</span><span class="rec-text"><strong>6.15</strong> 의식 있는 혈당&lt;70mg/dL — 포도당 선호 치료, 지방/단백질 위주 음식 피할 것, 15분 후 재확인·재치료</span></li>
+        <li class="rec-item"><span class="badge badge-A">A</span><span class="rec-text"><strong>6.16</strong> 인슐린 사용자·고위험군 전원 글루카곤 처방, 주변인 교육. <span class="badge badge-B">B</span> 재구성 불필요 제형 선호</span></li>
+        <li class="rec-item"><span class="badge badge-C">C</span><span class="rec-text"><strong>6.17</strong> 구급상자에 경구 포도당 포함</span></li>
+        <li class="rec-item"><span class="badge badge-A">A</span><span class="rec-text"><strong>6.18</strong> 인슐린 사용자/위험군 전원 구조화된 저혈당 예방·치료 교육 제공</span></li>
+        <li class="rec-item"><span class="badge badge-B">B</span><span class="rec-text"><strong>6.19</strong> Level 2·3 사건 1회 이상 발생 시 치료계획 재평가(디인텐시피케이션·전환 포함)</span></li>
+        <li class="rec-item"><span class="badge badge-B">B</span><span class="rec-text"><strong>6.20</strong> 인지기능 정기 평가, 저하 시 저혈당 경계 강화</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>📊 Table 6.4 — 저혈당 분류 체계</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <table class="tc-table">
+        <tr><th>등급</th><th>혈당 기준/설명</th></tr>
+        <tr><td><strong>Level 1</strong></td><td>&lt;70 mg/dL(&lt;3.9 mmol/L) 이고 ≥54 mg/dL(≥3.0 mmol/L)</td></tr>
+        <tr><td><strong>Level 2</strong></td><td>&lt;54 mg/dL(&lt;3.0 mmol/L)</td></tr>
+        <tr><td><strong>Level 3</strong></td><td>혈당 수치와 무관하게, 회복을 위해 타인의 도움이 필요한 정신·신체 기능 변화를 특징으로 하는 중증 사건</td></tr>
+      </table>
+      <ul class="dot" style="margin-top:8px">
+        <li>70 mg/dL은 비당뇨인에서 아드레날린 반응의 임계치 — 무증상이라도 측정 혈당 &lt;70mg/dL은 임상적으로 중요하게 간주</li>
+        <li>Level 2는 신경당결핍(neuroglycopenic) 증상이 시작되는 임계치 — 즉시 조치 필요</li>
+        <li>증상 없는 Level 2 저혈당 → <strong>저혈당 인지 저하</strong> 가능성 — 치료계획 재검토 필요</li>
+      </ul>
+      <div class="alert alert-danger" style="margin-top:8px"><span>🚫</span><span>Level 3 저혈당은 의식소실·발작·혼수·사망으로 진행 가능 — ACCORD·ADVANCE 양쪽 군 모두에서 사망률과 연관됨</span></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>⚠️ Table 6.5 — 저혈당 위험 평가 (인슐린·SU·메글리티니드 치료자)</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <div class="grid2">
+        <div>
+          <div style="font-weight:700;color:var(--accent2);font-size: calc(11.5px * var(--fscale, 1));margin-bottom:4px">임상·생물학적 위험인자</div>
+          <table class="tc-table">
+            <tr><th colspan="1">주요 위험인자</th></tr>
+            <tr><td>최근(3–6개월 내) Level 2·3 저혈당</td></tr>
+            <tr><td>강화 인슐린요법*</td></tr>
+            <tr><td>저혈당 인지 저하</td></tr>
+            <tr><td>신부전</td></tr>
+            <tr><td>인지장애·치매</td></tr>
+            <tr><td>대사수술 병력</td></tr>
+          </table>
+          <table class="tc-table" style="margin-top:6px">
+            <tr><th colspan="1">기타 위험인자</th></tr>
+            <tr><td>최근 다발성 Level 1 저혈당</td></tr>
+            <tr><td>기저인슐린요법*</td></tr>
+            <tr><td>연령 ≥75세†</td></tr>
+            <tr><td>여성</td></tr>
+            <tr><td>높은 혈당 변동성‡</td></tr>
+            <tr><td>다약제 복용</td></tr>
+            <tr><td>심혈관질환</td></tr>
+            <tr><td>CKD(eGFR&lt;60 또는 알부민뇨)</td></tr>
+            <tr><td>신경병증·망막병증</td></tr>
+            <tr><td>주요우울장애·중증 정신질환</td></tr>
+            <tr><td>위마비(gastroparesis)</td></tr>
+            <tr><td>베타차단제 사용</td></tr>
+          </table>
+        </div>
+        <div>
+          <div style="font-weight:700;color:var(--accent2);font-size: calc(11.5px * var(--fscale, 1));margin-bottom:4px">사회·문화·경제적 위험인자</div>
+          <table class="tc-table">
+            <tr><th colspan="1">주요 위험인자</th></tr>
+            <tr><td>식품 불안정</td></tr>
+            <tr><td>저소득§</td></tr>
+            <tr><td>주거 불안정</td></tr>
+            <tr><td>종교·문화적 금식</td></tr>
+            <tr><td>의료보험 부족</td></tr>
+          </table>
+          <table class="tc-table" style="margin-top:6px">
+            <tr><th colspan="1">기타 위험인자</th></tr>
+            <tr><td>낮은 건강 문해력</td></tr>
+            <tr><td>알코올·물질사용장애</td></tr>
+          </table>
+        </div>
+      </div>
+      <div style="font-size: calc(10px * var(--fscale, 1));color:var(--text2);margin-top:8px;line-height:1.6">고위험군 = 주요 위험인자 ≥1개 또는 다수의 기타 위험인자 보유(임상 판단). *강화인슐린(MDI/CSII/AID)이 가장 高위험, 다음 기저인슐린, 다음 SU/메글리티니드 순. 인슐린+SU 병용 시 위험 더욱 증가 †연령에 따른 위험은 치료계획·당뇨유형 고려 시 75세 이상이 2형당뇨에서 최고위험, 1형당뇨 젊은 연령도 고위험 ‡엄격한 혈당관리는 RCT에서 저혈당율 증가, 관찰연구에서는 고·저 A1C 모두 저혈당과 J자형 관계 §사회경제적 박탈지역 거주 포함</div>
+    </div>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <div class="card-header open" onclick="toggleCard(this)">
+        <span>🧠 저혈당 인지 저하 (Impaired Awareness)</span><span class="toggle">▾</span>
+      </div>
+      <div class="card-body">
+        <ul class="dot">
+          <li>저혈당 시 정상적인 길항호르몬 분비·증상이 나타나지 않는 상태 — 장기 유병·반복 저혈당에서 흔함</li>
+          <li>일부는 더 낮은 혈당에서만, 또는 적은 증상으로만 감지 가능</li>
+          <li>최초 증상이 혼란일 수 있어 <strong>Level 3 위험을 현저히 증가</strong></li>
+          <li>선별 질문 예시: <em>"혈당이 낮을 때 항상 느끼시나요?"</em> → "아니오" 응답 시 상세 평가</li>
+          <li>검증된 도구: 단일문항(Pedersen-Bjergaard, Gold) / 다영역(Clarke, HypoA-Q)</li>
+        </ul>
+        <div class="alert alert-warn" style="margin-top:8px"><span>⚠️</span><span>저혈당 공포와 저혈당 인지 저하는 흔히 동반 — 한쪽을 치료하면 다른 쪽도 함께 개선되는 경우가 많음</span></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header open" onclick="toggleCard(this)">
+        <span>👤 특수 취약군 및 추가 위험요인</span><span class="toggle">▾</span>
+      </div>
+      <div class="card-body">
+        <ul class="dot">
+          <li><strong>인지기능 저하</strong> — 저혈당과 양방향 연관, DCCT/EDIC 추적에서 반복 중증 저혈당이 정신운동·인지효율 저하와 연관 → 고령자 인지기능 정기 평가 필요</li>
+          <li><strong>대사수술 후</strong> — 특히 Roux-en-Y 위우회술 후 과도한 식후 내인성 인슐린 분비로 발생, 수술 수개월~수년 후 발현</li>
+          <li><strong>소아·고령자</strong> — 저혈당 증상 인지·의사표현 능력 저하로 특히 취약</li>
+          <li><strong>종교적 금식</strong> — 인슐린/인슐린분비촉진제 사용자에서 적절한 계획 없이 시행 시 저혈당 위험 증가, 안전한 치료계획 공동수립 필요</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>🍬 저혈당 치료 — 단계별 접근</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <div class="flow-box" style="border-left:3px solid var(--accent2)"><span class="step-num">1</span><strong>경각 수치(70 mg/dL 이하)</strong> — 빠른흡수 탄수화물로 즉시 치료 시작</div>
+      <div class="flow-box" style="border-left:3px solid var(--green)"><span class="step-num">2</span><strong>섭취량</strong> — 대부분 <strong>15g 탄수화물</strong>; 자동인슐린전달기기 사용자는 <strong>5–10g</strong>(운동 동반/볼러스 과다추정 제외)</div>
+      <div class="flow-box" style="border-left:3px solid var(--yellow)"><span class="step-num">3</span><strong>15분 후 재확인</strong> — 저혈당 지속 시 탄수화물 재섭취, 의식 없거나 섭취 불가 시 응급의료 호출</div>
+      <ul class="dot" style="margin-top:8px">
+        <li>급성 혈당반응은 총 탄수화물량보다 <strong>포도당 함량</strong>과 더 상관 — 순수 포도당이 1차 선호 치료</li>
+        <li><strong>Acarbose</strong> 복용자는 설탕(sucrose) 분해를 억제하므로 <strong>순수 포도당으로만</strong> 치료</li>
+        <li>지방 첨가 시 혈당반응이 느려지고 지속 → 초기 치료에는 고지방·고단백 음식 피할 것</li>
+        <li>단백질은 인슐린 분비를 증가시킬 수 있어 저혈당 치료용으로 사용하지 않음</li>
+        <li>구급상자에는 포도당정제(긴 유효기간, 용량 조절 용이) 또는 포도당겔(어린이·무치환자 적합) 포함 권장</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>💉 글루카곤 — Table 6.6 비교</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <table class="tc-table">
+        <tr><th>제품</th><th>형태</th><th>용량</th></tr>
+        <tr><td>Glucagon</td><td>재구성 분말+희석액 주사</td><td>1 mg</td></tr>
+        <tr><td>Glucagon</td><td>비강분말</td><td>3 mg</td></tr>
+        <tr><td>Glucagon</td><td>사전충전 펜/주사기</td><td>0.5 mg, 1 mg</td></tr>
+        <tr><td>Dasiglucagon</td><td>사전충전 펜/주사기</td><td>0.6 mg</td></tr>
+      </table>
+      <ul class="dot" style="margin-top:8px">
+        <li>경구 탄수화물 섭취가 불가능/거부되는 저혈당에 적응</li>
+        <li>인슐린 사용자 및 고위험군 <strong>전원</strong> 글루카곤 처방, 접근성·교육을 정기적으로 검토(현재 처방률 매우 낮음)</li>
+        <li>가족·룸메이트·학교직원·코치·돌봄제공자 등 <strong>비의료인도 안전하게 투여 가능</strong> — 보관 위치·투여법 교육 필요</li>
+        <li>비강분무·사전충전형은 재구성 불필요로 <strong>투여 용이성과 신속한 회복</strong> 측면에서 선호됨</li>
+        <li>유효기간 확인·제품별 보관조건 준수 필요, 보험사 선호 제형 확인 권장</li>
+      </ul>
+      <div class="alert alert-danger" style="margin-top:8px"><span>🚫</span><span>저혈당 환자에게는 <strong>절대 인슐린을 투여해서는 안 됨</strong> — 주변인 교육 시 반드시 명시할 핵심 사항</span></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>🛡️ Table 6.7 — 저혈당 예방 구성요소(방문별)</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <table class="tc-table">
+        <tr><th>예방 활동</th><th>초진</th><th>매 방문</th><th>연간</th></tr>
+        <tr><td>저혈당 병력 평가</td><td>✓</td><td>✓</td><td>✓</td></tr>
+        <tr><td>저혈당 인지 평가</td><td>✓</td><td>-</td><td>✓</td></tr>
+        <tr><td>인지기능·기타 위험인자 평가</td><td>✓</td><td>-</td><td>✓</td></tr>
+        <tr><td>구조화된 예방·치료 교육</td><td>✓</td><td>✓*</td><td>✓*</td></tr>
+        <tr><td>당뇨기술 필요성 검토</td><td>✓</td><td>✓</td><td>✓</td></tr>
+        <tr><td>치료계획 재평가(디인텐시피케이션·단순화·약물변경)</td><td>✓</td><td>✓†</td><td>✓†</td></tr>
+        <tr><td>글루카곤 처방·주변인 교육</td><td>✓</td><td>-</td><td>✓</td></tr>
+        <tr><td>저혈당 인지 회복 훈련</td><td>✓‡</td><td>-</td><td>✓‡</td></tr>
+      </table>
+      <div style="font-size: calc(10px * var(--fscale, 1));color:var(--text2);margin-top:6px">표기 빈도는 최소 권장치이며 임상 판단에 따라 더 자주 시행 가능. *반복 저혈당 또는 고위험약물 시작 시 †Level 2·3 저혈당, 간헐성질환, 상호작용 약물 도입 시 ‡저혈당 인지 저하 확인 시</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span>🔁 인지 회복 훈련 및 일시적 목표 완화</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body collapsed">
+      <ul class="dot">
+        <li>여러 근거기반 훈련 프로그램이 1형당뇨·저혈당 인지 저하군에서 저혈당 발생률 감소·삶의질 개선 입증 — 현재 임상에서 널리 이용 가능하지 않음</li>
+        <li>행동건강 전문가, 당뇨교육전문가 등을 통한 유사 훈련 제공 가능(RCT 근거는 아직 부족)</li>
+        <li><strong>수 주간의 저혈당 회피</strong>(목표 일시 완화)로 길항조절·저혈당 인지가 개선될 수 있음</li>
+        <li>저혈당 인지 저하 + 반복 저혈당 환자는 <strong>단기적 목표 완화</strong>로 이득을 볼 수 있음</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span>🔬 첨단 기술 및 실험적 접근</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body collapsed">
+      <ul class="dot">
+        <li>저혈당 자동중단(low-glucose suspend)·자동인슐린전달(AID) 시스템 — 1형당뇨 저혈당 감소에 효과적</li>
+        <li>치료 저항성 Level 3 저혈당·인지저하 지속 1형당뇨 → 췌장단독이식 또는 인체췌도이식 고려 가능(아직 실험적)</li>
+        <li>최근 관찰연구는 첨단기술·관리법 사용자에서도 중증 저혈당이 지속될 수 있음을 보여줌 — 지속적인 위험 감시 필요</li>
+      </ul>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══════════ TAB: 간헐성 질환 ═══════════ -->
+<div id="tab-illness" class="panel">
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>🤒 INTERCURRENT ILLNESS — 개요</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="dot">
+        <li>질병·외상·수술 등 스트레스 사건은 저혈당·고혈당 위험을 모두 증가시킴 — 특히 임상적 복잡성·다약제 복용 동반 시</li>
+        <li>중증 사례는 생명을 위협하는 고혈당 위기로 진행 가능 → 즉각적 의학적 치료 필요</li>
+        <li>모든 당뇨병 환자는 질병·스트레스 사건 시 더 빈번한 혈당 모니터링 필요성 평가 — 케톤생성 경향이 있는 환자는 요/혈중 케톤 모니터링도 필요</li>
+        <li>입원 환경에서의 고혈당 관리는 Section 16 "Diabetes Care in the Hospital" 참조</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>💊 약물별 간헐성 질환 시 조정 원칙</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <table class="tc-table">
+        <tr><th>약물군</th><th>조정 원칙</th></tr>
+        <tr><td>Metformin</td><td>경구섭취 불가 또는 급성신손상 우려 시 보류 고려</td></tr>
+        <tr><td>SGLT2 inhibitor</td><td>경구섭취 불가 또는 급성신손상 우려 시 보류 고려</td></tr>
+        <tr><td>GLP-1 RA</td><td>심한 위장관 증상을 동반한 질환에서는 보류 필요할 수 있음</td></tr>
+        <tr><td>Thiazolidinedione</td><td>심부전 악화·체액과다 상태 시 보류, 재투여는 개별화하여 재평가</td></tr>
+        <tr><td>기저 인슐린(강화요법자)</td><td><strong>금식 중에도 중단하지 말 것</strong> — 질병·금식 시 용량조절에 대한 구체적 지침 사전 제공</td></tr>
+        <tr><td>Sulfonylurea</td><td>특정 항균제 병용 시 일시적 감량·중단 고려(아래 참조)</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>💊 설폰요소제 + 항균제 상호작용 — 저혈당 위험</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <div class="alert alert-danger"><span>🚫</span><span>다음 항균제는 설폰요소제의 <strong>유효 용량을 현저히 증가</strong>시켜 저혈당을 유발할 수 있음 — 병용 시 일시적 감량·중단 고려</span></div>
+      <div class="grid3" style="margin-top:8px">
+        <div class="flow-box" style="text-align:center;border-left:3px solid var(--red)">Fluoroquinolone</div>
+        <div class="flow-box" style="text-align:center;border-left:3px solid var(--red)">Clarithromycin</div>
+        <div class="flow-box" style="text-align:center;border-left:3px solid var(--red)">Sulfamethoxazole-Trimethoprim</div>
+        <div class="flow-box" style="text-align:center;border-left:3px solid var(--red)">Metronidazole</div>
+        <div class="flow-box" style="text-align:center;border-left:3px solid var(--red)">Fluconazole</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span>📋 환자·돌봄제공자 교육 — 질병 시 행동지침</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body collapsed">
+      <ul class="dot">
+        <li>질병·기타 스트레스 사건 동안 중증 저혈당·고혈당·기타 부작용을 <strong>예방·감지·치료</strong>하는 구체적이고 개별화된 지침 제공</li>
+        <li>비진료시간을 포함해 <strong>질문이 있을 때 누구에게 연락할지</strong>, 임상적 심각도별로 <strong>어디서 도움을 받을지</strong>에 대한 안내 필요</li>
+        <li>목표는 고위험 질환 진행(특히 고혈당 위기로의 진행)을 사전에 예방하는 것</li>
+      </ul>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══════════ TAB: 고혈당 위기 ═══════════ -->
+<div id="tab-crisis" class="panel">
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>📌 HYPERGLYCEMIC CRISES 핵심 권고문</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="rec-list">
+        <li class="rec-item"><span class="badge badge-C">C</span><span class="rec-text"><strong>6.21</strong> 위험군 전원, 매 진료 시 고혈당 위기(DKA·HHS) 병력 검토</span></li>
+        <li class="rec-item"><span class="badge badge-B">B</span><span class="rec-text"><strong>6.22</strong> 1형당뇨 전원, 사건 경험자, 고위험군에 인지·예방·관리 구조화 교육 제공</span></li>
+      </ul>
+      <div class="alert alert-warn" style="margin-top:8px"><span>⚠️</span><span>최근 10년간 1형·2형당뇨 모두에서 DKA·HHS 발생률이 <strong>증가</strong> — 상당한 후유증·사망률·의료비 부담을 동반</span></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>⚠️ Table 6.8 — 고혈당 위기 위험인자</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <div class="grid2">
+        <ul class="dot">
+          <li>1형당뇨/절대적 인슐린결핍</li>
+          <li>젊은 연령</li>
+          <li>고혈당 위기 병력</li>
+          <li>저혈당 위기 병력</li>
+          <li>기타 당뇨 합병증 동반</li>
+        </ul>
+        <ul class="dot">
+          <li>기타 만성질환(특히 2형당뇨)</li>
+          <li>행동건강질환(우울증, 양극성장애, 섭식장애)</li>
+          <li>알코올·물질 사용</li>
+          <li>높은 A1C</li>
+          <li>인슐린 절약(rationing)</li>
+          <li>SGLT2(SGLT1/2) 억제제 사용</li>
+          <li>건강의 사회적 결정요인</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <div class="card-header open" onclick="toggleCard(this)">
+        <span>🧬 COVID-19와 신규 발병 당뇨</span><span class="toggle">▾</span>
+      </div>
+      <div class="card-body">
+        <ul class="dot">
+          <li>COVID-19 감염 중·후 신규진단 1형당뇨에서 DKA 동반 사례 다수 보고</li>
+          <li>정확한 기전은 불명확하나 여러 복합적 과정이 관여하는 것으로 추정</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header open" onclick="toggleCard(this)">
+        <span>💊 약물 유발성 DKA/HHS</span><span class="toggle">▾</span>
+      </div>
+      <div class="card-body">
+        <ul class="dot">
+          <li>탄수화물 대사에 영향을 주어 DKA·HHS를 유발할 수 있는 약물군:</li>
+        </ul>
+        <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:6px">
+          <span class="badge" style="background:#fff3e0;color:#7a3500;border:1px solid var(--orange)">글루코코르티코이드</span>
+          <span class="badge" style="background:#fff3e0;color:#7a3500;border:1px solid var(--orange)">항정신병약</span>
+          <span class="badge" style="background:#fff3e0;color:#7a3500;border:1px solid var(--orange)">면역관문억제제</span>
+          <span class="badge" style="background:#fff3e0;color:#7a3500;border:1px solid var(--orange)">SGLT2 억제제</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>🚨 SGLT2 억제제와 DKA 위험 — 1형 vs 2형당뇨</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <table class="tc-table">
+        <tr><th>당뇨 유형</th><th>DKA 위험</th><th>비고</th></tr>
+        <tr><td><strong>1형당뇨</strong></td><td>비사용자 대비 <strong>5–17배</strong> 높음</td><td>공복 β-hydroxybutyrate ≥0.8 mmol/L → 향후 1개월 DKA 위험 3.2배 증가</td></tr>
+        <tr><td><strong>2형당뇨</strong></td><td>1,000 patient-years당 0.6–4.9건(드묾)</td><td>RCT 메타분석 RR 2.46(95%CI 1.16–5.21), 관찰연구 메타분석 RR 1.74(95%CI 1.07–2.83)</td></tr>
+      </table>
+      <div class="alert alert-danger" style="margin-top:8px"><span>🚫</span><span>1형당뇨에서 SGLT2i 사용 시 DKA 위험이 현저히 높아 다수의 예방·조기개입 교육 프로토콜(STICH, STOP DKA 등)이 제안됨</span></div>
+      <div class="alert alert-info"><span>ℹ️</span><span>2형당뇨에서 SGLT2i 관련 DKA 위험인자: 초저탄수화물 식이·장기간 금식, 탈수, 과도한 음주, 자가면역 동반 등</span></div>
+      <div class="alert alert-teal"><span>💡</span><span>연속 케톤 모니터링(CKM) 기기가 향후 SGLT2i 사용 여부와 무관하게 1형당뇨 DKA 예방의 새로운 접근법이 될 수 있음</span></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>🤰 임신과 DKA</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="dot">
+        <li>임신전 당뇨(대개 1형당뇨) 임신의 <strong>최대 2%</strong>가 DKA로 합병</li>
+        <li>임신성당뇨(GDM)에서 DKA 발생률은 매우 낮음(<strong>&lt;0.1%</strong>)</li>
+        <li>임신 중에는 <strong>혈당 &lt;200 mg/dL(11.1 mmol/L)</strong>에서도 DKA(euglycemic DKA) 발생 가능 — 특히 입덧(hyperemesis) 동반 시 혼합 산-염기 장애로 진단이 어려울 수 있음</li>
+      </ul>
+      <div class="alert alert-warn" style="margin-top:8px"><span>⚠️</span><span>모체-태아 위해 위험이 크므로 DKA 위험군 임신부는 증상·징후 교육 후 의심 시 즉시 의료기관 방문하도록 안내</span></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>🩺 인지·예방·외래 관리</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="dot">
+        <li>다음 증상 시 고혈당 위기 의심: 다뇨·다음·체중감소·구토·탈수·의식상태 변화</li>
+        <li>위험군에는 조기 증상 교육, 케톤검사 도구(요/혈) 제공, <strong>"sick day advice"</strong>(자가관리 교육) 시행</li>
+        <li>매 방문 시 DKA 예방 실천 및 케톤검사 도구 보유 여부 검토</li>
+        <li>강화인슐린요법 사용자는 <strong>식사를 못해도 기저인슐린을 절대 중단하지 말 것</strong> — 질병·금식 시 인슐린 용량조절에 대한 상세 지침 필요</li>
+        <li>DKA 의심·우려 시 즉시 당뇨관리팀에 연락하도록 독려 — 응급실/입원 회피에 기여</li>
+      </ul>
+      <table class="tc-table" style="margin-top:8px">
+        <tr><th>케톤 측정 권장 상황</th></tr>
+        <tr><td>질병, 인슐린 누락, 섭식장애 등 위험인자 동반 시, 특히 혈당 &gt;200 mg/dL(11.1 mmol/L)인 경우</td></tr>
+      </table>
+      <div class="alert alert-success" style="margin-top:8px"><span>✅</span><span>6개월 RCT에서 <strong>혈중 케톤 모니터링</strong>이 요케톤 모니터링 대비 응급실/입원 위험을 약 <strong>50% 감소</strong>시킴</span></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>🏠 경증 DKA의 외래 관리 기준</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <div class="alert alert-success"><span>✅</span><span><strong>외래 관리 가능한 조건</strong> — 혈류역학적·인지적으로 안정, 경구수분 섭취 가능, 피하인슐린 자가투여 가능한 경우: 빈번한 혈당·케톤(요/혈) 모니터링 + 무열량 수분공급 + 피하인슐린 투여</span></div>
+      <div class="alert alert-danger" style="margin-top:8px"><span>🚫</span><span><strong>즉시 응급의료 필요</strong> — 경구수분 섭취 불가, 지속적 구토, 인슐린 투여에도 혈당/케톤 개선 없음, 의식상태 변화, 기타 악화 징후</span></div>
+      <div class="alert alert-warn" style="margin-top:8px"><span>⚠️</span><span><strong>HHS 의심 시</strong> — 더 큰 체액 손실 동반, 대개 급성질환이 유발 → <strong>즉시 입원 평가·치료</strong> 필요</span></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span>🔄 재발성 DKA와 행동학적 중재</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body collapsed">
+      <ul class="dot">
+        <li>DKA로 입원한 환자 중 상당수가 <strong>재발성 사건</strong>을 경험 — 유발요인 파악과 재발 예방을 위한 개입이 중요</li>
+        <li>구조화된 자가관리 교육(문제해결 포함), 심리적 중재, 동료지원, 개인코칭, 행동가족체계치료 등이 DKA 입원 감소에 효과적</li>
+        <li>기존 인슐린치료 당뇨에서 발생하는 DKA의 상당수는 자가관리 어려움에서 기인 — 재발성 DKA는 흔히 광범위한 다체계적 행동중재 필요</li>
+        <li>소아·청소년(특히 사춘기)이 성인보다 DKA 발생률이 더 높음</li>
+        <li>기존 당뇨병 환자의 DKA가 신규진단보다 흔함 — 섭식장애 등 정신사회적 어려움, 소아→성인 전환기의 진료 공백과 연관</li>
+        <li>여성, 소수인종/이주배경, 높은 A1C, 높은 인슐린 단위/kg/day(누락 인슐린에 대한 반응적 증량 반영 가능), 10–14세 연령, 공공보험, 이전 DKA 병력 등이 관련 요인</li>
+        <li>인슐린펌프 치료 자체는 현 시대 DKA 발생률 증가와 관련 없음</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span>🏘️ 건강의 사회적 결정요인 선별</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body collapsed">
+      <ul class="dot">
+        <li>DKA·HHS 경험자는 인슐린·기타 혈당강하제·당뇨 의료기기 접근 부족 등 사회적 결정요인 선별 필요</li>
+        <li>장벽 완화를 위해 적절한 의료·지역사회 서비스로 연계(Section 5 참조)</li>
+        <li><strong>CGM 접근성</strong>이 DKA 재발 위험 감소와 연관될 수 있음</li>
+      </ul>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══════════ TAB: 기준표 모음 ═══════════ -->
+<div id="tab-tables" class="panel">
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>📁 전체 권고문 표 (Rec 6.1–6.22)</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <table class="tc-table">
+        <tr><th>번호</th><th>권고 내용</th><th>등급</th></tr>
+        <tr><td>6.1</td><td>A1C 및/또는 CGM(TIR·TAR·TBR)으로 혈당 상태 평가; fructosamine/CGM은 A1C 대체 가능</td><td><span class="badge badge-A">A</span>/<span class="badge badge-B">B</span></td></tr>
+        <tr><td>6.2</td><td>최소 연 2회, 불안정·목표미달·치료변경 시 3개월마다 평가</td><td><span class="badge badge-E">E</span></td></tr>
+        <tr><td>6.3a</td><td>비임신 성인 A1C &lt;7% 목표</td><td><span class="badge badge-A">A</span></td></tr>
+        <tr><td>6.3b</td><td>CGM 사용자 TIR &gt;70% 목표</td><td><span class="badge badge-B">B</span></td></tr>
+        <tr><td>6.3c</td><td>TBR&lt;70 &lt;4%(고령자&lt;1%), TBR&lt;54 &lt;1% 목표</td><td><span class="badge badge-B">B</span></td></tr>
+        <tr><td>6.4</td><td>저위험·양호건강군 A1C &lt;6.5% 가능</td><td><span class="badge badge-B">B</span></td></tr>
+        <tr><td>6.5</td><td>기능제한·중증동반질환군 완화된 목표</td><td><span class="badge badge-B">B</span></td></tr>
+        <tr><td>6.6</td><td>고위험 저혈당약물 디인텐시피케이션·전환</td><td><span class="badge badge-B">B</span></td></tr>
+        <tr><td>6.7</td><td>치료 부담이 이득보다 큰 경우 디인텐시피케이션</td><td><span class="badge badge-B">B</span></td></tr>
+        <tr><td>6.8</td><td>Fig 6.1 기준에 따라 목표 재평가</td><td><span class="badge badge-E">E</span></td></tr>
+        <tr><td>6.9</td><td>진료 중 혈당 목표 설정</td><td><span class="badge badge-A">A</span></td></tr>
+        <tr><td>6.10</td><td>매 방문 시 저혈당 병력 검토</td><td><span class="badge badge-C">C</span></td></tr>
+        <tr><td>6.11</td><td>저혈당 인지 저하 매년 선별, 전문가 의뢰</td><td><span class="badge badge-E">E</span>/<span class="badge badge-A">A</span></td></tr>
+        <tr><td>6.12</td><td>저혈당 공포 매년 선별, 전문가 의뢰</td><td><span class="badge badge-E">E</span>/<span class="badge badge-A">A</span></td></tr>
+        <tr><td>6.13</td><td>약물·목표 선택 시 저혈당 위험 고려</td><td><span class="badge badge-B">B</span></td></tr>
+        <tr><td>6.14</td><td>고위험군 CGM 사용 권장</td><td><span class="badge badge-A">A</span></td></tr>
+        <tr><td>6.15</td><td>의식있는 저혈당 — 포도당 우선 치료, 15분 후 재평가</td><td><span class="badge badge-B">B</span></td></tr>
+        <tr><td>6.16</td><td>인슐린/고위험군 전원 글루카곤 처방·주변인 교육</td><td><span class="badge badge-A">A</span>/<span class="badge badge-B">B</span></td></tr>
+        <tr><td>6.17</td><td>구급상자에 경구포도당 포함</td><td><span class="badge badge-C">C</span></td></tr>
+        <tr><td>6.18</td><td>구조화된 저혈당 예방·치료 교육</td><td><span class="badge badge-A">A</span>/<span class="badge badge-C">C</span></td></tr>
+        <tr><td>6.19</td><td>Level 2·3 저혈당 시 치료계획 재평가</td><td><span class="badge badge-B">B</span></td></tr>
+        <tr><td>6.20</td><td>인지기능 정기평가, 저하 시 경계 강화</td><td><span class="badge badge-B">B</span></td></tr>
+        <tr><td>6.21</td><td>매 방문 시 고혈당 위기 병력 검토</td><td><span class="badge badge-C">C</span></td></tr>
+        <tr><td>6.22</td><td>1형당뇨·고위험군 고혈당위기 구조화 교육</td><td><span class="badge badge-B">B</span></td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span>📊 혈당 목표 한눈에 보기 (Fig 6.1 요약)</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body collapsed">
+      <table class="tc-table">
+        <tr><th>건강 상태</th><th>A1C</th><th>TIR</th></tr>
+        <tr><td>양호한 건강·기능, 저위험·저부담</td><td>&lt;6.5%</td><td>—</td></tr>
+        <tr><td>대부분 성인(건강한 고령자 포함)</td><td>&lt;7.0%</td><td>&gt;70%</td></tr>
+        <tr><td>고령자, 복합/중간 건강</td><td>&lt;7.5%</td><td>—</td></tr>
+        <tr><td>고령자, 매우 복합/저조한 건강</td><td>&lt;8.0%</td><td>&gt;50%</td></tr>
+        <tr><td>기대수명 제한된 모든 성인</td><td>목표 없음</td><td>증상성 고혈당 회피</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span>📊 저혈당 분류 한눈에 보기</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body collapsed">
+      <table class="tc-table">
+        <tr><th>등급</th><th>기준</th></tr>
+        <tr><td>Level 1</td><td>&lt;70 및 ≥54 mg/dL</td></tr>
+        <tr><td>Level 2</td><td>&lt;54 mg/dL</td></tr>
+        <tr><td>Level 3</td><td>혈당 무관, 타인 도움 필요한 중증 사건</td></tr>
+      </table>
+    </div>
+  </div>
+</div>
+</div><!-- /main -->
+
+<!-- ═══ MODAL: A1C 목표 ═══ -->
+<div id="a1cGoalModal" class="modal-overlay" onclick="closeModalOutside(event,'a1cGoalModal')">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal('a1cGoalModal')">✕</button>
+    <div class="modal-title">🎯 A1C 목표 — 개별화 원칙</div>
+
+    <div class="alert alert-info" style="margin:0 0 12px"><span>💡</span><span>A1C &lt;7%(&lt;53 mmol/mol)는 중증 저혈당이나 삶의 질에 영향을 주는 저혈당이 없는 많은 비임신 성인에게 적절한 목표다. 그러나 모든 환자에 일률적으로 적용해서는 안 되며 Fig 6.1 프레임워크로 개별화해야 한다.</span></div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">건강 상태별 A1C 목표</div>
+      <table class="modal-table">
+        <tr><th>건강 상태</th><th>A1C 목표</th></tr>
+        <tr><td>양호한 건강·기능, 저치료위험/부담</td><td>&lt;6.5% (&lt;48 mmol/mol)</td></tr>
+        <tr><td>대부분 성인 (건강한 고령자 포함)</td><td>&lt;7.0% (&lt;53 mmol/mol)</td></tr>
+        <tr><td>고령자, 복합/중간 건강</td><td>&lt;7.5% (&lt;58 mmol/mol)</td></tr>
+        <tr><td>고령자, 매우 복합/저조한 건강</td><td>&lt;8.0% (&lt;64 mmol/mol)</td></tr>
+        <tr><td>기대수명이 제한된 모든 성인</td><td>특정 A1C 목표 없음 — 증상성 고혈당 회피</td></tr>
+      </table>
+    </div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">더 엄격한 목표를 고려할 요인</div>
+      <table class="modal-table">
+        <tr><th>요인</th></tr>
+        <tr><td>짧은 당뇨병 유병기간</td></tr>
+        <tr><td>저저혈당 위험·저치료부담</td></tr>
+        <tr><td>심혈관·신장·체중 등 비혈당 이득 있는 약물치료 중</td></tr>
+        <tr><td>심혈관 합병증 없음, 동반질환 적음</td></tr>
+        <tr><td>충분한 기대수명(혈당강하 이득을 누릴 시간)</td></tr>
+      </table>
+    </div>
+
+    <div class="alert alert-warn" style="margin-top:4px"><span>⚠️</span><span>A1C를 7%에서 6%로 더 낮추는 것은 미세혈관 위험을 추가로 감소시키지만 절대적 이득은 작아지고, 인슐린·인슐린분비촉진제 사용 시 저혈당 위험 증가로 상쇄될 수 있다.</span></div>
+  </div>
+</div>
+
+<!-- ═══ MODAL: CGM 목표 ═══ -->
+<div id="cgmGoalModal" class="modal-overlay" onclick="closeModalOutside(event,'cgmGoalModal')">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal('cgmGoalModal')">✕</button>
+    <div class="modal-title">📡 CGM 목표 — Time in Range 및 관련 지표</div>
+
+    <div class="alert alert-info" style="margin:0 0 12px"><span>💡</span><span>TIR &gt;70%이 많은 비임신 성인에게 적절한 목표이며, 대략 A1C ~7%(~53 mmol/mol)에 대응한다. 평가 시 14일 착용, 활성 착용률 70% 이상을 권장한다.</span></div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">대부분 성인 목표(건강한 고령자 포함)</div>
+      <table class="modal-table">
+        <tr><th>지표</th><th>목표</th></tr>
+        <tr><td>TIR 70–180 mg/dL</td><td>&gt;70%</td></tr>
+        <tr><td>TBR &lt;70 mg/dL</td><td>&lt;4%</td></tr>
+        <tr><td>TBR &lt;54 mg/dL</td><td>&lt;1%</td></tr>
+        <tr><td>TAR &gt;180 mg/dL</td><td>&lt;25%</td></tr>
+        <tr><td>TAR &gt;250 mg/dL</td><td>&lt;5%</td></tr>
+      </table>
+    </div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">고령자(복합/중간 건강) 목표</div>
+      <table class="modal-table">
+        <tr><th>지표</th><th>목표</th></tr>
+        <tr><td>TIR 70–180 mg/dL</td><td>&gt;50%(하루 12시간)</td></tr>
+        <tr><td>TBR &lt;70 mg/dL</td><td>&lt;1%(하루 15분 이내)</td></tr>
+        <tr><td>TAR &gt;180 mg/dL</td><td>&lt;50% 허용(저혈당 예방 위해)</td></tr>
+      </table>
+    </div>
+
+    <div class="alert alert-teal" style="margin-top:4px"><span>💡</span><span>변동계수(CV) ≤36% 목표 — 일부 연구는 인슐린·SU 사용자에서 &lt;33%가 저혈당에 추가 보호효과 시사</span></div>
+  </div>
+</div>
+
+<!-- ═══ MODAL: 저혈당 등급 ═══ -->
+<div id="hypoLevelModal" class="modal-overlay" onclick="closeModalOutside(event,'hypoLevelModal')">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal('hypoLevelModal')">✕</button>
+    <div class="modal-title">⚠️ 저혈당 분류 체계 (Level 1·2·3)</div>
+
+    <div class="modal-section">
+      <table class="modal-table">
+        <tr><th>등급</th><th>기준</th><th>임상적 의의</th></tr>
+        <tr><td><strong>Level 1</strong></td><td>&lt;70 및 ≥54 mg/dL</td><td>아드레날린성 반응 임계치, 무증상이라도 임상적으로 중요</td></tr>
+        <tr><td><strong>Level 2</strong></td><td>&lt;54 mg/dL</td><td>신경당결핍 증상 시작, 즉시 조치 필요</td></tr>
+        <tr><td><strong>Level 3</strong></td><td>수치 무관</td><td>타인의 도움이 필요한 중증 정신·신체 기능 변화</td></tr>
+      </table>
+    </div>
+
+    <div class="alert alert-warn" style="margin-top:8px"><span>⚠️</span><span>증상 없는 Level 2 저혈당은 <strong>저혈당 인지 저하</strong>를 시사 — 치료계획 재검토가 필요하다.</span></div>
+    <div class="alert alert-danger"><span>🚫</span><span>Level 3 저혈당은 의식소실·발작·혼수·사망으로 진행할 수 있으며, ACCORD·ADVANCE 양쪽 군에서 사망률과 연관되었다.</span></div>
+    <div class="alert alert-info"><span>ℹ️</span><span>Level 2·3 사건 1회 이상 발생 시 치료계획(약물 디인텐시피케이션·전환 포함)을 반드시 재평가해야 한다(Rec 6.19).</span></div>
+  </div>
+</div>
+
+<!-- ═══ MODAL: 고혈당 위기 ═══ -->
+<div id="crisisModal" class="modal-overlay" onclick="closeModalOutside(event,'crisisModal')">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal('crisisModal')">✕</button>
+    <div class="modal-title">🚨 고혈당 위기 — DKA와 HHS</div>
+
+    <div class="alert alert-info" style="margin:0 0 12px"><span>💡</span><span>당뇨병성 케토산증(DKA)과 고혈당고삼투압상태(HHS)는 심각하고 급성이며 생명을 위협하는 고혈당 응급상황으로, 최근 10년간 1형·2형당뇨 모두에서 발생률이 증가하고 있다.</span></div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">DKA vs HHS 비교</div>
+      <table class="modal-table">
+        <tr><th>항목</th><th>DKA</th><th>HHS</th></tr>
+        <tr><td>주요 당뇨유형</td><td>1형당뇨에서 더 흔함</td><td>2형당뇨에서 더 흔함</td></tr>
+        <tr><td>체액 손실</td><td>상대적으로 적음</td><td>더 큰 체액 손실 동반</td></tr>
+        <tr><td>흔한 유발요인</td><td>인슐린 누락, SGLT2i, 질병</td><td>급성질환(흔히 감염)</td></tr>
+        <tr><td>치료 장소</td><td>경증은 외래 관리 가능</td><td>즉시 입원 평가·치료 필요</td></tr>
+      </table>
+    </div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">주요 위험인자(Table 6.8)</div>
+      <table class="modal-table">
+        <tr><th>위험인자</th></tr>
+        <tr><td>1형당뇨/절대적 인슐린결핍, 젊은 연령</td></tr>
+        <tr><td>고혈당·저혈당 위기 병력</td></tr>
+        <tr><td>높은 A1C, 인슐린 절약(rationing)</td></tr>
+        <tr><td>SGLT2 억제제 사용(1형당뇨에서 5–17배 위험 증가)</td></tr>
+        <tr><td>행동건강질환(우울증·양극성장애·섭식장애), 알코올·물질사용</td></tr>
+        <tr><td>건강의 사회적 결정요인</td></tr>
+      </table>
+    </div>
+
+    <div class="alert alert-success" style="margin-top:4px"><span>✅</span><span>혈중 케톤 모니터링은 요케톤 모니터링 대비 응급실/입원 위험을 약 50% 감소시켰다(6개월 RCT).</span></div>
+  </div>
+</div>
+
+<script>
+const FONT_ZOOM_LEVELS = [1, 1.25, 1.5];
+let fontZoomIndex = 0;
+
+function applyFontZoom(scale) {
+  document.documentElement.style.setProperty('--fscale', scale);
+  const label = document.getElementById('font-zoom-label');
+  if (label) label.textContent = Math.round(scale * 100) + '%';
+}
+
+function cycleFontZoom() {
+  fontZoomIndex = (fontZoomIndex + 1) % FONT_ZOOM_LEVELS.length;
+  applyFontZoom(FONT_ZOOM_LEVELS[fontZoomIndex]);
+}
+
+function showTab(id){
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('tab-'+id).classList.add('active');
+  event.target.classList.add('active');
+}
+function toggleCard(el){
+  el.classList.toggle('open');
+  el.nextElementSibling.classList.toggle('collapsed');
+}
+function toggleAcc(el){
+  const b=el.nextElementSibling;
+  b.style.display=b.style.display==='block'?'none':'block';
+  el.querySelector('span:last-child').textContent=b.style.display==='block'?'▴':'▾';
+}
+
+function openModal(id){document.getElementById(id).classList.add('open');}
+function closeModal(id){document.getElementById(id).classList.remove('open');}
+function closeModalOutside(e,id){if(e.target===document.getElementById(id))closeModal(id);}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')document.querySelectorAll('.modal-overlay.open').forEach(m=>m.classList.remove('open'));});
+
+const abbrs=[
+  ['A1C','Glycated Hemoglobin (당화혈색소) — 약 2–3개월 평균혈당을 반영하는 1차 혈당평가 지표. 대부분 비임신 성인 목표 <7%.'],
+  ['CGM','Continuous Glucose Monitoring (연속혈당측정) — TIR/TAR/TBR 등 지표 제공, 저혈당 위험군에 특히 권장.'],
+  ['BGM','Blood Glucose Monitoring (자가혈당측정, 손끝채혈) — 인슐린 치료자의 핵심 모니터링 도구.'],
+  ['TIR','Time in Range (목표범위 시간) — 70–180 mg/dL 내 시간 비율. 목표 >70%(대부분 성인).'],
+  ['TAR','Time Above Range (목표범위 초과 시간) — Level 1(>180) / Level 2(>250) 고혈당 시간 비율.'],
+  ['TBR','Time Below Range (목표범위 미달 시간) — Level 1(<70) / Level 2(<54) 저혈당 시간 비율.'],
+  ['GMI','Glucose Management Indicator — CGM 데이터로 추정한 A1C 근사값(완전히 동일하지 않음).'],
+  ['CV','Coefficient of Variation (혈당 변동계수) — 목표 ≤36%, 저혈당 위험과 연관.'],
+  ['eAG','Estimated Average Glucose (추정평균혈당) — A1C로부터 환산한 평균혈당치, ADAG 연구 기반.'],
+  ['ADAG','A1C-Derived Average Glucose (연구) — A1C-평균혈당 상관관계(r=0.92)를 정립한 국제 연구.'],
+  ['NGSP','National Glycohemoglobin Standardization Program — A1C 검사 표준화 프로그램.'],
+  ['DCCT','Diabetes Control and Complications Trial — 1형당뇨 강화혈당관리의 미세혈관 이득을 입증한 대규모 RCT.'],
+  ['EDIC','Epidemiology of Diabetes Interventions and Complications — DCCT 후속 장기추적 연구, legacy effect 입증.'],
+  ['UKPDS','UK Prospective Diabetes Study — 2형당뇨 강화혈당관리의 미세혈관 이득을 입증한 대규모 연구.'],
+  ['ACCORD','Action to Control Cardiovascular Risk in Diabetes — 근치료 목표 추구 시 총사망률 증가로 중단된 2형당뇨 RCT.'],
+  ['ADVANCE','Action in Diabetes and Vascular Disease: Preterax and Diamicron MR Controlled Evaluation — 2형당뇨 강화혈당관리 RCT.'],
+  ['VADT','Veterans Affairs Diabetes Trial — 2형당뇨 강화혈당관리 RCT, 장기추적에서 CVD 이득 확인.'],
+  ['ACCORDION','ACCORD Follow-On Study — ACCORD 후속 추적, 일반관리 복귀 후 초과사망률 소실 확인.'],
+  ['ADVANCE-ON','ADVANCE Post Trial Observational Study — ADVANCE 후속 10년 추적 연구.'],
+  ['SGLT2','Sodium-Glucose Cotransporter 2 (억제제) — 심·신장 보호 효과, 1형당뇨에서 DKA 위험 5–17배 증가.'],
+  ['GLP-1 RA','Glucagon-Like Peptide 1 Receptor Agonist — 심혈관·체중 이득, 저혈당 위험 낮음.'],
+  ['DKA','Diabetic Ketoacidosis (당뇨병성 케토산증) — 급성 생명위협 고혈당 응급상황, 1형당뇨에서 더 흔함.'],
+  ['HHS','Hyperglycemic Hyperosmolar State (고혈당고삼투압상태) — 급성 고혈당 응급상황, 2형당뇨에서 더 흔하고 체액손실이 더 큼.'],
+  ['CKM','Continuous Ketone Monitoring (연속케톤모니터링) — DKA 예방을 위한 신기술, 향후 활용 기대.'],
+  ['POC','Point-of-Care (검사) — 진료 현장 즉시검사, A1C POC는 검사실 검사보다 정확도가 낮을 수 있음.'],
+  ['G6PD','Glucose-6-Phosphate Dehydrogenase 결핍 — A1C 정확도를 저하시키는 적혈구 관련 상태.'],
+  ['HbSS','겸상적혈구병(동형접합) — HbA가 없어 A1C 측정이 불가능한 혈색소 변이.'],
+  ['HARPdoc','Hypoglycaemia Awareness Restoration Programme — 저혈당 인지 회복을 위한 근거기반 훈련 프로그램.'],
+  ['BGAT','Blood Glucose Awareness Training — 저혈당 인지 훈련 프로그램, 장기효과 입증.'],
+  ['HypoA-Q','Hypoglycaemia Awareness Questionnaire — 저혈당 인지 저하 평가를 위한 다영역 설문도구.'],
+  ['CSII','Continuous Subcutaneous Insulin Infusion (인슐린펌프) — 강화인슐린요법의 한 형태, 저혈당 위험 증가와 연관.'],
+  ['AID','Automated Insulin Delivery (자동인슐린전달시스템) — 저혈당 자동중단 기능으로 저혈당 감소 효과.'],
+  ['MDI','Multiple Daily Injections (다회인슐린주사) — 강화인슐린요법의 한 형태.'],
+  ['eGFR','estimated Glomerular Filtration Rate (추정 사구체여과율) — <60은 저혈당 주요 위험인자 중 하나(CKD).'],
+  ['CKD','Chronic Kidney Disease (만성콩팥병) — 저혈당 위험 증가 및 SGLT2i 적응증과 관련.'],
+];
+
+function buildAbbr(){
+  const sorted=abbrs.slice().sort((a,b)=>a[0].localeCompare(b[0]));
+  document.getElementById('abbr-grid-drop').innerHTML=sorted.map(a=>
+    `<div style="background:var(--surface2);border:1px solid var(--border);border-radius:5px;padding:6px 10px;margin-bottom:4px;" data-term="${a[0].toLowerCase()}" data-def="${a[1].toLowerCase()}">
+       <span style="font-weight:700;color:var(--accent2);font-size: calc(12px * var(--fscale, 1));font-family:'Courier New',monospace">${a[0]}</span>
+       <div style="font-size: calc(11px * var(--fscale, 1));color:var(--text2);line-height:1.45;margin-top:2px">${a[1]}</div>
+     </div>`).join('');
+}
+function filterAbbr(val){
+  const v=val.toLowerCase().trim();
+  const drop=document.getElementById('abbr-dropdown');
+  const items=document.querySelectorAll('#abbr-grid-drop [data-term]');
+  if(!v){drop.style.display='none';return;}
+  const inp=document.getElementById('abbr-input');
+  const rect=inp.getBoundingClientRect();
+  const w=440;
+  let left=rect.right-w;if(left<8)left=8;
+  drop.style.top=(rect.bottom+4)+'px';drop.style.left=left+'px';
+  drop.style.display='block';
+  items.forEach(el=>{
+    const show=el.dataset.term.startsWith(v)||el.dataset.def.includes(v);
+    el.style.display=show?'':'none';
+  });
+}
+document.addEventListener('click',e=>{
+  const inp=document.getElementById('abbr-input');
+  const drop=document.getElementById('abbr-dropdown');
+  if(inp&&!inp.contains(e.target)&&drop&&!drop.contains(e.target))drop.style.display='none';
+});
+buildAbbr();
+</script>
+</body>
+</html>

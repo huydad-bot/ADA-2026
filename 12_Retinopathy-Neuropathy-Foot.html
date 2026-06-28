@@ -1,0 +1,1176 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ADA 2026 망막병증·신경병증·족부관리</title>
+<style>
+  :root {
+    --bg:#f6f8fa;--surface:#fff;--surface2:#f0f2f5;--border:#d0d7de;
+    --accent:#0969da;--accent2:#0550ae;--green:#1a7f37;--yellow:#9a6700;
+    --red:#cf222e;--orange:#bc4c00;--text:#1f2328;--text2:#57606a;
+    --teal:#0a7c8a;--purple:#5a3ea0;--fscale:1;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'Pretendard','Noto Sans KR',-apple-system,sans-serif;background:var(--bg);color:var(--text);font-size: calc(13px * var(--fscale, 1));line-height:1.5;}
+  header{background:var(--surface);border-bottom:1px solid var(--border);padding:12px 16px 8px;display:flex;flex-direction:column;align-items:center;gap:4px;position:sticky;top:0;z-index:100;}
+  .header-inner{width:100%;max-width:960px;display:flex;flex-direction:column;align-items:center;gap:4px;}
+  .logo-badge{background:var(--accent2);color:#fff;font-size: calc(10px * var(--fscale, 1));font-weight:700;padding:3px 8px;border-radius:4px;letter-spacing:.5px;}
+  .tab-bar{display:flex;justify-content:center;background:var(--surface);border-bottom:1px solid var(--border);overflow-x:auto;scrollbar-width:none;}
+  .tab-bar::-webkit-scrollbar{display:none;}
+  .font-zoom-btn{display:flex;align-items:center;gap:3px;flex-shrink:0;margin:4px 4px 4px 6px;padding:5px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:6px;color:var(--accent2);font-size:calc(11px * var(--fscale, 1));font-weight:700;cursor:pointer;user-select:none;white-space:nowrap;transition:background .15s;}
+  .font-zoom-btn:hover{background:var(--border);}
+  .font-zoom-btn .fz-icon{font-size:calc(12px * var(--fscale, 1));}
+  .tab-bar-inner{width:100%;max-width:960px;display:flex;align-items:center;gap:2px;padding:0 4px;}
+  .tab{padding:7px 11px;font-size: calc(11.5px * var(--fscale, 1));color:var(--text2);cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;transition:color .15s,border-color .15s;user-select:none;flex-shrink:0;}
+  .tab:hover{color:var(--text);}
+  .tab.active{color:var(--accent2);border-bottom-color:var(--accent2);}
+  .tab-abbr-wrap{display:flex;align-items:center;padding:4px 4px;margin-left:4px;flex-shrink:0;position:relative;}
+  .main{padding:12px 16px;max-width:960px;margin:0 auto;}
+  .panel{display:none;}
+  .panel.active{display:block;}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+  .grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;}
+  @media(max-width:680px){.grid2,.grid3{grid-template-columns:1fr;}}
+  .card{background:var(--surface);border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-bottom:10px;}
+  .card-header{background:var(--surface2);padding:8px 12px;font-size: calc(12px * var(--fscale, 1));font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.5px;border-bottom:1px solid var(--border);cursor:pointer;display:flex;align-items:center;justify-content:space-between;user-select:none;}
+  .card-header .toggle{font-size: calc(13px * var(--fscale, 1));transition:transform .2s;}
+  .card-header.open .toggle{transform:rotate(180deg);}
+  .card-body{padding:10px 12px;}
+  .card-body.collapsed{display:none;}
+  .stat-row{display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap;}
+  .stat-box{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:10px 14px;flex:1;min-width:90px;text-align:center;}
+  .stat-box.clickable{cursor:pointer;transition:box-shadow .15s,border-color .15s;}
+  .stat-box.clickable:hover{border-color:var(--accent2);box-shadow:0 2px 8px rgba(5,80,174,.15);}
+  .stat-val{font-size: calc(18px * var(--fscale, 1));font-weight:700;color:var(--accent2);}
+  .stat-lbl{font-size: calc(10px * var(--fscale, 1));color:var(--text2);margin-top:2px;}
+  .stat-hint{font-size: calc(9px * var(--fscale, 1));color:var(--accent2);margin-top:4px;opacity:.7;}
+  /* Modal */
+  .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:500;align-items:center;justify-content:center;}
+  .modal-overlay.open{display:flex;}
+  .modal-box{background:var(--surface);border-radius:12px;padding:20px;max-width:680px;width:92%;max-height:84vh;overflow-y:auto;box-shadow:0 16px 48px rgba(0,0,0,.22);position:relative;}
+  .modal-close{position:absolute;top:12px;right:14px;background:none;border:none;font-size: calc(18px * var(--fscale, 1));cursor:pointer;color:var(--text2);line-height:1;}
+  .modal-title{font-size: calc(15px * var(--fscale, 1));font-weight:700;color:var(--text);margin-bottom:12px;padding-right:20px;line-height:1.4;}
+  .modal-section{margin-bottom:12px;}
+  .modal-section-title{font-size: calc(11px * var(--fscale, 1));font-weight:700;color:var(--accent2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;border-bottom:1px solid var(--border);padding-bottom:4px;}
+  .modal-table{width:100%;border-collapse:collapse;font-size: calc(11.5px * var(--fscale, 1));}
+  .modal-table th{background:var(--surface2);color:var(--text2);padding:4px 8px;font-size: calc(10.5px * var(--fscale, 1));font-weight:600;text-align:left;border-bottom:1px solid var(--border);}
+  .modal-table td{padding:5px 8px;border-bottom:1px solid var(--border);vertical-align:top;}
+  .modal-table tr:last-child td{border-bottom:none;}
+  .rec-list{list-style:none;}
+  .rec-item{padding:7px 0;border-bottom:1px solid var(--border);display:flex;gap:8px;align-items:flex-start;}
+  .rec-item:last-child{border-bottom:none;}
+  .rec-text{font-size: calc(12px * var(--fscale, 1));color:var(--text);line-height:1.65;}
+  .rec-text strong{color:#1f2328;}
+  .badge{display:inline-flex;align-items:center;padding:2px 8px;border-radius:10px;font-size: calc(10px * var(--fscale, 1));font-weight:700;white-space:nowrap;flex-shrink:0;margin-top:1px;}
+  .badge-A{background:#dafbe1;color:#116329;border:1px solid #1a7f37;}
+  .badge-B{background:#ddf4ff;color:var(--accent2);border:1px solid var(--accent2);}
+  .badge-C{background:#fff8c5;color:#7a4b00;border:1px solid #d4a017;}
+  .badge-E{background:#f3e5f5;color:#5a3ea0;border:1px solid #5a3ea0;}
+  .alert{padding:8px 12px;border-radius:6px;font-size: calc(12px * var(--fscale, 1));margin:8px 0;display:flex;gap:8px;align-items:flex-start;}
+  .alert-info{background:#ddf4ff;border-left:3px solid var(--accent2);color:#0550ae;}
+  .alert-warn{background:#fff8c5;border-left:3px solid #d4a017;color:#7a4b00;}
+  .alert-danger{background:#ffebe9;border-left:3px solid var(--red);color:#82071e;}
+  .alert-success{background:#dafbe1;border-left:3px solid var(--green);color:#116329;}
+  .alert-teal{background:#e0f5f5;border-left:3px solid var(--teal);color:#075050;}
+  .alert-orange{background:#fff3e0;border-left:3px solid var(--orange);color:#7a3500;}
+  .alert-purple{background:#f3e5f5;border-left:3px solid var(--purple);color:#5a3ea0;}
+  .tc-table{width:100%;border-collapse:collapse;font-size: calc(11.5px * var(--fscale, 1));}
+  .tc-table th{background:var(--surface2);color:var(--text2);padding:5px 8px;font-size: calc(10.5px * var(--fscale, 1));text-transform:uppercase;letter-spacing:.3px;font-weight:600;text-align:left;border-bottom:1px solid var(--border);}
+  .tc-table td{padding:5px 8px;border-bottom:1px solid var(--border);vertical-align:top;}
+  .tc-table tr:last-child td{border-bottom:none;}
+  .tc-table tr:hover td{background:rgba(0,0,0,.02);}
+  .acc{border:1px solid var(--border);border-radius:6px;margin-bottom:6px;overflow:hidden;}
+  .acc-hdr{background:var(--surface2);padding:7px 12px;font-size: calc(12px * var(--fscale, 1));font-weight:600;color:var(--text);cursor:pointer;display:flex;justify-content:space-between;align-items:center;user-select:none;}
+  .acc-hdr:hover{background:#e8eaec;}
+  .acc-body{display:none;padding:10px 12px;font-size: calc(12px * var(--fscale, 1));line-height:1.65;}
+  .flow-box{border:1px solid var(--border);border-radius:6px;background:var(--surface);padding:8px 12px;margin-bottom:6px;font-size: calc(12px * var(--fscale, 1));line-height:1.6;}
+  .flow-arrow{text-align:center;color:var(--text2);font-size: calc(14px * var(--fscale, 1));margin:2px 0;}
+  .step-num{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;background:var(--accent2);color:#fff;font-size: calc(10px * var(--fscale, 1));font-weight:700;flex-shrink:0;margin-right:6px;}
+  ul.dot{padding-left:18px;}
+  ul.dot li{margin-bottom:3px;font-size: calc(12px * var(--fscale, 1));line-height:1.6;}
+  ol.num{padding-left:18px;}
+  ol.num li{margin-bottom:4px;font-size: calc(12px * var(--fscale, 1));line-height:1.6;}
+  ::-webkit-scrollbar{width:5px;height:5px;}
+  ::-webkit-scrollbar-track{background:var(--bg);}
+  ::-webkit-scrollbar-thumb{background:#c8d0d9;border-radius:3px;}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div style="display:flex;align-items:center;gap:10px">
+      <span class="logo-badge">ADA 2026</span>
+      <h1 style="font-size:17px;font-weight:700;color:var(--text)">망막병증·신경병증·족부관리</h1>
+    </div>
+    <div style="text-align:center;line-height:1.5">
+      <span style="color:var(--text2);font-size: calc(11px * var(--fscale, 1))">Standards of Care in Diabetes—2026, Section 12 — American Diabetes Association</span><br>
+      <span style="font-size: calc(10px * var(--fscale, 1));color:var(--text2)">Diabetes Care 2026;49(Suppl. 1):S261–S276 · doi: 10.2337/dc26-S012</span>
+    </div>
+    <div style="font-size: calc(10px * var(--fscale, 1));color:var(--text2);font-style:italic;">This tool is not officially endorsed by the American Diabetes Association (ADA).</div>
+  </div>
+</header>
+
+<div class="tab-bar">
+  <div class="tab-bar-inner">
+    <div id="font-zoom-btn" class="font-zoom-btn" onclick="cycleFontZoom()"><span class="fz-icon">🔠</span><span id="font-zoom-label">100%</span></div>
+    <div class="tab active" onclick="showTab('overview')">🏠 개요</div>
+    <div class="tab" onclick="showTab('retinopathy')">👁️ 망막병증</div>
+    <div class="tab" onclick="showTab('neuropathy')">⚡ 신경병증</div>
+    <div class="tab" onclick="showTab('painmgmt')">💊 통증·자율신경 관리</div>
+    <div class="tab" onclick="showTab('footrisk')">🦶 족부 평가</div>
+    <div class="tab" onclick="showTab('foottx')">🩹 족부 치료</div>
+    <div class="tab" onclick="showTab('tables')">📁 기준표 모음</div>
+    <div class="tab-abbr-wrap">
+      <div style="position:relative;display:flex;align-items:center;flex-shrink:0">
+        <span style="position:absolute;left:8px;color:var(--text2);font-size: calc(12px * var(--fscale, 1));pointer-events:none">🔍</span>
+        <input id="abbr-input" type="text" placeholder="약어" oninput="filterAbbr(this.value)"
+          style="background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:4px 8px 4px 26px;color:var(--text);font-size: calc(12px * var(--fscale, 1));width:90px;outline:none;"
+          onfocus="this.style.borderColor='var(--accent2)'" onblur="this.style.borderColor='var(--border)'">
+      </div>
+      <div id="abbr-dropdown" style="display:none;position:fixed;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:8px;width:440px;max-height:360px;overflow-y:auto;z-index:300;box-shadow:0 8px 24px rgba(0,0,0,.12)">
+        <div id="abbr-grid-drop"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="main">
+
+<!-- ═══ OVERVIEW ═══ -->
+<div id="tab-overview" class="panel active">
+  <div class="stat-row">
+    <div class="stat-box clickable" onclick="openModal('screenModal')"><div class="stat-val">5년 / 진단시</div><div class="stat-lbl">망막 검진 시작 (1형/2형)</div><div class="stat-hint">▸ 클릭하여 상세 보기</div></div>
+    <div class="stat-box clickable" onclick="openModal('iwgdfModal')"><div class="stat-val">0–3</div><div class="stat-lbl">IWGDF 족부 위험 등급</div><div class="stat-hint">▸ 클릭하여 상세 보기</div></div>
+    <div class="stat-box clickable" onclick="openModal('painrxModal')"><div class="stat-val">4계열</div><div class="stat-lbl">신경병증성 통증 1차 약물</div><div class="stat-hint">▸ 클릭하여 상세 보기</div></div>
+    <div class="stat-box clickable" onclick="openModal('antivegfModal')"><div class="stat-val">Anti-VEGF</div><div class="stat-lbl">DME 1차 치료</div><div class="stat-hint">▸ 클릭하여 상세 보기</div></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>📋 3대 미세혈관 합병증 — 한눈에 보기</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <div class="flow-box" style="border-left:3px solid var(--accent2)">
+        <strong>① 당뇨병성 망막병증 (Diabetic Retinopathy)</strong><br>
+        <span style="color:var(--text2);font-size: calc(11px * var(--fscale, 1))">고소득국가 20–74세 신규 실명의 가장 흔한 원인. 미세혈관류 → 출혈/허혈 → 신생혈관(PDR) → 황반부종(DME)으로 진행</span>
+      </div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-box" style="border-left:3px solid var(--green)">
+        <strong>② 당뇨병성 신경병증 (Diabetic Neuropathy)</strong><br>
+        <span style="font-size: calc(11.5px * var(--fscale, 1))">배제 진단. DPN 최대 50%는 무증상. 자율신경병증(CAN)은 심혈관 사망률과 독립적으로 연관</span>
+      </div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-box" style="border-left:3px solid var(--yellow)">
+        <strong>③ 족부 관리 (Foot Care)</strong><br>
+        <span style="font-size: calc(11.5px * var(--fscale, 1))">말초신경병증(LOPS) + 말초동맥질환(PAD) + 족부 변형의 삼중고가 족부궤양(DFU)의 핵심 기전. 연 1회 종합 족부평가 필수</span>
+      </div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-box" style="border-left:3px solid var(--orange)">
+        <strong>④ 공통 위험인자 관리</strong><br>
+        <span style="font-size: calc(11.5px * var(--fscale, 1))">혈당·혈압·지질 관리가 세 합병증 모두의 발생/진행을 늦춤 — 단, 급격한 A1C 강하는 망막병증 초기 악화 위험</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <div class="card-header open" onclick="toggleCard(this)">
+        <span>📌 핵심 권고문 요약</span><span class="toggle">▾</span>
+      </div>
+      <div class="card-body">
+        <ul class="rec-list">
+          <li class="rec-item"><span class="badge badge-A">A</span><span class="rec-text"><strong>12.1/12.2</strong> 혈당·혈압·지질 목표 달성으로 망막병증 위험/진행 감소</span></li>
+          <li class="rec-item"><span class="badge badge-B">B</span><span class="rec-text"><strong>12.3–12.6</strong> 1형 5년 후·2형 진단 시 안과 검진 시작, AI 선별 프로그램 허용</span></li>
+          <li class="rec-item"><span class="badge badge-B">B</span><span class="rec-text"><strong>12.7/12.8</strong> 임신 계획·임신 중 망막병증 위험 상담 및 분기별 검진</span></li>
+          <li class="rec-item"><span class="badge badge-A">A</span><span class="rec-text"><strong>12.9–12.13</strong> DME·PDR 즉시 안과 의뢰, 범망막광응고술·anti-VEGF·국소레이저/스테로이드</span></li>
+          <li class="rec-item"><span class="badge badge-A">A</span><span class="rec-text"><strong>12.14</strong> 망막병증은 아스피린 심보호요법의 금기가 아님</span></li>
+          <li class="rec-item"><span class="badge badge-B">B</span><span class="rec-text"><strong>12.17–12.19</strong> DPN·자율신경병증 진단 시점부터 매년 선별 (10g 단일사 필수)</span></li>
+          <li class="rec-item"><span class="badge badge-B">B</span><span class="rec-text"><strong>12.20</strong> 혈당·체중·혈압·지질 관리로 신경병증 발생 예방/진행 둔화</span></li>
+          <li class="rec-item"><span class="badge badge-A">A</span><span class="rec-text"><strong>12.21/12.22</strong> 가바펜티노이드·SNRI·TCA·나트륨채널차단제 1차 치료, 오피오이드 비권장</span></li>
+          <li class="rec-item"><span class="badge badge-A">A</span><span class="rec-text"><strong>12.23–12.27</strong> 연 1회 종합 족부평가(피부·변형·신경·혈관), LOPS 환자는 매 방문 검사</span></li>
+          <li class="rec-item"><span class="badge badge-B">B</span><span class="rec-text"><strong>12.28/12.29</strong> 고위험 족부는 인터프로페셔널·족부전문의 의뢰, 흡연 시 금연상담</span></li>
+          <li class="rec-item"><span class="badge badge-B">B</span><span class="rec-text"><strong>12.30/12.31</strong> 일상 자가 발 검사 교육, 고위험군 맞춤형 치료용 신발 권고</span></li>
+          <li class="rec-item"><span class="badge badge-A">A</span><span class="rec-text"><strong>12.32</strong> 표준치료에 반응 없는 만성 DFU에 음압치료·피부대체물·국소산소요법 고려</span></li>
+        </ul>
+      </div>
+    </div>
+
+    <div>
+      <div class="card">
+        <div class="card-header open" onclick="toggleCard(this)">
+          <span>⚠️ 권고 등급 체계 (Evidence Grading)</span><span class="toggle">▾</span>
+        </div>
+        <div class="card-body">
+          <table class="tc-table">
+            <tr><th>등급</th><th>의미</th></tr>
+            <tr><td><span class="badge badge-A">A</span></td><td>명확한 근거 — 잘 수행된 다기관 RCT 또는 메타분석</td></tr>
+            <tr><td><span class="badge badge-B">B</span></td><td>뒷받침되는 근거 — 잘 수행된 코호트 연구 등</td></tr>
+            <tr><td><span class="badge badge-C">C</span></td><td>뒷받침되는 근거 부족 — 대조군 없는 연구, 사례 보고</td></tr>
+            <tr><td><span class="badge badge-E">E</span></td><td>전문가 합의 또는 임상 경험 (Expert consensus)</td></tr>
+          </table>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header open" onclick="toggleCard(this)">
+          <span>🔑 핵심 개념</span><span class="toggle">▾</span>
+        </div>
+        <div class="card-body">
+          <div class="alert alert-info"><span>ℹ️</span><span>대사기억(metabolic memory) — DCCT/EDIC: 조기 집중혈당관리의 미세혈관 보호효과는 이후 혈당이 상승해도 ~10년간 지속</span></div>
+          <div class="alert alert-warn"><span>⚠️</span><span>GLP-1 RA 강화 시 <strong>A1C 급강하로 망막병증 초기 악화</strong> 가능 — 치료 강화 전후 망막병증 상태 평가 필요</span></div>
+          <div class="alert alert-danger"><span>🚫</span><span>DPN은 <strong>배제 진단</strong> — 알코올, B12 결핍, 갑상선저하증, 신질환, 악성종양 등 다른 원인을 먼저 배제할 것</span></div>
+          <div class="alert alert-teal"><span>💡</span><span>말초신경병증·minor trauma·족부변형의 삼중고가 DFU 환자의 63% 이상에서 동반 — 세 가지를 모두 평가해야 함</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span>🆕 2026 업데이트 핵심 포인트</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body collapsed">
+      <ul class="dot">
+        <li><strong>GLP-1 RA와 안과 합병증</strong> — 비동맥성 전방 허혈성 시신경병증(NAION), 녹내장, 신생혈관성 AMD와의 연관성 데이터 상충, 추가 연구 필요</li>
+        <li><strong>GLP-1 RA의 PAD 이득</strong> — STRIDE 연구: 증상성 PAD 초기 단계에서 보행거리·삶의 질 개선, 기저 당뇨 특성과 무관하게 일관된 효과</li>
+        <li><strong>canagliflozin과 하지절단</strong> — CANVAS 연구에서 절단 위험 증가, 중대한 하지 합병증 발생 시 중단 고려</li>
+        <li><strong>국소산소요법(Topical Oxygen Therapy)</strong> — 다수의 고품질 RCT·메타분석에서 만성 DFU 치유 효과 입증, 가정 치료 가능</li>
+        <li><strong>AAN 신경병증성 통증 가이드라인 업데이트</strong> — 가바펜티노이드·SNRI·나트륨채널차단제·TCA 동등 효능, 오피오이드(트라마돌·타펜타돌 포함) 사용 비권장 강화</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ RETINOPATHY ═══ -->
+<div id="tab-retinopathy" class="panel">
+  <div class="alert alert-orange"><span>👁️</span><span>당뇨병성 망막병증은 고도로 특이적인 신경혈관 합병증으로, 당뇨병 유병기간과 만성 고혈당 정도에 비례한다. 고소득국가 20–74세 신규 실명의 가장 흔한 원인이다.</span></div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>🔬 자연경과 및 병태생리</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <div class="flow-box" style="border-left:3px solid var(--accent2)"><strong>① 미세혈관류(microaneurysm)</strong> — 가장 초기 병변</div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-box" style="border-left:3px solid var(--yellow)"><strong>② 망막출혈·허혈</strong></div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-box" style="border-left:3px solid var(--orange)"><strong>③ 신생혈관증식 → 증식성 망막병증(PDR)</strong> — 허혈에 대한 반응</div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-box" style="border-left:3px solid var(--red)"><strong>④ 황반부종(DME)·유리체출혈·견인성 망막박리</strong> — 어느 단계에서든 누출 발생 가능</div>
+      <ul class="dot" style="margin-top:10px">
+        <li>위험인자: 당뇨병 유병기간, 만성 고혈당, 신증, 고혈압, 이상지질혈증</li>
+        <li>녹내장·백내장도 당뇨병 환자에서 더 일찍, 더 흔하게 발생</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span>💉 GLP-1 RA와 안과 합병증 — 상충하는 데이터</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body collapsed">
+      <table class="tc-table">
+        <tr><th>방향</th><th>내용</th></tr>
+        <tr><td style="color:var(--red);font-weight:600">위험 가능성</td><td>liraglutide·semaglutide·dulaglutide — RCT에서 망막병증 경미 악화 위험과 연관. 비동맥성 전방 허혈성 시신경병증(NAION), 신생혈관성 AMD와 연관된 매칭 코호트 연구 존재(데이터 제한적)</td></tr>
+        <tr><td style="color:var(--green);font-weight:600">이득 가능성</td><td>안압 저하, 녹내장 위험 감소와의 연관성 보고</td></tr>
+      </table>
+      <div class="alert alert-warn" style="margin-top:8px"><span>⚠️</span><span>치료 강화(특히 GLP-1 RA)로 <strong>A1C가 급격히 강하</strong>될 때 망막병증 초기 악화 위험 — 혈당강하요법 강화 시점에 망막병증 상태를 평가해야 한다.</span></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>📅 선별검사 권고</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="rec-list">
+        <li class="rec-item"><span class="badge badge-B">B</span><span class="rec-text"><strong>12.3</strong> 1형당뇨: 발병 5년 후 산동 종합 안과검진 시작</span></li>
+        <li class="rec-item"><span class="badge badge-B">B</span><span class="rec-text"><strong>12.4</strong> 2형당뇨: 진단 시점에 산동 종합 안과검진 시작</span></li>
+        <li class="rec-item"><span class="badge badge-B">B</span><span class="rec-text"><strong>12.5</strong> 망막병증 없고 혈당 목표 달성 시 1–2년 간격 고려 가능, 망막병증 있으면 매년(진행 시 더 빈번)</span></li>
+        <li class="rec-item"><span class="badge badge-B">B</span><span class="rec-text"><strong>12.6</strong> 원격판독 망막촬영·FDA 승인 AI 알고리즘 — 적절한 선별전략, 단 의뢰경로 확보 필수</span></li>
+        <li class="rec-item"><span class="badge badge-B">B</span><span class="rec-text"><strong>12.7</strong> 임신 계획/임신 중 1형·2형당뇨 — 망막병증 발생/진행 위험 상담</span></li>
+        <li class="rec-item"><span class="badge badge-B">B</span><span class="rec-text"><strong>12.8</strong> 임신 전 검진 + 1분기 검진, 망막병증 정도에 따라 매 분기·산후 1년까지 모니터링</span></li>
+      </ul>
+      <table class="tc-table" style="margin-top:10px">
+        <tr><th>상황</th><th>검진 시작/간격</th></tr>
+        <tr><td>1형당뇨</td><td>발병 5년 후 시작 (망막병증 발현까지 최소 5년 소요)</td></tr>
+        <tr><td>2형당뇨</td><td>진단 시점 즉시 (진단 전 무진단 고혈당 기간 동안 이미 망막병증 위험 존재)</td></tr>
+        <tr><td>망막병증 없음 + 혈당목표 달성</td><td>1–2년 간격 고려 가능 (3년 간격 후향 연구에서도 유의한 망막병증 발생 위험 낮음)</td></tr>
+        <tr><td>망막병증 있음</td><td>최소 매년, 진행/시력위협 시 더 빈번</td></tr>
+        <tr><td>임신성 당뇨(GDM)</td><td>임신 중 안과검진 불필요 (망막병증 위험 증가 없음)</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <div class="card-header" onclick="toggleCard(this)">
+        <span>🤖 FDA 승인 AI 선별 플랫폼 (3종)</span><span class="toggle">▾</span>
+      </div>
+      <div class="card-body collapsed">
+        <ul class="dot">
+          <li><strong>AEYE-DS</strong> (AEYE Health)</li>
+          <li><strong>EyeArt</strong> AI screening system (Eyenuk)</li>
+          <li><strong>LumineticsCore</strong>, formerly IDx-DR (Digital Diagnostics)</li>
+        </ul>
+        <div class="alert alert-info" style="margin-top:8px"><span>ℹ️</span><span>대부분 보험 적용. 단, 사진 품질 불량 시 또는 이상 발견 시 대면 검진 필요 — 사진 검진은 산동 종합검진의 대체재가 아님</span></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header" onclick="toggleCard(this)">
+        <span>🤰 임신 중 망막병증 진행률 (메타분석, 18개 연구)</span><span class="toggle">▾</span>
+      </div>
+      <div class="card-body collapsed">
+        <table class="tc-table">
+          <tr><th>지표</th><th>임신 초기 유병률/100건당</th></tr>
+          <tr><td>임신 초기 망막병증(모든 단계)</td><td>52.3%</td></tr>
+          <tr><td>임신 초기 PDR</td><td>6.1%</td></tr>
+          <tr><td>신규 망막병증 발생</td><td>15.0 (95% CI 9.9–20.8)</td></tr>
+          <tr><td>비증식 망막병증 악화</td><td>31.0 (95% CI 23.2–39.2)</td></tr>
+          <tr><td>비증식→증식 진행</td><td>6.3 (95% CI 3.3–10.0)</td></tr>
+          <tr><td>증식성 망막병증 악화</td><td>37.0 (95% CI 21.2–54.0)</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>💊 치료 — 분류별 권고</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="rec-list">
+        <li class="rec-item"><span class="badge badge-A">A</span><span class="rec-text"><strong>12.9</strong> 모든 단계 DME, 중등도 이상 비증식 망막병증, 모든 PDR → 즉시 숙련 안과의 의뢰</span></li>
+        <li class="rec-item"><span class="badge badge-A">A</span><span class="rec-text"><strong>12.10</strong> 범망막광응고술(PRP) — 고위험 PDR·중증 비증식 망막병증의 시력손실 위험 감소</span></li>
+        <li class="rec-item"><span class="badge badge-A">A</span><span class="rec-text"><strong>12.11</strong> Anti-VEGF 유리체내주사 — PDR에서 PRP의 합리적 대안, 시력손실 위험도 감소</span></li>
+        <li class="rec-item"><span class="badge badge-A">A</span><span class="rec-text"><strong>12.12</strong> 중심부 침범 DME — anti-VEGF가 1차 치료</span></li>
+        <li class="rec-item"><span class="badge badge-A">A</span><span class="rec-text"><strong>12.13</strong> Anti-VEGF 실패/적합하지 않은 경우 — 국소레이저·유리체내 스테로이드</span></li>
+        <li class="rec-item"><span class="badge badge-A">A</span><span class="rec-text"><strong>12.14</strong> 망막병증은 아스피린 심보호요법의 금기가 아님 — 망막출혈 위험 증가시키지 않음</span></li>
+      </ul>
+      <div class="grid2" style="margin-top:10px">
+        <div>
+          <div class="acc">
+            <div class="acc-hdr" onclick="toggleAcc(this)"><span>레이저 광응고술 (DRS·ETDRS)</span><span>▾</span></div>
+            <div class="acc-body">PRP는 고위험 PDR에서 중증 시력손실을 15.9%→6.4%로 감소(DRS). 진행된 기저질환(시신경판 신생혈관·유리체출혈)에서 이득 비율 최대. 국소/격자 레이저는 DME 2차 치료로 격하됨.</div>
+          </div>
+          <div class="acc">
+            <div class="acc-hdr" onclick="toggleAcc(this)"><span>Anti-VEGF 치료 약제</span><span>▾</span></div>
+            <div class="acc-body">FDA 승인: aflibercept(2mg/8mg), ranibizumab, brolucizumab, faricimab + 오프라벨 bevacizumab. 첫 12개월 4–8주 간격 주사 필요, 이후 빈도 감소. faricimab·aflibercept 8mg은 최대 16주 간격 조정 가능.</div>
+          </div>
+        </div>
+        <div>
+          <div class="acc">
+            <div class="acc-hdr" onclick="toggleAcc(this)"><span>보조 치료 — 혈압·지질·항혈소판</span><span>▾</span></div>
+            <div class="acc-body">혈압강하는 진행 감소(단, 수축기 &lt;120mmHg 엄격목표는 추가이득 없음). 이상지질혈증 있으면 fenofibrate 추가로 진행 둔화(특히 초기 망막병증). 스타틴은 DME·PDR 등 시력위협형 망막병증 감소와 연관. Pioglitazone·rosiglitazone은 DME 발생/악화와 연관 가능성(근거 상충).</div>
+          </div>
+          <div class="acc">
+            <div class="acc-hdr" onclick="toggleAcc(this)"><span>임신 중 anti-VEGF 사용</span><span>▾</span></div>
+            <div class="acc-body">FDA 임신 카테고리 C(동물실험에서 배아·태아 독성 시사, 인체 대조자료 없음). 잠재 이득이 위험을 상회하고 명확한 적응증이 있을 때만 사용. 고위험 PDR·중심부침범 DME에는 레이저 광응고술이 임신 중 시력손실 위험을 최소화할 수 있음.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span>👓 시각 재활 (Visual Rehabilitation)</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body collapsed">
+      <ul class="rec-list">
+        <li class="rec-item"><span class="badge badge-E">E</span><span class="rec-text"><strong>12.15</strong> 시력저하 경험자 — 시각재활 전문가의 종합평가 상담·의뢰</span></li>
+        <li class="rec-item"><span class="badge badge-E">E</span><span class="rec-text"><strong>12.16</strong> 자가관리교육(혈당관리·저혈당 인지)과 함께 안과 지원자료 제공</span></li>
+      </ul>
+      <div class="alert alert-purple" style="margin-top:8px"><span>💡</span><span>미국 당뇨병 성인의 ~12%가 일정 수준의 시력장애를 겪으며, 이는 우울·불안·사회적 고립 및 일상생활 수행능력 저하로 이어질 수 있다.</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ NEUROPATHY ═══ -->
+<div id="tab-neuropathy" class="panel">
+  <div class="alert alert-orange"><span>⚡</span><span>당뇨병성 신경병증은 다양한 임상양상을 보이는 이질적 질환군이다. 당뇨병성 신경병증은 <strong>배제 진단</strong>이며, 치료 가능한 비당뇨병성 신경병증이 동반될 수 있음을 항상 고려해야 한다.</span></div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>📌 핵심 3가지 포인트</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <ol class="num">
+        <li><strong>배제 진단</strong> — 비당뇨병성 신경병증(치료 가능한 경우 포함)이 당뇨병 환자에서도 존재할 수 있음</li>
+        <li><strong>최대 50%가 무증상</strong> — 인지·예방적 발 관리가 없으면 손상, 족부궤양(DFU), 절단으로 이어질 위험. DFU는 표피 및 진피 일부의 결손(발목 이하)으로 정의되며 기능저하, 독립성 감소, 삶의 질 저하, 창상치료 비용, 감염, 입원, 하지절단, 사망으로 이어질 수 있음</li>
+        <li><strong>자율신경병증(CAN) 인지·치료</strong> — 증상 개선, 후유증 감소, 삶의 질 향상 가능. CAN은 심혈관질환을 악화시키고 심부전·급사에 기여할 수 있는 심각한 합병증</li>
+      </ol>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>🔍 선별 및 진단 — DPN (당뇨병성 말초신경병증)</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="rec-list">
+        <li class="rec-item"><span class="badge badge-B">B</span><span class="rec-text"><strong>12.17</strong> 2형당뇨 진단 시점부터, 1형당뇨 발병 5년 후부터, 이후 최소 매년 DPN 평가</span></li>
+        <li class="rec-item"><span class="badge badge-B">B</span><span class="rec-text"><strong>12.18</strong> 병력 + 온도/핀찌름(소섬유) + 128Hz 진동(대섬유) 평가, 모든 환자 매년 10g 단일사검사 시행</span></li>
+      </ul>
+      <table class="tc-table" style="margin-top:8px">
+        <tr><th>섬유 종류</th><th>증상/검사</th></tr>
+        <tr><td>소섬유 기능</td><td>초기 증상: 통증·이상감각(화끈거림·저림) / 검사: 핀찌름, 온도감각</td></tr>
+        <tr><td>대섬유 기능</td><td>균형장애(낙상 포함)·감각저하·보호감각소실(LOPS) / 검사: 하지반사, 진동감각(128Hz), 위치감각, 10g 단일사</td></tr>
+        <tr><td>보호감각</td><td>검사: 10g 단일사, Ipswich touch test</td></tr>
+      </table>
+      <div class="alert alert-info" style="margin-top:8px"><span>ℹ️</span><span>전기생리검사·척추 MRI·신경과 의뢰는 임상양상이 비전형적(급성/아급성 발현, 비길이의존성, 비대칭성, 운동침범)이거나 진단이 불명확할 때만 시행</span></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span>🚫 비당뇨병성 신경병증 — 반드시 배제할 원인</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body collapsed">
+      <div class="grid2">
+        <ul class="dot">
+          <li>독소(알코올)</li>
+          <li>신경독성 약물(화학요법제)</li>
+          <li>비타민 B12 결핍 — 특히 메트포르민 장기 복용자</li>
+          <li>기타 영양결핍(대사수술 후 구리 결핍 등)</li>
+          <li>갑상선저하증</li>
+        </ul>
+        <ul class="dot">
+          <li>신질환</li>
+          <li>악성종양(다발성골수종, 기관지암 등)</li>
+          <li>감염(HIV, C형간염)</li>
+          <li>만성 염증성 탈수초 신경병증</li>
+          <li>유전성 신경병증, 혈관염</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>🫀 자율신경병증 — 분류 및 평가</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="rec-list">
+        <li class="rec-item"><span class="badge badge-E">E</span><span class="rec-text"><strong>12.19</strong> 2형당뇨 진단 시점·1형당뇨 5년 후부터 매년 자율신경병증 평가, 신증·DPN 동반 시 더 중점적으로 평가</span></li>
+      </ul>
+      <table class="tc-table" style="margin-top:8px">
+        <tr><th>임상 양상</th><th>증상/징후</th></tr>
+        <tr><td>심혈관</td><td>안정시 빈맥, 기립성 저혈압</td></tr>
+        <tr><td>위장관</td><td>위마비, 변비, 설사, 대변실금</td></tr>
+        <tr><td>비뇨생식기</td><td>발기부전, 신경성 방광</td></tr>
+        <tr><td>발한</td><td>땀분비 이상(증가 또는 감소)</td></tr>
+      </table>
+      <div class="alert alert-warn" style="margin-top:8px"><span>⚠️</span><span>저혈당에 대한 반조절반응 손상(impaired hypoglycemia awareness)은 자율신경병증과 직접 연관되지는 않으나 임상적으로 중요</span></div>
+    </div>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <div class="card-header" onclick="toggleCard(this)">
+        <span>💓 심혈관 자율신경병증 (CAN)</span><span class="toggle">▾</span>
+      </div>
+      <div class="card-body collapsed">
+        <ul class="dot">
+          <li>다른 심혈관 위험인자와 <strong>독립적으로 사망률과 연관</strong></li>
+          <li>초기: 무증상, 심호흡 시 심박변이도 감소로만 검출</li>
+          <li>진행: 안정시 빈맥(&gt;100bpm), 기립성 저혈압(收/拡 &gt;20/&gt;10mmHg 하락, 적절한 심박증가 없이)</li>
+          <li>ACCORD 연구: 집중적 혈당+혈압관리로 CAN 위험 25% 감소</li>
+        </ul>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header" onclick="toggleCard(this)">
+        <span>🍽️ 위장관·비뇨생식기 신경병증</span><span class="toggle">▾</span>
+      </div>
+      <div class="card-body collapsed">
+        <p style="margin-bottom:6px"><strong>위장관</strong> — 식도운동이상, 위마비, 담도기능이상, 변비, 설사, 대변실금. 약물 부작용(메트포르민, GLP-1) 배제 우선. 위마비 진단의 표준은 동위원소 위배출검사(scintigraphy, 4시간), 대안으로 13C 옥탄산 호기검사</p>
+        <p><strong>비뇨생식기</strong> — 남성: 발기부전·역행성사정. 여성: 성욕감소·통증증가·각성감소·윤활부족. 하부요로증상: 요실금·야간뇨·빈뇨·요절박·약한요류</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ PAIN MGMT ═══ -->
+<div id="tab-painmgmt" class="panel">
+  <div class="alert alert-orange"><span>💊</span><span>신경병증의 근본적인 신경손상을 되돌리는 특이적 치료는 현재 없다. 치료는 위험인자 관리(예방)와 증상 완화(통증·자율신경증상)의 두 축으로 접근한다.</span></div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>🎯 위험인자 관리 — 예방 및 진행 둔화</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="rec-list">
+        <li class="rec-item"><span class="badge badge-A">A</span><span class="rec-text"><strong>12.20</strong> 1형당뇨: 혈당관리 최적화로 신경병증 발생/진행 예방. <span class="badge badge-C" style="margin-left:4px">C</span> 2형당뇨: 진행 둔화. <span class="badge badge-B" style="margin-left:4px">B</span> 체중·혈압·지질 관리로 위험/진행 감소</span></li>
+      </ul>
+      <table class="tc-table" style="margin-top:8px">
+        <tr><th>인자</th><th>근거 요약</th></tr>
+        <tr><td>혈당관리</td><td>1형당뇨에서 DPN·CAN 예방효과 강력(DCCT/EDIC). 2형당뇨에서는 진행의 완만한 둔화만(ACCORD), 신경손실 자체를 되돌리지는 못함</td></tr>
+        <tr><td>체중관리</td><td>비만은 신경병증의 일관된 위험인자. Look AHEAD: 생활습관중재로 증상 개선되었으나 검사소견은 개선 안 됨. 대사수술 관찰연구는 긍정적이나 RCT 부족</td></tr>
+        <tr><td>지질관리</td><td>고중성지방血증이 가장 강한 연관성. 단, 스타틴·피브레이트 등 기존 지질저하요법은 DPN 예방/치료에 효과 입증 안 됨</td></tr>
+        <tr><td>혈압관리</td><td>INTERPRET-DD 메타분석: 고혈압이 DPN 발생의 독립적 위험인자(OR 1.58, 95% CI 1.18–2.12). ACCORD: 집중혈압관리로 CAN 위험 25%↓</td></tr>
+      </table>
+      <div class="alert alert-warn" style="margin-top:8px"><span>⚠️</span><span>GLP-1 RA의 DPN 이득은 아직 논란 중이며 데이터 제한적. 반대로 GLP-1 RA 및 GIP/GLP-1 이중작용제 사용 시 이질감각(allodynia, 양말·신발·침구 등 접촉통)이 보고된 바 있음</span></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>💊 신경병증성 통증 — 1차 약물치료 (AAN 가이드라인)</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="rec-list">
+        <li class="rec-item"><span class="badge badge-A">A</span><span class="rec-text"><strong>12.21</strong> DPN 관련 통증 평가·치료 <span class="badge badge-B" style="margin-left:4px">B</span> 및 자율신경병증 증상 평가·치료(삶의 질 개선) <span class="badge badge-E" style="margin-left:4px">E</span></span></li>
+        <li class="rec-item"><span class="badge badge-A">A</span><span class="rec-text"><strong>12.22</strong> 가바펜티노이드·SNRI·TCA·나트륨채널차단제를 1차 약물로 권장, 병합요법으로 추가 통증완화 가능. 오피오이드(트라마돌·타펜타돌 포함)는 드문 예외 상황 제외 비권장</span></li>
+      </ul>
+      <table class="tc-table" style="margin-top:8px">
+        <tr><th>계열</th><th>대표 약물</th><th>근거수준</th><th>비고</th></tr>
+        <tr><td>가바펜티노이드</td><td>pregabalin, gabapentin, mirogabalin</td><td>pregabalin: 고품질 다수 / gabapentin: 고품질 1건+다수 소규모 / mirogabalin: 중등도, 효과 작음</td><td>고령에서 부작용 심할 수 있음 — 저용량 시작·천천히 적정</td></tr>
+        <tr><td>SNRI</td><td>duloxetine, venlafaxine, desvenlafaxine</td><td>duloxetine: 고품질 2+중등도 5 / venlafaxine: 고품질 1 / desvenlafaxine: 중등도 1</td><td>고령에서 부작용 우려 — 저용량·천천히 적정</td></tr>
+        <tr><td>삼환계 항우울제(TCA)</td><td>amitriptyline</td><td>고품질 2+중등도 2</td><td>항콜린성 부작용으로 용량제한 가능, 특히 ≥65세</td></tr>
+        <tr><td>나트륨채널차단제</td><td>lamotrigine, lacosamide, carbamazepine, oxcarbazepine, valproic acid</td><td>중등도 5건</td><td>—</td></tr>
+        <tr><td>국소제제</td><td>capsaicin 8% 패치, capsaicin 0.075% 크림, lidocaine 5% 패치</td><td>capsaicin 8%: 고품질 1 / lidocaine: 데이터 제한적</td><td>경구치료 금기·국소치료 선호 시 고려. lidocaine은 24시간 중 최대 12시간만 사용</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span>🚫 오피오이드 — 사용해서는 안 되는 이유</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body collapsed">
+      <ul class="dot">
+        <li>RCT에서 dextromethorphan·oxycodone·morphine이 DPN 통증을 줄인다는 증거는 있으나, <strong>장기 효능 데이터는 부재</strong></li>
+        <li>CDC 체계적 문헌고찰: 오피오이드의 만성 통증 장기 결과(통증·기능·삶의 질)를 평가한 연구 없음</li>
+        <li>CDC·AAN 모두 장기 위해(남용, 중독, 골절, 심장마비, 교통사고, 과다복용, 사망률) 문서화</li>
+        <li>tramadol·tapentadol은 μ-오피오이드+SNRI 기전이나, 효과크기는 SNRI 단독과 유사하면서 오피오이드의 모든 위험을 동반 — tramadol은 codeine과 유사한 크기의 전체사망률 증가와 연관</li>
+      </ul>
+      <div class="alert alert-danger" style="margin-top:8px"><span>🚫</span><span>AAN 가이드라인은 통증성 DPN에 오피오이드(트라마돌·타펜타돌 포함) 사용을 <strong>드문 예외 상황을 제외하고 권장하지 않음</strong></span></div>
+    </div>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <div class="card-header" onclick="toggleCard(this)">
+        <span>🩺 기립성 저혈압 관리</span><span class="toggle">▾</span>
+      </div>
+      <div class="card-body collapsed">
+        <p style="margin-bottom:6px"><strong>치료 목표</strong>: 정상혈압 회복이 아닌 <strong>기립 증상 최소화</strong></p>
+        <ul class="dot">
+          <li>비약물요법: 충분한 염분 섭취, 저혈압 유발약물 회피, 하지·복부 압박의류</li>
+          <li>탈컨디셔닝 예방을 위한 운동·신체활동 권장, 수액·염분 보충 중요</li>
+          <li>취침 시 혈압이 흔히 높음 → 압반사에 영향 주는 단기작용 약물(guanfacine, clonidine), 단기작용 칼슘차단제(isradipine), 단기작용 베타차단제(atenolol, metoprolol tartrate) 사용</li>
+          <li>대안: enalapril (1차 약제 불내성 시)</li>
+          <li>FDA 승인: midodrine, droxidopa</li>
+        </ul>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header" onclick="toggleCard(this)">
+        <span>🍽️ 위마비(Gastroparesis) 관리</span><span class="toggle">▾</span>
+      </div>
+      <div class="card-body collapsed">
+        <ul class="dot">
+          <li>소입자 식이패턴이 증상 완화에 도움</li>
+          <li>위장관운동 저하 약물(오피오이드, 항콜린제, TCA, GLP-1 RA, pramlintide) 중단 고려 — 단, GLP-1 기반 치료 중단의 위험·이득 균형 필요</li>
+          <li><strong>Metoclopramide</strong> — FDA 승인 유일한 촉진제. 근거는 약함, 추체외로 부작용(급성근긴장이상, 약물유발파킨슨증, 정좌불능, 지연성운동이상) 위험으로 <strong>12주 초과 사용 비권장</strong></li>
+          <li>기타: domperidone(미국 외 사용가능), erythromycin(빠른 내성으로 단기사용만 효과적)</li>
+          <li>위전기자극술(Gastric electrical stimulation) — FDA 승인되었으나 효과적 치료법이라는 근거는 부족</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span>⚧ 발기부전 관리</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body collapsed">
+      <p>성선저하증 동반 시 치료와 함께, 포스포디에스테라제 5형 억제제, 해면체내/요도내 프로스타글란딘, 진공압축기, 음경보형물 등을 고려한다. 다른 신경병증 치료와 마찬가지로 이들 중재는 기저 병리·자연경과를 바꾸지는 못하나 삶의 질을 개선할 수 있다.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ FOOT RISK ═══ -->
+<div id="tab-footrisk" class="panel">
+  <div class="alert alert-orange"><span>🦶</span><span>말초신경병증·말초동맥질환(PAD)·족부변형은 위험족(at-risk foot)을 정의하는 핵심 요인이다. 감염은 진행이 빠를 수 있고 중증도에 비해 증상이 미미할 수 있으며, 하지절단의 최종 직접 원인은 대개 감염이다.</span></div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>📋 종합 발 평가 — 권고 (연 1회 이상)</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="rec-list">
+        <li class="rec-item"><span class="badge badge-A">A</span><span class="rec-text"><strong>12.23</strong> 궤양·절단 위험인자 파악을 위해 최소 연 1회 종합 발 평가 시행</span></li>
+        <li class="rec-item"><span class="badge badge-B">B</span><span class="rec-text"><strong>12.24</strong> 피부 검사, 변형 평가, 신경학적 평가(10g 단일사 또는 Ipswich touch test + 핀찌름/온도/진동 중 1개 추가), 혈관 평가(다리·발 맥박)</span></li>
+        <li class="rec-item"><span class="badge badge-A">A</span><span class="rec-text"><strong>12.25</strong> 감각저하 또는 과거 궤양·절단 병력 있으면 <strong>매 방문 시</strong> 발 검사</span></li>
+        <li class="rec-item"><span class="badge badge-B">B</span><span class="rec-text"><strong>12.26</strong> 궤양·절단·Charcot족·혈관성형/수술·흡연·망막병증·신질환 병력 확인, 신경병증 증상(통증·화끈거림·저림)·혈관질환 증상(다리피로·파행) 평가</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>⚠️ 위험 인자 — At-Risk Foot 정의 요소</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <div class="grid2">
+        <ul class="dot">
+          <li>만성 고혈당</li>
+          <li>말초신경병증/보호감각소실(LOPS)</li>
+          <li>말초동맥질환(PAD)</li>
+          <li>족부 변형(무지외반증, 망치족지, Charcot 관절 등)</li>
+          <li>전구궤양(굳은살·티눈)</li>
+        </ul>
+        <ul class="dot">
+          <li>과거 궤양 병력</li>
+          <li>과거 절단 병력</li>
+          <li>흡연</li>
+          <li>망막병증</li>
+          <li>신증(특히 투석·이식 후)</li>
+          <li>사회경제적 요인·의료접근성</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>🧭 보호감각소실(LOPS) 평가</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <div class="alert alert-info"><span>ℹ️</span><span>말초감각신경병증은 발 궤양의 가장 흔한 단일 원인이다. 다기관 연구에서 궤양 환자의 78%가 말초신경병증을 동반했고, <strong>말초감각신경병증+경미한 외상+족부변형의 삼중고</strong>가 63% 이상에서 확인되었다.</span></div>
+      <table class="tc-table" style="margin-top:8px">
+        <tr><th>검사</th><th>방법</th><th>비고</th></tr>
+        <tr><td><strong>10g 단일사검사</strong></td><td>최소 1개 다른 신경학적 검사와 병용</td><td>진행된 DPN·궤양위험 검출에는 유용하나, 단독으로는 조기 질환을 놓칠 수 있음 — 단독 진단법으로 사용 금지</td></tr>
+        <tr><td><strong>Ipswich touch test</strong></td><td>손가락으로 접촉</td><td>영국 등에서 단일사 대신 선호되는 LOPS 선별법</td></tr>
+        <tr><td>128Hz 진동감각</td><td>튜닝포크</td><td>대섬유 기능 평가</td></tr>
+        <tr><td>핀찌름/온도</td><td>—</td><td>소섬유 기능 평가</td></tr>
+        <tr><td>발목반사</td><td>—</td><td>대섬유 기능 평가</td></tr>
+      </table>
+      <div class="alert alert-warn" style="margin-top:8px"><span>⚠️</span><span>단일사검사 무반응 + 다른 검사 1개 이상 이상 → <strong>LOPS 확진</strong>. 신경전도검사·근전도·신경생검·표피내 신경섬유밀도검사는 말초감각신경병증 진단에 통상 불필요</span></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>🩸 말초동맥질환(PAD) 평가</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="rec-list">
+        <li class="rec-item"><span class="badge badge-B">B</span><span class="rec-text"><strong>12.27</strong> 초기선별: 하지 맥박, 모세혈관충만시간, 의존성 발적, 거상 시 창백, 정맥충만시간. 다리피로·파행·휴식 시 완화되는 통증 또는 맥박 감소/소실 시 발목상완지수(toe pressure 포함) 및 추가 혈관평가 의뢰</span></li>
+      </ul>
+      <table class="tc-table" style="margin-top:8px">
+        <tr><th>검사</th><th>해석/주의점</th></tr>
+        <tr><td>발목상완지수(ABI)</td><td>비압박성 혈관으로 당뇨병 환자에서 부정확할 수 있어 신중히 해석</td></tr>
+        <tr><td>족지수축기압(Toe SBP)</td><td>ABI보다 정확. <strong>&lt;30mmHg는 PAD 및 궤양치유 불능 시사</strong></td></tr>
+        <tr><td>맥파기록(PVR)+족지압</td><td>이상 + 족지압&lt;30mmHg + 발궤양 동반 → 정식 혈관평가·혈관조영 의뢰</td></tr>
+        <tr><td>WIfI 분류</td><td>(Wound, Ischemia, foot Infection) — PAD 중증도·절단위험 평가 및 DFU 치유 예측에 점차 활용 증가</td></tr>
+      </table>
+      <div class="alert alert-info" style="margin-top:8px"><span>ℹ️</span><span>당뇨병 환자의 PAD 고유병률을 고려하여, Society for Vascular Surgery·American Podiatric Medical Association은 <strong>50세 이상 모든 당뇨병 환자</strong>에서 비침습적 동맥검사 선별을 권고(정상이면 5년마다 재검)</span></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span>🚨 Charcot 신경관절병증 — 의심 소견</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body collapsed">
+      <div class="alert alert-danger"><span>🚨</span><span>외상 병력 유무와 무관하게 <strong>신경병증 환자에서 발이 따뜻하고 부어있으며 발적</strong>되어 있고 개방창 없는 경우, 반드시 Charcot 신경관절병증을 의심하고 정밀평가해야 한다.</span></div>
+      <ul class="dot" style="margin-top:8px">
+        <li>이러한 임상소견이 있는 모든 환자에서 발·발목 X-ray 시행</li>
+        <li>조기 진단·치료가 변형·불안정성(궤양·절단으로 진행 가능) 예방에 핵심</li>
+        <li>총 비체중부하(non-weight-bearing) 및 족부전문의 긴급 의뢰 필요</li>
+        <li>복잡한 사지위협 변형의 수술적 재건이 중요한 역할을 하며, 다수의 수술에서 높은 성공률과 사지구제율을 보임</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>📚 발 관리 교육</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="rec-list">
+        <li class="rec-item"><span class="badge badge-B">B</span><span class="rec-text"><strong>12.28</strong> 인터프로페셔널 접근(족부전문의 중심) — 발궤양·고위험족(투석환자, Charcot족, 과거 궤양/절단, PAD)에 권고</span></li>
+        <li class="rec-item"><span class="badge badge-B">B</span><span class="rec-text"><strong>12.29</strong> 흡연 + 과거 하지합병증/LOPS/구조적 이상/PAD → 족부전문의 의뢰(지속적 예방관리·평생감시), 금연상담 의뢰 <span class="badge badge-A" style="margin-left:4px">A</span></span></li>
+        <li class="rec-item"><span class="badge badge-B">B</span><span class="rec-text"><strong>12.30</strong> 모든 당뇨병 환자(LOPS 포함)에게 일반 예방적 발 자가관리 교육(불파손 거울 이용 촉진/시각검사 등) 제공</span></li>
+      </ul>
+      <div class="alert alert-warn" style="margin-top:8px"><span>⚠️</span><span>최근 연구: 교육은 지식을 향상시키나 <strong>행동변화·개인 건강목표 달성으로 이어지지 않는 경우가 많음</strong> — 지식은 빨리 잊혀지므로 정기적 강화 필요</span></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span>👟 신발·자가관리 디테일</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body collapsed">
+      <ul class="dot">
+        <li>맨발보행·오픈토 신발 회피 등 신발 관련 행동 논의 필요</li>
+        <li>맞춤형 보조기를 동반한 치료용 신발은 족저압을 낮춤(단, 대부분 연구의 결과지표는 궤양예방이 아닌 족저압 감소) — 18개월 추적 체계적 문헌고찰에서 표준 인솔/엑스트라뎁스 신발 대비 궤양발생률 유의한 차이 없었고, 1차 궤양예방 근거는 부재</li>
+        <li>록커솔·중족골수용부 등 특수 디자인이 인솔 단독보다 족저압을 더 효과적으로 낮춤</li>
+        <li>스마트매트·스마트인솔·양말 등 발 온도 자가모니터링 — 아직 광범위하게 도입되지는 않았으나 인터랙티브 예방프로토콜에 통합 시 궤양 임박 조기식별에 유망</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ FOOT TX ═══ -->
+<div id="tab-foottx" class="panel">
+  <div class="alert alert-orange"><span>🩹</span><span>위험등급에 따른 차등 관리가 핵심이다. 저위험군은 교육·자가관리로 충분하나, 중등도~고위험군은 족부전문의 정기 의뢰가 필요하다.</span></div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>📊 IWGDF 위험분류 및 치료 전략</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <table class="tc-table">
+        <tr><th>등급</th><th>위험도</th><th>특징</th><th>관리</th></tr>
+        <tr><td><span class="badge badge-A">0</span></td><td>매우 낮음</td><td>LOPS 없음, PAD 없음</td><td>교육·자가관리, 매년 검진</td></tr>
+        <tr><td><span class="badge badge-B">1</span></td><td>낮음</td><td>LOPS 또는 PAD</td><td>6–12개월마다 검진</td></tr>
+        <tr><td><span class="badge badge-C">2</span></td><td>중등도</td><td>LOPS+PAD, 또는 LOPS+족부변형, 또는 PAD+족부변형</td><td>족부전문의 의뢰, 3–6개월마다 검진</td></tr>
+        <tr><td><span class="badge badge-E">3</span></td><td>높음</td><td>LOPS 또는 PAD + (과거궤양 OR 절단 OR 신부전) 중 1개 이상</td><td>족부전문의 의뢰, 1–3개월마다 검진</td></tr>
+      </table>
+      <div class="alert alert-info" style="margin-top:8px"><span>ℹ️</span><span>무위험·저위험군은 교육·자가관리로 관리 가능. 중등도~고위험군은 족부변형(무지외반증·망치족지·Charcot족 포함)이 있는 경우를 포함하며 정기적 족부전문의 평가·감시가 필요</span></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span>👟 변형별 맞춤 신발 전략</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body collapsed">
+      <table class="tc-table">
+        <tr><th>상황</th><th>전략</th></tr>
+        <tr><td>족저압 증가(굳은살로 확인)</td><td>맞춤형 압력완화 보조기를 동반한 잘 맞는 운동화/워킹슈즈</td></tr>
+        <tr><td>무지외반·망치족지 등 변형</td><td>엑스트라뎁스 신발 등 특수 신발 필요할 수 있음</td></tr>
+        <tr><td>Charcot 관절병증 등 중증 변형</td><td>맞춤제작 신발 필요</td></tr>
+        <tr><td>난치성 변형/재발성 궤양(보존적 신발치료 무반응)</td><td>경험있는 당뇨병성 족부외과의에 의한 수술적 교정 고려</td></tr>
+      </table>
+      <ul class="rec-list" style="margin-top:8px">
+        <li class="rec-item"><span class="badge badge-B">B</span><span class="rec-text"><strong>12.31</strong> LOPS, 족부변형, 궤양, 굳은살형성, 말초순환장애, 절단병력 등 궤양 고위험군에 맞춤형 치료용 신발 사용 권고</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>🩹 궤양 치료 5대 원칙</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <ol class="num">
+        <li><strong>압력 제거(offloading)</strong> — 궤양 부위의 체중부하 압력 경감</li>
+        <li><strong>변연절제술(debridement)</strong> — 과각화·괴사·비생존 조직 제거</li>
+        <li><strong>혈관재건술</strong> — 필요한 경우 허혈성 창상의 재혈관화</li>
+        <li><strong>감염 관리</strong> — 연조직 또는 골 감염 진단·치료</li>
+        <li><strong>상처 적합 국소 드레싱</strong> — 창상 특성에 맞는 드레싱 선택</li>
+      </ol>
+      <div class="alert alert-warn" style="margin-top:8px"><span>⚠️</span><span>4주 적절한 표준치료 후에도 창상 면적이 <strong>50% 이상 감소하지 않으면</strong> 첨단 창상치료 고려를 시작해야 한다. 단, 그 전에 고족저압을 유발하는 변형 평가, 골수염 배제가 선행되어야 함</span></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>🔬 첨단 창상치료 (Advanced Wound Therapy)</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="rec-list">
+        <li class="rec-item"><span class="badge badge-A">A</span><span class="rec-text"><strong>12.32</strong> 표준치료 단독으로 치유되지 않는 만성 DFU — 음압창상치료, 다양한 피부대체물, 국소산소요법 등 RCT 입증된 보조요법 고려</span></li>
+      </ul>
+      <table class="tc-table" style="margin-top:8px">
+        <tr><th>치료법</th><th>근거 요약</th></tr>
+        <tr><td>국소 성장인자·세포기질·태반조직·생체공학세포치료</td><td>표재성 만성 궤양 치유 촉진에 사용 증가, 근거 누적 중</td></tr>
+        <tr><td><strong>음압창상치료</strong></td><td>1990년대 초중반 도입. 피부이식·피판 준비, 깊고 큰 창상 폐쇄에 특히 유용</td></tr>
+        <tr><td>전기자극·박동성고주파·체외충격파</td><td>성장인자·사이토카인 상향조절 가설, 대부분 후향적 관찰 또는 저품질 RCT</td></tr>
+        <tr><td>고압산소요법(HBOT)</td><td>RCT 1건만 양성결과(9·12개월 치유율 향상), 다수 연구는 설계 결함·탈락으로 근거 불충분. 허혈/감염 없는 DFU에는 이득 없음. 일부 만성 신경허혈성 궤양에서 절단예방 가능성</td></tr>
+        <tr><td><strong>국소산소요법(TOT)</strong></td><td>다수의 고품질 RCT·메타분석에서 12주 시점 만성 DFU 치유효과 입증. 연속형·저정압형·주기형 3종 존재. <strong>가정치료 가능</strong>, 참여율 높고 이상반응 적음</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <div class="card-header" onclick="toggleCard(this)">
+        <span>🦠 감염·골수염 관리</span><span class="toggle">▾</span>
+      </div>
+      <div class="card-body collapsed">
+        <ul class="dot">
+          <li>임상적 감염징후 또는 뼈 노출/probe-to-bone 양성 시 조직배양·영상검사(X-ray, 모호하면 CT/MRI) 시행</li>
+          <li>농양은 신속히 배농(외래 또는 수술실, 중증도에 따라)</li>
+          <li>괴사성 연조직감염·습성괴사 — <strong>외과적 응급</strong>, 즉시 광범위 절개배농 및 절단 포함 수술 의뢰 필요</li>
+          <li>골수염 — MRI가 골감염 범위 평가·수술계획에 가장 유용, 골배양·병리로 확진 후 보존적/수술적/병합 치료</li>
+          <li>IWGDF/IDSA 통합 가이드라인이 당뇨병성 발감염의 진단·분류·항생제치료 일반원칙 상세 제시</li>
+        </ul>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header" onclick="toggleCard(this)">
+        <span>🩸 PAD 동반 시 약물요법 고려사항</span><span class="toggle">▾</span>
+      </div>
+      <div class="card-body collapsed">
+        <ul class="dot">
+          <li><strong>GLP-1 RA</strong> — SGLT2 억제제 대비 하지절단·DFU·전체사망률 감소와 연관. 경구 semaglutide: 주요 부정적 사지사건 비율 유의하게 낮음(심혈관예후시험)</li>
+          <li><strong>STRIDE 연구</strong> — 증상성 PAD 초기단계(Fontaine IIa)에 semaglutide, 보행거리·삶의 질·복합예후 개선, 기저 당뇨유병기간·A1C·BMI·SGLT2병용과 무관하게 일관</li>
+          <li><strong>Canagliflozin</strong> — CANVAS 연구에서 하지절단(주로 발가락) 위험 증가, 기전 불명. 중대한 하지합병증(DFU, 골수염, 괴사) 발생 시 적어도 호전까지 중단 고려</li>
+        </ul>
+        <div class="alert alert-info" style="margin-top:8px"><span>ℹ️</span><span>대절단 환자의 5년 생존율: 당뇨병 환자 33%(사망률 67%) vs 비당뇨병 환자 43%(사망률 57%) — 대부분의 초과 사망률은 심혈관질환과 관련</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span>✅ 치유 후 재발 예방</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body collapsed">
+      <p>궤양이 치유된 모든 환자는 재발 궤양·후속 절단 발생률 감소에 초점을 맞춘 공식적인 종합예방 프로그램에 등록되어야 한다 — 정기적 발 검사, 적절한 신발, 자가관리 교육의 지속이 핵심이다.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ TABLES ═══ -->
+<div id="tab-tables" class="panel">
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>👁️ 표 — 망막병증 선별 일정 요약</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <table class="tc-table">
+        <tr><th>상황</th><th>검진 시작</th><th>이후 간격</th></tr>
+        <tr><td>1형당뇨</td><td>발병 5년 후</td><td>매년(정상 1–2회 후 1–2년 간격 고려 가능)</td></tr>
+        <tr><td>2형당뇨</td><td>진단 시점</td><td>매년(정상 1–2회 후 1–2년 간격 고려 가능)</td></tr>
+        <tr><td>망막병증 있음</td><td>—</td><td>최소 매년, 진행/시력위협 시 더 빈번</td></tr>
+        <tr><td>임신 계획/임신 중(기존 1형·2형)</td><td>임신 전 + 1분기</td><td>망막병증 정도에 따라 매 분기·산후 1년까지</td></tr>
+        <tr><td>임신성 당뇨(GDM)</td><td>불필요</td><td>—</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span>⚡ 표 — DPN 평가 도구별 대상 섬유</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body collapsed">
+      <table class="tc-table">
+        <tr><th>섬유</th><th>검사</th></tr>
+        <tr><td>소섬유</td><td>핀찌름, 온도감각</td></tr>
+        <tr><td>대섬유</td><td>하지반사, 진동감각(128Hz), 위치감각, 10g 단일사</td></tr>
+        <tr><td>보호감각</td><td>10g 단일사, Ipswich touch test</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span>💊 표 — 신경병증성 통증 약물 비교</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body collapsed">
+      <table class="tc-table">
+        <tr><th>계열</th><th>약물</th><th>근거</th></tr>
+        <tr><td>가바펜티노이드</td><td>pregabalin, gabapentin, mirogabalin</td><td>pregabalin·gabapentin 근거 강함</td></tr>
+        <tr><td>SNRI</td><td>duloxetine, venlafaxine, desvenlafaxine</td><td>duloxetine 근거 가장 풍부</td></tr>
+        <tr><td>TCA</td><td>amitriptyline</td><td>고품질 연구 존재, 항콜린 부작용 주의</td></tr>
+        <tr><td>Na채널차단제</td><td>lamotrigine, lacosamide, carbamazepine, oxcarbazepine, valproic acid</td><td>중등도 근거</td></tr>
+        <tr><td>국소제제</td><td>capsaicin 8% 패치, lidocaine 5% 패치</td><td>국소치료 선호/경구금기 시</td></tr>
+        <tr><td>오피오이드</td><td>—</td><td>드문 예외 제외 비권장 (트라마돌·타펜타돌 포함)</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span>🦶 표 — IWGDF 족부 위험분류 전체</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body collapsed">
+      <table class="tc-table">
+        <tr><th>등급</th><th>위험도</th><th>특징</th><th>검진간격</th></tr>
+        <tr><td>0</td><td>매우 낮음</td><td>LOPS 없음, PAD 없음</td><td>매년</td></tr>
+        <tr><td>1</td><td>낮음</td><td>LOPS 또는 PAD</td><td>6–12개월</td></tr>
+        <tr><td>2</td><td>중등도</td><td>LOPS+PAD / LOPS+변형 / PAD+변형</td><td>3–6개월</td></tr>
+        <tr><td>3</td><td>높음</td><td>LOPS 또는 PAD + (과거궤양/절단/신부전)</td><td>1–3개월</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span>💉 표 — DME/PDR 치료 옵션 정리</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body collapsed">
+      <table class="tc-table">
+        <tr><th>병변</th><th>1차 치료</th><th>대안/2차</th></tr>
+        <tr><td>고위험 PDR</td><td>범망막광응고술(PRP) 또는 anti-VEGF</td><td>—</td></tr>
+        <tr><td>중심부침범 DME</td><td>anti-VEGF (aflibercept, ranibizumab, faricimab 등)</td><td>국소/격자레이저, 유리체내 스테로이드</td></tr>
+        <tr><td>임신 중 고위험 PDR/DME</td><td>레이저 광응고술 우선 고려</td><td>anti-VEGF는 이득&gt;위험일 때만(FDA 카테고리 C)</td></tr>
+      </table>
+    </div>
+  </div>
+</div>
+</div><!-- /main -->
+
+<!-- ═══ MODAL: 망막 검진 시작시점 ═══ -->
+<div id="screenModal" class="modal-overlay" onclick="closeModalOutside(event,'screenModal')">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal('screenModal')">✕</button>
+    <div class="modal-title">📅 당뇨병성 망막병증 선별검사 시작시점 및 간격</div>
+
+    <div class="alert alert-info" style="margin:0 0 12px"><span>💡</span><span>1형당뇨는 망막병증 발현까지 최소 5년이 소요되므로 발병 5년 후 시작하지만, 2형당뇨는 진단 전 무진단 고혈당 기간이 길어 진단 시점에 이미 망막병증이 있을 수 있어 즉시 검진을 시작한다.</span></div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">유형별 시작 시점</div>
+      <table class="modal-table">
+        <tr><th>유형</th><th>시작 시점</th><th>근거</th></tr>
+        <tr><td>1형당뇨</td><td>발병 5년 후</td><td>망막병증 발현에 최소 5년 소요로 추정</td></tr>
+        <tr><td>2형당뇨</td><td>진단 시점 즉시</td><td>진단 전 무진단 고혈당 기간 중 이미 유병률 상당</td></tr>
+      </table>
+    </div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">검진 간격 결정</div>
+      <table class="modal-table">
+        <tr><th>상황</th><th>간격</th></tr>
+        <tr><td>망막병증 없음 + 혈당목표 달성</td><td>1–2년 간격 고려 가능 (3년 추적 후향연구에서 유의 위험 발생 낮음)</td></tr>
+        <tr><td>어떤 단계든 망막병증 존재</td><td>최소 매년</td></tr>
+        <tr><td>진행 중이거나 시력위협 소견</td><td>안과 권고에 따라 더 빈번히</td></tr>
+      </table>
+    </div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">대체 선별 방법</div>
+      <ul class="dot">
+        <li>원격판독 망막촬영(teleretinal photography)</li>
+        <li>FDA 승인 AI 알고리즘 — AEYE-DS, EyeArt, LumineticsCore(구 IDx-DR)</li>
+      </ul>
+      <p style="font-size: calc(11px * var(--fscale, 1));color:var(--text2);margin-top:6px">사진검사는 산동 종합 안과검진의 대체재가 아니며, 사진품질 불량 시 또는 이상 발견 시 대면 검진이 필요하다.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ MODAL: IWGDF 위험분류 ═══ -->
+<div id="iwgdfModal" class="modal-overlay" onclick="closeModalOutside(event,'iwgdfModal')">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal('iwgdfModal')">✕</button>
+    <div class="modal-title">🦶 IWGDF 족부 위험분류 시스템 — 상세</div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">등급별 정의 및 검진 빈도</div>
+      <table class="modal-table">
+        <tr><th>등급</th><th>위험도</th><th>특징</th><th>검진빈도</th></tr>
+        <tr><td><strong>0</strong></td><td>매우 낮음</td><td>LOPS 없음, PAD 없음</td><td>매년</td></tr>
+        <tr><td><strong>1</strong></td><td>낮음</td><td>LOPS 또는 PAD 중 1개</td><td>6–12개월</td></tr>
+        <tr><td><strong>2</strong></td><td>중등도</td><td>LOPS+PAD, 또는 LOPS+족부변형, 또는 PAD+족부변형</td><td>3–6개월</td></tr>
+        <tr><td><strong>3</strong></td><td>높음</td><td>LOPS 또는 PAD + (과거 발궤양 OR 절단[경증/중증] OR 신부전) 중 1개 이상</td><td>1–3개월</td></tr>
+      </table>
+    </div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">실제 적용 원칙</div>
+      <ul class="dot">
+        <li>등급 0–1: 교육·자가관리로 관리 가능한 저위험군</li>
+        <li>등급 2–3: 족부전문의 정기 의뢰 및 surveillance 필요</li>
+        <li>개방창·설명되지 않는 부종/발적/피부온도상승 → 즉시 긴급 의뢰</li>
+        <li>검진 빈도는 전문가 합의 및 개인별 상황에 근거 — 절대적 규칙이 아님</li>
+      </ul>
+    </div>
+
+    <div class="alert alert-warn" style="margin-top:4px"><span>⚠️</span><span>출처: Schaper NC, et al. IWGDF 2023 update, Diabetes Metab Res Rev 2024;40:e3657 (허가 하에 인용)</span></div>
+  </div>
+</div>
+
+<!-- ═══ MODAL: 신경병증성 통증 1차 약물 ═══ -->
+<div id="painrxModal" class="modal-overlay" onclick="closeModalOutside(event,'painrxModal')">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal('painrxModal')">✕</button>
+    <div class="modal-title">💊 당뇨병성 말초신경병증(DPN) 통증 — 1차 약물 4계열</div>
+
+    <div class="alert alert-info" style="margin:0 0 12px"><span>💡</span><span>AAN(American Academy of Neurology) 2022년 가이드라인 업데이트 기준. 4계열 모두 1차 치료로 고려 가능하며, 단독요법 반응이 부족하면 병합요법(2–3제, 저용량)을 시도할 수 있다.</span></div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">① 가바펜티노이드</div>
+      <table class="modal-table">
+        <tr><th>약물</th><th>근거 수준</th></tr>
+        <tr><td>pregabalin</td><td>고품질·중등도 다수 RCT (7개 용량범위 시험)</td></tr>
+        <tr><td>gabapentin</td><td>고품질 1건 + 다수 소규모 연구</td></tr>
+        <tr><td>mirogabalin</td><td>중등도 — 효과크기 작음</td></tr>
+      </table>
+      <p style="font-size: calc(11px * var(--fscale, 1));color:var(--text2);margin-top:4px">고령에서 부작용 심할 수 있음 — 저용량 시작, 천천히 적정</p>
+    </div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">② SNRI (세로토닌-노르에피네프린 재흡수억제제)</div>
+      <table class="modal-table">
+        <tr><th>약물</th><th>근거 수준</th></tr>
+        <tr><td>duloxetine</td><td>고품질 2건 + 중등도 5건</td></tr>
+        <tr><td>venlafaxine</td><td>고품질 1건</td></tr>
+        <tr><td>desvenlafaxine</td><td>중등도 1건(가능성 시사)</td></tr>
+      </table>
+    </div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">③ 삼환계 항우울제(TCA)</div>
+      <p>amitriptyline — 고품질 2건 + 중등도 2건. 항콜린성 부작용(특히 ≥65세)으로 용량제한 가능</p>
+    </div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">④ 나트륨채널차단제</div>
+      <p>lamotrigine, lacosamide, carbamazepine, oxcarbazepine, valproic acid — 중등도 5건 RCT가 효과 지지</p>
+    </div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">병합요법 근거</div>
+      <p>OPTION-DM 교차시험: amitriptyline+pregabalin, pregabalin+amitriptyline, duloxetine+pregabalin 간 치료효과 동등성 입증 — 단독요법 무반응 시 저용량 병합이 효과적일 수 있음</p>
+    </div>
+
+    <div class="alert alert-danger" style="margin-top:4px"><span>🚫</span><span>오피오이드(트라마돌·타펜타돌 포함)는 장기효능 근거 부재, 남용·중독·골절·심장마비·사망률 증가 위험으로 드문 예외 상황 제외 비권장</span></div>
+  </div>
+</div>
+
+<!-- ═══ MODAL: DME 1차 치료 ═══ -->
+<div id="antivegfModal" class="modal-overlay" onclick="closeModalOutside(event,'antivegfModal')">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal('antivegfModal')">✕</button>
+    <div class="modal-title">💉 중심부침범 황반부종(DME) — Anti-VEGF 1차 치료</div>
+
+    <div class="alert alert-info" style="margin:0 0 12px"><span>💡</span><span>중심부를 침범하여 시력을 손상시키는 대부분의 DME 안구에서 anti-VEGF 유리체내주사가 1차 치료다(권고 12.12, 근거등급 A).</span></div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">사용 가능 약제 (5종)</div>
+      <table class="modal-table">
+        <tr><th>약물</th><th>승인 상태</th></tr>
+        <tr><td>bevacizumab</td><td>오프라벨 사용</td></tr>
+        <tr><td>ranibizumab</td><td>온라벨</td></tr>
+        <tr><td>aflibercept (2mg, 8mg)</td><td>온라벨</td></tr>
+        <tr><td>brolucizumab</td><td>온라벨</td></tr>
+        <tr><td>faricimab</td><td>온라벨, 최대 16주 간격 조정 가능</td></tr>
+      </table>
+    </div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">투여 일정</div>
+      <ul class="dot">
+        <li>ranibizumab·aflibercept: 첫 12개월 4–8주 간격, 이후 빈도 감소(완화 유지 시)</li>
+        <li>faricimab·aflibercept 8mg: aflibercept 2mg과 유사한 시력·해부학적 개선을 최대 16주 간격으로 달성 가능</li>
+        <li>시력 양호(20/25 이상)한 DME — 즉시 치료 대신 면밀한 관찰 후 시력 악화 시 치료시작도 2년 결과는 유사</li>
+      </ul>
+    </div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">비교 근거</div>
+      <p>중등도 시력장애(20/50 이하)를 동반한 DME에서는 aflibercept가 bevacizumab보다 우수한 시력 결과를 보임(비교효과연구). 지속적 DME에는 국소레이저 또는 유리체내 스테로이드가 대안</p>
+    </div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">치료 지속성의 중요성</div>
+      <p>anti-VEGF 치료는 정기적 추적방문 참여가 필수적이며, 비의도적 치료 중단(lapse) 시 시력·해부학적 결과가 악화될 위험이 있다 — 범망막광응고술과 달리 1회성 치료가 아님</p>
+    </div>
+  </div>
+</div>
+
+<script>
+const FONT_ZOOM_LEVELS = [1, 1.25, 1.5];
+let fontZoomIndex = 0;
+
+function applyFontZoom(scale) {
+  document.documentElement.style.setProperty('--fscale', scale);
+  const label = document.getElementById('font-zoom-label');
+  if (label) label.textContent = Math.round(scale * 100) + '%';
+}
+
+function cycleFontZoom() {
+  fontZoomIndex = (fontZoomIndex + 1) % FONT_ZOOM_LEVELS.length;
+  applyFontZoom(FONT_ZOOM_LEVELS[fontZoomIndex]);
+}
+
+function showTab(id){
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('tab-'+id).classList.add('active');
+  event.target.classList.add('active');
+}
+function toggleCard(el){
+  el.classList.toggle('open');
+  el.nextElementSibling.classList.toggle('collapsed');
+}
+function toggleAcc(el){
+  const b=el.nextElementSibling;
+  b.style.display=b.style.display==='block'?'none':'block';
+  el.querySelector('span:last-child').textContent=b.style.display==='block'?'▴':'▾';
+}
+
+function openModal(id){document.getElementById(id).classList.add('open');}
+function closeModal(id){document.getElementById(id).classList.remove('open');}
+function closeModalOutside(e,id){if(e.target===document.getElementById(id))closeModal(id);}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')document.querySelectorAll('.modal-overlay.open').forEach(m=>m.classList.remove('open'));});
+
+const abbrs=[
+  ['DR','Diabetic Retinopathy (당뇨병성 망막병증) — 미세혈관류→출혈/허혈→신생혈관(PDR)→황반부종(DME)으로 진행하는 신경혈관 합병증.'],
+  ['PDR','Proliferative Diabetic Retinopathy (증식성 당뇨병성 망막병증) — 허혈에 대한 반응으로 신생혈관이 발생한 단계.'],
+  ['DME','Diabetic Macular Edema (당뇨병성 황반부종) — 망막혈관 누출로 황반에 부종 발생, 어느 단계에서든 동반 가능.'],
+  ['NPDR','Nonproliferative Diabetic Retinopathy (비증식성 당뇨병성 망막병증) — PDR 이전 단계.'],
+  ['anti-VEGF','Anti-Vascular Endothelial Growth Factor — 혈관내피성장인자 억제제. DME 1차 치료, PDR에서 PRP의 대안.'],
+  ['PRP','Panretinal (Laser) Photocoagulation — 범망막광응고술. 고위험 PDR 치료.'],
+  ['DRS','Diabetic Retinopathy Study — PRP의 치료효과를 입증한 대규모 임상시험.'],
+  ['ETDRS','Early Treatment Diabetic Retinopathy Study — 국소/격자 레이저 치료 근거를 마련한 임상시험.'],
+  ['NAION','Nonarteritic Anterior Ischemic Optic Neuropathy (비동맥성 전방 허혈성 시신경병증) — 일부 GLP-1 RA와 연관성이 보고된 안과 합병증.'],
+  ['AMD','Age-Related Macular Degeneration (연령관련 황반변성) — 일부 GLP-1 RA와 연관성 보고, 데이터 제한적.'],
+  ['DPN','Diabetic Peripheral Neuropathy (당뇨병성 말초신경병증) — 최대 50%가 무증상, 배제 진단.'],
+  ['CAN','Cardiovascular Autonomic Neuropathy (심혈관 자율신경병증) — 다른 위험인자와 독립적으로 사망률과 연관.'],
+  ['LOPS','Loss of Protective Sensation (보호감각소실) — 발 궤양의 핵심 위험인자, 10g 단일사로 평가.'],
+  ['DFU','Diabetic Foot Ulcer (당뇨병성 발궤양) — 발목 이하 표피 및 진피 일부의 결손.'],
+  ['PAD','Peripheral Artery Disease (말초동맥질환) — 발 궤양·절단의 주요 위험인자, ABI·toe pressure로 평가.'],
+  ['ABI','Ankle-Brachial Index (발목상완지수) — 당뇨병 환자에서 비압박혈관으로 부정확할 수 있어 해석에 주의.'],
+  ['WIfI','Wound, Ischemia, foot Infection (창상-허혈-발감염 분류) — PAD 중증도·절단위험·DFU 치유 예측에 사용.'],
+  ['IWGDF','International Working Group on the Diabetic Foot — 당뇨병성 발 위험분류 및 예방/관리 가이드라인 발행기구.'],
+  ['IDSA','Infectious Diseases Society of America — IWGDF와 공동으로 당뇨병성 발감염 가이드라인 발행.'],
+  ['SNRI','Serotonin-Norepinephrine Reuptake Inhibitor — duloxetine 등, 신경병증성 통증 1차 치료 계열.'],
+  ['TCA','Tricyclic Antidepressant (삼환계 항우울제) — amitriptyline 등, 신경병증성 통증 1차 치료 계열.'],
+  ['AAN','American Academy of Neurology — 통증성 DPN 치료 가이드라인 발행기구.'],
+  ['CDC','Centers for Disease Control and Prevention — 오피오이드 처방 가이드라인 발행, 만성통증 장기효능 근거부족 보고.'],
+  ['OPTION-DM','신경병증성 통증 병합요법(amitriptyline·pregabalin·duloxetine) 비교 교차임상시험.'],
+  ['HBOT','Hyperbaric Oxygen Therapy (고압산소요법) — 만성 DFU에 근거 제한적, 일부 신경허혈성 궤양에서 절단예방 가능성.'],
+  ['TOT','Topical Oxygen Therapy (국소산소요법) — 다수 고품질 RCT에서 만성 DFU 치유효과 입증, 가정치료 가능.'],
+  ['IADPSG','International Association of the Diabetes and Pregnancy Study Groups — 관련 진단기준 제정 단체(GDM).'],
+  ['STRIDE','Semaglutide and Walking Capacity in PAD with T2D — semaglutide의 증상성 PAD 보행능력 개선 효과 입증 임상시험.'],
+  ['CANVAS','Canagliflozin Cardiovascular Assessment Study — canagliflozin의 하지절단 위험 증가를 보고한 심혈관예후시험.'],
+  ['SGLT2','Sodium-Glucose Cotransporter 2 (나트륨-포도당 공동수송체 2) 억제제 — canagliflozin 등.'],
+  ['GLP-1 RA','Glucagon-Like Peptide-1 Receptor Agonist — 망막병증 초기악화·NAION 연관성 논란과 동시에 PAD·DFU·절단위험 감소 효과 보고.'],
+  ['DCCT/EDIC','Diabetes Control and Complications Trial/Epidemiology of Diabetes Interventions and Complications — 대사기억(metabolic memory) 개념을 제시한 1형당뇨 장기추적연구.'],
+  ['ACCORD','Action to Control Cardiovascular Risk in Diabetes — 집중혈당·혈압관리의 CAN 위험감소 효과를 보고한 2형당뇨 임상시험.'],
+  ['BARI 2D','Bypass Angioplasty Revascularization Investigation in Type 2 Diabetes — 인슐린민감제와 DPN 발생 빈도 연관 분석을 포함한 임상시험.'],
+  ['INTERPRET-DD','International Prevalence and Treatment of Diabetes and Depression study — 고혈압과 DPN 발생의 독립적 연관성을 보고한 14개국 연구.'],
+];
+
+function buildAbbr(){
+  const sorted=abbrs.slice().sort((a,b)=>a[0].localeCompare(b[0]));
+  document.getElementById('abbr-grid-drop').innerHTML=sorted.map(a=>
+    `<div style="background:var(--surface2);border:1px solid var(--border);border-radius:5px;padding:6px 10px;margin-bottom:4px;" data-term="${a[0].toLowerCase()}" data-def="${a[1].toLowerCase()}">
+       <span style="font-weight:700;color:var(--accent2);font-size: calc(12px * var(--fscale, 1));font-family:'Courier New',monospace">${a[0]}</span>
+       <div style="font-size: calc(11px * var(--fscale, 1));color:var(--text2);line-height:1.45;margin-top:2px">${a[1]}</div>
+     </div>`).join('');
+}
+function filterAbbr(val){
+  const v=val.toLowerCase().trim();
+  const drop=document.getElementById('abbr-dropdown');
+  const items=document.querySelectorAll('#abbr-grid-drop [data-term]');
+  if(!v){drop.style.display='none';return;}
+  const inp=document.getElementById('abbr-input');
+  const rect=inp.getBoundingClientRect();
+  const w=440;
+  let left=rect.right-w;if(left<8)left=8;
+  drop.style.top=(rect.bottom+4)+'px';drop.style.left=left+'px';
+  drop.style.display='block';
+  items.forEach(el=>{
+    const show=el.dataset.term.startsWith(v)||el.dataset.def.includes(v);
+    el.style.display=show?'':'none';
+  });
+}
+document.addEventListener('click',e=>{
+  const inp=document.getElementById('abbr-input');
+  const drop=document.getElementById('abbr-dropdown');
+  if(inp&&!inp.contains(e.target)&&drop&&!drop.contains(e.target))drop.style.display='none';
+});
+buildAbbr();
+</script>
+</body>
+</html>

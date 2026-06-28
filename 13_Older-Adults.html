@@ -1,0 +1,1191 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ADA 2026 노인 당뇨병 관리</title>
+<style>
+  :root {
+    --bg:#f6f8fa;--surface:#fff;--surface2:#f0f2f5;--border:#d0d7de;
+    --accent:#0969da;--accent2:#0550ae;--green:#1a7f37;--yellow:#9a6700;
+    --red:#cf222e;--orange:#bc4c00;--text:#1f2328;--text2:#57606a;
+    --teal:#0a7c8a;--purple:#5a3ea0;--fscale:1;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'Pretendard','Noto Sans KR',-apple-system,sans-serif;background:var(--bg);color:var(--text);font-size: calc(13px * var(--fscale, 1));line-height:1.5;}
+  header{background:var(--surface);border-bottom:1px solid var(--border);padding:12px 16px 8px;display:flex;flex-direction:column;align-items:center;gap:4px;position:sticky;top:0;z-index:100;}
+  .header-inner{width:100%;max-width:960px;display:flex;flex-direction:column;align-items:center;gap:4px;}
+  .logo-badge{background:var(--accent2);color:#fff;font-size: calc(10px * var(--fscale, 1));font-weight:700;padding:3px 8px;border-radius:4px;letter-spacing:.5px;}
+  .tab-bar{display:flex;justify-content:center;background:var(--surface);border-bottom:1px solid var(--border);overflow-x:auto;scrollbar-width:none;}
+  .tab-bar::-webkit-scrollbar{display:none;}
+  .font-zoom-btn{display:flex;align-items:center;gap:3px;flex-shrink:0;margin:4px 4px 4px 6px;padding:5px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:6px;color:var(--accent2);font-size:calc(11px * var(--fscale, 1));font-weight:700;cursor:pointer;user-select:none;white-space:nowrap;transition:background .15s;}
+  .font-zoom-btn:hover{background:var(--border);}
+  .font-zoom-btn .fz-icon{font-size:calc(12px * var(--fscale, 1));}
+  .tab-bar-inner{width:100%;max-width:960px;display:flex;align-items:center;gap:2px;padding:0 4px;}
+  .tab{padding:7px 11px;font-size: calc(11.5px * var(--fscale, 1));color:var(--text2);cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;transition:color .15s,border-color .15s;user-select:none;flex-shrink:0;}
+  .tab:hover{color:var(--text);}
+  .tab.active{color:var(--accent2);border-bottom-color:var(--accent2);}
+  .tab-abbr-wrap{display:flex;align-items:center;padding:4px 4px;margin-left:4px;flex-shrink:0;position:relative;}
+  .main{padding:12px 16px;max-width:960px;margin:0 auto;}
+  .panel{display:none;}
+  .panel.active{display:block;}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+  .grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;}
+  @media(max-width:680px){.grid2,.grid3{grid-template-columns:1fr;}}
+  .card{background:var(--surface);border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-bottom:10px;}
+  .card-header{background:var(--surface2);padding:8px 12px;font-size: calc(12px * var(--fscale, 1));font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.5px;border-bottom:1px solid var(--border);cursor:pointer;display:flex;align-items:center;justify-content:space-between;user-select:none;}
+  .card-header .toggle{font-size: calc(13px * var(--fscale, 1));transition:transform .2s;}
+  .card-header.open .toggle{transform:rotate(180deg);}
+  .card-body{padding:10px 12px;}
+  .card-body.collapsed{display:none;}
+  .stat-row{display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap;}
+  .stat-box{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:10px 14px;flex:1;min-width:90px;text-align:center;}
+  .stat-box.clickable{cursor:pointer;transition:box-shadow .15s,border-color .15s;}
+  .stat-box.clickable:hover{border-color:var(--accent2);box-shadow:0 2px 8px rgba(5,80,174,.15);}
+  .stat-val{font-size: calc(18px * var(--fscale, 1));font-weight:700;color:var(--accent2);}
+  .stat-lbl{font-size: calc(10px * var(--fscale, 1));color:var(--text2);margin-top:2px;}
+  .stat-hint{font-size: calc(9px * var(--fscale, 1));color:var(--accent2);margin-top:4px;opacity:.7;}
+  /* Modal */
+  .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:500;align-items:center;justify-content:center;}
+  .modal-overlay.open{display:flex;}
+  .modal-box{background:var(--surface);border-radius:12px;padding:20px;max-width:680px;width:92%;max-height:84vh;overflow-y:auto;box-shadow:0 16px 48px rgba(0,0,0,.22);position:relative;}
+  .modal-close{position:absolute;top:12px;right:14px;background:none;border:none;font-size: calc(18px * var(--fscale, 1));cursor:pointer;color:var(--text2);line-height:1;}
+  .modal-title{font-size: calc(15px * var(--fscale, 1));font-weight:700;color:var(--text);margin-bottom:12px;padding-right:20px;line-height:1.4;}
+  .modal-section{margin-bottom:12px;}
+  .modal-section-title{font-size: calc(11px * var(--fscale, 1));font-weight:700;color:var(--accent2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;border-bottom:1px solid var(--border);padding-bottom:4px;}
+  .modal-table{width:100%;border-collapse:collapse;font-size: calc(11.5px * var(--fscale, 1));}
+  .modal-table th{background:var(--surface2);color:var(--text2);padding:4px 8px;font-size: calc(10.5px * var(--fscale, 1));font-weight:600;text-align:left;border-bottom:1px solid var(--border);}
+  .modal-table td{padding:5px 8px;border-bottom:1px solid var(--border);vertical-align:top;}
+  .modal-table tr:last-child td{border-bottom:none;}
+  .rec-list{list-style:none;}
+  .rec-item{padding:7px 0;border-bottom:1px solid var(--border);display:flex;gap:8px;align-items:flex-start;}
+  .rec-item:last-child{border-bottom:none;}
+  .rec-text{font-size: calc(12px * var(--fscale, 1));color:var(--text);line-height:1.65;}
+  .rec-text strong{color:#1f2328;}
+  .badge{display:inline-flex;align-items:center;padding:2px 8px;border-radius:10px;font-size: calc(10px * var(--fscale, 1));font-weight:700;white-space:nowrap;flex-shrink:0;margin-top:1px;}
+  .badge-A{background:#dafbe1;color:#116329;border:1px solid #1a7f37;}
+  .badge-B{background:#ddf4ff;color:var(--accent2);border:1px solid var(--accent2);}
+  .badge-C{background:#fff8c5;color:#7a4b00;border:1px solid #d4a017;}
+  .badge-E{background:#f3e5f5;color:#5a3ea0;border:1px solid #5a3ea0;}
+  .alert{padding:8px 12px;border-radius:6px;font-size: calc(12px * var(--fscale, 1));margin:8px 0;display:flex;gap:8px;align-items:flex-start;}
+  .alert-info{background:#ddf4ff;border-left:3px solid var(--accent2);color:#0550ae;}
+  .alert-warn{background:#fff8c5;border-left:3px solid #d4a017;color:#7a4b00;}
+  .alert-danger{background:#ffebe9;border-left:3px solid var(--red);color:#82071e;}
+  .alert-success{background:#dafbe1;border-left:3px solid var(--green);color:#116329;}
+  .alert-teal{background:#e0f5f5;border-left:3px solid var(--teal);color:#075050;}
+  .alert-orange{background:#fff3e0;border-left:3px solid var(--orange);color:#7a3500;}
+  .alert-purple{background:#f3e5f5;border-left:3px solid var(--purple);color:#5a3ea0;}
+  .tc-table{width:100%;border-collapse:collapse;font-size: calc(11.5px * var(--fscale, 1));}
+  .tc-table th{background:var(--surface2);color:var(--text2);padding:5px 8px;font-size: calc(10.5px * var(--fscale, 1));text-transform:uppercase;letter-spacing:.3px;font-weight:600;text-align:left;border-bottom:1px solid var(--border);}
+  .tc-table td{padding:5px 8px;border-bottom:1px solid var(--border);vertical-align:top;}
+  .tc-table tr:last-child td{border-bottom:none;}
+  .tc-table tr:hover td{background:rgba(0,0,0,.02);}
+  .acc{border:1px solid var(--border);border-radius:6px;margin-bottom:6px;overflow:hidden;}
+  .acc-hdr{background:var(--surface2);padding:7px 12px;font-size: calc(12px * var(--fscale, 1));font-weight:600;color:var(--text);cursor:pointer;display:flex;justify-content:space-between;align-items:center;user-select:none;}
+  .acc-hdr:hover{background:#e8eaec;}
+  .acc-body{display:none;padding:10px 12px;font-size: calc(12px * var(--fscale, 1));line-height:1.65;}
+  .flow-box{border:1px solid var(--border);border-radius:6px;background:var(--surface);padding:8px 12px;margin-bottom:6px;font-size: calc(12px * var(--fscale, 1));line-height:1.6;}
+  .flow-arrow{text-align:center;color:var(--text2);font-size: calc(14px * var(--fscale, 1));margin:2px 0;}
+  .step-num{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;background:var(--accent2);color:#fff;font-size: calc(10px * var(--fscale, 1));font-weight:700;flex-shrink:0;margin-right:6px;}
+  ul.dot{padding-left:18px;}
+  ul.dot li{margin-bottom:3px;font-size: calc(12px * var(--fscale, 1));line-height:1.6;}
+  ol.num{padding-left:18px;}
+  ol.num li{margin-bottom:4px;font-size: calc(12px * var(--fscale, 1));line-height:1.6;}
+  ::-webkit-scrollbar{width:5px;height:5px;}
+  ::-webkit-scrollbar-track{background:var(--bg);}
+  ::-webkit-scrollbar-thumb{background:#c8d0d9;border-radius:3px;}
+  .ms4-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+  @media(max-width:680px){.ms4-grid{grid-template-columns:1fr;}}
+  .ms4-box{border-radius:8px;padding:10px 12px;color:#fff;}
+  .ms4-box h4{font-size: calc(12.5px * var(--fscale, 1));margin-bottom:6px;display:flex;align-items:center;gap:6px;}
+  .ms4-box ul{padding-left:16px;}
+  .ms4-box li{font-size: calc(11px * var(--fscale, 1));line-height:1.55;margin-bottom:2px;}
+  .ms4-mention{background:#b03a3a;}
+  .ms4-medication{background:#b03a3a;}
+  .ms4-mentation{background:#0a7c8a;}
+  .ms4-mobility{background:#0a7c8a;}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div style="display:flex;align-items:center;gap:10px">
+      <span class="logo-badge">ADA 2026</span>
+      <h1 style="font-size:17px;font-weight:700;color:var(--text)">노인 당뇨병 관리</h1>
+    </div>
+    <div style="text-align:center;line-height:1.5">
+      <span style="color:var(--text2);font-size: calc(11px * var(--fscale, 1))">Standards of Care in Diabetes—2026, Section 13 — American Diabetes Association</span><br>
+      <span style="font-size: calc(10px * var(--fscale, 1));color:var(--text2)">Diabetes Care 2026;49(Suppl. 1):S277–S296 · doi: 10.2337/dc26-S013</span>
+    </div>
+    <div style="font-size: calc(10px * var(--fscale, 1));color:var(--text2);font-style:italic;">This tool is not officially endorsed by the American Diabetes Association (ADA).</div>
+  </div>
+</header>
+
+<div class="tab-bar">
+  <div class="tab-bar-inner">
+    <div id="font-zoom-btn" class="font-zoom-btn" onclick="cycleFontZoom()"><span class="fz-icon">🔠</span><span id="font-zoom-label">100%</span></div>
+    <div class="tab active" onclick="showTab('overview')">🏠 개요(4Ms)</div>
+    <div class="tab" onclick="showTab('cognition')">🧠 인지·저혈당</div>
+    <div class="tab" onclick="showTab('goals')">🎯 치료목표</div>
+    <div class="tab" onclick="showTab('lifestyle')">🥗 생활습관</div>
+    <div class="tab" onclick="showTab('pharm')">💊 약물치료</div>
+    <div class="tab" onclick="showTab('insulin')">💉 인슐린 단순화</div>
+    <div class="tab" onclick="showTab('paltc')">🏥 시설·임종돌봄</div>
+    <div class="tab" onclick="showTab('tables')">📁 기준표 모음</div>
+    <div class="tab-abbr-wrap">
+      <div style="position:relative;display:flex;align-items:center;flex-shrink:0">
+        <span style="position:absolute;left:8px;color:var(--text2);font-size: calc(12px * var(--fscale, 1));pointer-events:none">🔍</span>
+        <input id="abbr-input" type="text" placeholder="약어" oninput="filterAbbr(this.value)"
+          style="background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:4px 8px 4px 26px;color:var(--text);font-size: calc(12px * var(--fscale, 1));width:90px;outline:none;"
+          onfocus="this.style.borderColor='var(--accent2)'" onblur="this.style.borderColor='var(--border)'">
+      </div>
+      <div id="abbr-dropdown" style="display:none;position:fixed;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:8px;width:440px;max-height:360px;overflow-y:auto;z-index:300;box-shadow:0 8px 24px rgba(0,0,0,.12)">
+        <div id="abbr-grid-drop"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="main">
+
+<!-- ═══ OVERVIEW (4Ms) ═══ -->
+<div id="tab-overview" class="panel active">
+  <div class="stat-row">
+    <div class="stat-box clickable" onclick="openModal('prevModal')"><div class="stat-val">29%+</div><div class="stat-lbl">65세 이상 당뇨병 유병률</div><div class="stat-hint">▸ 클릭하여 상세 보기</div></div>
+    <div class="stat-box clickable" onclick="openModal('a1cModal')"><div class="stat-val">3단계</div><div class="stat-lbl">건강상태별 A1C 목표</div><div class="stat-hint">▸ 클릭하여 상세 보기</div></div>
+    <div class="stat-box clickable" onclick="openModal('leadModal')"><div class="stat-val">LEAD</div><div class="stat-lbl">생존기대 예측도구</div><div class="stat-hint">▸ 클릭하여 상세 보기</div></div>
+    <div class="stat-box clickable" onclick="openModal('4sModal')"><div class="stat-val">4S</div><div class="stat-lbl">치료조정 단계적 접근법</div><div class="stat-hint">▸ 클릭하여 상세 보기</div></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>📋 핵심 권고문 — 종합평가</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="rec-list">
+        <li class="rec-item"><span class="badge badge-B">B</span><span class="rec-text"><strong>13.1</strong> 의학적·심리적·기능적(자가관리능력)·사회적 영역을 종합평가하여 치료목표·접근법 결정</span></li>
+        <li class="rec-item"><span class="badge badge-B">B</span><span class="rec-text"><strong>13.2</strong> 노인증후군(인지장애·우울·요실금·낙상·지속통증·노쇠), 저혈당, 다약제복용을 최소 매년 선별</span></li>
+      </ul>
+      <div class="alert alert-info" style="margin-top:8px"><span>ℹ️</span><span>65세 이상 인구의 29% 이상이 당뇨병을 보유하며, 이 집단은 1형·2형 모두를 포함해 임상적으로 매우 이질적이다. 인슐린 전달·기술·관리의 발전으로 소아·성인기 발병 1형당뇨 환자가 노년까지 생존하는 사례가 증가하고 있다.</span></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>🧭 4Ms 프레임워크 — Age-Friendly Health Systems</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <p style="margin-bottom:10px;font-size: calc(11.5px * var(--fscale, 1));color:var(--text2)">Institute for Healthcare Improvement이 개발한 노인친화 의료의 근거기반 프레임워크. 4개 요소는 서로 영향을 미치며, 노인 당뇨병 관리에서 상호연관된 개인별 이슈를 다루는 데 유용한 개념적 모델을 제공한다.</p>
+      <div class="ms4-grid">
+        <div class="ms4-box ms4-mention">
+          <h4>🧠 Mentation (인지·정신)</h4>
+          <ul>
+            <li>약물 자가투여 능력</li>
+            <li>당뇨기술 사용 능력</li>
+            <li>불안·우울·당뇨디스트레스</li>
+            <li>경도인지장애 또는 치매</li>
+            <li>대처기술·자가관리</li>
+          </ul>
+        </div>
+        <div class="ms4-box ms4-medication">
+          <h4>💊 Medications (약물)</h4>
+          <ul>
+            <li>저혈당·저혈당인지저하·저혈당 두려움 위험</li>
+            <li>치료부담</li>
+            <li>비용·보험 적용 여부</li>
+            <li>약물선택에 영향을 미치는 말기장기질환·합병증</li>
+            <li>다약제복용</li>
+            <li>약물 이상반응 병력</li>
+            <li>사회적·가족 지원</li>
+          </ul>
+        </div>
+        <div class="ms4-box ms4-mentation">
+          <h4>🚶 Mobility (이동성)</h4>
+          <ul>
+            <li>발 합병증</li>
+            <li>기능 능력</li>
+            <li>노쇠·근감소증</li>
+            <li>보행 불균형·현훈</li>
+            <li>신경병증</li>
+            <li>시력·청력 장애</li>
+          </ul>
+        </div>
+        <div class="ms4-box ms4-mobility">
+          <h4>❤️ What Matters Most (가장 중요한 것)</h4>
+          <ul>
+            <li>목표·기대 논의</li>
+            <li>증상·질병 부담</li>
+            <li>식사·치료 선호(주사·혈당측정 등)</li>
+            <li>치료의 위험·부담·이득</li>
+            <li>외로움·사회적고립·전반적 삶의 질</li>
+            <li>기대수명</li>
+          </ul>
+        </div>
+      </div>
+      <div class="alert alert-warn" style="margin-top:10px"><span>⚠️</span><span>여기서 다루는 일반 관리원칙은 노인에게만 국한되지 않으며, 복합적 건강필요를 가진 모든 사람에게 적용된다.</span></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span>🔑 핵심 개념</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body collapsed">
+      <div class="alert alert-info"><span>ℹ️</span><span>노인 당뇨병 환자는 비당뇨군에 비해 기능장애·근육소실 가속화·이동장애·노쇠·동반질환(고혈압·CKD·관상동맥질환·뇌졸중) 발생률이 더 높다.</span></div>
+      <div class="alert alert-warn"><span>⚠️</span><span>시력·하지 합병증처럼 단기간에 발생할 수 있고 기능상태를 심각히 저해하는 합병증에 특별한 주의가 필요</span></div>
+      <div class="alert alert-teal"><span>💡</span><span>1형당뇨가 노년기에 새로 진단되는 경우도 증가하고 있으며, 서구 국가에서 발생률이 더 높음</span></div>
+      <div class="alert alert-danger"><span>🚫</span><span>당뇨병 합병증 선별검사는 <strong>개별화</strong>해야 하며, 일률적 적용이 아닌 기능상태·삶의 질에 영향을 줄 합병증을 우선해야 함</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ COGNITION & HYPOGLYCEMIA ═══ -->
+<div id="tab-cognition" class="panel">
+  <div class="alert alert-orange"><span>🧠</span><span>인지장애와 저혈당은 서로를 악화시키는 양방향 관계다 — 인지저하는 저혈당 위험을 높이고, 중증 저혈당은 치매 위험을 높인다.</span></div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>📋 신경인지기능 — 권고</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="rec-list">
+        <li class="rec-item"><span class="badge badge-B">B</span><span class="rec-text"><strong>13.3</strong> 65세 이상 — 경도인지장애 또는 치매의 조기발견을 위해 첫 방문 시·매년·필요 시 선별</span></li>
+      </ul>
+      <div class="alert alert-info" style="margin-top:8px"><span>ℹ️</span><span>당뇨병 환자는 전체원인 치매·알츠하이머병·혈관성 치매의 발생률이 더 높으며, 반대로 알츠하이머병 환자도 당뇨병 발생률이 더 높음 — 신경퇴행에 기여하는 대사적 과정을 시사</span></div>
+    </div>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <div class="card-header" onclick="toggleCard(this)">
+        <span>🩺 당뇨병관련 치매(Diabetes-Related Dementia)</span><span class="toggle">▾</span>
+      </div>
+      <div class="card-body collapsed">
+        <p style="margin-bottom:6px">알츠하이머병·혈관성 치매와 구분되는 새로운 임상개체로 부상 중. 특징:</p>
+        <ul class="dot">
+          <li>치매의 느린 진행</li>
+          <li>전형적 신경영상 소견 부재</li>
+          <li>고령, A1C 상승, 긴 당뇨병 유병기간</li>
+          <li>인슐린 사용 빈도 높음</li>
+          <li>노쇠·근감소증·동력감소증(dynapenia, 신경/근육질환에 의하지 않은 근력손실) 동반</li>
+        </ul>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header" onclick="toggleCard(this)">
+        <span>💊 약물별 인지영향</span><span class="toggle">▾</span>
+      </div>
+      <div class="card-body collapsed">
+        <ul class="dot">
+          <li>당뇨병 예방·집중적 혈당/혈압관리는 인지저하 감소를 보이지 못함(ACCORD MIND 등)</li>
+          <li>티아졸리딘디온, GLP-1 RA, SGLT2 억제제 — 인지저하 진행 둔화에 작은 이득 시사</li>
+          <li>메타분석: 심보호성 혈당강하제는 전체원인 치매 감소와 연관 없으나, <strong>GLP-1 RA는 통계적으로 유의한 치매 감소</strong>와 연관</li>
+          <li>혈압관리·스타틴 지질저하 — 치매 위험감소와 연관, 노인 당뇨병 환자에서 특히 중요</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>📊 표 13.1 — 노인증후군 및 기능장애 선별 (요약)</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <table class="tc-table">
+        <tr><th>영역</th><th>핵심 선별 질문</th><th>도구</th><th>판정기준</th></tr>
+        <tr><td>인지장애/치매</td><td>기억력이나 사고력에 변화가 있었나요?</td><td>Mini-Cog (5문항, 3분)</td><td>&lt;3점 — 치매선별 양성</td></tr>
+        <tr><td>섬망</td><td>오늘이 무슨 요일인가요?</td><td>4AT (4문항, 2분)</td><td>≥4점 — 섬망 가능성</td></tr>
+        <tr><td>우울</td><td>지난 한 달간 기분이 가라앉거나 우울하거나 희망이 없다고 느낀 적이 자주 있었나요?</td><td>GDS-5 (5문항, 2분)</td><td>≥2점 — 우울 가능성</td></tr>
+        <tr><td>낙상위험</td><td>최근 1년간 낙상했거나 균형/보행 문제로 낙상이 두려운가요?</td><td>STEADI (3문항, 1–2분)</td><td>한 문항이라도 "예" — 낙상위험 증가</td></tr>
+        <tr><td>노쇠</td><td>최근 비정상적으로 피로하거나 계단 오르기가 힘들었나요?</td><td>Clinical Frailty Scale (1문항, 1–2분)</td><td>≥5점 — 임상적으로 의미있는 노쇠</td></tr>
+        <tr><td>영양불량</td><td>최근 6개월간 의도치 않게 체중이 감소했나요?</td><td>MNA-SF (6문항, 5분)</td><td>0–7 영양불량 / 8–11 위험 / 12–14 정상</td></tr>
+        <tr><td>통증</td><td>현재 통증을 경험하고 있나요?</td><td>숫자통증등급(NRS, 1문항)</td><td>1–3 경도 / 4–6 중등도 / 7–10 중증</td></tr>
+        <tr><td>다약제복용</td><td>생각보다 많은 약을 복용하거나 부작용을 경험하나요?</td><td>Beers Criteria 또는 전체 약물 검토</td><td>목록상 약물 존재 시 검토 필요(이득&lt;위험 시 특히)</td></tr>
+        <tr><td>근감소증</td><td>최근 1년간 방을 가로질러 걷거나 계단을 오르기 힘들었나요?</td><td>SARC-F (5문항, 2–3분)</td><td>≥4점 — 근감소증 위험</td></tr>
+        <tr><td>청력장애</td><td>보청기를 사용해도 듣기가 어렵나요?</td><td>Whisper test</td><td>무작위 문자·숫자 3개 중 3개 이상 반복 못함 — 청력손실 가능</td></tr>
+        <tr><td>시력장애</td><td>안경을 써도 보기가 어렵나요?</td><td>Snellen 시력표</td><td>20/40 이하 — 시력장애</td></tr>
+        <tr><td>불면증</td><td>잠들기 어렵거나 자다가 깨거나 너무 일찍 깨서 다시 못 자나요?</td><td>ISI-7 (7문항, 3분)</td><td>≥8점 — 불면증</td></tr>
+        <tr><td>요실금</td><td>방광조절이나 소변누출 문제가 있나요?</td><td>3IQ (3문항, 1–2분)</td><td>응답에 따라 요실금 유형 분류</td></tr>
+        <tr><td>손동작능력</td><td>옷의 단추를 채우는 등 일상에서 손 사용에 어려움이 있나요?</td><td>단추·동전 검사 (2항목, 1–2분)</td><td>0 심각한 장애 / 1 경중등도 / 2 경미~정상</td></tr>
+        <tr><td>현훈</td><td>현훈, 멍함, 또는 회전감을 느끼나요? 균형이나 안정성에 변화가 있나요?</td><td>기립혈압·신경학적검사</td><td>임상평가</td></tr>
+        <tr><td>실행기능</td><td>일상활동을 계획하거나 조직하는 것이 어려운가요?</td><td>Trail Making Test B (3–5분)</td><td>≥180초 — 실행기능장애</td></tr>
+      </table>
+      <div class="alert alert-info" style="margin-top:8px"><span>ℹ️</span><span>이러한 도구는 임상적으로 필요할 때 사용하며, 당뇨병 관리팀의 어떤 구성원이든 시행할 수 있다.</span></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>📉 저혈당 — 권고 및 위험요인</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="rec-list">
+        <li class="rec-item"><span class="badge badge-B">B</span><span class="rec-text"><strong>13.4</strong> 저혈당제(설폰요소제, 메글리티나이드, 인슐린) 치료 시 특히, 정기방문 시 저혈당 발생을 파악하고 대응</span></li>
+        <li class="rec-item"><span class="badge badge-A">A</span><span class="rec-text"><strong>13.5</strong> 1형당뇨 노인에게 CGM 권장 / <span class="badge badge-B" style="margin-left:4px">B</span> 인슐린치료 2형당뇨 노인에게도 권장 — 혈당관리 개선, 저혈당·치료부담 감소</span></li>
+        <li class="rec-item"><span class="badge badge-B">B</span><span class="rec-text"><strong>13.6</strong> 자동인슐린전달시스템(AID) 및 연결펜 등 첨단기기 <span class="badge badge-E" style="margin-left:4px">E</span> — 개인의 능력·지지체계에 따라 저혈당위험 감소를 위해 고려</span></li>
+      </ul>
+      <div class="grid2" style="margin-top:8px">
+        <ul class="dot">
+          <li>불규칙한 식사섭취(인슐린치료 시 특히)</li>
+          <li>신기능 악화</li>
+          <li>인지장애·치매로 인한 복잡한 자가관리 수행 어려움</li>
+        </ul>
+        <ul class="dot">
+          <li>인지저하 → 저혈당위험 증가, 중증 저혈당 → 치매위험 증가(양방향)</li>
+          <li>ACCORD·VADT: A1C&lt;6.0% 목표의 집중치료가 도움이 필요한 저혈당을 유의하게 증가</li>
+          <li>단, 해당 임상시험은 인슐린 위주·GLP-1 RA 거의 미사용, SGLT2 도입 이전 시행됨</li>
+        </ul>
+      </div>
+      <div class="alert alert-warn" style="margin-top:8px"><span>⚠️</span><span>급성질환·외상·수술 등 스트레스 상황에서도 저혈당이 유발될 수 있어, 이 시기에는 개별화된 혈당모니터링·약물조정 지침이 필요</span></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span>📱 CGM·첨단인슐린전달기기 임상근거</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body collapsed">
+      <table class="tc-table">
+        <tr><th>연구</th><th>대상</th><th>주요 결과</th></tr>
+        <tr><td>ORACL</td><td>1형당뇨 노인 30명(평균 67세)</td><td>AID가 센서증강펌프 대비 TIR 유의개선 + 저혈당 경미개선</td></tr>
+        <tr><td>오픈라벨 교차시험</td><td>1형당뇨 ≥60세 37명</td><td>16주 하이브리드 클로즈드루프 — TIR 개선·범위초과시간 감소, 저혈당 차이는 없었음</td></tr>
+        <tr><td>RCT(다회주사군)</td><td>자가관리 어려운 2형당뇨 노인</td><td>가정건강서비스 병행 AID 12주 사용 — TIR 27% 증가</td></tr>
+        <tr><td>AIDE T1D</td><td>≥65세 82명, 교차설계</td><td>AID 사용군이 하이브리드클로즈드루프·예측저혈당중단·센서증강펌프 대비 저혈당 적음. 연장단계에서 91%가 AID 선택</td></tr>
+        <tr><td>Medicare 실사용데이터</td><td>4,243명(89% 1형, 평균 67.4세)</td><td>하이브리드클로즈드루프 시작 — 평균혈당 개선, TIR 10%p 증가</td></tr>
+      </table>
+      <div class="alert alert-info" style="margin-top:8px"><span>ℹ️</span><span>노인이 신기술 학습에 더 오랜 시간이 필요할 수 있어 보호자 참여가 유익. 인지·기능적 능력 평가 및 보호자 지원 가능성 확인이 중요. 그룹홈·요양시설 거주자나 대리인이 혈당을 모니터링해야 하는 경우에도 CGM이 유용할 수 있음</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ TREATMENT GOALS ═══ -->
+<div id="tab-goals" class="panel">
+  <div class="alert alert-orange"><span>🎯</span><span>건강상태가 헬시(Healthy)에서 복합/중등도(Complex/Intermediate), 매우복합/저건강(Very Complex/Poor)으로 갈수록 목표는 점차 완화되며, 저혈당·증상성 고혈당 회피가 핵심이 된다.</span></div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>📋 치료목표 — 핵심 권고</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="rec-list">
+        <li class="rec-item"><span class="badge badge-C">C</span><span class="rec-text"><strong>13.7a</strong> 동반질환 적고 안정적, 인지·기능 양호 — A1C &lt;7.0–7.5%, 그리고/또는 CGM 사용 시 TIR ≥70%·TBR ≤4%</span></li>
+        <li class="rec-item"><span class="badge badge-C">C</span><span class="rec-text"><strong>13.7b</strong> 중등도/복합 건강(이질적, 가변적 기대수명) — 저혈당 회피 우선, 덜 엄격한 목표(A1C &lt;8.0%, TIR ≥50%·TBR &lt;1%)</span></li>
+        <li class="rec-item"><span class="badge badge-C">C</span><span class="rec-text"><strong>13.7c</strong> 매우복합/저건강 — 엄격한 혈당목표의 이득 미미, 저혈당·증상성 고혈당 회피에 집중</span></li>
+        <li class="rec-item"><span class="badge badge-C">C</span><span class="rec-text"><strong>13.8</strong> 합병증 선별은 개별화 — 기능상태·삶의 질 저해 합병증 우선</span></li>
+        <li class="rec-item"><span class="badge badge-A">A</span><span class="rec-text"><strong>13.9</strong> 대부분 노인의 치료중 혈압목표는 안전하게 달성 가능 시 &lt;130/80mmHg, 저건강/기대수명 제한/항고혈압치료 이상반응 고위험군은 &lt;140/90mmHg 고려 <span class="badge badge-E" style="margin-left:4px">E</span></span></li>
+        <li class="rec-item"><span class="badge badge-A">A</span><span class="rec-text"><strong>13.10</strong> 다른 심혈관위험인자 치료도 개별화, 이득까지의 시간프레임 고려 — 1차/2차예방 임상시험 기간과 같거나 그 이상 기대수명일 때 지질저하제·항혈소판제 이득</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>📊 표 13.2 — 건강상태별 치료목표 프레임워크</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <table class="tc-table">
+        <tr><th>건강상태</th><th>특징</th><th>A1C 목표</th><th>CGM 목표(TIR/TBR)</th><th>공복/식전 혈당</th><th>취침전 혈당</th><th>혈압</th><th>지질</th></tr>
+        <tr><td><strong>건강</strong></td><td>동반질환 적음, 인지·기능 양호</td><td>&lt;7.0–7.5%</td><td>TIR≥70%, TBR≤4%</td><td>80–130 mg/dL</td><td>80–180 mg/dL</td><td>&lt;130/80</td><td>스타틴(금기/불내성 없으면)</td></tr>
+        <tr><td><strong>복합/중등도</strong></td><td>다중 동반질환† 또는 ADL장애 ≥2 또는 경중등도 인지장애</td><td>&lt;8.0%</td><td>TIR≥50%, TBR&lt;1%</td><td>90–150 mg/dL</td><td>100–180 mg/dL</td><td>&lt;130/80</td><td>스타틴(금기/불내성 없으면)</td></tr>
+        <tr><td><strong>매우복합/저건강</strong></td><td>PALTC 또는 말기질환‡ 또는 중등중증 인지장애 또는 ADL장애 ≥2</td><td>A1C 의존 회피</td><td>—</td><td>100–180 mg/dL</td><td>110–200 mg/dL</td><td>&lt;140/90</td><td>스타틴 이득가능성 고려</td></tr>
+      </table>
+      <div class="alert alert-info" style="margin-top:8px"><span>ℹ️</span><span>†다중 동반질환 = 관절염·암·심부전·우울·폐기종·낙상·고혈압·요실금·3기 이상 CKD·심근경색·뇌졸중 등 약물/생활습관관리가 필요한 질환 3개 이상(흔히 5개 이상도 가능). ‡말기질환 = 3–4기 심부전, 산소의존 폐질환, 투석필요 CKD, 조절안되는 전이성암 등 단일 말기질환으로도 기능상태·기대수명에 큰 영향을 줄 수 있음</span></div>
+      <p style="font-size: calc(11px * var(--fscale, 1));color:var(--text2);margin-top:6px">달성가능하고 반복적/중증 저혈당이나 과도한 치료부담 없이 가능하다면 더 낮은 A1C 목표를 설정할 수 있음. Kirkman et al. 적용</p>
+    </div>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <div class="card-header" onclick="toggleCard(this)">
+        <span>📐 생존기대 예측 — LEAD 도구</span><span class="toggle">▾</span>
+      </div>
+      <div class="card-body collapsed">
+        <p style="margin-bottom:6px"><strong>Life Expectancy Estimator for Older Adults with Diabetes(LEAD)</strong> — 당뇨병 노인 대상 개발·검증된 도구. 고위험 점수는 기대수명 5년 미만과 강하게 연관</p>
+        <ul class="dot">
+          <li>덜 엄격한 혈당목표 선택 결정에 유용한 출발점, 특히 더 엄격한 목표가 저혈당위험 높은 약물을 필요로 할 때</li>
+          <li>나이, 질병부담, 노쇠·장애 정도가 기대수명에 영향</li>
+          <li>여러 다른 예후도구도 존재</li>
+        </ul>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header" onclick="toggleCard(this)">
+        <span>🩸 A1C 신뢰도 — 주의 상황</span><span class="toggle">▾</span>
+      </div>
+      <div class="card-body collapsed">
+        <p style="margin-bottom:6px">A1C는 적혈구 회전율에 영향을 주는 상태에서 부정확할 수 있다. 노인에서 흔한 원인:</p>
+        <ul class="dot">
+          <li>신부전</li>
+          <li>최근의 심각한 출혈</li>
+          <li>에리스로포이에틴 치료</li>
+          <li>수혈 병력</li>
+        </ul>
+        <div class="alert alert-warn" style="margin-top:8px"><span>⚠️</span><span>이런 경우 혈당측정·CGM을 목표설정에 사용해야 하며, fructosamine 등 당화단백 검사가 보조적으로 유용할 수 있음</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <div class="card-header" onclick="toggleCard(this)">
+        <span>✅ 기능 양호·합병증 없는 노인</span><span class="toggle">▾</span>
+      </div>
+      <div class="card-body collapsed">
+        <p>장기적 집중관리의 이득을 실현할 만큼 충분히 오래 생존할 것으로 예상되고, 인지·신체기능이 양호하며 치료부담이 적은(또는 받아들일 수 있는) 노인은 더 젊은 성인과 유사한 치료적 접근·목표로 관리할 수 있다.</p>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header" onclick="toggleCard(this)">
+        <span>⚠️ 합병증 동반·기능저하 노인</span><span class="toggle">▾</span>
+      </div>
+      <div class="card-body collapsed">
+        <p style="margin-bottom:6px">경합사망(competing mortality)과 이득시간(time to benefit) 개념에 근거하여:</p>
+        <ul class="dot">
+          <li>기대수명 짧음, 진행된 당뇨합병증, 생명제한적 동반질환, 노쇠, 상당한 인지/기능장애 — 혈당강하의 이득 적고 저혈당 등 심각한 부작용 위험 더 큼</li>
+          <li>단, &gt;180mg/dL 고혈당도 탈수·쇠약·감염·창상치유불량·고혈당위기 위험을 높이므로 회피해야 함</li>
+          <li>약물의 위험·이득 균형(질환특이적 이득 vs 저혈당위험·내약성·투여어려움·지원체계부족·비용) 고려 필요</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span>🔬 동반질환 기반 분류 연구 — 3개 군집</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body collapsed">
+      <table class="tc-table">
+        <tr><th>군집</th><th>특징</th></tr>
+        <tr><td>건강군(Healthy)</td><td>기준 비교군</td></tr>
+        <tr><td>노인병군(Geriatric)</td><td>비만·고혈압·관절염·요실금 유병률 가장 높음</td></tr>
+        <tr><td>심혈관군(Cardiovascular)</td><td>심근경색·심부전·뇌졸중 유병률 가장 높음, 건강군 대비 노쇠·후속사망률 가장 높음</td></tr>
+      </table>
+      <p style="font-size: calc(11px * var(--fscale, 1));color:var(--text2);margin-top:6px">전세계적으로 합의된 최적 분류전략은 아직 없으며, 자연경과 및 혈당관리/특정약물에 대한 차별적 반응을 구분할 재현가능한 분류체계 개발을 위한 추가연구가 필요하다.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span>⚰️ 임종기(End of Life) — 당뇨관리 원칙</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body collapsed">
+      <ul class="dot">
+        <li>완화의료·임종돌봄 환자 — 저혈당·증상성 고혈당 회피가 목표, 혈당관리 부담 감소</li>
+        <li>장기부전이 진행되면 치료계획을 점차 탈강도화(deintensify)</li>
+        <li>임종기에는 대부분의 2형당뇨 약물을 중단할 수 있음</li>
+        <li>1형당뇨의 임종기 관리에는 합의된 지침이 없음</li>
+        <li>복잡한 의학적·기능적 문제 및 사전돌봄계획 수립 지원을 위해 노인의학·완화의료 전문가 자문이 도움될 수 있음</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ LIFESTYLE ═══ -->
+<div id="tab-lifestyle" class="panel">
+  <div class="alert alert-orange"><span>🥗</span><span>노인 생활습관관리는 노쇠상태에 맞춰 조정해야 한다. 당뇨병은 근력저하·근육질 저하·근육량 가속소실의 독립적 위험인자이며, 근감소증·동력감소증·골감소증으로 이어질 수 있다.</span></div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>📋 생활습관관리 — 핵심 권고</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="rec-list">
+        <li class="rec-item"><span class="badge badge-B">B</span><span class="rec-text"><strong>13.11a</strong> 충분한 단백질 섭취(최소 0.8g/kg체중/일)를 동반한 건강한 식이 권장, 근육량/기능 회복 목표 시 더 높은 개별화된 양 고려</span></li>
+        <li class="rec-item"><span class="badge badge-B">B</span><span class="rec-text"><strong>13.11b</strong> 안전하게 참여 가능한 경우 유산소·체중부하운동·저항운동을 포함한 규칙적 신체활동 권장, 특히 체중감량 추구 시 근육량 유지 목적</span></li>
+        <li class="rec-item"><span class="badge badge-A">A</span><span class="rec-text"><strong>13.12</strong> 2형당뇨+과체중/비만+안전운동 가능 — 식이변화·신체활동·체중감량(5–7%) 집중 생활습관중재를 삶의질·이동성·신체기능·심대사위험 이득 측면에서 고려</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <div class="card-header open" onclick="toggleCard(this)">
+        <span>🍗 단백질 섭취 가이드</span><span class="toggle">▾</span>
+      </div>
+      <div class="card-body">
+        <ul class="dot">
+          <li>일반권장량(0.8–1.5g/kg체중/일 또는 칼로리의 15–20%)을 넘는 단백질조정이 혈당관리·심혈관예후를 개선한다는 근거는 현재 없음</li>
+          <li>단, 일부 연구에서 다소 높은 단백질섭취(20–30%)가 포만감 증진으로 당뇨관리를 도울 수 있음을 시사</li>
+          <li>근감소증 인구 — 단백질보충 + 저항운동 병합이 근육량·근력 증가와 연관</li>
+          <li>영양불량(또는 그 위험)에 특히 주의 — 근감소증과 연관, 일상생활능력·악력·하지신체기능·인지·삶의질 저하와도 연관</li>
+        </ul>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header open" onclick="toggleCard(this)">
+        <span>🏋️ 노쇠 관리 — 구조화된 신체활동</span><span class="toggle">▾</span>
+      </div>
+      <div class="card-body">
+        <p style="margin-bottom:6px"><strong>LIFE 연구</strong> — 노쇠 노인에서 구조화된 신체활동 프로그램의 이득:</p>
+        <ul class="dot">
+          <li>좌식시간 감소</li>
+          <li>이동성장애 예방</li>
+          <li>노쇠 감소</li>
+        </ul>
+        <div class="alert alert-info" style="margin-top:8px"><span>ℹ️</span><span>목표는 체중감량이 아니라 <strong>기능상태 향상</strong></span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>⚖️ Look AHEAD 연구 — 노인 하위분석</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <div class="alert alert-info" style="margin:0 0 8px"><span>ℹ️</span><span>45–74세 대상, 최대운동검사 수행가능자만 포함(낮은 기능상태자는 제외) — 1차 결과(심혈관사건 감소)는 달성하지 못했으나 다수의 임상적 이득 확인</span></div>
+      <table class="tc-table">
+        <tr><th>결과지표</th><th>이득</th></tr>
+        <tr><td>체중·신체기능</td><td>체중감량, 신체적합도 개선, 허리둘레 감소</td></tr>
+        <tr><td>대사지표</td><td>HDL콜레스테롤 증가, 수축기혈압 저하, A1C 감소</td></tr>
+        <tr><td>약물사용</td><td>항고혈압제·스타틴·인슐린 필요성 감소</td></tr>
+        <tr><td>노화관련 지표</td><td>다중질병이환 감소, 신체기능 개선, 삶의질 향상</td></tr>
+      </table>
+      <ul class="dot" style="margin-top:8px">
+        <li>1년차 체중 10% 이상 감량군에서 심혈관예후 개선(하위그룹분석)</li>
+        <li>60–70세 노인군 — 더 젊은 참가자와 유사한 이득 확인(연령계층화분석)</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ PHARMACOLOGIC THERAPY ═══ -->
+<div id="tab-pharm" class="panel">
+  <div class="alert alert-orange"><span>💊</span><span>노인은 다약제복용 및 그 부작용의 고위험군이다. 치료계획의 복잡성은 자가관리능력·가용한 사회적·의료적 지지체계와 맞춰야 한다.</span></div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>📋 약물요법 — 핵심 권고</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="rec-list">
+        <li class="rec-item"><span class="badge badge-B">B</span><span class="rec-text"><strong>13.13</strong> 저혈당위험요인 있는 2형당뇨 노인 — 저혈당위험 낮은 약물 선택</span></li>
+        <li class="rec-item"><span class="badge badge-B">B</span><span class="rec-text"><strong>13.14a</strong> 저혈당 고위험군 — 저혈당유발약물(인슐린·설폰요소제·메글리티나이드) 탈강도화 또는 저위험계열로 전환, 개별화된 혈당목표 적용</span></li>
+        <li class="rec-item"><span class="badge badge-E">E</span><span class="rec-text"><strong>13.14b</strong> 치료의 위해/부담이 이득보다 큰 경우 약물 탈강도화(개별화된 혈당목표 내에서)</span></li>
+        <li class="rec-item"><span class="badge badge-B">B</span><span class="rec-text"><strong>13.14c</strong> 복잡한 치료계획(특히 인슐린)을 단순화하여 저혈당·다약제복용 위험과 치료부담 감소</span></li>
+        <li class="rec-item"><span class="badge badge-A">A</span><span class="rec-text"><strong>13.14d</strong> ASCVD/심부전/CKD 확정 또는 고위험 2형당뇨 노인 — 혈당과 무관하게 심·신질환 위험 감소제제 포함</span></li>
+        <li class="rec-item"><span class="badge badge-B">B</span><span class="rec-text"><strong>13.15</strong> 치료계획 수립 시 비용·보험적용을 고려하여 비용관련 복약/자가관리 장벽 감소</span></li>
+      </ul>
+      <div class="alert alert-danger" style="margin-top:8px"><span>🚫</span><span>인슐린·설폰요소제를 광범위하게 사용하는 집중적 혈당관리는 특히 복합건강 노인에서 <strong>과잉치료(overtreatment)</strong>로 간주되며 임상에서 흔히 관찰되고, 사망률을 높일 수 있음. 높은 치료부담도 과잉치료의 신호</span></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>🧭 4S 경로(4S Pathway) — 치료 재조정 단계적 접근</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <div class="flow-box" style="border-left:3px solid var(--accent2)">
+        <strong>① 평가(Survey)</strong><br>
+        <span style="color:var(--text2);font-size: calc(11px * var(--fscale, 1))">위험신호·약물이상반응·건강/기능의 주요변화 조사 — 의학적 사건, 인생전환 사건, 신체/인지/정신건강 변화, 약물복용행동 변화, 미인지 저혈당 징후, 고혈당 증상</span>
+      </div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-box" style="border-left:3px solid var(--green)">
+        <strong>② 재평가(Shared decision-making)</strong><br>
+        <span style="font-size: calc(11.5px * var(--fscale, 1))">공유의사결정을 통해 혈당목표 재평가, 보호자 참여, 2주간 CGM 사용으로 혈당패턴 평가 고려</span>
+      </div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-box" style="border-left:3px solid var(--yellow)">
+        <strong>③ 조정(Simplify)</strong><br>
+        <span style="font-size: calc(11.5px * var(--fscale, 1))">안전성 최적화·다약제복용 최소화·질환특이적 이득을 목표로 치료계획 탈강도화·단순화·수정</span>
+      </div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-box" style="border-left:3px solid var(--orange)">
+        <strong>④ 재확인(Sustain)</strong><br>
+        <span style="font-size: calc(11.5px * var(--fscale, 1))">치료참여도·부담을 재평가, 필요 시 추가 조정</span>
+      </div>
+      <p style="font-size: calc(10.5px * var(--fscale, 1));color:var(--text2);margin-top:6px">Munshi et al., Lancet Diabetes Endocrinol 2025 권고에 기반</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>💊 계열별 노인 처방 고려사항</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <div class="acc">
+        <div class="acc-hdr" onclick="toggleAcc(this)"><span>메트포르민</span><span>▾</span></div>
+        <div class="acc-body">저혈당위험 낮고 투여가 간단하여 좋은 선택. eGFR≥30에서 안전 사용 가능(30–45에서는 저용량). 3–6개월마다 eGFR 모니터링(신기능저하위험군). 진행된 신질환에서는 금기, 저관류·저산소증·간기능장애 시 젖산산증 위험으로 주의. 요오드조영제 검사·입원·급성질환 시 임시중단 고려. 위장관 부작용은 서서히 적정으로 최소화. 서방형 제제가 즉방형의 대안. 4년 이상 장기복용 시 매년 비타민B12 모니터링.</div>
+      </div>
+      <div class="acc">
+        <div class="acc-hdr" onclick="toggleAcc(this)"><span>Pioglitazone</span><span>▾</span></div>
+        <div class="acc-body">저혈당위험 낮으나 심부전·체액저류·체중증가·골다공증·황반부종 위험으로 선별적·신중한 사용 필요. 저용량·병합요법 시 이상반응 위험 감소. 뇌졸중감소의 이득 가능성도 있음.</div>
+      </div>
+      <div class="acc">
+        <div class="acc-hdr" onclick="toggleAcc(this)"><span>인슐린분비촉진제(설폰요소제·메글리티니드)</span><span>▾</span></div>
+        <div class="acc-body">설폰요소제 — 저혈당·골손실·골절위험과 연관, 신중사용 필요. 메글리티니드(repaglinide, nateglinide)도 저혈당·골절위험 증가. 짧은작용 설폰요소제(glipizide 등)가 선호되나, 최근 분석에서 주요심혈관사건 위험이 가장 높음. Glyburide(다중 활성대사체, 장시간작용)는 저혈당위험으로 노인에서 회피. 항균제(특히 fluoroquinolone, sulfamethoxazole-trimethoprim)와 상호작용으로 저혈당 유발 가능 — 이 경우 용량감량·임시중단. 규칙적이고 충분한 식사가 저혈당위험 감소에 필수, 질병/금식/식사장애 시 용량조절 또는 보류 필요.</div>
+      </div>
+      <div class="acc">
+        <div class="acc-hdr" onclick="toggleAcc(this)"><span>DPP-4 억제제</span><span>▾</span></div>
+        <div class="acc-body">부작용 적고 저혈당위험 최소이나 비용이 장벽일 수 있음. 비교적 약한 혈당강하효과이며 GLP-1 RA·SGLT2 억제제와 같은 심·신질환위험 감소효과 없음. GLP-1 RA 또는 GIP/GLP-1 RA를 견디지 못하는 경미한 고혈당 또는 저혈당고위험 노인에 유용할 수 있음. 저eGFR 노인에서 메트포르민 대안 가능 — linagliptin은 신용량조절 불필요.</div>
+      </div>
+      <div class="acc">
+        <div class="acc-hdr" onclick="toggleAcc(this)"><span>GLP-1 기반 치료 (GLP-1 RA / GIP·GLP-1 RA)</span><span>▾</span></div>
+        <div class="acc-body">저혈당위험 낮은 고효능 혈당강하제, 투석 중 포함 저eGFR에서도 사용 가능. ASCVD·고위험·CKD·HFpEF(비만동반) 환자에서 심혈관이득. 메타분석: 65세 이상/이하에서 주요심혈관사건·심혈관사망·뇌졸중·심근경색 감소효과 동일. 체중감량의 부가이득 — 수면무호흡·무릎골관절염·MASH 개선. 실용적 고려사항: 경구세마글루타이드 제외 주사제(시각·운동·인지능력 필요, 대개 주1회). 오심·구토·설사·변비 가능 — 서서히 적정. 원인불명 체중감소·영양불량, 문제적 변비, 심각한 위마비, 재발성 장폐색/마비성장폐쇄 환자에서는 비선호. 탈수·과도한체중감소(근감소증·골밀도저하 위험) 정기모니터링 필요 — 충분한 단백질섭취·저항/근력운동으로 완화 가능.</div>
+      </div>
+      <div class="acc">
+        <div class="acc-hdr" onclick="toggleAcc(this)"><span>SGLT2 억제제</span><span>▾</span></div>
+        <div class="acc-body">경구투여로 편리. ASCVD 확정 시 심혈관이득, 심부전 이득, CKD 진행 둔화. 계층화분석에서 노인이 더 젊은 인구와 유사하거나 더 큰 이득. 전반적으로 내약성 양호하나 신중한 환자선택 필요. 임상적으로 유의한 체액량감소 위험(노인 특히 취약) — 노쇠·기립성저혈압경향 환자에서 주의. 생식기 진균감염 위험 증가(여성 특히), 부담스러울 경우 중단 고려. 요로감염 약간 증가 가능 — 재발성/중증 요로감염자 주의. 요량을 증가시키므로 시작 전후 요실금증상 확인. 정상혈당 당뇨병성케토산증(드물지만 심각) — 특히 PALTC 거주 다중질병이환자, 감염이 가장 흔한 유발인자.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span>💉 인슐린치료 — 노인 처방 시 고려사항</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body collapsed">
+      <ul class="dot">
+        <li>본인 또는 보호자가 양호한 시각·운동기능·인지능력을 보유하여 투여·조정·저혈당 인지/치료가 가능해야 함</li>
+        <li>나이 자체가 기술사용을 제한하지 않음 — CGM·AID 사용가능한 노인은 안전·효과적 혈당관리에 도움이 된다면 사용 권장</li>
+        <li>1일 1회 기저인슐린이 많은 노인에게 합리적 선택, 단 저혈당위험·기타이득 측면에서 비인슐린제제가 선호됨</li>
+        <li>장시간작용 인슐린유사체 — Medicare 인구에서 NPH인슐린보다 저혈당관련 응급실방문/입원 위험이 낮음</li>
+        <li>1일 다회주사는 진행된 합병증·생명제한적 동반질환·인지/기능장애·낮은 기능상태/사회적지지 노인에게 너무 복잡할 수 있음</li>
+        <li>가능하다면 주사기보다 인슐린펜이 선호됨, 특히 기능장애가 있는 노인에서</li>
+      </ul>
+      <div class="alert alert-info" style="margin-top:8px"><span>ℹ️</span><span>개인의 자가관리능력·가용지지체계에 맞춘 인슐린계획 단순화는 혈당결과를 악화시키지 않으면서 저혈당·질병관련디스트레스를 감소시키는 것으로 나타남</span></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span>🏠 기타 고려사항 — 생활환경·지지체계</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body collapsed">
+      <ul class="dot">
+        <li>부적절한 사회적지지·장기서비스 접근성 저하 → 삶의 질 감소, 기능적 의존위험 증가</li>
+        <li>생활환경(독립생활/요양시설/그룹홈)이 당뇨관리·지지필요를 좌우</li>
+        <li>가족·보호자 등 사회적·도구적 지지망을 당뇨관리 논의 및 공유의사결정에 포함해야 함</li>
+        <li>PALTC로의 전환은 치료목표의 불연속성, 투여오류, 영양/활동변화로 이어질 수 있음 — 지속적 지지가 더욱 중요해짐</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span>🧬 1형당뇨 노인 — 특별 고려사항</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body collapsed">
+      <ul class="dot">
+        <li>현대 당뇨관리의 성공으로 1형당뇨 환자의 생존기간이 늘어나 65세 이상 인구가 증가 중</li>
+        <li>인슐린은 생명유지에 필수 — 식사를 못하더라도 DKA 예방을 위해 일정 형태의 기저인슐린이 필요</li>
+        <li>주사, AID시스템, 또는 인슐린펌프 단독 등 개인선호·능력·상황에 따른 인슐린 전달방식 선택</li>
+        <li>모든 인슐린전달시스템과 함께 CGM 사용 권장 — Medicare 승인, A1C개선·혈당변동성감소·저혈당위험감소에 중요한 역할</li>
+        <li>합병증·인지/기능장애 진행에 따라 인슐린투여가 더 어려워짐 — 보호자의 역할이 더욱 중요해짐</li>
+        <li>PALTC시설 직원의 CGM·인슐린펌프·첨단인슐린전달기기에 대한 익숙함은 여전히 부족 — 실현가능성연구에서 충분한 직원교육이 있다면 CGM이 PALTC에서도 유용함을 확인</li>
+        <li>PALTC거주 노인 대상 CGM 연구 — 인슐린 및 설폰요소제 사용자 모두에서 높은 저혈당 유병률 확인, 이 인구집단의 저혈당고위험을 시사</li>
+        <li>DKA가 패혈증·장기부전·기타 전해질이상으로 오인될 수 있음 — 본인/가족이 현재 관리계획을 시설직원/의료진보다 더 잘 알 수 있어, 관련 직원교육이 중요</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ INSULIN SIMPLIFICATION ═══ -->
+<div id="tab-insulin" class="panel">
+  <div class="alert alert-orange"><span>💉</span><span>복잡한 인슐린요법의 단순화는 개인의 자가관리능력·가용지지체계에 맞춰야 한다. 기술사용 최적화와 보호자참여가 모든 단순화과정의 출발점이다.</span></div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>🗺️ 인슐린 단순화 알고리즘 — 단계별 접근</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <div class="alert alert-info" style="margin:0 0 10px"><span>ℹ️</span><span>출발점: 기술 사용 최적화 및 보호자 참여. 이후 환자가 기저/식전 인슐린 중인지, 혼합형(premixed) 인슐린 중인지에 따라 경로가 나뉜다.</span></div>
+
+      <div class="grid2">
+        <div>
+          <div class="flow-box" style="border-left:3px solid var(--accent2)">
+            <strong>경로 A — 기저+식전 인슐린</strong><br>
+            <span style="font-size: calc(11px * var(--fscale, 1))">기저인슐린: 취침전→아침으로 시점변경. 1주간 공복혈당 기준으로 적정(목표 90–150mg/dL): 50% 초과 시 ≥2단위 증량, 주2회 초과 &lt;80mg/dL 시 ≥2단위 감량</span>
+          </div>
+          <div class="flow-arrow">↓</div>
+          <div class="flow-box" style="border-left:3px solid var(--yellow)">
+            <strong>식전(프란디알) 인슐린 단순화</strong><br>
+            <span style="font-size: calc(11px * var(--fscale, 1))">10단위 초과 시: 50% 감량 + 비인슐린제 추가, 이후 비인슐린제 증량하며 식전인슐린 감량(궁극적으로 중단 목표)<br>10단위 이하 시: 식전인슐린 중단 + 비인슐린제 추가</span>
+          </div>
+        </div>
+        <div>
+          <div class="flow-box" style="border-left:3px solid var(--teal)">
+            <strong>경로 B — 혼합형(premixed) 인슐린</strong><br>
+            <span style="font-size: calc(11px * var(--fscale, 1))">총 혼합인슐린용량의 70%를 아침 기저인슐린으로만 사용하는 것으로 전환</span>
+          </div>
+          <div class="flow-arrow">↓</div>
+          <div class="flow-box" style="border-left:3px solid var(--orange)">
+            <strong>비인슐린제 추가</strong><br>
+            <span style="font-size: calc(11px * var(--fscale, 1))">eGFR≥45: 메트포르민 500mg/일 시작, 2주마다 내약성에 따라 증량<br>eGFR&lt;45 또는 메트포르민 사용중/불내성: 동반질환·합병증 고려해 2차 약제로 진행(SGLT2, DPP-4, GLP-1 RA, GIP/GLP-1 RA 중 선택)</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="alert alert-warn" style="margin-top:10px"><span>⚠️</span><span><strong>추가 팁</strong> — 취침 전 속효성/초속효성 인슐린 사용 금지. 식전혈당 &gt;250mg/dL 시 속효성 2단위, &gt;350mg/dL 시 4단위의 간단한 교정스케일 사용 가능, 매일 필요하지 않으면 교정스케일 중단</span></div>
+      <table class="tc-table" style="margin-top:10px">
+        <tr><th>식전 추가용량 조정(2주마다)</th><th>기준</th></tr>
+        <tr><td>증량 또는 약제추가</td><td>2주간 식전혈당 50% 초과가 목표 이상(90–150mg/dL 기준, 전반적 건강·돌봄목표에 따라 변경 가능)</td></tr>
+        <tr><td>감량</td><td>주2회 초과 식전혈당 &lt;90mg/dL</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>📊 표 13.3 — 치료계획 단순화·탈강도화 시점 (건강상태별)</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <table class="tc-table">
+        <tr><th>건강상태</th><th>합리적 혈당목표</th><th>단순화가 필요할 수 있는 시점</th><th>탈강도화가 필요할 수 있는 시점</th></tr>
+        <tr><td><strong>건강</strong></td><td>A1C &lt;7.0–7.5%</td><td>급성질환 시 투약오류위험 / 급성질환 후 인지·기능저하</td><td>인슐린 사용중 중증·반복 저혈당(A1C무관) / 광범위한 혈당변동 / 다약제복용</td></tr>
+        <tr><td><strong>복합/중등도</strong></td><td>A1C &lt;8.0%</td><td>인슐린치료중 중증·반복 저혈당 / 인슐린계획 관리어려움 / 사회적상황 큰변화(보호자상실·생활환경/재정변화)</td><td>인슐린/설폰요소제 사용중 중증·반복 저혈당(A1C무관) / 광범위한 혈당변동 / 다약제복용</td></tr>
+        <tr><td><strong>요양시설 단기입소 중인 지역사회거주자</strong></td><td>A1C 의존 회피, 혈당목표 100–200mg/dL</td><td>체중감소·식욕부진·단기인지저하·신체기능저하</td><td>입원중 복잡해졌다면 입원전 치료계획 재도입 고려</td></tr>
+        <tr><td><strong>매우복합/저건강</strong></td><td>A1C 의존 회피, 저혈당·증상성고혈당 회피</td><td>주사·손가락혈당검사 횟수 감소 희망 / 불규칙한 식사패턴</td><td>설폰요소제/메글리티니드 복용중 인지기능장애·우울·식욕부진·불규칙식사 / 명확한 이득없이 당뇨약물 복용중</td></tr>
+        <tr><td><strong>임종기</strong></td><td>저혈당·증상성고혈당 회피</td><td>치료(주사·손가락혈당검사)로 인한 통증·불편 / 치료복잡성으로 보호자의 과도한 스트레스</td><td>증상개선·편안함에 명확한 이득없이 당뇨약물 복용중</td></tr>
+      </table>
+      <div class="alert alert-info" style="margin-top:8px"><span>ℹ️</span><span><strong>치료계획 단순화</strong> = 투약전략 변경으로 복잡성 감소(투여횟수·혈당검사횟수 감소, 슬라이딩스케일·인슐린-탄수화물비율 계산 필요성 감소). <strong>탈강도화/처방감소</strong> = 치료의 용량·투여빈도 감소 또는 완전중단</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ PALTC & END OF LIFE ═══ -->
+<div id="tab-paltc" class="panel">
+  <div class="alert alert-orange"><span>🏥</span><span>요양시설(PALTC) 거주 노인은 저혈당의 특히 취약한 집단이다. 완화의료·임종돌봄에서는 편안함과 증상관리가 엄격한 대사지표 관리보다 우선한다.</span></div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>📋 PALTC 관리 — 핵심 권고</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="rec-list">
+        <li class="rec-item"><span class="badge badge-E">E</span><span class="rec-text"><strong>13.16</strong> PALTC 시설 직원에게 당뇨교육/훈련 권장(CGM기기·인슐린펌프·첨단인슐린전달시스템 포함)</span></li>
+        <li class="rec-item"><span class="badge badge-E">E</span><span class="rec-text"><strong>13.17</strong> PALTC거주자 — 이동성·인지·약물·관리선호도(4Ms)에 대한 신중한 평가로 개별화된 혈당목표 수립 및 적절한 약물/기기 선택(CGM·인슐린펌프·첨단전달시스템 포함)</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <div class="card-header" onclick="toggleCard(this)">
+        <span>🍽️ 영양 고려사항</span><span class="toggle">▾</span>
+      </div>
+      <div class="card-body collapsed">
+        <ul class="dot">
+          <li>불규칙·예측불가능한 식사섭취, 영양불량, 식욕저하, 삼킴장애 가능</li>
+          <li>치료적 영양계획·변형된 음식점도가 의도치않게 섭취감소·체중감소·영양불량을 유발할 수 있음</li>
+          <li>문화·선호·개인목표에 맞춘 식사 — 삶의질·식사만족도·영양상태 향상</li>
+          <li>식사 직후 인슐린투여가 섭취한 탄수화물량에 맞는 용량을 보장하는 데 도움될 수 있음</li>
+          <li>단, 저혈당위험과 균형을 맞춰야 함 — 식전인슐린은 속효성(초속효성 아님)으로, 식사 후 가능한 빨리 투여</li>
+          <li>식전혈당측정·인슐린투여·식사가 서로 최대한 가까운 시점에 이루어져야 함</li>
+        </ul>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header" onclick="toggleCard(this)">
+        <span>📉 PALTC 저혈당 위험요인</span><span class="toggle">▾</span>
+      </div>
+      <div class="card-body collapsed">
+        <ul class="dot">
+          <li>인지·신기능 저하</li>
+          <li>호르몬 조절/반조절 반응 둔화</li>
+          <li>수분상태 불충분</li>
+          <li>가변적 식욕·영양섭취</li>
+          <li>식사보조 필요</li>
+          <li>다약제복용</li>
+          <li>장흡수 저하</li>
+        </ul>
+        <div class="alert alert-info" style="margin-top:8px"><span>ℹ️</span><span>PALTC 2형당뇨 거주자에서 경구제가 기저인슐린과 유사한 혈당결과를 보일 수 있음. CGM이 인슐린치료자의 저혈당 모니터링/예방에 유용한 접근법이 될 수 있음</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>🚨 PALTC 혈당 알림 전략</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <div class="alert alert-danger" style="margin-bottom:8px"><span>🚨</span><span><strong>즉시 연락</strong> — 혈당 &lt;70 mg/dL(&lt;3.9 mmol/L). 단, 연락을 기다리며 저혈당 치료를 지연해서는 안 됨</span></div>
+      <table class="tc-table">
+        <tr><th>상황</th><th>대응</th></tr>
+        <tr><td>혈당 70–100 mg/dL</td><td>가능한 빨리 연락 (치료계획 조정 필요할 수 있음)</td></tr>
+        <tr><td>24시간 내 혈당 &gt;250mg/dL 2회 이상 + 임상상태 유의한 변화 동반</td><td>가능한 빨리 연락</td></tr>
+        <tr><td>24시간 내 지속적으로 혈당 &gt;250mg/dL</td><td>가능한 빨리 연락</td></tr>
+        <tr><td>연속 2일간 혈당 &gt;300mg/dL</td><td>가능한 빨리 연락</td></tr>
+        <tr><td>혈당측정기기 측정범위 초과 판독값</td><td>가능한 빨리 연락</td></tr>
+        <tr><td>증상성 고혈당, 구토, 발열, 무기력, 경구섭취불량</td><td>가능한 빨리 연락</td></tr>
+      </table>
+      <div class="alert alert-warn" style="margin-top:8px"><span>⚠️</span><span>연방규정상 PALTC 평가는 입소 후 최초 90일간 최소 30일마다, 이후 최소 60일마다 + 임상적으로 필요시 시행 — 병원과 달리 매일 평가가 의무화되지 않아 표준화된 알림체계가 중요함</span></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>⚰️ 임종기 당뇨관리 — 권고 및 3단계 접근</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="rec-list">
+        <li class="rec-item"><span class="badge badge-E">E</span><span class="rec-text"><strong>13.18</strong> 완화의료 필요 시 환자·보호자와 돌봄목표·강도를 논의, 엄격한 혈당/혈압/지질관리는 불필요 — 약물계획 탈강도화·단순화 고려, 증상관리 우선</span></li>
+        <li class="rec-item"><span class="badge badge-C">C</span><span class="rec-text"><strong>13.19</strong> 임종기 당뇨관리의 1차 목표는 전반적 편안함, 고통스러운 증상 예방, 삶의질·존엄성 보존</span></li>
+      </ul>
+
+      <table class="tc-table" style="margin-top:10px">
+        <tr><th>분류</th><th>접근</th></tr>
+        <tr><td><strong>① 안정적인 환자</strong></td><td>기존 약물계획 유지, 저혈당예방+신장당배출역치 이하 유지·고혈당탈수예방에 초점. A1C 모니터링 역할 없음</td></tr>
+        <tr><td><strong>② 장기부전 환자</strong></td><td>저혈당예방이 가장 중요. 탈수예방/치료 필수. 1형당뇨 — 경구섭취감소에 따라 인슐린감량 가능하나 중단해서는 안 됨. 2형당뇨 — 저혈당유발제 용량감소. 목표범위 상한선 수준의 혈당 허용</td></tr>
+        <tr><td><strong>③ 임종이 임박한 환자</strong></td><td>2형당뇨 — 경구섭취가 거의 없으므로 모든 약물중단이 합리적 접근일 수 있음. 1형당뇨 — 합의된 지침없으나, 소량의 기저인슐린이 급성고혈당합병증·증상부담을 예방할 수 있음</td></tr>
+      </table>
+
+      <div class="alert alert-info" style="margin-top:10px"><span>ℹ️</span><span>다기관 임상시험에서 완화의료 환자의 스타틴 중단이 삶의 질을 개선함을 확인. 환자는 검사·치료를 거부할 권리가 있으며, 의료진은 혈당측정빈도 감소를 포함한 치료중단·진단검사제한을 고려할 수 있음</span></div>
+      <div class="alert alert-teal" style="margin-top:8px"><span>💡</span><span>빈번한 혈당측정이 부담스럽지만 저혈당/고혈당 모니터링이 필요하다면 CGM을 고려할 수 있음. 혈당목표는 저혈당(&lt;70mg/dL) 예방 및 증상부담이 증가하는 중증고혈당(&gt;250mg/dL) 예방을 지향</span></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span>📝 사전돌봄계획(Advance Care Planning)</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body collapsed">
+      <ul class="dot">
+        <li>당뇨병 의료진은 환자의 사전돌봄계획 수립을 지원하는 데 적합한 위치에 있음</li>
+        <li>환자가 스스로 결정할 수 없게 될 때 의료진·보호자가 어려운 치료결정을 내리는 데 사전돌봄계획이 지침이 됨</li>
+        <li>연구에 따르면 당뇨병 환자는 의료진과 임종기 돌봄계획을 논의하고 싶어함</li>
+        <li>검증된 도구: <strong>Supportive and Palliative Care Indicators Tool (SPICT)</strong>, <strong>Gold Standards Framework Proactive Identification Guidance</strong></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ TABLES ═══ -->
+<div id="tab-tables" class="panel">
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>🎯 표 — 건강상태별 혈당/혈압/지질 목표 요약</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <table class="tc-table">
+        <tr><th>건강상태</th><th>A1C</th><th>CGM(TIR/TBR)</th><th>혈압</th><th>지질</th></tr>
+        <tr><td>건강</td><td>&lt;7.0–7.5%</td><td>TIR≥70%, TBR≤4%</td><td>&lt;130/80</td><td>스타틴</td></tr>
+        <tr><td>복합/중등도</td><td>&lt;8.0%</td><td>TIR≥50%, TBR&lt;1%</td><td>&lt;130/80</td><td>스타틴</td></tr>
+        <tr><td>매우복합/저건강</td><td>A1C 의존 회피</td><td>—</td><td>&lt;140/90</td><td>이득가능성 고려</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span>🧠 표 — 노인증후군 선별도구 빠른참조</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body collapsed">
+      <table class="tc-table">
+        <tr><th>영역</th><th>도구</th><th>판정기준</th></tr>
+        <tr><td>인지장애</td><td>Mini-Cog</td><td>&lt;3점</td></tr>
+        <tr><td>섬망</td><td>4AT</td><td>≥4점</td></tr>
+        <tr><td>우울</td><td>GDS-5</td><td>≥2점</td></tr>
+        <tr><td>낙상위험</td><td>STEADI</td><td>"예" 1개 이상</td></tr>
+        <tr><td>노쇠</td><td>Clinical Frailty Scale</td><td>≥5점</td></tr>
+        <tr><td>영양불량</td><td>MNA-SF</td><td>0–7점</td></tr>
+        <tr><td>근감소증</td><td>SARC-F</td><td>≥4점</td></tr>
+        <tr><td>불면증</td><td>ISI-7</td><td>≥8점</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span>💊 표 — 노인 약물선택 핵심 포인트</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body collapsed">
+      <table class="tc-table">
+        <tr><th>계열</th><th>핵심 포인트</th></tr>
+        <tr><td>메트포르민</td><td>eGFR≥30 사용가능, 4년 이상 시 B12 모니터링</td></tr>
+        <tr><td>Pioglitazone</td><td>심부전·체액저류·골다공증·황반부종 주의</td></tr>
+        <tr><td>설폰요소제/메글리티니드</td><td>저혈당·골절위험, glyburide 회피</td></tr>
+        <tr><td>DPP-4 억제제</td><td>저혈당위험 최소, 심·신보호효과 없음</td></tr>
+        <tr><td>GLP-1 RA/GIP·GLP-1 RA</td><td>저혈당위험 낮음, 심혈관이득, 체중감소 부작용 모니터링</td></tr>
+        <tr><td>SGLT2 억제제</td><td>심·신보호효과, 체액량감소·생식기감염·정상혈당DKA 주의</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span>💉 표 — 인슐린 단순화 핵심 기준</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body collapsed">
+      <table class="tc-table">
+        <tr><th>항목</th><th>기준</th></tr>
+        <tr><td>기저인슐린 시점</td><td>취침전 → 아침으로 변경</td></tr>
+        <tr><td>공복혈당 목표</td><td>90–150 mg/dL</td></tr>
+        <tr><td>식전인슐린 10단위 초과</td><td>50% 감량 + 비인슐린제 추가</td></tr>
+        <tr><td>식전인슐린 10단위 이하</td><td>중단 + 비인슐린제 추가</td></tr>
+        <tr><td>혼합형 인슐린 전환</td><td>총용량의 70%를 아침 기저인슐린으로</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span>🚨 표 — PALTC 혈당 알림기준</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body collapsed">
+      <table class="tc-table">
+        <tr><th>혈당/상황</th><th>대응시급도</th></tr>
+        <tr><td>&lt;70 mg/dL</td><td>즉시 연락(치료 지연 금지)</td></tr>
+        <tr><td>70–100 mg/dL</td><td>가능한 빨리 연락</td></tr>
+        <tr><td>24h내 &gt;250 2회+임상변화</td><td>가능한 빨리 연락</td></tr>
+        <tr><td>2일 연속 &gt;300</td><td>가능한 빨리 연락</td></tr>
+      </table>
+    </div>
+  </div>
+</div>
+</div><!-- /main -->
+
+<!-- ═══ MODAL: 노인 당뇨병 유병률 ═══ -->
+<div id="prevModal" class="modal-overlay" onclick="closeModalOutside(event,'prevModal')">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal('prevModal')">✕</button>
+    <div class="modal-title">📊 노인 당뇨병 유병률 및 이질성</div>
+
+    <div class="alert alert-info" style="margin:0 0 12px"><span>💡</span><span>65세 이상 인구의 29% 이상이 당뇨병을 보유한다. 인구고령화와 비만율 증가의 영향으로 향후 수십년간 노인 당뇨병 인구가 급속히 증가할 것으로 예상된다.</span></div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">노인 당뇨병의 이질성</div>
+      <table class="modal-table">
+        <tr><th>유형</th><th>특징</th></tr>
+        <tr><td>2형당뇨</td><td>노인 인구에서도 주된 유형(젊은 인구와 동일)</td></tr>
+        <tr><td>1형당뇨</td><td>인슐린전달·기술·관리 발전으로 소아/성인기 발병자가 노년까지 생존하는 사례 증가. 노년기 신규진단도 증가, 서구국가에서 발생률 더 높음</td></tr>
+      </table>
+    </div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">노인 당뇨병 환자의 임상적 다양성</div>
+      <ul class="dot">
+        <li>수년 전 진단되어 상당한 합병증을 가진 경우</li>
+        <li>신규진단이지만 수년간 미진단 고혈당으로 이미 합병증이 있는 경우</li>
+        <li>진정한 최근발병으로 합병증이 적거나 없는 경우</li>
+        <li>기타 만성질환·상당한 당뇨관련 동반질환·인지/신체기능 제한·노쇠를 가진 경우</li>
+        <li>동반질환이 적고 인지·신체기능이 양호한 경우</li>
+      </ul>
+    </div>
+
+    <div class="alert alert-warn" style="margin-top:4px"><span>⚠️</span><span>이러한 이질성으로 인해 모든 노인 당뇨병 환자에게 단일 접근법을 적용할 수 없으며, 의학·심리·기능·사회적 영역의 종합평가가 필수적이다.</span></div>
+  </div>
+</div>
+
+<!-- ═══ MODAL: 건강상태별 A1C 목표 ═══ -->
+<div id="a1cModal" class="modal-overlay" onclick="closeModalOutside(event,'a1cModal')">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal('a1cModal')">✕</button>
+    <div class="modal-title">🎯 건강상태에 따른 3단계 A1C 목표 체계</div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">① 건강(Healthy)</div>
+      <table class="modal-table">
+        <tr><th>항목</th><th>내용</th></tr>
+        <tr><td>특징</td><td>동반질환 적음, 인지·기능상태 양호, 기대수명 더 길게 남음</td></tr>
+        <tr><td>A1C 목표</td><td>&lt;7.0–7.5% (&lt;53–58 mmol/mol)</td></tr>
+        <tr><td>CGM 목표</td><td>TIR 70–180mg/dL ≥70%, TBR ≤70mg/dL ≤4%</td></tr>
+      </table>
+    </div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">② 복합/중등도(Complex/Intermediate)</div>
+      <table class="modal-table">
+        <tr><th>항목</th><th>내용</th></tr>
+        <tr><td>특징</td><td>다중 동반질환(≥3개) 또는 ADL장애 ≥2개 또는 경중등도 인지장애, 가변적 기대수명</td></tr>
+        <tr><td>A1C 목표</td><td>&lt;8.0% (&lt;64 mmol/mol)</td></tr>
+        <tr><td>CGM 목표</td><td>TIR ≥50%, TBR &lt;1%</td></tr>
+        <tr><td>개별화 고려요소</td><td>동반질환 중증도, 인지·기능적 제한, 노쇠, 당뇨약물의 위험대비이득, 개인선호</td></tr>
+      </table>
+    </div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">③ 매우복합/저건강(Very Complex/Poor Health)</div>
+      <table class="modal-table">
+        <tr><th>항목</th><th>내용</th></tr>
+        <tr><td>특징</td><td>PALTC 또는 말기 동반질환, 중등중증 인지장애, ADL장애 ≥2개</td></tr>
+        <tr><td>A1C 목표</td><td>A1C 의존 회피, 저혈당·증상성 고혈당 회피에 기반한 혈당관리</td></tr>
+      </table>
+    </div>
+
+    <div class="alert alert-info" style="margin-top:4px"><span>ℹ️</span><span>특성 분류는 일반적 개념이며 모든 개인이 명확히 한 범주에 속하지는 않는다. 개인·보호자의 선호, 보호자 참여도·능력·자원에 대한 고려가 치료개별화의 중요한 측면이다. Kirkman et al. 적용</span></div>
+  </div>
+</div>
+
+<!-- ═══ MODAL: LEAD 도구 ═══ -->
+<div id="leadModal" class="modal-overlay" onclick="closeModalOutside(event,'leadModal')">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal('leadModal')">✕</button>
+    <div class="modal-title">📐 LEAD — Life Expectancy Estimator for Older Adults with Diabetes</div>
+
+    <div class="alert alert-info" style="margin:0 0 12px"><span>💡</span><span>당뇨병 노인 대상으로 특별히 개발·검증된 생존기대 예측도구. Diabetes and Aging Study에서 개발되었다.</span></div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">활용 목적</div>
+      <ul class="dot">
+        <li>고위험 점수는 기대수명 5년 미만과 강하게 연관</li>
+        <li>덜 엄격한 혈당목표 선택을 위한 의사결정 출발점으로 유용</li>
+        <li>특히 더 엄격한 목표달성을 위해 저혈당위험·기타 이상반응이 높은 약물이 필요할 때 중요</li>
+      </ul>
+    </div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">생존기대에 영향을 미치는 요소</div>
+      <table class="modal-table">
+        <tr><th>요소</th><th>영향</th></tr>
+        <tr><td>나이</td><td>고령일수록 기대수명 단축</td></tr>
+        <tr><td>질병부담</td><td>동반질환 많을수록 단축</td></tr>
+        <tr><td>노쇠 정도</td><td>노쇠가 심할수록 단축</td></tr>
+        <tr><td>장애 정도</td><td>장애가 심할수록 단축</td></tr>
+      </table>
+    </div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">기타 예후도구</div>
+      <p>LEAD 외에도 노인 대상 다양한 생존기대 예측도구가 존재한다. 이러한 데이터는 치료의사결정의 보조자료로 사용하되, 개인·보호자 선호를 반영한 공유의사결정의 틀 안에서 활용해야 한다.</p>
+    </div>
+
+    <div class="alert alert-warn" style="margin-top:4px"><span>⚠️</span><span>예후도구는 치료방향을 정하는 출발점일 뿐, 단독으로 치료중단·강도결정을 내리는 근거로 사용해서는 안 된다.</span></div>
+  </div>
+</div>
+
+<!-- ═══ MODAL: 4S 경로 ═══ -->
+<div id="4sModal" class="modal-overlay" onclick="closeModalOutside(event,'4sModal')">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal('4sModal')">✕</button>
+    <div class="modal-title">🧭 4S 경로(Pathway) — 노인 당뇨약물 재조정 단계적 접근</div>
+
+    <div class="alert alert-info" style="margin:0 0 12px"><span>💡</span><span>Munshi et al.(2025)의 권고에 근거한, 치료의 어려움을 평가하고 공유의사결정을 통해 혈당목표를 재평가하며 치료를 탈강도화/단순화/수정하는 4단계 로드맵이다.</span></div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">Step 1 — 평가(Survey)</div>
+      <p style="margin-bottom:6px">위험신호·약물이상반응·건강/기능의 주요변화를 조사한다.</p>
+      <ul class="dot">
+        <li>의학적 사건</li>
+        <li>인생을 변화시키는 사건</li>
+        <li>신체·인지·정신건강 상태의 변화</li>
+        <li>약물 위험신호 또는 이상반응</li>
+        <li>복약행동의 변화</li>
+        <li>미인지 저혈당의 징후</li>
+        <li>고혈당 증상</li>
+      </ul>
+    </div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">Step 2 — 재평가(Shared decision-making)</div>
+      <p>공유의사결정을 통해 혈당목표를 재평가한다. 보호자를 참여시키고, 2주간의 CGM 사용으로 혈당패턴을 평가하는 것을 고려한다.</p>
+    </div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">Step 3 — 조정(Deintensify/Simplify/Modify)</div>
+      <p>안전성 최적화, 다약제복용 최소화, 질환특이적 이득을 목표로 당뇨치료계획을 탈강도화·단순화·수정한다.</p>
+    </div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">Step 4 — 재확인(Reassess engagement)</div>
+      <p>치료참여도와 부담을 재평가한다. 모든 개입의 안전성과 부담을 지속적으로 점검하는 순환적 과정이다.</p>
+    </div>
+
+    <div class="alert alert-warn" style="margin-top:4px"><span>⚠️</span><span>인슐린·설폰요소제를 광범위하게 사용하는 집중적 혈당관리는 노인에서 흔히 관찰되는 과잉치료이며 사망률을 높일 수 있다 — 4S 경로는 이러한 과잉치료를 체계적으로 식별·교정하기 위한 도구다.</span></div>
+  </div>
+</div>
+
+<script>
+const FONT_ZOOM_LEVELS = [1, 1.25, 1.5];
+let fontZoomIndex = 0;
+
+function applyFontZoom(scale) {
+  document.documentElement.style.setProperty('--fscale', scale);
+  const label = document.getElementById('font-zoom-label');
+  if (label) label.textContent = Math.round(scale * 100) + '%';
+}
+
+function cycleFontZoom() {
+  fontZoomIndex = (fontZoomIndex + 1) % FONT_ZOOM_LEVELS.length;
+  applyFontZoom(FONT_ZOOM_LEVELS[fontZoomIndex]);
+}
+
+function showTab(id){
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('tab-'+id).classList.add('active');
+  event.target.classList.add('active');
+}
+function toggleCard(el){
+  el.classList.toggle('open');
+  el.nextElementSibling.classList.toggle('collapsed');
+}
+function toggleAcc(el){
+  const b=el.nextElementSibling;
+  b.style.display=b.style.display==='block'?'none':'block';
+  el.querySelector('span:last-child').textContent=b.style.display==='block'?'▴':'▾';
+}
+
+function openModal(id){document.getElementById(id).classList.add('open');}
+function closeModal(id){document.getElementById(id).classList.remove('open');}
+function closeModalOutside(e,id){if(e.target===document.getElementById(id))closeModal(id);}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')document.querySelectorAll('.modal-overlay.open').forEach(m=>m.classList.remove('open'));});
+
+const abbrs=[
+  ['4Ms','Mentation, Medications, Mobility, What Matters Most — IHI 노인친화 의료시스템의 4대 평가영역, 노인 당뇨관리의 개념적 틀.'],
+  ['4S Pathway','Survey, Shared decision-making, Simplify, Sustain — 노인 당뇨약물 재조정을 위한 4단계 접근법(Munshi et al. 2025).'],
+  ['LEAD','Life Expectancy Estimator for Older Adults with Diabetes — 당뇨병 노인 대상 검증된 생존기대 예측도구.'],
+  ['ADL','Activities of Daily Living (일상생활활동) — 건강상태 분류(건강/복합/매우복합)의 핵심 평가축.'],
+  ['PALTC','Post-Acute and Long-Term Care (급성기이후·장기요양시설) — 요양원, 숙련요양시설 등을 포괄.'],
+  ['TIR','Time in Range (목표범위시간) — CGM에서 70–180mg/dL 범위 내 시간비율.'],
+  ['TBR','Time Below Range (목표이하시간) — CGM에서 저혈당 범위(보통 <70mg/dL) 시간비율.'],
+  ['CGM','Continuous Glucose Monitoring (연속혈당측정) — 1형당뇨 노인에 근거등급 A로 권장, 인슐린치료 2형당뇨에는 B.'],
+  ['AID','Automated Insulin Delivery (자동인슐린전달시스템) — 노인에서 저혈당위험 감소를 위해 고려되는 첨단기기.'],
+  ['Mini-Cog','5문항 인지선별검사 — 노인 당뇨병 환자의 매년 인지장애 선별에 사용.'],
+  ['MNA-SF','Mini Nutritional Assessment Short Form — 영양상태 선별도구, 노인 당뇨병의 영양불량/근감소증 평가.'],
+  ['SARC-F','근감소증(sarcopenia) 위험 선별 5문항 설문도구.'],
+  ['STEADI','Stopping Elderly Accidents, Deaths, and Injuries — CDC 낙상위험 선별도구.'],
+  ['4AT','섬망(delirium) 신속선별도구, 4문항.'],
+  ['GDS-5','Geriatric Depression Scale 5-item — 노인우울 선별 단축형 설문도구.'],
+  ['ORACL','Older Adult Closed Loop trial — 1형당뇨 노인 대상 자동인슐린전달 무작위교차시험.'],
+  ['AIDE T1D','Automated Insulin Delivery in Elderly With Type 1 Diabetes — 65세 이상 1형당뇨 AID 효과를 평가한 임상시험.'],
+  ['ACCORD','Action to Control Cardiovascular Risk in Diabetes — A1C<6.0% 집중치료의 저혈당위험 증가를 보고한 임상시험.'],
+  ['VADT','Veterans Affairs Diabetes Trial — 집중혈당관리와 저혈당위험 증가 연관성을 보고한 임상시험.'],
+  ['ACCORD MIND','ACCORD 연구의 뇌영상·인지기능 하위연구 — 집중혈당관리의 인지기능 영향을 평가.'],
+  ['LIFE study','Lifestyle Interventions and Independence for Elders — 노쇠노인 대상 구조화된 신체활동 프로그램 효과를 평가한 임상시험.'],
+  ['Look AHEAD','Action for Health in Diabetes — 2형당뇨 비만/과체중 환자의 집중생활습관중재 임상시험.'],
+  ['DPP-4','Dipeptidyl Peptidase 4 억제제 — 저혈당위험 낮으나 심·신보호효과 없는 혈당강하제 계열.'],
+  ['GLP-1 RA','Glucagon-Like Peptide-1 Receptor Agonist — 저혈당위험 낮고 심혈관/치매위험 감소와 연관된 주사제(경구세마글루타이드 제외).'],
+  ['GIP','Glucose-dependent Insulinotropic Polypeptide — tirzepatide 등 이중작용제의 표적 호르몬 중 하나.'],
+  ['SGLT2','Sodium-Glucose Cotransporter 2 억제제 — 경구제, 심부전·CKD진행 둔화 효과, 정상혈당 DKA 위험.'],
+  ['DKA','Diabetic Ketoacidosis (당뇨병성 케토산증) — SGLT2 억제제 사용 시 정상혈당 형태로 발생 가능, PALTC에서 패혈증 등으로 오인될 위험.'],
+  ['MASH','Metabolic Dysfunction-Associated Steatohepatitis — GLP-1 기반 치료의 체중감소로 개선 가능한 간질환.'],
+  ['eGFR','Estimated Glomerular Filtration Rate (추정 사구체여과율) — 메트포르민 등 약물 용량결정의 핵심 지표.'],
+  ['NPH','Neutral Protamine Hagedorn insulin — 중간작용 인슐린, 장시간작용 유사체 대비 노인에서 저혈당관련 응급실/입원 위험 더 높음.'],
+  ['SPICT','Supportive and Palliative Care Indicators Tool — 임종기 돌봄계획 수립을 지원하는 검증된 도구.'],
+  ['IHI','Institute for Healthcare Improvement — 4Ms 프레임워크를 개발한 기관.'],
+];
+
+function buildAbbr(){
+  const sorted=abbrs.slice().sort((a,b)=>a[0].localeCompare(b[0]));
+  document.getElementById('abbr-grid-drop').innerHTML=sorted.map(a=>
+    `<div style="background:var(--surface2);border:1px solid var(--border);border-radius:5px;padding:6px 10px;margin-bottom:4px;" data-term="${a[0].toLowerCase()}" data-def="${a[1].toLowerCase()}">
+       <span style="font-weight:700;color:var(--accent2);font-size: calc(12px * var(--fscale, 1));font-family:'Courier New',monospace">${a[0]}</span>
+       <div style="font-size: calc(11px * var(--fscale, 1));color:var(--text2);line-height:1.45;margin-top:2px">${a[1]}</div>
+     </div>`).join('');
+}
+function filterAbbr(val){
+  const v=val.toLowerCase().trim();
+  const drop=document.getElementById('abbr-dropdown');
+  const items=document.querySelectorAll('#abbr-grid-drop [data-term]');
+  if(!v){drop.style.display='none';return;}
+  const inp=document.getElementById('abbr-input');
+  const rect=inp.getBoundingClientRect();
+  const w=440;
+  let left=rect.right-w;if(left<8)left=8;
+  drop.style.top=(rect.bottom+4)+'px';drop.style.left=left+'px';
+  drop.style.display='block';
+  items.forEach(el=>{
+    const show=el.dataset.term.startsWith(v)||el.dataset.def.includes(v);
+    el.style.display=show?'':'none';
+  });
+}
+document.addEventListener('click',e=>{
+  const inp=document.getElementById('abbr-input');
+  const drop=document.getElementById('abbr-dropdown');
+  if(inp&&!inp.contains(e.target)&&drop&&!drop.contains(e.target))drop.style.display='none';
+});
+buildAbbr();
+</script>
+</body>
+</html>

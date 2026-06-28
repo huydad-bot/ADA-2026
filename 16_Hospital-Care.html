@@ -1,0 +1,1300 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ADA 2026 병원에서의 당뇨병 관리</title>
+<style>
+  :root {
+    --bg:#f6f8fa;--surface:#fff;--surface2:#f0f2f5;--border:#d0d7de;
+    --accent:#0969da;--accent2:#0550ae;--green:#1a7f37;--yellow:#9a6700;
+    --red:#cf222e;--orange:#bc4c00;--text:#1f2328;--text2:#57606a;
+    --teal:#0a7c8a;--purple:#5a3ea0;--fscale:1;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'Pretendard','Noto Sans KR',-apple-system,sans-serif;background:var(--bg);color:var(--text);font-size: calc(13px * var(--fscale, 1));line-height:1.5;}
+  header{background:var(--surface);border-bottom:1px solid var(--border);padding:12px 16px 8px;display:flex;flex-direction:column;align-items:center;gap:4px;position:sticky;top:0;z-index:100;}
+  .header-inner{width:100%;max-width:960px;display:flex;flex-direction:column;align-items:center;gap:4px;}
+  .logo-badge{background:var(--accent2);color:#fff;font-size: calc(10px * var(--fscale, 1));font-weight:700;padding:3px 8px;border-radius:4px;letter-spacing:.5px;}
+  .tab-bar{display:flex;justify-content:center;background:var(--surface);border-bottom:1px solid var(--border);overflow-x:auto;scrollbar-width:none;}
+  .tab-bar::-webkit-scrollbar{display:none;}
+  .font-zoom-btn{display:flex;align-items:center;gap:3px;flex-shrink:0;margin:4px 4px 4px 6px;padding:5px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:6px;color:var(--accent2);font-size:calc(11px * var(--fscale, 1));font-weight:700;cursor:pointer;user-select:none;white-space:nowrap;transition:background .15s;}
+  .font-zoom-btn:hover{background:var(--border);}
+  .font-zoom-btn .fz-icon{font-size:calc(12px * var(--fscale, 1));}
+  .tab-bar-inner{width:100%;max-width:960px;display:flex;align-items:center;gap:2px;padding:0 4px;}
+  .tab{padding:7px 11px;font-size: calc(11.5px * var(--fscale, 1));color:var(--text2);cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;transition:color .15s,border-color .15s;user-select:none;flex-shrink:0;}
+  .tab:hover{color:var(--text);}
+  .tab.active{color:var(--accent2);border-bottom-color:var(--accent2);}
+  .tab-abbr-wrap{display:flex;align-items:center;padding:4px 4px;margin-left:4px;flex-shrink:0;position:relative;}
+  .main{padding:12px 16px;max-width:960px;margin:0 auto;}
+  .panel{display:none;}
+  .panel.active{display:block;}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+  .grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;}
+  @media(max-width:680px){.grid2,.grid3{grid-template-columns:1fr;}}
+  .card{background:var(--surface);border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-bottom:10px;}
+  .card-header{background:var(--surface2);padding:8px 12px;font-size: calc(12px * var(--fscale, 1));font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.5px;border-bottom:1px solid var(--border);cursor:pointer;display:flex;align-items:center;justify-content:space-between;user-select:none;}
+  .card-header .toggle{font-size: calc(13px * var(--fscale, 1));transition:transform .2s;}
+  .card-header.open .toggle{transform:rotate(180deg);}
+  .card-body{padding:10px 12px;}
+  .card-body.collapsed{display:none;}
+  .stat-row{display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap;}
+  .stat-box{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:10px 14px;flex:1;min-width:90px;text-align:center;}
+  .stat-box.clickable{cursor:pointer;transition:box-shadow .15s,border-color .15s;}
+  .stat-box.clickable:hover{border-color:var(--accent2);box-shadow:0 2px 8px rgba(5,80,174,.15);}
+  .stat-val{font-size: calc(18px * var(--fscale, 1));font-weight:700;color:var(--accent2);}
+  .stat-lbl{font-size: calc(10px * var(--fscale, 1));color:var(--text2);margin-top:2px;}
+  .stat-hint{font-size: calc(9px * var(--fscale, 1));color:var(--accent2);margin-top:4px;opacity:.7;}
+  /* Modal */
+  .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:500;align-items:center;justify-content:center;}
+  .modal-overlay.open{display:flex;}
+  .modal-box{background:var(--surface);border-radius:12px;padding:20px;max-width:680px;width:92%;max-height:84vh;overflow-y:auto;box-shadow:0 16px 48px rgba(0,0,0,.22);position:relative;}
+  .modal-close{position:absolute;top:12px;right:14px;background:none;border:none;font-size: calc(18px * var(--fscale, 1));cursor:pointer;color:var(--text2);line-height:1;}
+  .modal-title{font-size: calc(15px * var(--fscale, 1));font-weight:700;color:var(--text);margin-bottom:12px;padding-right:20px;line-height:1.4;}
+  .modal-section{margin-bottom:12px;}
+  .modal-section-title{font-size: calc(11px * var(--fscale, 1));font-weight:700;color:var(--accent2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;border-bottom:1px solid var(--border);padding-bottom:4px;}
+  .modal-table{width:100%;border-collapse:collapse;font-size: calc(11.5px * var(--fscale, 1));}
+  .modal-table th{background:var(--surface2);color:var(--text2);padding:4px 8px;font-size: calc(10.5px * var(--fscale, 1));font-weight:600;text-align:left;border-bottom:1px solid var(--border);}
+  .modal-table td{padding:5px 8px;border-bottom:1px solid var(--border);vertical-align:top;}
+  .modal-table tr:last-child td{border-bottom:none;}
+  .rec-list{list-style:none;}
+  .rec-item{padding:7px 0;border-bottom:1px solid var(--border);display:flex;gap:8px;align-items:flex-start;}
+  .rec-item:last-child{border-bottom:none;}
+  .rec-text{font-size: calc(12px * var(--fscale, 1));color:var(--text);line-height:1.65;}
+  .rec-text strong{color:#1f2328;}
+  .badge{display:inline-flex;align-items:center;padding:2px 8px;border-radius:10px;font-size: calc(10px * var(--fscale, 1));font-weight:700;white-space:nowrap;flex-shrink:0;margin-top:1px;}
+  .badge-A{background:#dafbe1;color:#116329;border:1px solid #1a7f37;}
+  .badge-B{background:#ddf4ff;color:var(--accent2);border:1px solid var(--accent2);}
+  .badge-C{background:#fff8c5;color:#7a4b00;border:1px solid #d4a017;}
+  .badge-E{background:#f3e5f5;color:#5a3ea0;border:1px solid #5a3ea0;}
+  .alert{padding:8px 12px;border-radius:6px;font-size: calc(12px * var(--fscale, 1));margin:8px 0;display:flex;gap:8px;align-items:flex-start;}
+  .alert-info{background:#ddf4ff;border-left:3px solid var(--accent2);color:#0550ae;}
+  .alert-warn{background:#fff8c5;border-left:3px solid #d4a017;color:#7a4b00;}
+  .alert-danger{background:#ffebe9;border-left:3px solid var(--red);color:#82071e;}
+  .alert-success{background:#dafbe1;border-left:3px solid var(--green);color:#116329;}
+  .alert-teal{background:#e0f5f5;border-left:3px solid var(--teal);color:#075050;}
+  .alert-orange{background:#fff3e0;border-left:3px solid var(--orange);color:#7a3500;}
+  .alert-purple{background:#f3e5f5;border-left:3px solid var(--purple);color:#5a3ea0;}
+  .tc-table{width:100%;border-collapse:collapse;font-size: calc(11.5px * var(--fscale, 1));}
+  .tc-table th{background:var(--surface2);color:var(--text2);padding:5px 8px;font-size: calc(10.5px * var(--fscale, 1));text-transform:uppercase;letter-spacing:.3px;font-weight:600;text-align:left;border-bottom:1px solid var(--border);}
+  .tc-table td{padding:5px 8px;border-bottom:1px solid var(--border);vertical-align:top;}
+  .tc-table tr:last-child td{border-bottom:none;}
+  .tc-table tr:hover td{background:rgba(0,0,0,.02);}
+  .acc{border:1px solid var(--border);border-radius:6px;margin-bottom:6px;overflow:hidden;}
+  .acc-hdr{background:var(--surface2);padding:7px 12px;font-size: calc(12px * var(--fscale, 1));font-weight:600;color:var(--text);cursor:pointer;display:flex;justify-content:space-between;align-items:center;user-select:none;}
+  .acc-hdr:hover{background:#e8eaec;}
+  .acc-body{display:none;padding:10px 12px;font-size: calc(12px * var(--fscale, 1));line-height:1.65;}
+  .flow-box{border:1px solid var(--border);border-radius:6px;background:var(--surface);padding:8px 12px;margin-bottom:6px;font-size: calc(12px * var(--fscale, 1));line-height:1.6;}
+  .flow-arrow{text-align:center;color:var(--text2);font-size: calc(14px * var(--fscale, 1));margin:2px 0;}
+  .step-num{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;background:var(--accent2);color:#fff;font-size: calc(10px * var(--fscale, 1));font-weight:700;flex-shrink:0;margin-right:6px;}
+  ul.dot{padding-left:18px;}
+  ul.dot li{margin-bottom:3px;font-size: calc(12px * var(--fscale, 1));line-height:1.6;}
+  ol.num{padding-left:18px;}
+  ol.num li{margin-bottom:4px;font-size: calc(12px * var(--fscale, 1));line-height:1.6;}
+  ::-webkit-scrollbar{width:5px;height:5px;}
+  ::-webkit-scrollbar-track{background:var(--bg);}
+  ::-webkit-scrollbar-thumb{background:#c8d0d9;border-radius:3px;}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div style="display:flex;align-items:center;gap:10px">
+      <span class="logo-badge">ADA 2026</span>
+      <h1 style="font-size:17px;font-weight:700;color:var(--text)">병원에서의 당뇨병 관리</h1>
+    </div>
+    <div style="text-align:center;line-height:1.5">
+      <span style="color:var(--text2);font-size: calc(11px * var(--fscale, 1))">Standards of Care in Diabetes—2026, Section 16 — American Diabetes Association</span><br>
+      <span style="font-size: calc(10px * var(--fscale, 1));color:var(--text2)">Diabetes Care 2026;49(Suppl. 1):S339–S355 · doi: 10.2337/dc26-S016</span>
+    </div>
+    <div style="font-size: calc(10px * var(--fscale, 1));color:var(--text2);font-style:italic;">This tool is not officially endorsed by the American Diabetes Association (ADA).</div>
+  </div>
+</header>
+
+<div class="tab-bar">
+  <div class="tab-bar-inner">
+    <div id="font-zoom-btn" class="font-zoom-btn" onclick="cycleFontZoom()"><span class="fz-icon">🔠</span><span id="font-zoom-label">100%</span></div>
+    <div class="tab active" onclick="showTab('overview')">🏠 개요</div>
+    <div class="tab" onclick="showTab('admission')">🩺 입원평가·진료체계</div>
+    <div class="tab" onclick="showTab('glycemic')">🎯 혈당목표·모니터링</div>
+    <div class="tab" onclick="showTab('insulin')">💉 인슐린·약물치료</div>
+    <div class="tab" onclick="showTab('hypo')">⚠️ 저혈당</div>
+    <div class="tab" onclick="showTab('special')">🍽️ 영양·특수상황</div>
+    <div class="tab" onclick="showTab('periop')">🔪 수술전후 관리(Perioperative)</div>
+    <div class="tab" onclick="showTab('dka')">🚨 DKA·HHS</div>
+    <div class="tab" onclick="showTab('discharge')">🚪 퇴원·재입원방지</div>
+    <div class="tab" onclick="showTab('tables')">📁 기준표 모음</div>
+    <div class="tab-abbr-wrap">
+      <div style="position:relative;display:flex;align-items:center;flex-shrink:0">
+        <span style="position:absolute;left:8px;color:var(--text2);font-size: calc(12px * var(--fscale, 1));pointer-events:none">🔍</span>
+        <input id="abbr-input" type="text" placeholder="약어" oninput="filterAbbr(this.value)"
+          style="background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:4px 8px 4px 26px;color:var(--text);font-size: calc(12px * var(--fscale, 1));width:90px;outline:none;"
+          onfocus="this.style.borderColor='var(--accent2)'" onblur="this.style.borderColor='var(--border)'">
+      </div>
+      <div id="abbr-dropdown" style="display:none;position:fixed;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:8px;width:440px;max-height:360px;overflow-y:auto;z-index:300;box-shadow:0 8px 24px rgba(0,0,0,.12)">
+        <div id="abbr-grid-drop"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="main">
+
+<!-- ═══ OVERVIEW ═══ -->
+<div id="tab-overview" class="panel active">
+  <div class="stat-row">
+    <div class="stat-box clickable" onclick="openModal('glucoseDefModal')"><div class="stat-val">&gt;140 / &lt;70</div><div class="stat-lbl">고혈당·저혈당 정의(mg/dL)</div><div class="stat-hint">▸ 클릭하여 상세 보기</div></div>
+    <div class="stat-box clickable" onclick="openModal('goalModal')"><div class="stat-val">140–180 / 100–180</div><div class="stat-lbl">ICU / 비ICU 혈당목표</div><div class="stat-hint">▸ 클릭하여 상세 보기</div></div>
+    <div class="stat-box clickable" onclick="openModal('insulinRegimenModal')"><div class="stat-val">Basal-Bolus</div><div class="stat-lbl">권장 인슐린 처방 구조</div><div class="stat-hint">▸ 클릭하여 상세 보기</div></div>
+    <div class="stat-box clickable" onclick="openModal('dkaHhsModal')"><div class="stat-val">DKA / HHS</div><div class="stat-lbl">고혈당 위기 진단기준</div><div class="stat-hint">▸ 클릭하여 상세 보기</div></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>📋 입원 당뇨병 관리 전체 흐름</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <div class="flow-box" style="border-left:3px solid var(--accent2)">
+        <strong>① 입원 시 평가</strong><br>
+        <span style="color:var(--text2);font-size: calc(11px * var(--fscale, 1))">당뇨병 유형 확인, 최근 3개월 내 A1C 없으면 측정, 자가관리 지식·행동 평가</span>
+      </div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-box" style="border-left:3px solid var(--green)">
+        <strong>② 진료체계 구축</strong><br>
+        <span style="font-size: calc(11.5px * var(--fscale, 1))">CPOE 기반 표준화 오더셋 사용, 가능하면 당뇨/혈당관리 전담팀 자문</span>
+      </div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-box" style="border-left:3px solid var(--yellow)">
+        <strong>③ 혈당 모니터링·목표 설정</strong><br>
+        <span style="font-size: calc(11.5px * var(--fscale, 1))">중증/비중증 구분 → 혈당목표 설정, POC 혈당 또는 (조건부) CGM 모니터링</span>
+      </div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-box" style="border-left:3px solid var(--orange)">
+        <strong>④ 치료 시작·조정</strong><br>
+        <span style="font-size: calc(11.5px * var(--fscale, 1))">≥180 mg/dL 지속 시 인슐린 시작 — 중증: IV 인슐린, 비중증: basal±bolus+교정. Sliding scale 단독 사용 지양</span>
+      </div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-box" style="border-left:3px solid var(--teal)">
+        <strong>⑤ 특수상황 대응</strong><br>
+        <span style="font-size: calc(11.5px * var(--fscale, 1))">금식/영양공급 변화, 스테로이드, 수술전후, DKA/HHS 발생 시 프로토콜 적용</span>
+      </div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-box" style="border-left:3px solid var(--purple)">
+        <strong>⑥ 퇴원 계획</strong><br>
+        <span style="font-size: calc(11.5px * var(--fscale, 1))">약물 조정·교육·외래 추적(1개월 이내, 필요시 1–2주) 포함한 구조화된 퇴원계획</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <div class="card-header open" onclick="toggleCard(this)">
+        <span>📌 핵심 권고문 요약</span><span class="toggle">▾</span>
+      </div>
+      <div class="card-body">
+        <ul class="rec-list">
+          <li class="rec-item"><span class="badge badge-B">B</span><span class="rec-text"><strong>16.1</strong> 입원 시 A1C 측정(최근 3개월 내 결과 없으면)</span></li>
+          <li class="rec-item"><span class="badge badge-B">B</span><span class="rec-text"><strong>16.2</strong> 표준화된 CPOE 기반 오더셋 사용</span></li>
+          <li class="rec-item"><span class="badge badge-B">B</span><span class="rec-text"><strong>16.3</strong> 당뇨/혈당관리 전담팀 자문(가능 시)</span></li>
+          <li class="rec-item"><span class="badge badge-A">A</span><span class="rec-text"><strong>16.4a/b</strong> ≥180 mg/dL 지속 시 인슐린(±기타 약물) 시작</span></li>
+          <li class="rec-item"><span class="badge badge-A">A</span><span class="rec-text"><strong>16.5a/b</strong> ICU 140–180, 비ICU 100–180 mg/dL 목표</span></li>
+          <li class="rec-item"><span class="badge badge-B">B</span><span class="rec-text"><strong>16.6/16.7</strong> 개인 CGM·인슐린펌프 조건부 지속 사용 가능</span></li>
+          <li class="rec-item"><span class="badge badge-A">A</span><span class="rec-text"><strong>16.8a/b–16.10</strong> 중증: IV 인슐린 / 비중증: basal±bolus, sliding scale 단독 지양</span></li>
+          <li class="rec-item"><span class="badge badge-A">A</span><span class="rec-text"><strong>16.9</strong> 경구섭취 양호 시 basal-prandial-correction 처방</span></li>
+          <li class="rec-item"><span class="badge badge-A">A</span><span class="rec-text"><strong>16.11</strong> 심부전 동반 시 SGLT2 억제제 시작·지속 고려</span></li>
+          <li class="rec-item"><span class="badge badge-C">C</span><span class="rec-text"><strong>16.12/16.13</strong> 저혈당 관리 프로토콜 마련 및 &lt;70 mg/dL 시 처방 재검토</span></li>
+          <li class="rec-item"><span class="badge badge-A">A</span><span class="rec-text"><strong>16.16</strong> DKA/HHS — 수액·인슐린·전해질 관리 및 원인 치료(그림 16.1)</span></li>
+          <li class="rec-item"><span class="badge badge-B">B</span><span class="rec-text"><strong>16.17/16.18</strong> DKA/HHS 재발 방지 교육, 개인별 구조화된 퇴원계획</span></li>
+        </ul>
+      </div>
+    </div>
+
+    <div>
+      <div class="card">
+        <div class="card-header open" onclick="toggleCard(this)">
+          <span>⚠️ 권고 등급 체계 (Evidence Grading)</span><span class="toggle">▾</span>
+        </div>
+        <div class="card-body">
+          <table class="tc-table">
+            <tr><th>등급</th><th>의미</th></tr>
+            <tr><td><span class="badge badge-A">A</span></td><td>명확한 근거 — 잘 수행된 다기관 RCT 또는 메타분석</td></tr>
+            <tr><td><span class="badge badge-B">B</span></td><td>뒷받침되는 근거 — 잘 수행된 코호트 연구 등</td></tr>
+            <tr><td><span class="badge badge-C">C</span></td><td>뒷받침되는 근거 부족 — 대조군 없는 연구, 사례 보고</td></tr>
+            <tr><td><span class="badge badge-E">E</span></td><td>전문가 합의 또는 임상 경험 (Expert consensus)</td></tr>
+          </table>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header open" onclick="toggleCard(this)">
+          <span>🔑 핵심 개념</span><span class="toggle">▾</span>
+        </div>
+        <div class="card-body">
+          <div class="alert alert-info"><span>ℹ️</span><span>입원 중 고혈당·저혈당·혈당변동성 모두 사망률·이환율 증가와 연관 — 적극적 식별·관리가 직접적 이득</span></div>
+          <div class="alert alert-warn"><span>⚠️</span><span>NICE-SUGAR 등 연구에서 <strong>지나치게 엄격한 혈당목표(80–110)는 저혈당 10–15배 증가</strong>와 함께 사망률 오히려 상승</span></div>
+          <div class="alert alert-danger"><span>🚫</span><span>인슐린은 입원 환자에서 <strong>가장 흔한 약물 관련 이상사례 원인</strong> 중 하나 — basal 없는 sliding scale 단독 사용은 강력히 지양</span></div>
+          <div class="alert alert-teal"><span>💡</span><span>당뇨병 전담팀 운영 시 재원기간 단축, 30일 재입원 감소, 저혈당·고혈당 30–40% 감소 효과 보고</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ ADMISSION ═══ -->
+<div id="tab-admission" class="panel">
+  <div class="alert alert-orange"><span>🩺</span><span>입원 시 당뇨병 유형 확인, A1C 측정, 자가관리 평가가 출발점이며, 구조화된 오더셋과 전담팀 운영이 진료 질을 결정한다.</span></div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>📊 입원 시 고려사항 (Considerations on Admission)</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="dot">
+        <li>초기 평가 시 당뇨병 유형 기재(알고 있는 경우): 1형, 2형, 임신성, 췌장성, 스트레스고혈당, 약물관련, 영양관련(경관·정맥영양 등)</li>
+        <li>최근 3개월 내 A1C 결과 없으면 입원 시 또는 직후 측정 — 입원 중 치료·퇴원계획에 사전 혈당상태 반영 필요</li>
+        <li>A1C를 혈당관리 오더셋에 포함시키면 검사 시행률 증가</li>
+        <li>자가관리 지식·행동을 입원 시 평가, 입원 중(특히 새로운 치료계획 도입 시) 자가관리교육 지속 제공</li>
+        <li>교육 내용: 약물 용량·투여법, 식사계획, 혈당모니터링, 저혈당 인지·치료</li>
+        <li>그룹홈·시설 거주자는 시설의 당뇨관리 역량을 확인하여 치료계획에 반영</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <div class="card-header open" onclick="toggleCard(this)">
+        <span>💻 CPOE 기반 표준화 오더셋</span><span class="toggle">▾</span>
+      </div>
+      <div class="card-body">
+        <ul class="dot">
+          <li>National Academy of Medicine — 약물 관련 오류 예방·투약 효율 증대 위해 CPOE 권장</li>
+          <li>RCT 체계적 문헌고찰: 컴퓨터 보조 시스템 사용 시 목표혈당범위 내 시간 비율 개선, 평균혈당 감소, 저혈당 증가 없음</li>
+          <li>구조화된 오더셋은 체중기반 초기 인슐린 용량 가이드, 입원 중 인슐린 적정(titration) 가이드 제공이 이상적</li>
+          <li>상업용 전자 혈당관리시스템(EGMS)이 인슐린 프로토콜 구현을 도울 수 있음</li>
+        </ul>
+        <div class="alert alert-info" style="margin-top:8px"><span>ℹ️</span><span>16.2 — 기관은 개인맞춤 접근이 가능한 검증된 서면/전산 오더셋 프로토콜을 도입해야 한다. <span class="badge badge-B">B</span></span></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header open" onclick="toggleCard(this)">
+        <span>👥 병원 당뇨병 전담팀 (Diabetes Care Teams)</span><span class="toggle">▾</span>
+      </div>
+      <div class="card-body">
+        <ul class="dot">
+          <li>전문 인력·전담팀의 진료 → 재원기간 단축, 혈당·임상결과 개선</li>
+          <li>당뇨 관련 30일 재입원 위험 감소 및 비용 절감 효과</li>
+          <li>가상 혈당관리서비스(EHR 기반 일일 차트리뷰+권고) — 고혈당·저혈당 30–40% 감소</li>
+          <li>팀 구성: 의사 또는 NP/PA, 간호사, 임상영양사, 약사 등 당뇨교육 훈련받은 인력</li>
+          <li>관련 자원: Joint Commission 인증프로그램, Society of Hospital Medicine, The Leapfrog Group, JBDS(영국)</li>
+        </ul>
+        <div class="alert alert-info" style="margin-top:8px"><span>ℹ️</span><span>16.3 — 당뇨병(기존/신규) 또는 스트레스고혈당 환자 진료 시 가능하면 전담팀에 자문한다. <span class="badge badge-B">B</span></span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ GLYCEMIC ═══ -->
+<div id="tab-glycemic" class="panel">
+  <div class="alert alert-orange"><span>🎯</span><span>고혈당 &gt;140, 저혈당 &lt;70 mg/dL로 정의. 치료 시작 임계값과 치료 후 목표범위는 중증도에 따라 다르다.</span></div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>📊 표 — 혈당 이상 표준 정의</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <table class="tc-table">
+        <tr><th>구분</th><th>기준</th><th>비고</th></tr>
+        <tr><td><strong>고혈당</strong></td><td>&gt;140 mg/dL (&gt;7.8 mmol/L)</td><td>비정상 혈당의 임계값</td></tr>
+        <tr><td><strong>입원 시 A1C ≥6.5%</strong></td><td>(≥48 mmol/mol)</td><td>입원 전부터 당뇨병 존재 시사</td></tr>
+        <tr><td><strong>저혈당 (전체)</strong></td><td>&lt;70 mg/dL (&lt;3.9 mmol/L)</td><td>3단계로 세분</td></tr>
+        <tr><td>　Level 1</td><td>54–69 mg/dL (3.0–3.8 mmol/L)</td><td>즉시 치료 권장(진행 예방)</td></tr>
+        <tr><td>　Level 2</td><td>&lt;54 mg/dL (&lt;3.0 mmol/L)</td><td>신경당결핍 증상 임계값, 즉시 개입 필요</td></tr>
+        <tr><td>　Level 3</td><td>의식/신체기능 변화로 타인 도움 필요한 임상사건</td><td>즉시 개입 필요</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <div class="card-header open" onclick="toggleCard(this)">
+        <span>🎯 치료 시작 임계값 및 목표혈당</span><span class="toggle">▾</span>
+      </div>
+      <div class="card-body">
+        <table class="tc-table">
+          <tr><th>구분</th><th>치료 시작 임계값</th><th>치료 후 목표</th></tr>
+          <tr><td><strong>중증(ICU)</strong></td><td>≥180 mg/dL 지속(24h 내 2회 확인)</td><td>140–180 mg/dL<br><span style="color:var(--text2);font-size:11px">선택된 경우 110–140도 가능(저혈당 없이 달성 시)</span></td></tr>
+          <tr><td><strong>비중증(비ICU)</strong></td><td>≥180 mg/dL 지속(24h 내 2회 확인)</td><td>100–180 mg/dL</td></tr>
+        </table>
+        <ul class="dot" style="margin-top:8px">
+          <li>16.4a <span class="badge badge-A">A</span> 중증 환자 다수에서 ≥180 mg/dL 지속 시 인슐린 시작/강화</li>
+          <li>16.4b <span class="badge badge-B">B</span> 비중증 환자에서 인슐린 및/또는 기타 약물 시작/강화</li>
+          <li>16.5a <span class="badge badge-A">A</span> 중증환자 목표 140–180, 선택군 110–140(저혈당 없을 시) <span class="badge badge-B">B</span></li>
+          <li>16.5b <span class="badge badge-B">B</span> 비중증환자 목표 100–180(저혈당 없이 달성 가능 시)</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header open" onclick="toggleCard(this)">
+        <span>📚 근거 배경 — 엄격한 목표의 함정</span><span class="toggle">▾</span>
+      </div>
+      <div class="card-body">
+        <ul class="dot">
+          <li><strong>Van den Berghe(2001)</strong> — 외과 ICU에서 80–110 목표가 사망률 40% 감소(단일기관)</li>
+          <li><strong>NICE-SUGAR</strong> — 80–110군이 140–180군 대비 이득 없음, 사망률 오히려 소폭 높음(27.5% vs 25%), 저혈당 10–15배 증가</li>
+          <li><strong>TGC-Fast(2023)</strong> — 조기 비경구영양 없는 중증환자에서 엄격관리(tight) 이득 없음, 양 군 모두 저혈당 매우 낮음(1.0% vs 0.7%)</li>
+          <li>결론: 다수 메타분석에서 적극적 목표는 저혈당·사망률 증가와 연관 → 중등도 목표(140–180) 권장</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>🔍 특수 상황별 목표 조정</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="dot">
+        <li><strong>110–140 mg/dL 더 엄격한 목표</strong> — 심장수술 등 선택된 중증환자에서 저혈당 없이 달성 가능 시</li>
+        <li><strong>최대 250 mg/dL까지 완화 가능</strong> — 말기질환(기대수명 짧음), 진행된 신부전(투석 포함), 고저혈당위험군, 불안정한 혈당 변동 환자</li>
+        <li>공복혈당 &lt;100 mg/dL은 향후 24시간 내 저혈당의 예측인자 → basal 인슐린 용량 조정 필요</li>
+        <li>임상상태(중증도, 영양상태, 글루코코르티코이드 등 병용약물) 변화에 따른 일일 재평가 필요</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <div class="card-header open" onclick="toggleCard(this)">
+        <span>📟 혈당 모니터링 (POC)</span><span class="toggle">▾</span>
+      </div>
+      <div class="card-body">
+        <ul class="dot">
+          <li>식사하는 환자: <strong>식전</strong> 모니터링</li>
+          <li>금식 환자: <strong>4–6시간마다</strong></li>
+          <li>IV 인슐린 사용 시: <strong>30분–2시간마다</strong> (안전한 사용 위해 더 자주)</li>
+          <li>FDA 승인 병원용 POC 혈당계 사용 — 정확도는 검사실보다 낮으나 통상 진료에는 충분</li>
+          <li>오차 유발 요인: 관류 이상, 부종, 빈혈/적혈구증가증, 일부 약물</li>
+          <li>임상상태와 맞지 않는 POC 결과는 재검사 → 필요시 검사실 검체로 확인(특히 무증상 저혈당)</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header open" onclick="toggleCard(this)">
+        <span>📡 연속혈당모니터링 (CGM)</span><span class="toggle">▾</span>
+      </div>
+      <div class="card-body">
+        <ul class="dot">
+          <li>16.6 <span class="badge badge-B">B</span> 개인 CGM 사용자는 임상적으로 적절하면 입원 중에도 지속 가능 — 단, 인슐린 용량결정·저혈당평가는 <strong>POC로 확인</strong> 필요(기관 프로토콜에 따름)</li>
+          <li><strong>20/20 기준</strong>: 혈당≥70 시 POC의 ±20% 이내, &lt;70 시 ±20mg/dL 이내여야 유효</li>
+          <li>현재 어떤 CGM도 FDA의 입원환경 사용 승인은 받지 않음</li>
+          <li>TIGHT 연구(2025) — 비중증 2형당뇨 입원환자에서 CGM이 POC 대비 인슐린 조정 이득 없음(평균혈당 170±32 vs 175±33)</li>
+          <li>야간·무증상 저혈당 감지에는 강점 — 원격 글루코스 텔레메트리 시스템과 결합 시 유용</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span>⚙️ 인슐린펌프·자동인슐린전달(AID) 시스템</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body collapsed">
+      <ul class="dot">
+        <li>16.7 <span class="badge badge-C">C</span> 임상적으로 적절하고 자가관리 가능하며 직원 교육·역량평가·기관 프로토콜이 있다면 펌프/AID 지속 사용 지지</li>
+        <li>폐쇄형 AID 시스템이 기존 피하인슐린보다 우월한 혈당관리, 저혈당 위험 증가 없음(RCT)</li>
+        <li>많은 기관이 1–6회/일 POC 확인 요구 — CGM 데이터 정확성을 적어도 1일 1회 POC와 교차검증 필요</li>
+        <li>CGM·AID 데이터는 매일(식전·취침전 등) 검토·기록, 필요시 펌프 설정 조정</li>
+        <li>설문 결과 절반 미만 병원만 관련 정책 보유 — 기기 오작동·교육부족 의심 시 내분비/당뇨팀 자문 권장</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ INSULIN ═══ -->
+<div id="tab-insulin" class="panel">
+  <div class="alert alert-orange"><span>💉</span><span>중증에서는 지속 정맥 인슐린, 비중증에서는 basal±prandial+correction이 표준. Sliding scale 단독 사용은 지양한다.</span></div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>🏥 중증치료 환경(Critical Care) — 정맥 인슐린</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="dot">
+        <li>16.8a <span class="badge badge-A">A</span> 지속 정맥 인슐린 주입이 중증환자에서 목표달성·저혈당 회피에 가장 효과적</li>
+        <li>검증된 서면/전산 프로토콜 사용 — 직전·현재 주입속도와 혈당변화 기반 사전정의된 조정 허용</li>
+        <li>식사 가능하나 IV 인슐린 지속 필요 시 → 식사커버는 <strong>피하 속효성 인슐린</strong>으로(IV 요구량 급변동·저혈당 방지)</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>🔄 IV → SC 전환 프로토콜</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="dot">
+        <li>IV 인슐린 중단 <strong>2시간 전</strong> 피하 basal 인슐린 투여(반동성 고혈당 예방)</li>
+        <li>DKA 환자(±)에서 IV 주입과 함께 <strong>저용량 basal 인슐린 analog(0.15–0.3 units/kg)</strong> 조기 추가 시 IV 주입기간·재원기간 단축, 반동성 고혈당 예방(저혈당 증가 없음) — 1형당뇨에서 특히 유용</li>
+        <li>총일일용량 산정: 체중기반 / 가정용량 기반 / 직전 6–8시간 IV 주입속도 기반</li>
+        <li>IV 주입속도 기반 산정 시 약 <strong>60%</strong>만 사용(glucotoxicity 고려)</li>
+        <li>인슐린펜 사용 또는 약사·간호 정밀감독으로 정확한 용량 보장</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>🏨 비중증치료 환경(Noncritical Care)</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <table class="tc-table">
+        <tr><th>경구섭취 상태</th><th>권장 처방</th><th>등급</th></tr>
+        <tr><td>부족/제한된 경구섭취</td><td>Basal 단독 또는 basal + 교정 인슐린</td><td><span class="badge badge-A">A</span> 16.8b</td></tr>
+        <tr><td>충분한 영양섭취</td><td>Basal + Prandial + Correction (전체 구성)</td><td><span class="badge badge-A">A</span> 16.9</td></tr>
+        <tr><td>(모든 상황)</td><td>Basal 없는 교정/보충 인슐린(구 sliding scale) 단독 사용 지양</td><td><span class="badge badge-A">A</span> 16.10</td></tr>
+      </table>
+      <div class="alert alert-warn" style="margin-top:8px"><span>⚠️</span><span>RABBIT 2 Surgery 연구 — basal-bolus가 일반외과 2형당뇨 환자에서 sliding scale보다 혈당·합병증 개선. 단, 경증 고혈당/스트레스고혈당이며 &lt;180 mg/dL 유지되는 비중증 2형당뇨에서는 예외적으로 단독 sliding scale 허용 가능</span></div>
+    </div>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <div class="card-header" onclick="toggleCard(this)">
+        <span>🧮 총일일 인슐린 용량 산정</span><span class="toggle">▾</span>
+      </div>
+      <div class="card-body collapsed">
+        <ul class="dot">
+          <li>일반적 시작용량: <strong>0.3–0.6 units/kg/day</strong></li>
+          <li>대안: 직전 6–8h IV 주입속도 기반, 이전 입원 시 용량, 또는 가정용량의 <strong>80%</strong></li>
+          <li>총일일용량의 <strong>50%는 basal, 50%는 nutritional(식사)</strong> 인슐린으로 배분</li>
+          <li>교정 인슐린 스케일은 총일일용량에 비례: &lt;40u/day(low), 40–80u/day(medium), &gt;80u/day(high)</li>
+          <li>교정 인슐린은 통상 140 또는 150 mg/dL부터 시작</li>
+          <li>인슐린펜 사용 시 안전성·간호만족도 향상(바코드 스캐닝 등 안전절차 병행 시)</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header" onclick="toggleCard(this)">
+        <span>🧬 인슐린 제형별 주의사항</span><span class="toggle">▾</span>
+      </div>
+      <div class="card-body collapsed">
+        <ul class="dot">
+          <li>인슐린 analog vs human insulin — 혈당결과 유사, human insulin은 저혈당 위험 다소 높음</li>
+          <li><strong>혼합형 인슐린(70/30, 75/25, 50/50)은 입원 중 권장하지 않음</strong> — basal-bolus 대비 저혈당 유의하게 증가</li>
+          <li>농축인슐린(glargine U-300, degludec U-200, U-500 regular) — 입원·수술전후 자료 제한적, 결과 다양</li>
+          <li><strong>U-500</strong> 사용자는 입원 중 요구량이 가정용량 대비 최대 75% 감소 가능 — 용량오류·저혈당 특히 주의</li>
+          <li>농축인슐린 필요 시 펜 사용 또는 약사가 직접 용량 인출 권장, 당뇨팀 자문 고려</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span>🧬 1형당뇨 특이사항</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body collapsed">
+      <div class="alert alert-danger"><span>🚫</span><span>1형당뇨에서 <strong>교정 인슐린 단독은 금기</strong> — 식전 혈당만 반영하여 basal 요구량·열량섭취를 고려하지 못해 저혈당·고혈당 위험 모두 증가</span></div>
+      <ul class="dot">
+        <li>금식 중에도 basal+correction 필수, 식사 시 prandial 추가</li>
+        <li>EHR 정책·경고로 1형당뇨 환자의 basal 인슐린이 보류되지 않도록 보장(특히 care transition 시기)</li>
+        <li>지속적인 처방자·간호 교육 필요</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>💊 비인슐린 약물 (Noninsulin Therapies)</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <table class="tc-table">
+        <tr><th>약물군</th><th>입원 중 사용</th></tr>
+        <tr><td><strong>SGLT2 억제제</strong></td><td>혈당관리 목적 권장 아님. 심부전 동반 시 금기 없으면 시작/지속 가능 <span class="badge badge-A">A</span>(16.11). 중증질환·케톤혈증/케톤뇨·장기금식·수술 시 회피. 예정수술 3일 전(ertugliflozin 4일 전) 중단</td></tr>
+        <tr><td><strong>DPP-4 억제제</strong></td><td>경증~중등도 고혈당(입원 시 혈당 &lt;180–200)에서 안전성·단순성 측면 유리, 저혈당 위험 감소. Saxagliptin·alogliptin은 심부전 발생 시 중단 고려. Linagliptin은 신장용량조절 불필요</td></tr>
+        <tr><td><strong>GLP-1 RA</strong></td><td>자료 제한적·안정된 환자 연구 위주 — <strong>급성기 환자에서는 보류</strong></td></tr>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ HYPO ═══ -->
+<div id="tab-hypo" class="panel">
+  <div class="alert alert-danger"><span>⚠️</span><span>입원 중 저혈당의 다수는 예방 가능. 모든 병원/의료시스템은 표준화된 간호사 주도 저혈당 프로토콜을 도입해야 한다.</span></div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>📋 권고문 및 핵심 원칙</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="dot">
+        <li>16.12 <span class="badge badge-C">C</span> 모든 의료시스템은 저혈당 관리 프로토콜을 채택하고 개인별 식별·치료·예방 계획을 수립 — EHR에 문서화·추적하여 질 개선에 활용</li>
+        <li>16.13 <span class="badge badge-C">C</span> 혈당 &lt;70 mg/dL 발생 시 재발 방지를 위해 치료계획 검토·변경</li>
+        <li>저혈당은 사망률 증가와 연관되나, 많은 경우 사망의 직접 원인이 아닌 기저질환의 표지자(marker)</li>
+        <li>그럼에도 대사조절장애·당뇨치료의 심각한 결과이며 입원 중 최소화가 필수</li>
+        <li>핵심 전략: 모든 인슐린·인슐린주입 처방에 저혈당 치료를 내재화(embedding)</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <div class="card-header open" onclick="toggleCard(this)">
+        <span>🔍 위험인자 및 원인</span><span class="toggle">▾</span>
+      </div>
+      <div class="card-body">
+        <ul class="dot">
+          <li>인슐린은 입원환자에서 가장 흔한 약물이상사례 원인 중 하나 — 처방·조제·투약 오류 모두 관여</li>
+          <li><strong>신부전</strong>이 중요 위험인자(인슐린 청소율 감소)</li>
+          <li>고령, 심부전·간부전 등 동반질환, 패혈증, 영양불량</li>
+          <li>흔한 의인성 원인: 스테로이드 급감량, 경구섭취 감소·구토, 식사시점과 인슐린투여 시점 불일치, IV 포도당 주입속도 감소, 경관/정맥영양 갑작스런 중단, 장시간 시술/수술, 혈당체크 지연·누락, 증상보고 능력 저하</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header open" onclick="toggleCard(this)">
+        <span>🛡️ 예방 전략과 효과</span><span class="toggle">▾</span>
+      </div>
+      <div class="card-body">
+        <ul class="dot">
+          <li>"묶음(bundled)" 예방요법 — 혈당 이상치(outlier) 능동감시 + 다학제 데이터기반 접근</li>
+          <li>기저치 대비 저혈당 사건 <strong>56–80% 감소</strong> 보고</li>
+          <li>Joint Commission — 모든 저혈당 사건에 대한 근본원인 분석 및 집계·검토 권고</li>
+          <li>개인 CGM·AID 사용이 저혈당 예방에 도움 가능(임박한 저혈당 알림 기능)</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>💊 저혈당 치료 프로토콜</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <ol class="num">
+        <li>경구 섭취 가능·NPO 아님 → <strong>15g 속효성 탄수화물</strong> 투여</li>
+        <li>경구 불가 시 → <strong>정맥 포도당</strong> 또는 <strong>글루카곤</strong> 투여</li>
+        <li><strong>15분마다</strong> 혈당 재확인, 70 mg/dL 이상으로 안정될 때까지 치료 반복</li>
+      </ol>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span>🔁 중증 저혈당 예측·예방</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body collapsed">
+      <ul class="dot">
+        <li>중증 저혈당(&lt;40 mg/dL) 환자의 <strong>84%</strong>가 같은 입원 중 선행 저혈당(&lt;70) 경험</li>
+        <li>다른 연구(&lt;50 mg/dL 정의) — <strong>78%가 basal 인슐린 사용 중</strong>, 자정~오전6시에 발생 정점</li>
+        <li>저혈당 인지 후에도 <strong>75%는 다음 basal 인슐린 투여 전까지 용량 변경 없음</strong> — 처방 재검토의 중요성 강조</li>
+        <li>공복혈당 &lt;100 mg/dL은 익일 저혈당의 예측인자(단일 후향연구)</li>
+        <li>저혈당 예측 알고리즘 개발 중 — 검증되면 입원 저혈당 감소에 유용한 도구 될 전망</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ SPECIAL ═══ -->
+<div id="tab-special" class="panel">
+  <div class="alert alert-orange"><span>🍽️</span><span>영양공급 형태(경구·경관·정맥)와 스테로이드 사용은 인슐린 처방을 근본적으로 변화시키는 핵심 변수다.</span></div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>🍱 의학영양요법(MNT) — 일반 원칙</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="dot">
+        <li>ADA는 특정 식단·다량영양소 비율을 일률적으로 권장하지 않음 — 치료목표·생리지표·약물에 따른 개인화 강조</li>
+        <li><strong>조절된 탄수화물 식단</strong>(식판마다 탄수화물량 계산) — 식사 인슐린 용량 매칭에 유리</li>
+        <li><strong>"식사 삼각(meal triad)"</strong> — 혈당체크·식사배달·식사인슐린 투여의 시점 일치(coordination) 필요. 불일치 시 고혈당·저혈당 위험</li>
+        <li>"meals on demand"(자유배식)는 만족도는 높이나 혈당-인슐린-식사 일치가 어려워 인슐린 누적(stacking) 위험</li>
+        <li>탄수화물 계산 가능 환경이면 집에서 카운팅하던 환자(특히 인슐린펌프 사용자)에게 제공</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>🧑‍🤝‍🧑 병원 내 자가관리 (Self-Management)</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="dot">
+        <li>적합 대상: 부모 동반 소아, 청소년, 가정에서 성공적으로 자가관리 해온 성인(급성질환·섬망으로 인지·신체능력 저하 없는 경우)</li>
+        <li>충분한 경구섭취 + 안정된 인슐린 요구량 필요</li>
+        <li>매일 환자-진료팀이 자가관리 적합성에 합의하는 정책 권장</li>
+        <li>약사의 가정약물 확인 및 처방자의 자가투여 승인 필요(간호사 감독下)</li>
+        <li>인슐린펌프·CGM 착용 시 주입부위·센서 교체 등 기관정책 마련 필요</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>🍼 경관·정맥영양(Enteral/Parenteral Feeding)</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="dot">
+        <li>인슐린 처방은 basal, prandial(영양), correction 모두 포함 필요</li>
+        <li><strong>1형당뇨는 급식 중단 시에도 basal 인슐린 지속 필수</strong></li>
+        <li>기존 basal 용량 지속 + 영양성분 인슐린: <strong>탄수화물 10–15g당 1단위</strong></li>
+        <li>경관 지속주입: 속효성 4시간마다, regular 6시간마다, NPH 8–12시간마다 — regular insulin 기반이 주사횟수 적고 혈당관리 우수</li>
+        <li>급식 중단 시 → 활성 인슐린 작용시간 동안 IV dextrose 공급</li>
+        <li>볼루스 경관급식: 매 급식 전 탄수화물 10–15g당 속효성 1단위 + 필요시 교정인슐린</li>
+        <li>야간 경관급식: 급식 시작과 함께 NPH 투여가 합리적</li>
+        <li>지속 정맥영양: 직전 24시간 교정인슐린 &gt;20단위 시 TPN 백에 regular human insulin 첨가(dextrose 10g당 1단위 시작) 고려 — 중단/중단 시 저혈당 예방에 가장 안전. 피하 glargine도 동등 효과 보고</li>
+        <li>지속 경관/정맥영양은 지속적 식후상태 유발 → 혈당 &lt;140 목표 시 저혈당 위험 크게 증가</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>💊 글루코코르티코이드 치료 시 고혈당</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="dot">
+        <li>입원환자 10–15%에서 스테로이드 사용, 이 중 56–86%에서 고혈당 유발(당뇨 유무 무관)</li>
+        <li><strong>중간작용(prednisone 등, 아침투여)</strong> 전형적 패턴: 공복혈당 정상/경한 상승 → 오후 상승 → 저녁 최고치(CGM상)</li>
+        <li>1일 1~2회 스테로이드 → <strong>NPH 인슐린을 스테로이드 투여와 동시에</strong> 투여(작용시점 4–6h 매칭)</li>
+        <li><strong>장시간작용(dexamethasone) 또는 다회/지속 투여</strong> → 장시간작용 basal 인슐린 필요</li>
+        <li>고용량 스테로이드 시 prandial·교정 인슐린을 <strong>40–60% 이상</strong> 증량 필요할 수 있음</li>
+        <li>인슐린:스테로이드 비율 증가가 목표범위 시간(TIR) 개선과 연관되나 저혈당도 증가 — 일일 조정 필수</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ PERIOP ═══ -->
+<div id="tab-periop" class="panel">
+  <div class="alert alert-orange"><span>🔪</span><span><strong>수술전후 관리(Perioperative Care)</strong> — 수술전후 고혈당은 수술부위감염·재원기간·사망률 증가와 연관. 술전 A1C 최적화와 개별 약물 중단 시점 관리가 핵심이다.</span></div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>📊 배경 및 권고문</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="dot">
+        <li>대형 일반외과 수술 환자의 최대 20%가 당뇨병, 23–60%는 전당뇨/미진단 당뇨</li>
+        <li>수술 스트레스·역조절호르몬 → 고혈당, 사망률·감염·재원기간 증가</li>
+        <li>합병증 증가의 혈당 임계값: 약 100–180 mg/dL</li>
+        <li>16.14 <span class="badge badge-C">C</span> 선택수술 술전 A1C 목표 &lt;8%(3개월 내), 개인별 위험-이득 평가. 14일 GMI &lt;8% 또는 TIR &gt;50%도 대체 가능 <span class="badge badge-E">E</span></li>
+        <li>16.15 <span class="badge badge-E">E</span> 술전·중·후 혈당 100–180 mg/dL로 모니터링·유지(수술종류·저혈당위험·약물에 따라 목표 조정)</li>
+        <li>A1C/GMI만으로 수술을 연기·거부하는 것은 권장하지 않음(불필요한 지연 위험)</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>✅ 수술전후 5대 핵심 포인트</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <ol class="num">
+        <li>지나치게 엄격한 수술전후 혈당목표는 이득 없이 저혈당만 증가 — 지양</li>
+        <li>NPO 중 <strong>2–4시간마다</strong> 혈당 모니터링, 필요시 인슐린 투여(수술전후 유일 권장 혈당저하제는 인슐린)</li>
+        <li>CGM은 수술 중 단독 모니터링 수단으로 사용 불가</li>
+        <li>Metformin 등 경구약은 수술 당일 보류(SGLT2i·GLP-1RA는 별도 기준 참조)</li>
+        <li>인슐린펌프는 기관정책·수술상황에 부합 시 수술 중에도 지속 가능 — 불가 시 IV 주입 또는 basal+교정으로 대체</li>
+      </ol>
+    </div>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <div class="card-header open" onclick="toggleCard(this)">
+        <span>💉 술전 인슐린 용량 조정</span><span class="toggle">▾</span>
+      </div>
+      <div class="card-body">
+        <table class="tc-table">
+          <tr><th>인슐린 종류</th><th>술전일 저녁 조정</th></tr>
+          <tr><td>일반 basal(평소 용량 대비)</td><td><strong>25% 감량</strong>이 저혈당 위험 낮추며 목표달성에 유리</td></tr>
+          <tr><td>NPH</td><td><strong>1/2 용량</strong>으로 감량</td></tr>
+          <tr><td>장시간 basal analog</td><td><strong>75–80%</strong>로 감량</td></tr>
+          <tr><td>인슐린펌프(비자동모드)</td><td>basal rate를 당뇨유형·임상판단에 따라 조정</td></tr>
+        </table>
+        <div class="alert alert-warn" style="margin-top:8px"><span>⚠️</span><span>일부 1형당뇨 환자에서는 용량감량이 적합하지 않을 수 있어 개별화 필요</span></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header open" onclick="toggleCard(this)">
+        <span>💊 SGLT2 억제제 — 수술전후</span><span class="toggle">▾</span>
+      </div>
+      <div class="card-body">
+        <ul class="dot">
+          <li>선택수술 전 <strong>3–4일 중단</strong> (FDA 권고)</li>
+          <li>비예정(응급) 수술 중 SGLT2i 사용자는 수술 후 DKA(특히 <strong>euglycemic DKA</strong>) 가능성 면밀히 관찰</li>
+          <li>일부 연구에서 DKA/음이온차산증 위험 증가 보고(통계적으로 유의하지 않은 연구도 존재) — 예방적으로 3–4일 중단 유지</li>
+          <li>심부전 적응증으로 재개 시점: 영양섭취 재개 후 병원 내 재시작 가능</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>💊 GLP-1/GIP 듀얼 RA — 수술전후 (흡인 위험)</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <div class="alert alert-danger"><span>🚫</span><span>FDA — 모든 GLP-1RA/GIP·GLP-1 듀얼 작용제 라벨에 전신마취·깊은진정 시 <strong>흡인성 폐렴 가능성</strong> 경고 추가</span></div>
+      <ul class="dot">
+        <li>오심·구토·위배출 지연과 연관, 마취 중 흡인 사례 보고 존재</li>
+        <li>금식했음에도 위 내용물 잔류 가능성 증가 — 1주일 보류(주 1회 제형)로도 위험 완전히 해소 안 될 수 있음</li>
+        <li>semaglutide 최대 30일(평균 10일) 보류해도 위 내용물 잔류 보고된 연구 존재</li>
+        <li>일부 후향연구는 흡인성 폐렴 위험 증가를 확인하지 못함 — 상충되는 근거</li>
+        <li>최근 다학회는 <strong>개인화된 접근</strong> 권장: 위배출지연 저위험·선택수술 환자는 지속 복용 가능, 위험군은 24h 액체식이 등 고려</li>
+        <li>고려요인: 적응증(당뇨 vs 비만), 현재 혈당관리, 용량·기간·약물특성, 위장관 증상, 수술 종류·긴급성, 마취 종류</li>
+        <li>위배출지연 시사 증상(오심·구토·소화불량·복부팽만) 시 full stomach precaution 고려, 술전 위초음파로 위 내용물 정량화 가능</li>
+        <li>약물 보류 결정 시 혈당악화 예상되면 대체 전략(인슐린 등) 마련</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ DKA ═══ -->
+<div id="tab-dka" class="panel">
+  <div class="alert alert-danger"><span>🚨</span><span>DKA·HHS는 생명을 위협하는 급성 고혈당 응급상황. 수액·인슐린·전해질 교정과 원인질환 치료가 핵심이다.</span></div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>📊 표 16.1 — DKA·HHS 진단 기준</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <table class="tc-table">
+        <tr><th>DKA 항목</th><th>기준</th></tr>
+        <tr><td>당뇨/고혈당</td><td>혈당 ≥200 mg/dL(≥11.1 mmol/L) 또는 당뇨병 과거력</td></tr>
+        <tr><td>케토시스</td><td>β-OHB ≥3.0 mmol/L 또는 요케톤 2+ 이상</td></tr>
+        <tr><td>대사성산증</td><td>pH &lt;7.3 및/또는 중탄산염 &lt;18 mmol/L</td></tr>
+      </table>
+      <table class="tc-table" style="margin-top:8px">
+        <tr><th>HHS 항목</th><th>기준</th></tr>
+        <tr><td>고혈당</td><td>혈장혈당 ≥600 mg/dL(≥33.3 mmol/L)</td></tr>
+        <tr><td>고삼투압</td><td>유효삼투압 &gt;300 mOsm/kg [2×Na+glucose] 또는 총삼투압 &gt;320 [2×Na+glucose+urea]</td></tr>
+        <tr><td>의미있는 케톤혈증 없음</td><td>β-OHB &lt;3.0 mmol/L 또는 요케톤 2+ 미만</td></tr>
+        <tr><td>산증 없음</td><td>pH ≥7.3 및 중탄산염 ≥15 mmol/L</td></tr>
+      </table>
+      <div class="alert alert-warn" style="margin-top:8px"><span>⚠️</span><span>모든 기준을 충족해야 진단 성립. DKA의 약 10%는 <strong>euglycemic DKA</strong>(혈당 &lt;200)로 발생 — 고혈당 또는 당뇨병력 중 하나로 진단 가능. DKA·HHS는 흔히 동시발생(mixed)하며 사망률은 단독보다 높음.</span></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span>📊 표 16.2 — DKA vs HHS 임상양상 비교</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body collapsed">
+      <table class="tc-table">
+        <tr><th>DKA</th><th>HHS</th></tr>
+        <tr><td>수시간~수일에 걸쳐 발생</td><td>수일~1주에 걸쳐 발생</td></tr>
+        <tr><td>대개 의식명료</td><td>인지상태 변화 흔함</td></tr>
+        <tr><td colspan="2">다뇨, 다음, 체중감소, 탈수 (공통)</td></tr>
+        <tr><td>오심, 구토, 복통</td><td>흔히 다른 급성질환과 동반</td></tr>
+        <tr><td>Kussmaul 호흡</td><td>-</td></tr>
+        <tr><td colspan="2">고혈당 응급의 1/3은 DKA-HHS 혼합형으로 나타남</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>💧 치료 경로 (Fig 16.1 핵심 요약)</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <div class="grid3">
+        <div class="flow-box" style="border-left:3px solid var(--accent2)">
+          <strong>💧 IV 수액</strong>
+          <ul class="dot" style="margin-top:6px">
+            <li>수화상태 평가 → 중증/경증 저혈량, 심부전 여부 판단</li>
+            <li>0.9% NaCl 등 결정질액, 첫 8–12시간 내 수분결핍의 50% 보충(약 1.0L/h)</li>
+            <li>혈당 &lt;250 도달 시 5–10% dextrose 추가</li>
+            <li>Euglycemic DKA(혈당&lt;200+BOHB양성) — 인슐린 치료 시작과 함께 dextrose 동시 시작</li>
+          </ul>
+        </div>
+        <div class="flow-box" style="border-left:3px solid var(--orange)">
+          <strong>💉 인슐린</strong>
+          <ul class="dot" style="margin-top:6px">
+            <li><strong>경증 DKA</strong>: 0.1u/kg SC bolus 후 매시간 0.1u/kg 또는 2시간마다 0.2u/kg</li>
+            <li><strong>중등도~중증 DKA</strong>: 0.1u/kg/h IV 고정속도 주입(또는 nurse-driven 가변속도)</li>
+            <li><strong>HHS</strong>: 0.05u/kg/h 고정속도 IV 시작</li>
+            <li>혈당 &lt;250 도달 시 단기인슐린 속도를 0.05u/kg/h(IV) 또는 SC로 감량</li>
+            <li>목표: DKA 150–200, HHS 200–250 mg/dL 유지(해소까지)</li>
+          </ul>
+        </div>
+        <div class="flow-box" style="border-left:3px solid var(--purple)">
+          <strong>🧪 칼륨</strong>
+          <ul class="dot" style="margin-top:6px">
+            <li>K+ &lt;3.5 → 인슐린 시작 보류, K+ 보충 우선(10–20 mmol/L/h, 중심정맥 필요시)</li>
+            <li>K+ 3.5–5.0 → 인슐린 시작, K+는 보충하지 않고 2시간마다 재검</li>
+            <li>K+ &gt;5.0 → 인슐린 시작, K+ 보충 보류</li>
+            <li>적절한 신기능 확보(요량 ~0.5mL/kg/h) 전제 필요</li>
+          </ul>
+        </div>
+      </div>
+      <div class="alert alert-info" style="margin-top:10px"><span>ℹ️</span><span>전해질·신기능·정맥pH·삼투압·혈당을 안정될 때까지 <strong>2–4시간마다</strong> 확인. 해소 후 경구섭취 가능해지면 피하 다회인슐린으로 전환(IV→SC 전환 시 SC 투여 후 <strong>1–2시간</strong> IV 주입 유지)</span></div>
+    </div>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <div class="card-header open" onclick="toggleCard(this)">
+        <span>📌 해소(Resolution) 정의</span><span class="toggle">▾</span>
+      </div>
+      <div class="card-body">
+        <table class="tc-table">
+          <tr><th>구분</th><th>기준</th></tr>
+          <tr><td><strong>DKA</strong></td><td>정맥pH &gt;7.3 또는 중탄산염 &gt;18 mmol/L, 혈장/모세혈관 케톤 &lt;0.6 mmol/L</td></tr>
+          <tr><td><strong>HHS</strong></td><td>계산된 혈청삼투압 &lt;300 mOsm/kg, 요량 &gt;0.5mL/kg/h, 혈당 &lt;250 mg/dL</td></tr>
+        </table>
+        <div class="alert alert-warn" style="margin-top:8px"><span>⚠️</span><span>임상판단을 활용하며, 기준 미충족만으로 퇴원·전과를 불필요하게 지연하지 않는다.</span></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header open" onclick="toggleCard(this)">
+        <span>📌 보조요법 및 역학</span><span class="toggle">▾</span>
+      </div>
+      <div class="card-body">
+        <ul class="dot">
+          <li><strong>중탄산염</strong> — pH &lt;7.0일 때만 고려, 통상 권장 안 함(산증해소·재원기간에 차이 없음)</li>
+          <li><strong>인산염</strong> — 근력약화·호흡부전·인산 &lt;1.0(또는 &lt;0.32) mmol/L 아니면 투여 안 함</li>
+          <li>전체 당뇨병 입원의 약 1%가 고혈당 응급으로 인한 입원</li>
+          <li>1형당뇨 고혈당위기 발생률 44.5–82.6/1,000인년, 2형당뇨 최대 3.2/1,000인년(최근 증가 추세)</li>
+          <li>입원 중 사망률: 1형 DKA 0.2%, 2형 DKA 1.0%, HHS 0.77%(2018 기준, 감소 추세였으나 정체)</li>
+          <li>DKA 퇴원 후 1년 연령보정 사망률이 일반인구의 <strong>13배</strong></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ DISCHARGE ═══ -->
+<div id="tab-discharge" class="panel">
+  <div class="alert alert-orange"><span>🚪</span><span>구조화된 개인별 퇴원계획은 재원기간·재입원율을 낮추고 환자만족도를 높인다. 계획은 입원 시작과 동시에 시작해야 한다.</span></div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>📋 퇴원계획 3대 핵심 요소 (AHRQ 권고)</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <div class="grid3">
+        <div class="flow-box" style="border-left:3px solid var(--accent2)">
+          <strong>💊 약물 조정(Medication Reconciliation)</strong>
+          <ul class="dot" style="margin-top:6px">
+            <li>가정·병원 약물 교차확인 — 만성약물 누락·중복(다른 브랜드명) 방지</li>
+            <li>신규/변경 처방은 가능하면 퇴원 전 조제·환자·돌봄제공자와 함께 검토</li>
+          </ul>
+        </div>
+        <div class="flow-box" style="border-left:3px solid var(--green)">
+          <strong>📨 구조화된 퇴원소통</strong>
+          <ul class="dot" style="margin-top:6px">
+            <li>약물변경·대기중인 검사·추적필요사항을 외래진료팀에 신속·정확히 전달</li>
+            <li>퇴원요약서는 퇴원 후 가능한 빨리 1차진료팀에 전송</li>
+            <li>퇴원 전 환자 동의하에 추적예약 확정 시 외래방문 이행률 증가</li>
+          </ul>
+        </div>
+        <div class="flow-box" style="border-left:3px solid var(--teal)">
+          <strong>📚 환자 교육</strong>
+          <ul class="dot" style="margin-top:6px">
+            <li>퇴원 후 추적·당뇨관리 담당 의료진 확인</li>
+            <li>당뇨진단·혈당모니터링·목표·연락시점 이해도 평가</li>
+            <li>식이상담·외래영양사 의뢰, 투약법(인슐린 포함)·sick-day 관리·기구 사용법/폐기 교육</li>
+          </ul>
+        </div>
+      </div>
+      <div class="alert alert-info" style="margin-top:10px"><span>ℹ️</span><span>16.18 — 구조화된 퇴원계획은 개인에 맞춰 조정해야 한다 <span class="badge badge-B">B</span>. 집이 아닌 시설로 퇴원 시 해당 시설의 당뇨관리 역량을 고려한다 <span class="badge badge-E">E</span>.</span></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>📅 외래 추적 및 약물조정 알고리즘</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="dot">
+        <li>입원 중 고혈당/저혈당 경험자는 퇴원 <strong>1개월 이내</strong> 1차진료/내분비/당뇨교육전문가 외래 추적 권장</li>
+        <li>약물 변경되었거나 혈당관리 불충분 시 → <strong>1–2주 이내</strong> 조기 예약, 필요시 빈번한 연락으로 치료조정</li>
+        <li>입원 시 A1C, 입원 전 약물, 입원 중 인슐린 사용량 기반 퇴원 알고리즘 — 퇴원 후 A1C 유의하게 개선시킨다는 근거 존재</li>
+        <li>퇴원요약서를 통한 직접/간접 소통이 안전한 전환에 도움</li>
+        <li>고혈당 원인(또는 원인규명 계획), 관련 합병증·동반질환, 권장 치료 정보 제공이 외래진료팀에 유용</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>🔁 재입원 예방 (Preventing Readmissions)</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="dot">
+        <li>당뇨병 환자 재입원율 <strong>14–20%</strong> — 비당뇨군의 거의 2배</li>
+        <li>당뇨병 입원의 30%가 2일 이상 재원, 이들이 당뇨 관련 입원비용의 50% 이상 차지</li>
+        <li>재입원 위험요인: 남성, 이전 재원기간 길수록, 이전 입원횟수 多, 동반질환 수·중증도, 낮은 사회경제·교육수준</li>
+        <li>재입원 감소요인: 계획된 가정방문 간호, 신속한 외래 추적</li>
+        <li><strong>A1C &gt;9%</strong> 또는 DKA로 입원한 경우 인슐린 조정 모니터링 + transitional care model 적용</li>
+        <li>중증저혈당·저혈당인지장애·고위험군(신부전, 강화인슐린요법, 노쇠, 지원체계 부족)에는 향후 사용 위한 <strong>글루카곤 처방</strong> 고려</li>
+        <li>만성콩팥병 동반 환자 — 협력적 person-centered medical home 모델이 위험보정 재입원율 감소</li>
+        <li>CGM이 응급실방문·재입원 예방 가능 — 퇴원 직전 CGM 시작이 추적·재발방지에 유용할 수 있음</li>
+        <li>고령(연령 자체가 중요 위험인자) — Section 13 "Older Adults" 참조</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span>🔮 미래 전망 (The Future)</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body collapsed">
+      <ul class="dot">
+        <li>EHR 기반 의사결정지원·진료조언(practice advisory)이 표준 준수를 촉진</li>
+        <li>개인·병원소유 당뇨기기 및 용량결정 알고리즘이 진료방식을 지속적으로 변화시키고 있음</li>
+        <li>향후 입원-외래 전환 과정의 질 향상이 핵심 과제로 지속될 전망</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ TABLES ═══ -->
+<div id="tab-tables" class="panel">
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>📊 통합 기준표 — 혈당 정의 및 목표</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <table class="tc-table">
+        <tr><th>구분</th><th>기준/목표</th></tr>
+        <tr><td>고혈당</td><td>&gt;140 mg/dL (&gt;7.8 mmol/L)</td></tr>
+        <tr><td>저혈당 Level 1</td><td>54–69 mg/dL</td></tr>
+        <tr><td>저혈당 Level 2</td><td>&lt;54 mg/dL</td></tr>
+        <tr><td>저혈당 Level 3</td><td>타인 도움 필요한 임상사건</td></tr>
+        <tr><td>중증환자 치료시작 임계값</td><td>≥180 mg/dL(2회 확인)</td></tr>
+        <tr><td>중증환자 목표</td><td>140–180 (선택군 110–140)</td></tr>
+        <tr><td>비중증환자 치료시작 임계값</td><td>≥180 mg/dL(2회 확인)</td></tr>
+        <tr><td>비중증환자 목표</td><td>100–180 mg/dL</td></tr>
+        <tr><td>완화 가능 목표(말기질환 등)</td><td>최대 250 mg/dL까지</td></tr>
+        <tr><td>수술전후 목표</td><td>100–180 mg/dL</td></tr>
+        <tr><td>술전 A1C 목표</td><td>&lt;8% (3개월 내)</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>📊 통합 기준표 — DKA/HHS 진단 (표 16.1)</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <table class="tc-table">
+        <tr><th>항목</th><th>DKA</th><th>HHS</th></tr>
+        <tr><td>혈당</td><td>≥200 mg/dL 또는 당뇨력</td><td>≥600 mg/dL</td></tr>
+        <tr><td>케톤</td><td>β-OHB≥3.0 또는 요케톤≥2+</td><td>β-OHB&lt;3.0 또는 요케톤&lt;2+</td></tr>
+        <tr><td>산증</td><td>pH&lt;7.3 및/또는 HCO3&lt;18</td><td>pH≥7.3 및 HCO3≥15</td></tr>
+        <tr><td>삼투압</td><td>해당없음</td><td>유효&gt;300 또는 총&gt;320 mOsm/kg</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span>📊 통합 기준표 — 인슐린 용량 산정 요약</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body collapsed">
+      <table class="tc-table">
+        <tr><th>상황</th><th>산정법</th></tr>
+        <tr><td>일반 시작용량</td><td>0.3–0.6 units/kg/day (basal:nutritional = 1:1)</td></tr>
+        <tr><td>IV주입 기반 전환</td><td>직전 6–8h 주입속도 × 60%</td></tr>
+        <tr><td>가정용량 기반</td><td>가정 총일일용량 × 80%</td></tr>
+        <tr><td>경관영양 nutritional</td><td>탄수화물 10–15g당 1단위</td></tr>
+        <tr><td>정맥영양(TPN) 첨가</td><td>dextrose 10g당 regular insulin 1단위(시작)</td></tr>
+        <tr><td>DKA 중 basal 조기추가</td><td>0.15–0.3 units/kg(저용량 analog)</td></tr>
+        <tr><td>술전 basal 감량(전날 저녁)</td><td>일반 25%↓, NPH 1/2, 장시간analog 75–80%</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span>📊 통합 기준표 — 주요 수치 모음</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body collapsed">
+      <table class="tc-table">
+        <tr><th>항목</th><th>값</th></tr>
+        <tr><td>CGM 유효성 20/20 기준</td><td>≥70: POC±20% / &lt;70: POC±20mg/dL</td></tr>
+        <tr><td>저혈당 치료</td><td>경구가능: 15g 속효성 탄수화물 / 15분마다 재확인</td></tr>
+        <tr><td>SGLT2i 술전 중단</td><td>3–4일 전(ertugliflozin 4일)</td></tr>
+        <tr><td>GLP-1RA 술전 보류</td><td>1주(주1회제형) — 단, 최근엔 개인화 접근 권장</td></tr>
+        <tr><td>병원 재입원율(당뇨)</td><td>14–20% (비당뇨군의 약 2배)</td></tr>
+        <tr><td>DKA 퇴원후 1년 사망률</td><td>일반인구 대비 13배</td></tr>
+        <tr><td>입원중 사망률</td><td>1형DKA 0.2% / 2형DKA 1.0% / HHS 0.77%</td></tr>
+      </table>
+    </div>
+  </div>
+</div>
+
+</div>
+
+<!-- ═══ MODAL: 혈당 정의 ═══ -->
+<div id="glucoseDefModal" class="modal-overlay" onclick="closeModalOutside(event,'glucoseDefModal')">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal('glucoseDefModal')">✕</button>
+    <div class="modal-title">📊 고혈당·저혈당 표준 정의</div>
+
+    <div class="alert alert-info" style="margin:0 0 12px"><span>💡</span><span>입원환자의 혈당이상은 명확한 임계값으로 정의되며, 저혈당은 임상적 중요도에 따라 3단계로 세분화된다.</span></div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">① 고혈당</div>
+      <table class="modal-table">
+        <tr><th>항목</th><th>내용</th></tr>
+        <tr><td>정의</td><td>혈당 &gt;140 mg/dL (&gt;7.8 mmol/L) — 비정상 혈당의 임계값 기준</td></tr>
+        <tr><td>입원시 A1C ≥6.5%</td><td>당뇨병 발병이 입원 전부터 있었음을 시사</td></tr>
+      </table>
+    </div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">② 저혈당 — 3단계 분류</div>
+      <table class="modal-table">
+        <tr><th>단계</th><th>혈당 기준</th><th>의의</th></tr>
+        <tr><td>Level 1</td><td>54–69 mg/dL (3.0–3.8 mmol/L)</td><td>level 2·3 진행 예방을 위해 즉시 치료 권장</td></tr>
+        <tr><td>Level 2</td><td>&lt;54 mg/dL (&lt;3.0 mmol/L)</td><td>신경당결핍 증상의 통상적 임계값, 즉시 개입 필요</td></tr>
+        <tr><td>Level 3</td><td>의식/신체기능 변화로 타인 도움이 필요한 임상사건</td><td>즉시 개입 필요</td></tr>
+      </table>
+    </div>
+
+    <div class="alert alert-warn" style="margin-top:4px"><span>⚠️</span><span>혈당 &lt;70 mg/dL 발생은 흔히 이후 level 3 저혈당을 예측하므로, 발생 시마다 치료계획을 재검토해야 한다.</span></div>
+  </div>
+</div>
+
+<!-- ═══ MODAL: 혈당 목표 ═══ -->
+<div id="goalModal" class="modal-overlay" onclick="closeModalOutside(event,'goalModal')">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal('goalModal')">✕</button>
+    <div class="modal-title">🎯 입원환자 혈당 목표 — 중증도별</div>
+
+    <div class="alert alert-info" style="margin:0 0 12px"><span>💡</span><span>치료시작 임계값(≥180 mg/dL)은 중증·비중증 동일하나, 치료 후 목표범위는 중증도와 개인상황에 따라 달라진다.</span></div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">① 중증치료(ICU) 환자</div>
+      <table class="modal-table">
+        <tr><th>항목</th><th>내용</th></tr>
+        <tr><td>치료시작 임계값</td><td>≥180 mg/dL 지속(24h 내 2회 확인) <span class="badge badge-A">A</span></td></tr>
+        <tr><td>치료 후 목표</td><td>140–180 mg/dL <span class="badge badge-A">A</span></td></tr>
+        <tr><td>선택적 강화목표</td><td>110–140 mg/dL — 심장수술 등 선택군에서 저혈당 없이 달성 가능 시 <span class="badge badge-B">B</span></td></tr>
+      </table>
+    </div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">② 비중증치료(비ICU) 환자</div>
+      <table class="modal-table">
+        <tr><th>항목</th><th>내용</th></tr>
+        <tr><td>치료시작 임계값</td><td>≥180 mg/dL 지속(24h 내 2회 확인) <span class="badge badge-B">B</span></td></tr>
+        <tr><td>치료 후 목표</td><td>100–180 mg/dL(저혈당 없이 달성 가능 시) <span class="badge badge-B">B</span></td></tr>
+      </table>
+    </div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">③ 완화된 목표가 적절한 경우</div>
+      <table class="modal-table">
+        <tr><th>대상군</th><th>완화 목표</th></tr>
+        <tr><td>말기질환(기대수명 짧음), 진행된 신부전(투석포함), 고저혈당위험군, 혈당변동 불안정군</td><td>최대 250 mg/dL까지 허용 가능</td></tr>
+      </table>
+    </div>
+
+    <div class="alert alert-danger" style="margin-top:4px"><span>🚫</span><span>NICE-SUGAR 등 연구에서 80–110 mg/dL의 엄격한 목표는 저혈당을 10–15배 증가시키고 사망률 이득도 없었다 — 과도하게 엄격한 목표는 지양한다.</span></div>
+  </div>
+</div>
+
+<!-- ═══ MODAL: 인슐린 처방 구조 ═══ -->
+<div id="insulinRegimenModal" class="modal-overlay" onclick="closeModalOutside(event,'insulinRegimenModal')">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal('insulinRegimenModal')">✕</button>
+    <div class="modal-title">💉 비중증 입원환자 인슐린 처방 구조</div>
+
+    <div class="alert alert-info" style="margin:0 0 12px"><span>💡</span><span>경구섭취 상태에 따라 처방 구성요소가 달라지며, basal 없는 단독 교정인슐린(sliding scale)은 대부분의 상황에서 지양된다.</span></div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">① Basal + Prandial + Correction (충분한 영양섭취)</div>
+      <table class="modal-table">
+        <tr><th>구성</th><th>역할</th></tr>
+        <tr><td>Basal</td><td>공복·식간 혈당 조절, 총일일용량의 약 50%</td></tr>
+        <tr><td>Prandial</td><td>식사 탄수화물 커버, 총일일용량의 약 50%</td></tr>
+        <tr><td>Correction</td><td>예상치 못한 고혈당 추가 교정</td></tr>
+      </table>
+      <div class="alert alert-success" style="margin-top:6px"><span>✅</span><span>대부분 비중증 입원환자(영양섭취 양호)에 권장되는 표준 처방 <span class="badge badge-A">A</span></span></div>
+    </div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">② Basal ± Correction (부족/제한된 경구섭취)</div>
+      <table class="modal-table">
+        <tr><th>구성</th><th>역할</th></tr>
+        <tr><td>Basal</td><td>지속적 공복혈당 관리(NPO에도 유지)</td></tr>
+        <tr><td>Correction</td><td>필요시 추가</td></tr>
+      </table>
+      <div class="alert alert-success" style="margin-top:6px"><span>✅</span><span>경구섭취 부족/제한 환자에 권장 <span class="badge badge-A">A</span></span></div>
+    </div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">③ Correction(Sliding Scale) 단독 — 지양</div>
+      <table class="modal-table">
+        <tr><th>특징</th><th>내용</th></tr>
+        <tr><td>정의</td><td>basal 없이 식전혈당만으로 인슐린량 결정(구 "sliding scale")</td></tr>
+        <tr><td>문제점</td><td>basal 요구량·열량섭취 미반영 → 저혈당·고혈당 위험 모두 증가</td></tr>
+        <tr><td>예외적 허용</td><td>경증고혈당/스트레스고혈당 2형당뇨, 혈당 &lt;180 mg/dL 유지되는 경우 단기간 한정</td></tr>
+      </table>
+      <div class="alert alert-danger" style="margin-top:6px"><span>🚫</span><span>1형당뇨에서는 단독 사용이 <strong>금기</strong>. 대부분의 경우 장기간 사용은 강력히 지양 <span class="badge badge-A">A</span></span></div>
+    </div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">④ 중증치료(ICU) — 정맥 인슐린 주입</div>
+      <table class="modal-table">
+        <tr><th>특징</th><th>내용</th></tr>
+        <tr><td>적용대상</td><td>중증질환 전체(특히 혈당 불안정·DKA/HHS)</td></tr>
+        <tr><td>장점</td><td>목표달성·저혈당 회피에 가장 효과적인 방법</td></tr>
+        <tr><td>식사 시</td><td>피하 속효성 인슐린으로 식사 커버(IV 급변동 방지)</td></tr>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ MODAL: DKA·HHS 진단 ═══ -->
+<div id="dkaHhsModal" class="modal-overlay" onclick="closeModalOutside(event,'dkaHhsModal')">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal('dkaHhsModal')">✕</button>
+    <div class="modal-title">🚨 DKA·HHS 진단기준 한눈에 보기 (표 16.1)</div>
+
+    <div class="alert alert-info" style="margin:0 0 12px"><span>💡</span><span>각 진단은 해당하는 모든 기준을 충족해야 성립한다. DKA·HHS는 흔히 동시발생(mixed)하며, 이 경우 사망률이 단독보다 높다.</span></div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">① DKA (당뇨병성 케토산증)</div>
+      <table class="modal-table">
+        <tr><th>항목</th><th>기준</th></tr>
+        <tr><td>당뇨/고혈당</td><td>혈당 ≥200 mg/dL(≥11.1 mmol/L) 또는 당뇨병 과거력</td></tr>
+        <tr><td>케토시스</td><td>β-hydroxybutyrate ≥3.0 mmol/L 또는 요케톤스트립 2+ 이상</td></tr>
+        <tr><td>대사성산증</td><td>pH &lt;7.3 및/또는 중탄산염 &lt;18 mmol/L</td></tr>
+      </table>
+    </div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">② HHS (고혈당고삼투압상태)</div>
+      <table class="modal-table">
+        <tr><th>항목</th><th>기준</th></tr>
+        <tr><td>고혈당</td><td>혈장혈당 ≥600 mg/dL (≥33.3 mmol/L)</td></tr>
+        <tr><td>고삼투압</td><td>유효 혈청삼투압 &gt;300 mOsm/kg [2×Na+glucose] 또는 총삼투압 &gt;320 [2×Na+glucose+urea]</td></tr>
+        <tr><td>의미있는 케톤혈증 없음</td><td>β-OHB &lt;3.0 mmol/L 또는 요케톤스트립 2+ 미만</td></tr>
+        <tr><td>산증 없음</td><td>pH ≥7.3 및 중탄산염 ≥15 mmol/L</td></tr>
+      </table>
+    </div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">③ 특수 형태 — Euglycemic DKA</div>
+      <table class="modal-table">
+        <tr><th>항목</th><th>내용</th></tr>
+        <tr><td>정의</td><td>혈장혈당 &lt;200 mg/dL(&lt;11.1 mmol/L)이면서 케토시스·대사성산증 동반</td></tr>
+        <tr><td>빈도</td><td>전체 DKA의 약 10%</td></tr>
+        <tr><td>관련요인</td><td>경구섭취 감소, 임신, 음주, 간부전, SGLT2 억제제 치료</td></tr>
+      </table>
+    </div>
+
+    <div class="alert alert-warn" style="margin-top:4px"><span>⚠️</span><span>Euglycemic DKA는 혈당이 낮아 간과되기 쉽다 — 저인슐린 상태에서 발생하므로 케톤·산증 평가를 통해 적극적으로 의심해야 한다.</span></div>
+  </div>
+</div>
+
+<script>
+const FONT_ZOOM_LEVELS = [1, 1.25, 1.5];
+let fontZoomIndex = 0;
+
+function applyFontZoom(scale) {
+  document.documentElement.style.setProperty('--fscale', scale);
+  const label = document.getElementById('font-zoom-label');
+  if (label) label.textContent = Math.round(scale * 100) + '%';
+}
+
+function cycleFontZoom() {
+  fontZoomIndex = (fontZoomIndex + 1) % FONT_ZOOM_LEVELS.length;
+  applyFontZoom(FONT_ZOOM_LEVELS[fontZoomIndex]);
+}
+
+function showTab(id){
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('tab-'+id).classList.add('active');
+  event.target.classList.add('active');
+}
+function toggleCard(el){
+  el.classList.toggle('open');
+  el.nextElementSibling.classList.toggle('collapsed');
+}
+function toggleAcc(el){
+  const b=el.nextElementSibling;
+  b.style.display=b.style.display==='block'?'none':'block';
+  el.querySelector('span:last-child').textContent=b.style.display==='block'?'▴':'▾';
+}
+
+function openModal(id){document.getElementById(id).classList.add('open');}
+function closeModal(id){document.getElementById(id).classList.remove('open');}
+function closeModalOutside(e,id){if(e.target===document.getElementById(id))closeModal(id);}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')document.querySelectorAll('.modal-overlay.open').forEach(m=>m.classList.remove('open'));});
+
+const abbrs=[
+  ['A1C','Glycated Hemoglobin (당화혈색소) — 입원 시 측정하여 입원 전 혈당상태를 반영. ≥6.5%는 입원 전부터 당뇨병이 있었음을 시사.'],
+  ['CPOE','Computerized Provider Order Entry — 전산화된 처방입력 시스템. 약물오류 예방·인슐린 적정 가이드에 활용.'],
+  ['EGMS','Electronic Glycemic Management System — 전자 혈당관리시스템. 인슐린 프로토콜 구현을 지원하는 상업용 시스템.'],
+  ['POC','Point-of-Care (병상검사) — 침상에서 즉시 결과를 얻는 혈당 모니터링 방식.'],
+  ['CGM','Continuous Glucose Monitoring (연속혈당모니터링) — 조건부로 입원 중 지속 가능하나 인슐린 용량결정은 POC로 확인 필요.'],
+  ['AID','Automated Insulin Delivery (자동인슐린전달) — 폐쇄형/하이브리드 폐쇄형 인슐린펌프 시스템.'],
+  ['NICE-SUGAR','Normoglycemia in Intensive Care Evaluation and Survival Using Glucose Algorithm Regulation — 중증환자 엄격 혈당관리의 무효·위해성을 보여준 대규모 다기관 RCT.'],
+  ['ICU','Intensive Care Unit (중환자실) — 중증치료 환경, 더 엄격한 혈당관리 목표(140–180) 적용.'],
+  ['DKA','Diabetic Ketoacidosis (당뇨병성 케토산증) — 고혈당·케토시스·대사성산증을 특징으로 하는 급성 고혈당 응급상황.'],
+  ['HHS','Hyperglycemic Hyperosmolar State (고혈당고삼투압상태) — 심한 고혈당과 고삼투압을 특징으로 하며 케톤증·산증은 경미한 응급상황.'],
+  ['BOHB','β-Hydroxybutyrate (베타하이드록시뷰티레이트) — 주요 케톤체, DKA 진단 및 해소 판정에 사용.'],
+  ['TPN','Total Parenteral Nutrition (총정맥영양) — 정맥을 통한 완전 영양공급, 인슐린 첨가로 혈당관리.'],
+  ['NPH','Neutral Protamine Hagedorn — 중간작용 인슐린, 스테로이드 유발 고혈당 관리에 흔히 사용.'],
+  ['SGLT2','Sodium-Glucose Cotransporter 2 억제제 — 심부전 동반 시 입원 중 시작/지속 가능, 수술전후·중증질환 시 중단.'],
+  ['GLP-1 RA','Glucagon-Like Peptide-1 Receptor Agonist — 급성기에는 보류, 수술전후 흡인위험으로 FDA 경고 라벨 부착.'],
+  ['DPP-4i','Dipeptidyl Peptidase 4 inhibitor — 경증~중등도 고혈당에서 안전성 측면 유리한 비인슐린 약물.'],
+  ['GIP','Glucose-dependent Insulinotropic Polypeptide — GLP-1과의 듀얼 작용제(예: tirzepatide) 구성성분.'],
+  ['EHR','Electronic Health Record (전자의무기록) — 저혈당 추적·정책 알림·퇴원소통에 핵심 역할.'],
+  ['JBDS','Joint British Diabetes Societies (영국당뇨병학회연합) — 입원당뇨관리 가이드라인·자원 제공 단체.'],
+  ['TIGHT','TIGHT RCT Study — CGM 기반 집중혈당관리 대 표준관리를 비교한 최근 RCT(2형당뇨 비중증입원).'],
+  ['TGC-Fast','Tight Blood-Glucose Control without Early Parenteral Nutrition 연구 — 조기 비경구영양 없는 중증환자에서 엄격혈당관리 무효를 보인 RCT.'],
+  ['RABBIT 2','RABBIT 2 Surgery 연구 — 일반외과 2형당뇨 환자에서 basal-bolus가 sliding scale보다 우월함을 보인 RCT.'],
+  ['GMI','Glucose Management Indicator — CGM 데이터 기반 추정 A1C 지표, 술전 평가에 A1C 대체 가능.'],
+  ['TIR','Time in Range (목표범위 내 시간) — CGM 지표, 술전평가·전반적 혈당관리 평가에 사용.'],
+  ['AHRQ','Agency for Healthcare Research and Quality — 퇴원계획 3대 요소(약물조정·소통·교육)를 권고한 미국 기관.'],
+];
+
+function buildAbbr(){
+  const sorted=abbrs.slice().sort((a,b)=>a[0].localeCompare(b[0]));
+  document.getElementById('abbr-grid-drop').innerHTML=sorted.map(a=>
+    `<div style="background:var(--surface2);border:1px solid var(--border);border-radius:5px;padding:6px 10px;margin-bottom:4px;" data-term="${a[0].toLowerCase()}" data-def="${a[1].toLowerCase()}">
+       <span style="font-weight:700;color:var(--accent2);font-size: calc(12px * var(--fscale, 1));font-family:'Courier New',monospace">${a[0]}</span>
+       <div style="font-size: calc(11px * var(--fscale, 1));color:var(--text2);line-height:1.45;margin-top:2px">${a[1]}</div>
+     </div>`).join('');
+}
+function filterAbbr(val){
+  const v=val.toLowerCase().trim();
+  const drop=document.getElementById('abbr-dropdown');
+  const items=document.querySelectorAll('#abbr-grid-drop [data-term]');
+  if(!v){drop.style.display='none';return;}
+  const inp=document.getElementById('abbr-input');
+  const rect=inp.getBoundingClientRect();
+  const w=440;
+  let left=rect.right-w;if(left<8)left=8;
+  drop.style.top=(rect.bottom+4)+'px';drop.style.left=left+'px';
+  drop.style.display='block';
+  items.forEach(el=>{
+    const show=el.dataset.term.startsWith(v)||el.dataset.def.includes(v);
+    el.style.display=show?'':'none';
+  });
+}
+document.addEventListener('click',e=>{
+  const inp=document.getElementById('abbr-input');
+  const drop=document.getElementById('abbr-dropdown');
+  if(inp&&!inp.contains(e.target)&&drop&&!drop.contains(e.target))drop.style.display='none';
+});
+buildAbbr();
+</script>
+</body>
+</html>

@@ -1,0 +1,1205 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ADA 2026 만성콩팥병과 위험관리</title>
+<style>
+  :root {
+    --bg:#f6f8fa;--surface:#fff;--surface2:#f0f2f5;--border:#d0d7de;
+    --accent:#0969da;--accent2:#0550ae;--green:#1a7f37;--yellow:#9a6700;
+    --red:#cf222e;--orange:#bc4c00;--text:#1f2328;--text2:#57606a;
+    --teal:#0a7c8a;--purple:#5a3ea0;--fscale:1;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'Pretendard','Noto Sans KR',-apple-system,sans-serif;background:var(--bg);color:var(--text);font-size: calc(13px * var(--fscale, 1));line-height:1.5;}
+  header{background:var(--surface);border-bottom:1px solid var(--border);padding:12px 16px 8px;display:flex;flex-direction:column;align-items:center;gap:4px;position:sticky;top:0;z-index:100;}
+  .header-inner{width:100%;max-width:960px;display:flex;flex-direction:column;align-items:center;gap:4px;}
+  .logo-badge{background:var(--accent2);color:#fff;font-size: calc(10px * var(--fscale, 1));font-weight:700;padding:3px 8px;border-radius:4px;letter-spacing:.5px;}
+  .tab-bar{display:flex;justify-content:center;background:var(--surface);border-bottom:1px solid var(--border);overflow-x:auto;scrollbar-width:none;}
+  .tab-bar::-webkit-scrollbar{display:none;}
+  .font-zoom-btn{display:flex;align-items:center;gap:3px;flex-shrink:0;margin:4px 4px 4px 6px;padding:5px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:6px;color:var(--accent2);font-size:calc(11px * var(--fscale, 1));font-weight:700;cursor:pointer;user-select:none;white-space:nowrap;transition:background .15s;}
+  .font-zoom-btn:hover{background:var(--border);}
+  .font-zoom-btn .fz-icon{font-size:calc(12px * var(--fscale, 1));}
+  .tab-bar-inner{width:100%;max-width:960px;display:flex;align-items:center;gap:2px;padding:0 4px;}
+  .tab{padding:7px 11px;font-size: calc(11.5px * var(--fscale, 1));color:var(--text2);cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;transition:color .15s,border-color .15s;user-select:none;flex-shrink:0;}
+  .tab:hover{color:var(--text);}
+  .tab.active{color:var(--accent2);border-bottom-color:var(--accent2);}
+  .tab-abbr-wrap{display:flex;align-items:center;padding:4px 4px;margin-left:4px;flex-shrink:0;position:relative;}
+  .main{padding:12px 16px;max-width:960px;margin:0 auto;}
+  .panel{display:none;}
+  .panel.active{display:block;}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+  .grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;}
+  @media(max-width:680px){.grid2,.grid3{grid-template-columns:1fr;}}
+  .card{background:var(--surface);border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-bottom:10px;}
+  .card-header{background:var(--surface2);padding:8px 12px;font-size: calc(12px * var(--fscale, 1));font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.5px;border-bottom:1px solid var(--border);cursor:pointer;display:flex;align-items:center;justify-content:space-between;user-select:none;}
+  .card-header .toggle{font-size: calc(13px * var(--fscale, 1));transition:transform .2s;}
+  .card-header.open .toggle{transform:rotate(180deg);}
+  .card-body{padding:10px 12px;}
+  .card-body.collapsed{display:none;}
+  .stat-row{display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap;}
+  .stat-box{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:10px 14px;flex:1;min-width:90px;text-align:center;}
+  .stat-box.clickable{cursor:pointer;transition:box-shadow .15s,border-color .15s;}
+  .stat-box.clickable:hover{border-color:var(--accent2);box-shadow:0 2px 8px rgba(5,80,174,.15);}
+  .stat-val{font-size: calc(18px * var(--fscale, 1));font-weight:700;color:var(--accent2);}
+  .stat-lbl{font-size: calc(10px * var(--fscale, 1));color:var(--text2);margin-top:2px;}
+  .stat-hint{font-size: calc(9px * var(--fscale, 1));color:var(--accent2);margin-top:4px;opacity:.7;}
+  /* Modal */
+  .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:500;align-items:center;justify-content:center;}
+  .modal-overlay.open{display:flex;}
+  .modal-box{background:var(--surface);border-radius:12px;padding:20px;max-width:680px;width:92%;max-height:84vh;overflow-y:auto;box-shadow:0 16px 48px rgba(0,0,0,.22);position:relative;}
+  .modal-close{position:absolute;top:12px;right:14px;background:none;border:none;font-size: calc(18px * var(--fscale, 1));cursor:pointer;color:var(--text2);line-height:1;}
+  .modal-title{font-size: calc(15px * var(--fscale, 1));font-weight:700;color:var(--text);margin-bottom:12px;padding-right:20px;line-height:1.4;}
+  .modal-section{margin-bottom:12px;}
+  .modal-section-title{font-size: calc(11px * var(--fscale, 1));font-weight:700;color:var(--accent2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;border-bottom:1px solid var(--border);padding-bottom:4px;}
+  .modal-table{width:100%;border-collapse:collapse;font-size: calc(11.5px * var(--fscale, 1));}
+  .modal-table th{background:var(--surface2);color:var(--text2);padding:4px 8px;font-size: calc(10.5px * var(--fscale, 1));font-weight:600;text-align:left;border-bottom:1px solid var(--border);}
+  .modal-table td{padding:5px 8px;border-bottom:1px solid var(--border);vertical-align:top;}
+  .modal-table tr:last-child td{border-bottom:none;}
+  .rec-list{list-style:none;}
+  .rec-item{padding:7px 0;border-bottom:1px solid var(--border);display:flex;gap:8px;align-items:flex-start;}
+  .rec-item:last-child{border-bottom:none;}
+  .rec-text{font-size: calc(12px * var(--fscale, 1));color:var(--text);line-height:1.65;}
+  .rec-text strong{color:#1f2328;}
+  .badge{display:inline-flex;align-items:center;padding:2px 8px;border-radius:10px;font-size: calc(10px * var(--fscale, 1));font-weight:700;white-space:nowrap;flex-shrink:0;margin-top:1px;}
+  .badge-A{background:#dafbe1;color:#116329;border:1px solid #1a7f37;}
+  .badge-B{background:#ddf4ff;color:var(--accent2);border:1px solid var(--accent2);}
+  .badge-C{background:#fff8c5;color:#7a4b00;border:1px solid #d4a017;}
+  .badge-E{background:#f3e5f5;color:#5a3ea0;border:1px solid #5a3ea0;}
+  .alert{padding:8px 12px;border-radius:6px;font-size: calc(12px * var(--fscale, 1));margin:8px 0;display:flex;gap:8px;align-items:flex-start;}
+  .alert-info{background:#ddf4ff;border-left:3px solid var(--accent2);color:#0550ae;}
+  .alert-warn{background:#fff8c5;border-left:3px solid #d4a017;color:#7a4b00;}
+  .alert-danger{background:#ffebe9;border-left:3px solid var(--red);color:#82071e;}
+  .alert-success{background:#dafbe1;border-left:3px solid var(--green);color:#116329;}
+  .alert-teal{background:#e0f5f5;border-left:3px solid var(--teal);color:#075050;}
+  .alert-orange{background:#fff3e0;border-left:3px solid var(--orange);color:#7a3500;}
+  .alert-purple{background:#f3e5f5;border-left:3px solid var(--purple);color:#5a3ea0;}
+  .tc-table{width:100%;border-collapse:collapse;font-size: calc(11.5px * var(--fscale, 1));}
+  .tc-table th{background:var(--surface2);color:var(--text2);padding:5px 8px;font-size: calc(10.5px * var(--fscale, 1));text-transform:uppercase;letter-spacing:.3px;font-weight:600;text-align:left;border-bottom:1px solid var(--border);}
+  .tc-table td{padding:5px 8px;border-bottom:1px solid var(--border);vertical-align:top;}
+  .tc-table tr:last-child td{border-bottom:none;}
+  .tc-table tr:hover td{background:rgba(0,0,0,.02);}
+  .acc{border:1px solid var(--border);border-radius:6px;margin-bottom:6px;overflow:hidden;}
+  .acc-hdr{background:var(--surface2);padding:7px 12px;font-size: calc(12px * var(--fscale, 1));font-weight:600;color:var(--text);cursor:pointer;display:flex;justify-content:space-between;align-items:center;user-select:none;}
+  .acc-hdr:hover{background:#e8eaec;}
+  .acc-body{display:none;padding:10px 12px;font-size: calc(12px * var(--fscale, 1));line-height:1.65;}
+  .flow-box{border:1px solid var(--border);border-radius:6px;background:var(--surface);padding:8px 12px;margin-bottom:6px;font-size: calc(12px * var(--fscale, 1));line-height:1.6;}
+  .flow-arrow{text-align:center;color:var(--text2);font-size: calc(14px * var(--fscale, 1));margin:2px 0;}
+  .step-num{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;background:var(--accent2);color:#fff;font-size: calc(10px * var(--fscale, 1));font-weight:700;flex-shrink:0;margin-right:6px;}
+  ul.dot{padding-left:18px;}
+  ul.dot li{margin-bottom:3px;font-size: calc(12px * var(--fscale, 1));line-height:1.6;}
+  ol.num{padding-left:18px;}
+  ol.num li{margin-bottom:4px;font-size: calc(12px * var(--fscale, 1));line-height:1.6;}
+  ::-webkit-scrollbar{width:5px;height:5px;}
+  ::-webkit-scrollbar-track{background:var(--bg);}
+  ::-webkit-scrollbar-thumb{background:#c8d0d9;border-radius:3px;}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div style="display:flex;align-items:center;gap:10px">
+      <span class="logo-badge">ADA 2026</span>
+      <h1 style="font-size:17px;font-weight:700;color:var(--text)">만성콩팥병과 위험관리</h1>
+    </div>
+    <div style="text-align:center;line-height:1.5">
+      <span style="color:var(--text2);font-size: calc(11px * var(--fscale, 1))">Standards of Care in Diabetes—2026, Section 11 — American Diabetes Association</span><br>
+      <span style="font-size: calc(10px * var(--fscale, 1));color:var(--text2)">Diabetes Care 2026;49(Suppl. 1):S246–S260 · doi: 10.2337/dc26-S011 · National Kidney Foundation 승인</span>
+    </div>
+    <div style="font-size: calc(10px * var(--fscale, 1));color:var(--text2);font-style:italic;">This tool is not officially endorsed by the American Diabetes Association (ADA).</div>
+  </div>
+</header>
+
+<div class="tab-bar">
+  <div class="tab-bar-inner">
+    <div id="font-zoom-btn" class="font-zoom-btn" onclick="cycleFontZoom()"><span class="fz-icon">🔠</span><span id="font-zoom-label">100%</span></div>
+    <div class="tab active" onclick="showTab('overview')">🏠 개요</div>
+    <div class="tab" onclick="showTab('diagnosis')">🔬 진단·분류</div>
+    <div class="tab" onclick="showTab('surveillance')">📊 감시·예방</div>
+    <div class="tab" onclick="showTab('bp')">🩺 혈당·혈압관리</div>
+    <div class="tab" onclick="showTab('sglt')">💉 SGLT2i·GLP-1RA</div>
+    <div class="tab" onclick="showTab('mra')">💊 MRA·병용요법</div>
+    <div class="tab" onclick="showTab('severe')">🚨 중증CKD·의뢰</div>
+    <div class="tab" onclick="showTab('tables')">📁 기준표 모음</div>
+    <div class="tab-abbr-wrap">
+      <div style="position:relative;display:flex;align-items:center;flex-shrink:0">
+        <span style="position:absolute;left:8px;color:var(--text2);font-size: calc(12px * var(--fscale, 1));pointer-events:none">🔍</span>
+        <input id="abbr-input" type="text" placeholder="약어" oninput="filterAbbr(this.value)"
+          style="background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:4px 8px 4px 26px;color:var(--text);font-size: calc(12px * var(--fscale, 1));width:90px;outline:none;"
+          onfocus="this.style.borderColor='var(--accent2)'" onblur="this.style.borderColor='var(--border)'">
+      </div>
+      <div id="abbr-dropdown" style="display:none;position:fixed;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:8px;width:440px;max-height:360px;overflow-y:auto;z-index:300;box-shadow:0 8px 24px rgba(0,0,0,.12)">
+        <div id="abbr-grid-drop"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="main">
+
+<!-- ═══════════ TAB: 개요 ═══════════ -->
+<div id="tab-overview" class="panel active">
+  <div class="stat-row">
+    <div class="stat-box clickable" onclick="openModal('ckdDefModal')"><div class="stat-val">UACR / eGFR</div><div class="stat-lbl">CKD 진단 2대 지표</div><div class="stat-hint">▸ 클릭하여 상세 보기</div></div>
+    <div class="stat-box clickable" onclick="openModal('bpGoalCkdModal')"><div class="stat-val">&lt;130/80<br>(&lt;120 SBP)</div><div class="stat-lbl">CKD 혈압 목표</div><div class="stat-hint">▸ 클릭하여 상세 보기</div></div>
+    <div class="stat-box clickable" onclick="openModal('sgltKidneyModal')"><div class="stat-val">eGFR≥20</div><div class="stat-lbl">SGLT2i 시작 기준</div><div class="stat-hint">▸ 클릭하여 상세 보기</div></div>
+    <div class="stat-box clickable" onclick="openModal('referralModal')"><div class="stat-val">eGFR&lt;30</div><div class="stat-lbl">신장내과 의뢰 기준</div><div class="stat-hint">▸ 클릭하여 상세 보기</div></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>📋 Fig 11.2 — CKD 동반 당뇨환자의 통합적 치료 접근</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <div class="flow-box" style="border-left:3px solid var(--accent2)">
+        <strong>기반 — 생활습관</strong><br>
+        <span style="color:var(--text2);font-size: calc(11px * var(--fscale, 1))">건강한 식습관, 신체활동, 금연, 체중관리 — 3–6개월마다 정기 재평가</span>
+      </div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-box" style="border-left:3px solid var(--green)">
+        <strong>RAS요법 — 1차 기반치료</strong><br>
+        <span style="font-size: calc(11.5px * var(--fscale, 1))">알부민뇨/고혈압 동반 시 ACEi/ARB를 최대내약용량까지 적정</span>
+      </div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-box" style="border-left:3px solid var(--teal)">
+        <strong>1차 약물요법(병행 가능)</strong><br>
+        <span style="font-size: calc(11.5px * var(--fscale, 1))">SGLT2i(eGFR≥20부터 시작, 투석/이식까지 지속) ± GLP-1RA · CCB/이뇨제 · 중강도/고강도 스타틴</span>
+      </div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-box" style="border-left:3px solid var(--orange)">
+        <strong>위험기반 추가요법</strong><br>
+        <span style="font-size: calc(11.5px * var(--fscale, 1))">개별화목표 미달성 시: 비스테로이드성MRA(finerenone, eGFR≥25), 저항성고혈압시 스테로이드성MRA, ASCVD 항혈소판제, 지질목표 미달성시 ezetimibe/PCSK9i/icosapent ethyl</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <div class="card-header open" onclick="toggleCard(this)">
+        <span>📌 핵심 권고문 요약</span><span class="toggle">▾</span>
+      </div>
+      <div class="card-body">
+        <ul class="rec-list">
+          <li class="rec-item"><span class="badge badge-B">B</span><span class="rec-text"><strong>11.1a</strong> 1형당뇨(유병≥5년)·모든2형당뇨 — 연1회 UACR+eGFR 평가</span></li>
+          <li class="rec-item"><span class="badge badge-B">B</span><span class="rec-text"><strong>11.1b</strong> CKD환자 — 단계별 연1–4회 UACR·eGFR 모니터링(Fig 11.1)</span></li>
+          <li class="rec-item"><span class="badge badge-B">B</span><span class="rec-text"><strong>11.2</strong> 알부민뇨≥300mg/g — 요알부민 ≥30% 감소 목표</span></li>
+          <li class="rec-item"><span class="badge badge-A">A</span><span class="rec-text"><strong>11.3</strong> CKD G3이상 — 단백질 0.8g/kg/day(일반인구와 동일)</span></li>
+          <li class="rec-item"><span class="badge badge-A">A</span><span class="rec-text"><strong>11.4</strong> 혈당관리 최적화로 CKD 위험감소·진행둔화(Fig 9.4)</span></li>
+          <li class="rec-item"><span class="badge badge-A">A</span><span class="rec-text"><strong>11.5</strong> CKD환자 혈압목표 &lt;130/80, 수축기&lt;120 장려</span></li>
+          <li class="rec-item"><span class="badge badge-A">A</span><span class="rec-text"><strong>11.6a</strong> UACR≥300 또는 eGFR&lt;60 — ACEi/ARB 최대내약용량 강력권장</span></li>
+          <li class="rec-item"><span class="badge badge-A">A</span><span class="rec-text"><strong>11.7a/b</strong> CKD+2형당뇨 — 입증된 SGLT2i(eGFR≥20부터) 및/또는 GLP-1RA 권장</span></li>
+          <li class="rec-item"><span class="badge badge-A">A</span><span class="rec-text"><strong>11.8</strong> CKD+알부민뇨 — 입증된 비스테로이드성MRA(eGFR≥25) 권장</span></li>
+          <li class="rec-item"><span class="badge badge-B">B</span><span class="rec-text"><strong>11.9</strong> UACR≥100, eGFR30–90 — SGLT2i+nsMRA 동시시작 고려</span></li>
+          <li class="rec-item"><span class="badge badge-B">B</span><span class="rec-text"><strong>11.11a</strong> eGFR&lt;20 비투석 — SGLT2i 안전하게 지속 가능</span></li>
+          <li class="rec-item"><span class="badge badge-A">A</span><span class="rec-text"><strong>11.12a</strong> 급속진행 또는 eGFR&lt;30 — 신장내과 의뢰</span></li>
+        </ul>
+      </div>
+    </div>
+
+    <div>
+      <div class="card">
+        <div class="card-header open" onclick="toggleCard(this)">
+          <span>⚠️ 권고 등급 체계 (Evidence Grading)</span><span class="toggle">▾</span>
+        </div>
+        <div class="card-body">
+          <table class="tc-table">
+            <tr><th>등급</th><th>의미</th></tr>
+            <tr><td><span class="badge badge-A">A</span></td><td>명확한 근거 — 잘 수행된 다기관 RCT 또는 메타분석</td></tr>
+            <tr><td><span class="badge badge-B">B</span></td><td>뒷받침되는 근거 — 잘 수행된 코호트 연구 등</td></tr>
+            <tr><td><span class="badge badge-C">C</span></td><td>뒷받침되는 근거 부족 — 대조군 없는 연구, 사례 보고</td></tr>
+            <tr><td><span class="badge badge-E">E</span></td><td>전문가 합의 또는 임상 경험 (Expert consensus)</td></tr>
+          </table>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header open" onclick="toggleCard(this)">
+          <span>🔑 핵심 개념</span><span class="toggle">▾</span>
+        </div>
+        <div class="card-body">
+          <div class="alert alert-info"><span>ℹ️</span><span>당뇨 환자의 <strong>20–40%</strong>에서 CKD 발생 — 1형당뇨는 유병 10년 이후(흔히 5–15년), 2형당뇨는 진단 시점에도 존재 가능. 미국 신부전의 가장 흔한 원인</span></div>
+          <div class="alert alert-warn"><span>⚠️</span><span>비전형적 특징(활동성요침사, 급속진행, 망막병증 없는 1형당뇨) 시 신장내과 의뢰 — 생검 없이는 "당뇨환자의 CKD" 또는 "추정 당뇨병성신증"으로 표현</span></div>
+          <div class="alert alert-teal"><span>💡</span><span>SGLT2i·GLP-1RA·비스테로이드성MRA(finerenone)는 혈당강하와 독립적인 직접적 신장보호효과를 가짐 — RAS차단제 최대내약용량 치료를 기반으로 추가</span></div>
+          <div class="alert alert-danger"><span>🚫</span><span>ACEi+ARB 병용은 추가이득 없이 고칼륨혈증·AKI 위험만 증가 — 절대 병용해서는 안 됨</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ TAB: 진단·분류 ═══════════ -->
+<div id="tab-diagnosis" class="panel">
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>📌 알부민뇨·eGFR 평가 — 핵심 권고문</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="rec-list">
+        <li class="rec-item"><span class="badge badge-B">B</span><span class="rec-text"><strong>11.1a</strong> 1형당뇨(유병≥5년) 및 모든 2형당뇨(치료법 무관) — 최소 연1회 임의뇨 UACR+eGFR 평가</span></li>
+        <li class="rec-item"><span class="badge badge-B">B</span><span class="rec-text"><strong>11.1b</strong> CKD환자 — 신질환 단계에 따라 연 1–4회 UACR·eGFR 모니터링(Fig 11.1)</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>🧪 UACR 측정 — 방법 및 분류</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="dot">
+        <li>임의 스팟뇨에서 UACR 측정이 가장 간편 — 시간뇨/24시간뇨는 더 번거로움</li>
+        <li>알부민단독측정(크레아티닌 동시측정 없음)은 저렴하나 수분상태에 따른 요농도변화로 위양성·위음성에 취약</li>
+        <li>반정량/정성(딥스틱) 선별은 인증된 검사실의 UACR값으로 확인이 필요</li>
+      </ul>
+      <table class="tc-table" style="margin-top:8px">
+        <tr><th>분류</th><th>UACR</th></tr>
+        <tr><td>정상~경도증가</td><td>&lt;30 mg/g creatinine</td></tr>
+        <tr><td>중등도증가</td><td>30 to &lt;300 mg/g creatinine</td></tr>
+        <tr><td>중증증가</td><td>≥300 mg/g creatinine</td></tr>
+      </table>
+      <div class="alert alert-warn" style="margin-top:8px"><span>⚠️</span><span>요알부민배설은 측정간 생물학적변동성이 &gt;20%로 높음 — <strong>3–6개월 내 채취한 3개 검체 중 2개</strong>가 이상이어야 중등도/중증 알부민뇨로 판정. 24시간내 운동, 감염, 발열, 심부전, 현저한 고혈당, 생리, 현저한 고혈압이 신장손상과 무관하게 UACR을 상승시킬 수 있음</span></div>
+      <div class="alert alert-info"><span>ℹ️</span><span>1개월간 매주 측정 시에도 UACR 변동성이 확인됨 — 반복측정과 추세추적이 변화를 제대로 파악하는 데 필요</span></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>🧬 eGFR 측정 — CKD-EPI 공식 및 Cystatin C</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="dot">
+        <li>안정상태 혈청크레아티닌으로부터 검증된 공식으로 계산 — <strong>2021 CKD-EPI 크레아티닌 방정식</strong>을 모든 사람에게 사용 권장</li>
+        <li>eGFR이 지속적으로 &lt;60 mL/min/1.73m² 및/또는 요알부민&gt;30mg/g creatinine은 이상으로 간주(단, 70세 이상 고령자의 진단임계값은 논쟁적)</li>
+        <li><strong>Cystatin C</strong>는 모든 유핵세포에서 생성되는 저분자단백 — 절단, 노쇠, 저근육량, 간질환 등 크레아티닌생성에 변화가 있는 경우 특히 유용</li>
+        <li>단, cystatin C도 염증, 연령, 성별, 체구, 갑상선기능, 당뇨 등 비신장 요인에 영향받을 수 있음</li>
+      </ul>
+      <div class="alert alert-teal" style="margin-top:8px"><span>💡</span><span>크레아티닌+cystatin C <strong>두 여과지표 병용</strong>이 단독사용보다 더 정확하며 더 나은 임상적 결정을 지지함</span></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>📐 Fig 11.1 — GFR·알부민뇨 기반 CKD 위험분류 및 모니터링빈도</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <table class="tc-table">
+        <tr><th>GFR단계</th><th>eGFR범위</th><th>A1(&lt;30mg/g)</th><th>A2(30–299mg/g)</th><th>A3(≥300mg/g)</th></tr>
+        <tr><td>G1 정상/높음</td><td>≥90</td><td style="background:#dafbe1">선별 1회</td><td style="background:#fff8c5">치료 1회</td><td style="background:#fff3e0">치료+의뢰 2회</td></tr>
+        <tr><td>G2 경도감소</td><td>60–89</td><td style="background:#dafbe1">선별 1회</td><td style="background:#fff8c5">치료 1회</td><td style="background:#fff3e0">치료+의뢰 2회</td></tr>
+        <tr><td>G3a 경도~중등도</td><td>45–59</td><td style="background:#fff8c5">치료 1회</td><td style="background:#fff3e0">치료 2회</td><td style="background:#ffebe9">치료+의뢰 3회</td></tr>
+        <tr><td>G3b 중등도~중증</td><td>30–44</td><td style="background:#fff3e0">치료 2회</td><td style="background:#ffebe9">치료+의뢰 3회</td><td style="background:#ffebe9">치료+의뢰 3회</td></tr>
+        <tr><td>G4 중증감소</td><td>15–29</td><td style="background:#ffebe9">치료+의뢰 3회</td><td style="background:#ffebe9">치료+의뢰 3회</td><td style="background:#ffebe9;font-weight:700">치료+의뢰 4+회</td></tr>
+        <tr><td>G5 신부전</td><td>&lt;15</td><td style="background:#ffebe9;font-weight:700">치료+의뢰 4+</td><td style="background:#ffebe9;font-weight:700">치료+의뢰 4+</td><td style="background:#ffebe9;font-weight:700">치료+의뢰 4+</td></tr>
+      </table>
+      <div style="font-size: calc(10px * var(--fscale, 1));color:var(--text2);margin-top:8px;line-height:1.6">박스 내 숫자 = 연간 권장 선별·모니터링 횟수. 초록(저위험, CKD증거없음)은 연1회 선별. 노랑(중등도위험)~진한빨강(고·매우고위험, 1–3개월마다)까지 CKD진행·합병증 위험에 따라 모니터링 빈도 증가. 이는 전문가의견 기반 일반지침이며 동반질환·개별관리변경가능성을 함께 고려해야 함</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>🩺 당뇨환자에서 CKD 진단 — 전형적 양상</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="dot">
+        <li>일반적으로 알부민뇨 및/또는 eGFR저하의 존재(타 원발성신질환의 징후/증상 없이)에 기반한 <strong>임상적 진단</strong></li>
+        <li>전형적 양상: 장기간 당뇨유병, 망막병증, 육안적혈뇨 없는 알부민뇨, 점진적으로 진행하는 eGFR저하</li>
+        <li>2형당뇨에서는 진단시점부터 또는 망막병증 없이도 CKD 징후가 있을 수 있음</li>
+        <li>알부민뇨 없는 eGFR저하가 1형·2형당뇨 모두에서 흔히 보고되며, 당뇨유병률 증가에 따라 점점 더 흔해지고 있음</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>⚠️ Table 11.1 — 비당뇨성신질환을 고려해야 하는 상황</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <table class="tc-table">
+        <tr><th>고려 상황</th></tr>
+        <tr><td>1형당뇨 유병기간 &lt;5년 또는 망막병증 없음</td></tr>
+        <tr><td>활동성 요침사(예: 적혈구·세포원주 포함)</td></tr>
+        <tr><td>지속적으로 양호한 혈당관리</td></tr>
+        <tr><td>급속히 감소하는 eGFR</td></tr>
+        <tr><td>급속히 증가하거나 매우 높은 UACR(&gt;300mg/g) 또는 요단백/크레아티닌(&gt;500mg/g)</td></tr>
+      </table>
+      <div class="alert alert-warn" style="margin-top:8px"><span>⚠️</span><span>1형당뇨에서 망막병증 없이 신질환이 발생하는 경우는 드묾. 2형당뇨에서는 망막병증의 CKD 예측 민감도·특이도가 중등도 수준에 불과(생검으로 확인됨)</span></div>
+      <div class="alert alert-info"><span>ℹ️</span><span>생검 없이는 "당뇨로 인한 CKD"라고 확정할 수 없음 — 다른 원인 또는 복수원인이 있을 수 있어 <strong>"당뇨환자의 CKD"</strong> 또는 <strong>"추정 당뇨병성신증"</strong>으로 표현 권장. 비전형적 특징·복수동반질환 시 신장내과 의뢰 고려</span></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>📊 CKD 단계 분류 — eGFR·알부민뇨 병용</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="dot">
+        <li>G1·G2 단계 — 고알부민뇨 증거 + eGFR≥90 또는 eGFR 60–89로 정의</li>
+        <li>G3–G5 단계 — 점진적으로 낮아지는 eGFR범위로 정의, G5는 신부전</li>
+        <li>어떤 eGFR에서도 알부민뇨 정도는 CVD·CKD진행·사망위험과 연관 — 이에 따른 추가 세분류(Fig 11.1) 필요</li>
+        <li>eGFR·알부민뇨 둘 다 정량화해야 치료결정을 가이드할 수 있음</li>
+        <li>eGFR수준 정량화는 약물용량조절·사용제한에 필수, 알부민뇨 정도는 항고혈압제·혈당강하제 선택에 영향</li>
+        <li>eGFR 저하의 관찰병력(CKD진행·기타 불량한 건강결과 위험과도 연관)과 신장손상의 원인(당뇨 외 가능원인 포함)도 이러한 결정에 영향을 줄 수 있음</li>
+      </ul>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══════════ TAB: 감시·예방 ═══════════ -->
+<div id="tab-surveillance" class="panel">
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>🚨 급성신손상(AKI) — 정의 및 위험인자</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <div class="alert alert-warn"><span>⚠️</span><span><strong>정의</strong> — 단기간(시간~일) 내 급격한 신기능저하, 혈청크레아티닌 증가 및/또는 요량감소가 특징</span></div>
+      <ul class="dot" style="margin-top:8px">
+        <li>당뇨환자는 비당뇨인보다 AKI위험이 높음 — 투석필요 AKI 입원율이 당뇨환자에서 <strong>5배</strong> 높음(RR 5.0, 95%CI 4.8–5.1)</li>
+        <li><strong>기타 위험인자</strong> — 기존CKD, 신장손상유발약물(NSAID 등), 특정조영제(요오드화 조영제), 신혈류·신장내 혈류역학을 변화시키는 약물</li>
+        <li>이뇨제, ACEi, ARB 등은 혈관내용적·신혈류·사구체여과를 감소시킬 수 있음</li>
+      </ul>
+      <div class="alert alert-success" style="margin-top:8px"><span>✅</span><span>SGLT2i가 용적감소를 통해 AKI를 촉진할 우려가 있었으나, 진행된 신질환 또는 정상신기능+고심혈관위험 환자의 RCT에서는 <strong>사실로 확인되지 않음</strong>. 비스테로이드성MRA도 신질환진행 둔화목적 사용 시 AKI위험을 증가시키지 않음</span></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>⚠️ 크레아티닌 상승과 AKI 구별 — 핵심 원칙</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <div class="alert alert-danger"><span>🚫</span><span>RAS차단제(ACEi/ARB)에 의한 크레아티닌 상승(<strong>기저치의 30%까지</strong>)을 AKI로 오인해서는 안 됨</span></div>
+      <ul class="dot" style="margin-top:8px">
+        <li><strong>ACCORD BP</strong> 분석 — 집중혈압관리군에서 크레아티닌 30%까지 상승해도 사망률·진행성신질환 증가 없음</li>
+        <li><strong>SPRINT</strong> — 집중혈압관리군에서 eGFR감소에도 세뇨관기능·손상·염증·회복 요표지자(β2-microglobulin 등)가 증가하지 않음</li>
+        <li>SGLT2i·GLP-1RA 시작 시에도 토관-사구체피드백의 혈류역학적 변화로 유사한 크레아티닌 상승이 나타남 — 이를 이유로 약물을 중단해서는 안 됨</li>
+        <li>용적감소 증거가 없는 경우, ACEi/ARB는 크레아티닌상승(&lt;30%)을 이유로 중단해서는 안 됨</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>📋 정기 감시 — 목적 및 항목</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="dot">
+        <li>알부민뇨·eGFR 모두 연1회 이상 모니터링 — CKD 시기적절한 진단, 진행감시, 중첩성신질환(AKI포함)감지, 합병증위험평가, 적절한 약물용량설정, 신장내과 의뢰 필요성 판단</li>
+        <li>이뇨제 치료자 — 저칼륨혈증 유발가능(심혈관위험·사망률과 연관)하므로 혈청칼륨 모니터링 필요</li>
+        <li>eGFR&lt;60 + ACEi/ARB/MRA 치료자 — 고칼륨혈증 평가 위해 정기적 혈청칼륨 측정</li>
+        <li>이 범위의 eGFR 환자 — 약물용량 확인, 신독성물질(NSAID·요오드조영제) 노출 최소화, CKD합병증 평가 필요(Table 11.2)</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>📊 Table 11.2 — CKD 합병증 선별</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <table class="tc-table">
+        <tr><th>합병증</th><th>신체·검사평가</th></tr>
+        <tr><td>혈압&gt;130/80mmHg</td><td>혈압, 체중, BMI</td></tr>
+        <tr><td>체액과다</td><td>병력, 신체검사, 체중</td></tr>
+        <tr><td>전해질이상</td><td>혈청전해질</td></tr>
+        <tr><td>대사성산증</td><td>혈청전해질</td></tr>
+        <tr><td>빈혈</td><td>혈색소, (필요시)철분·철포화도·페리틴</td></tr>
+        <tr><td>대사성골질환</td><td>혈청칼슘·인·PTH·비타민25(OH)D</td></tr>
+      </table>
+      <div style="font-size: calc(10px * var(--fscale, 1));color:var(--text2);margin-top:6px;line-height:1.6">CKD 합병증은 eGFR&lt;60(G3이상)에서 흔해지고 진행할수록 더 흔하고 중증화됨. 혈압·체액과다는 매 진료마다 평가, 검사평가는 G3는 6–12개월마다, G4는 3–5개월마다, G5는 1–3개월마다(또는 증상·치료변경시) 권장</div>
+      <div class="alert alert-info" style="margin-top:8px"><span>ℹ️</span><span>신부전진행 가능성이 높은 사람에게는 조기 B형간염 예방접종 권장(Section 4 참조)</span></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>📐 알부민뇨 추적 — 임상적 활용</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="dot">
+        <li>신기능의 초기변화는 eGFR변화보다 <strong>알부민뇨 증가가 먼저</strong> 감지될 수 있음 — 심혈관위험에도 큰 영향</li>
+        <li>지속적 감시로 치료반응·질병진행 평가, ACEi/ARB 치료 참여도 평가에 도움</li>
+        <li>2형당뇨 ACEi/ARB 임상시험 — 알부민뇨를 <strong>&lt;300mg/g 또는 기저치 대비 &gt;30% 감소</strong>시키는 것이 신장·심혈관결과 개선과 연관 → 잔존위험 지속되므로 UACR 감소를 최대화하도록 약물 적정 권장</li>
+        <li>SGLT2i·finerenone 모두 이득의 대부분이 <strong>알부민뇨 감소를 매개</strong>로 함이 입증됨</li>
+      </ul>
+      <div class="alert alert-warn" style="margin-top:8px"><span>⚠️</span><span>실세계데이터는 RAS차단이 최대용량 미달(submaximal)일 때 심혈관·신장결과 이득이 적음을 보여줌</span></div>
+      <div class="alert alert-info"><span>ℹ️</span><span>알부민뇨는 자발적으로 관해될 수 있음 — 알부민뇨 변화와 임상결과의 연관성을 평가한 코호트연구들은 전반적으로 심혈관·신장결과 이득을 보고함</span></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>📊 Table 11.3 — 알부민뇨를 낮추는 중재</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <div class="grid2">
+        <ul class="dot">
+          <li>혈당관리</li>
+          <li>혈압관리</li>
+          <li>ACEi 또는 ARB 치료</li>
+          <li>금연</li>
+        </ul>
+        <ul class="dot">
+          <li>체중감량</li>
+          <li>식이패턴 변화(나트륨·단백질 섭취 감소)</li>
+          <li>신체활동</li>
+          <li>SGLT2i, MRA, 또는 GLP-1RA 치료</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>🛡️ 1차 예방 — 혈당·혈압관리 외 입증된 방법 없음</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <div class="alert alert-info"><span>ℹ️</span><span>당뇨환자에서 CKD에 대해 입증된 유일한 1차예방 중재는 <strong>혈당관리(A1C목표 7%)</strong>와 <strong>혈압관리(&lt;130/80mmHg)</strong>임</span></div>
+      <ul class="dot" style="margin-top:8px">
+        <li>고혈압·알부민뇨가 없는 상태에서 RAS억제제 또는 기타 중재가 CKD 발생을 예방한다는 근거는 없음 — ADA는 CKD <strong>발생예방만을 목적</strong>으로 이들 약물의 정기적 사용을 권장하지 않음</li>
+      </ul>
+      <div class="alert alert-teal" style="margin-top:8px"><span>💡</span><span><strong>GRADE 연구</strong>(2023) — metformin단독요법 2형당뇨 5,047명을 대상으로 liraglutide·sitagliptin·glimepiride·인슐린glargine 비교(평균5년 추적). 대부분 등록시점에 신질환 징후 없음. 신장보호효과에서 약물 간 차이 없음(SGLT2i는 연구당시 미도입으로 미포함)</span></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>🥗 영양 — 단백질 섭취 권고</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="rec-list">
+        <li class="rec-item"><span class="badge badge-A">A</span><span class="rec-text"><strong>11.3</strong> CKD G3이상(비투석) — 단백질섭취 0.8g/kg/day(일반인구와 동일권고량). 투석환자는 단백질에너지소모(protein-energy wasting)가 주요문제이므로 1.0–1.2g/kg/day 고려 <span class="badge badge-B">B</span></span></li>
+      </ul>
+      <ul class="dot" style="margin-top:8px">
+        <li>0.8g/kg/day 수준이 더 높은 단백질섭취 대비 GFR저하를 둔화시키며 시간이 지날수록 효과가 더 큼</li>
+        <li>고단백섭취(일일칼로리 &gt;20% 또는 &gt;1.3g/kg/day)는 알부민뇨증가, 신기능 더 빠른 손실, CVD사망률증가와 연관 — 회피해야 함</li>
+        <li>0.8g/kg/day 미만의 단백질섭취는 권장하지 않음 — 혈당·심혈관위험지표·GFR저하경과를 변화시키지 못함</li>
+        <li>NKF KDOQI·국제신장영양대사학회는 더 낮은 단백질섭취(0.6–0.8g/kg/day)를 권장하나, 당뇨에서의 CKD에 대해서는 전문가 "의견"등급에 불과</li>
+      </ul>
+      <div class="alert alert-warn" style="margin-top:8px"><span>⚠️</span><span>저단백 식이패턴은 CKD영양관리 경험이 있는 의료전문가의 안내와 함께 시행해야 함</span></div>
+      <div class="alert alert-info"><span>ℹ️</span><span>나트륨제한(&lt;2,300mg/day)이 혈압관리·심혈관위험감소에 유용할 수 있음, 칼륨섭취는 혈청칼륨농도 관리를 위해 개별화 필요. eGFR저하자는 나트륨·칼륨 요배설이 손상될 수 있어 더욱 중요. 등록영양사의 의학영양치료가 목표달성에 매우 효과적</span></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>🩸 혈당목표 — CKD 영향</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="rec-list">
+        <li class="rec-item"><span class="badge badge-A">A</span><span class="rec-text"><strong>11.4</strong> CKD 위험감소·진행둔화를 위해 혈당관리 최적화(Fig 9.4 참조)</span></li>
+      </ul>
+      <ul class="dot" style="margin-top:8px">
+        <li>대규모RCT — 근정상혈당 목표의 강화혈당강하가 1형당뇨(DCCT/EDIC)·2형당뇨 모두에서 알부민뇨 발생·진행을 지연시키고 eGFR저하를 감소시킴</li>
+        <li>CKD 존재는 강화혈당관리의 위험·이득에 영향 — 기저신질환자에서 강화관리의 부작용(저혈당·사망률)이 증가</li>
+        <li>강화혈당관리 효과가 eGFR결과로 나타나기까지 <strong>2형당뇨 최소2년, 1형당뇨는 10년 이상</strong>의 지연시간 존재</li>
+        <li>따라서 기존CKD+상당한 동반질환이 있는 일부 환자는 저혈당위험 감소를 위해 치료강도를 낮출 수 있음(즉 A1C목표를 높일 수 있음)</li>
+        <li>진행된 CKD단계에서는 A1C 신뢰도가 떨어짐 — 더 짧은 기간(15–30일) 평균혈당을 반영하는 glycated albumin·fructosamine이 임상관리에 도움</li>
+      </ul>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══════════ TAB: 혈당·혈압관리 ═══════════ -->
+<div id="tab-bp" class="panel">
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>📌 혈압목표·ACEi/ARB — 핵심 권고문</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="rec-list">
+        <li class="rec-item"><span class="badge badge-A">A</span><span class="rec-text"><strong>11.5</strong> CKD환자 치료중 혈압목표 &lt;130/80mmHg(안전달성가능시), 수축기&lt;120mmHg 및/또는 혈압변동성 감소 장려</span></li>
+        <li class="rec-item"><span class="badge badge-B">B</span><span class="rec-text"><strong>11.6a</strong> UACR 30–299 — ACEi/ARB 권장. UACR≥300 또는 eGFR&lt;60 — 최대내약용량까지 강력권장 <span class="badge badge-A">A</span>(불내성시 대체 <span class="badge badge-B">B</span>)</span></li>
+        <li class="rec-item"><span class="badge badge-B">B</span><span class="rec-text"><strong>11.6b</strong> ACEi/ARB/MRA — eGFR하락·K+상승 모니터링. 이뇨제 — 시작/용량변경 7–14일후 저칼륨혈증 모니터링</span></li>
+        <li class="rec-item"><span class="badge badge-A">A</span><span class="rec-text"><strong>11.6c</strong> 정상혈압+정상UACR(&lt;30)+정상eGFR — ACEi/ARB의 CKD 1차예방목적 사용 비권장</span></li>
+        <li class="rec-item"><span class="badge badge-A">A</span><span class="rec-text"><strong>11.6d</strong> 세포외액용적감소 징후 없이 크레아티닌 경도~중등도 상승(≤30%) — RAS차단 지속</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>📊 BPROAD — CKD 동반자에서 집중혈압관리 근거</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="dot">
+        <li>12,821명(당뇨+CVD위험증가), 수축기목표≤120 vs ≤140mmHg, 최대5년 추적</li>
+        <li>1차결과(비치명뇌졸중·비치명MI·심부전·CV사망) — 집중치료군 <strong>21% 감소</strong></li>
+        <li>신규알부민뇨 발생도 집중치료군에서 더 적음(11.29 vs 13.84/100인년, HR 0.87)</li>
+        <li>CKD진행·발생 발생률은 양 군 유사</li>
+      </ul>
+      <div class="alert alert-info" style="margin-top:8px"><span>ℹ️</span><span>남성 재향군인 관찰연구 — 수축기혈압을 낮추는 것이 유익했으나, <strong>이완기혈압이 70mmHg 미만으로 떨어지지 않는 경우에만</strong> 해당</span></div>
+      <div class="alert alert-warn"><span>⚠️</span><span>CKD환자는 혈압변동성(시간에 따른 개인내 혈압변화)이 더 자주, 더 크게 나타남 — 10mmHg 증가당 신부전위험 <strong>47% 증가</strong>(HR 1.47)와 연관</span></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>💊 ACEi/ARB — 1차약제 근거 및 적용범위</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <table class="tc-table">
+        <tr><th>UACR 범위</th><th>근거 수준</th><th>입증된 효과</th></tr>
+        <tr><td>≥300mg/g + eGFR&lt;60</td><td>다수 RCT(RENAAL·Collaborative Study Group·IDNT·HOPE 등)</td><td>신부전진행위험 감소, 1차약제로 강력권장</td></tr>
+        <tr><td>30–299mg/g(중등도)</td><td>최대내약용량 사용 RCT</td><td>중증알부민뇨로 진행 감소, CKD진행둔화, 심혈관사건 감소 — 단 신부전진행 자체는 감소시키지 못함</td></tr>
+        <tr><td>정상혈압+정상/경도알부민뇨</td><td>2개 장기·이중맹검 연구(1형·2형당뇨)</td><td>신장보호효과 입증되지 않음(생검평가)</td></tr>
+      </table>
+      <div class="alert alert-warn" style="margin-top:8px"><span>⚠️</span><span>ACEi·ARB는 크레아티닌상승 우려로 흔히 최대내약용량으로 처방되지 않음 — 그러나 효능을 입증한 모든 임상시험은 <strong>최대내약용량</strong>을 사용했으므로 견딜 수 있는 만큼 증량해야 함. eGFR&lt;30에서도 사망률·CKD진행둔화 이득을 보이는 연구들이 존재</span></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>🔄 RAS차단제 중단 후 재시작 — 최신 근거</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <table class="tc-table">
+        <tr><th>분석</th><th>핵심 결과</th></tr>
+        <tr><td>Ku et al.(17개시험, 11,800명, 82%당뇨)</td><td>3개월내 eGFR&lt;13% 감소 또는 1개월내 &lt;21% 감소는 장기신장결과 양호와 연관</td></tr>
+        <tr><td>Hattori et al.(6,065명, ~40%당뇨)</td><td>고칼륨혈증/AKI로 ACEi/ARB 중단 후 재시작한 환자가 장기신장결과·사망률 더 양호(재시작군 고칼륨혈증 유의차 없음)</td></tr>
+      </table>
+      <div class="alert alert-info" style="margin-top:8px"><span>ℹ️</span><span>SGLT2i 시작은 RAS차단제 사용자에서 고칼륨혈증 위험 감소(HR0.89) 및 ACEi/ARB 중단률 감소(36% vs 45%)와 연관 — UACR≥1,000인 경우 효과가 더 뚜렷함</span></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>🚫 ACEi+ARB 병용 금지 및 신질환 없는 경우의 한계</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <div class="alert alert-danger"><span>🚫</span><span><strong>ONTARGET, VA NEPHRON-D</strong> 두 시험 모두 ACEi+ARB 병용이 CVD·CKD에 이득 없이 고칼륨혈증·AKI 등 이상반응만 증가시킴 — 병용을 피해야 함</span></div>
+      <ul class="dot" style="margin-top:8px">
+        <li>신질환이 없는 경우 ACEi/ARB는 혈압관리에 유용하나, thiazide계 이뇨제·디하이드로피리딘계CCB 대비 우월성 입증되지 않음</li>
+        <li>정상요알부민배설 2형당뇨에서 ARB가 알부민뇨발생을 억제했으나 심혈관사건은 오히려 증가(ROADMAP)</li>
+        <li>알부민뇨·고혈압 없는 1형당뇨에서 ACEi/ARB가 생검평가 사구체병증 발생을 예방하지 못함(같은 결과가 2형당뇨에서도 확인)</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>🤰 임신 — 신장보호약물 사용제한</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="rec-list">
+        <li class="rec-item"><span class="badge badge-B">B</span><span class="rec-text"><strong>11.10</strong> 비신뢰피임 가임기 — 임신중 유해할 수 있는 신장보호약물(ACEi/ARB/직접레닌억제제/MRA/SGLT2i/네프릴리신억제제) 회피, 사용중이면 임신전 더 안전한 약물로 전환</span></li>
+      </ul>
+      <table class="tc-table" style="margin-top:8px">
+        <tr><th>안전성</th><th>약물</th></tr>
+        <tr><td>임신중 효과·안전성 확인됨</td><td>methyldopa, labetalol, 장시간형 nifedipine</td></tr>
+        <tr><td>급성기 관리에 고려 가능</td><td>hydralazine(중증전자간증 포함)</td></tr>
+        <tr><td>비권장(단, 후기 체액관리 필요시 가능)</td><td>이뇨제</td></tr>
+      </table>
+      <div class="alert alert-info" style="margin-top:8px"><span>ℹ️</span><span>ACOG는 임신성고혈압·전자간증·중첩전자간증 환자에서 산후 72시간 입원관찰+산후7–10일 추적, 평생 심혈관위험 증가로 장기추적 권장</span></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══════════ TAB: SGLT2i·GLP-1RA ═══════════ -->
+<div id="tab-sglt" class="panel">
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>📌 핵심 권고문</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="rec-list">
+        <li class="rec-item"><span class="badge badge-A">A</span><span class="rec-text"><strong>11.7a</strong> 2형당뇨+CKD — 입증된 SGLT2i로 CKD진행·심혈관사건위험 감소. eGFR≥20부터 시작, 신부전까지 안전하게 지속 가능</span></li>
+        <li class="rec-item"><span class="badge badge-A">A</span><span class="rec-text"><strong>11.7b</strong> 2형당뇨+CKD — 입증된 GLP-1RA로 신질환진행·심혈관위험 감소</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>🧬 직접적 신장보호 기전 — 혈당강하와 독립적</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <div class="grid2">
+        <div>
+          <div style="font-weight:700;color:var(--accent2);margin-bottom:4px">SGLT2 억제제</div>
+          <ul class="dot">
+            <li>신세뇨관 포도당재흡수 감소</li>
+            <li>체중·전신혈압·사구체내압·알부민뇨 감소</li>
+            <li>혈당과 무관한 기전으로 GFR손실 둔화</li>
+            <li>신장산화스트레스 &gt;50% 감소</li>
+            <li>안지오텐시노겐 상승 억제, NLRP3 인플라마좀 활성 감소</li>
+          </ul>
+        </div>
+        <div>
+          <div style="font-weight:700;color:var(--accent2);margin-bottom:4px">GLP-1 수용체작용제</div>
+          <ul class="dot">
+            <li>항염증 작용</li>
+            <li>항산화 작용</li>
+            <li>면역조절 작용</li>
+            <li>(비대사적 기전을 통한 신장보호)</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>📊 SGLT2i — CKD 1차결과 핵심 RCT(3대 시험)</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <table class="tc-table">
+        <tr><th>시험</th><th>약물</th><th>대상</th><th>주요 결과</th></tr>
+        <tr><td><strong>CREDENCE</strong></td><td>Canagliflozin</td><td>4,401명, UACR≥300–5,000, eGFR30–90</td><td>신부전 32%감소, 1차복합결과 30%감소(+CV사망/심부전입원31%↓, MACE20%↓), &gt;99% 배경RAS차단치료</td></tr>
+        <tr><td><strong>DAPA-CKD</strong></td><td>Dapagliflozin</td><td>4,304명(67.5%당뇨), eGFR25–75, UACR중앙값949</td><td>1차결과 HR0.61, 신장복합 HR0.56, CV사망/심부전입원 HR0.71, 전체사망률감소</td></tr>
+        <tr><td><strong>EMPA-KIDNEY</strong></td><td>Empagliflozin</td><td>6,609명(~50%당뇨), eGFR20–45 또는 45–90+UACR≥200</td><td>신질환진행위험·CV사망위험 감소(HR0.72)</td></tr>
+      </table>
+      <div class="alert alert-teal" style="margin-top:8px"><span>💡</span><span>SGLT2i의 혈당강하효과는 eGFR&lt;45에서 둔화되지만, <strong>신장·심혈관이득은 eGFR 20까지 유지</strong>됨(혈당의 유의한 변화 없이도). 이것이 eGFR≥20부터 시작 권장의 근거</span></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>📊 GLP-1RA — FLOW 시험(Semaglutide 신장결과)</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="dot">
+        <li>3,533명(모두 알부민뇨≥100mg/g), eGFR 및/또는 알부민뇨로 정의된 유의한 신질환</li>
+        <li>1차결과(첫주요신질환사건: eGFR≥50%감소, eGFR&lt;15 지속, 투석/이식시작, 신장사망, CV사망) — 조기종료(사전계획결과 도달)</li>
+        <li>Semaglutide군 HR <strong>24% 낮음</strong>; CV사망 제외 시 신장특이결과 HR <strong>21% 낮음</strong></li>
+        <li>Semaglutide 복용군은 더 낮은 A1C, 더 낮은 혈압, 더 큰 체중감량 동반 — 이것이 신장보호효과의 주원인인지 semaglutide 고유의 신장보호효과인지는 추가규명 필요</li>
+      </ul>
+      <div class="alert alert-info" style="margin-top:8px"><span>ℹ️</span><span><strong>SURMOUNT-2</strong>(Tirzepatide, 938명) — 알부민뇨 감소(eGFR 부작용 없이) 확인, 단 eGFR&lt;60은 5%뿐, 발표된 RCT 신장결과는 아직 없음</span></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>📊 대형 심혈관결과시험의 2차 신장결과(보충 근거)</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <table class="tc-table">
+        <tr><th>시험</th><th>약물</th><th>신장관련 결과</th></tr>
+        <tr><td>EMPA-REG OUTCOME</td><td>Empagliflozin</td><td>신증진행/악화 39%감소, 크레아티닌2배+eGFR≤45 위험 44%감소</td></tr>
+        <tr><td>CANVAS Program</td><td>Canagliflozin</td><td>알부민뇨진행 27%감소, eGFR감소/신부전/신장사망 40%감소</td></tr>
+        <tr><td>LEADER</td><td>Liraglutide</td><td>신증신규/악화 22%감소</td></tr>
+        <tr><td>REWIND</td><td>Dulaglutide</td><td>신장복합결과(eGFR≥40%지속감소·신부전·신장사망) 25%감소</td></tr>
+        <tr><td>SUSTAIN-6</td><td>Semaglutide</td><td>신증신규/악화 36%감소</td></tr>
+      </table>
+      <div style="font-size: calc(10px * var(--fscale, 1));color:var(--text2);margin-top:6px">모든 P&lt;0.01 — 단 이들 연구는 CKD를 주로 선택한 집단이 아니었고 신장효과는 2차결과로 평가됨</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>💊 Metformin — CKD에서의 사용 기준 (2016 FDA 개정)</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <table class="tc-table">
+        <tr><th>eGFR</th><th>지침</th></tr>
+        <tr><td>&lt;30</td><td>금기</td></tr>
+        <tr><td>30–45</td><td>신규시작 금지, 지속중이면 이득·위험 재평가</td></tr>
+        <tr><td>30–60</td><td>요오드조영제 검사 시 임시중단</td></tr>
+        <tr><td>≥45</td><td>사용가능, eGFR 모니터링 지속</td></tr>
+      </table>
+      <div style="font-size: calc(10px * var(--fscale, 1));color:var(--text2);margin-top:6px">2016년 FDA 개정 — 혈청크레아티닌 대신 eGFR을 기준으로 사용하도록 변경, 신질환자 중 metformin고려 가능 대상 확대</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>🎯 약물 선택 — eGFR 기준 SGLT2i 시작·지속 원칙</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="dot">
+        <li>SGLT2i — CKD진행 고위험군(알부민뇨 또는 eGFR손실 병력)에 권장(Fig 9.4 참조)</li>
+        <li>eGFR≥20 부터 시작 권장(CREDENCE eGFR&gt;30+UACR&gt;300, DAPA-CKD eGFR&gt;25+UACR&gt;200, EMPA-KIDNEY eGFR≥20에서 효과확인, EMPEROR심부전시험들도 eGFR&gt;20에서 효과 확인)</li>
+        <li>DECLARE-TIMI 58은 정상요알부민 환자에서도 효과 시사</li>
+        <li>SGLT2i는 내약성이 있으면 <strong>투석시작 전까지 지속</strong>해야 함</li>
+        <li>대부분의 GLP-1RA는 저eGFR에서도 심혈관보호목적으로 사용 가능(용량조절 필요할 수 있음) — 단 신장으로 배설되는 lixisenatide·exenatide는 eGFR&lt;30 또는 크레아티닌청소율&lt;30에서 데이터 제한적</li>
+      </ul>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══════════ TAB: MRA·병용요법 ═══════════ -->
+<div id="tab-mra" class="panel">
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>📌 핵심 권고문</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="rec-list">
+        <li class="rec-item"><span class="badge badge-A">A</span><span class="rec-text"><strong>11.8</strong> CKD+알부민뇨 — 입증된 비스테로이드성MRA로 CKD진행·심혈관사건 감소(eGFR≥25 필요). 시작1개월후 칼륨 모니터링</span></li>
+        <li class="rec-item"><span class="badge badge-B">B</span><span class="rec-text"><strong>11.9</strong> 2형당뇨+UACR≥100+eGFR30–90(RAS억제제복용중) — SGLT2i+비스테로이드성MRA(finerenone) 동시시작 고려(안전성·알부민뇨이득의 근거 확보)</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>🧬 MRA의 2가지 종류 — 스테로이드성 vs 비스테로이드성</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <table class="tc-table">
+        <tr><th>구분</th><th>약물</th><th>신장근거</th></tr>
+        <tr><td>스테로이드성</td><td>Spironolactone, Eplerenone</td><td>고칼륨혈증위험으로 당뇨+CKD에서 충분히 연구되지 않음, 알부민뇨감소 지속효과 시사</td></tr>
+        <tr><td>비스테로이드성(nsMRA)</td><td>Finerenone</td><td>FIDELIO-DKD·FIGARO-DKD 대규모RCT로 신장·심혈관이득 입증</td></tr>
+      </table>
+      <div class="alert alert-warn" style="margin-top:8px"><span>⚠️</span><span>두 계열은 서로 다른 약물군이며 한 계열의 근거를 다른 계열에 외삽할 수 없음</span></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>📊 FIDELIO-DKD — Finerenone 핵심 신장결과시험</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <table class="tc-table">
+        <tr><th>항목</th><th>내용</th></tr>
+        <tr><td>대상</td><td>5,734명, 2형당뇨+CKD. UACR30–&lt;300+eGFR25–&lt;60+망막병증, 또는 UACR300–5,000+eGFR25–&lt;75. K+≤4.8mmol/L</td></tr>
+        <tr><td>기저특성</td><td>평균연령65.6세, 평균eGFR 44.3, 평균알부민뇨 852mg/g</td></tr>
+        <tr><td>1차결과</td><td>신부전·eGFR持续40%↓·신장사망 복합 — HR0.82(P=0.001)</td></tr>
+        <tr><td>주요2차결과</td><td>심혈관복합(CV사망·비치명MI·뇌졸중·심부전입원) — HR0.86(P=0.03)</td></tr>
+        <tr><td>고칼륨혈증</td><td>중단율 2.3%(위약0.9%), 고칼륨혈증관련 사망 없음, 4.5%가 SGLT2i 병용중</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>📊 FIGARO-DKD — Finerenone 심혈관중심 결과시험</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <table class="tc-table">
+        <tr><th>항목</th><th>내용</th></tr>
+        <tr><td>대상</td><td>7,352명(finerenone3,686/위약3,666), UACR30–&lt;300+eGFR25–90, K+≤4.8mmol/L. HFrEF·미관리고혈압 제외</td></tr>
+        <tr><td>용량</td><td>eGFR25–60: 10mg시작, eGFR≥60: 20mg시작. 1개월후 칼륨≤4.8·eGFR안정시 20mg로 증량 권장</td></tr>
+        <tr><td>1차결과</td><td>CV사망·MI·뇌졸중·심부전입원 — 13%감소(12.4% vs 14.2%, HR0.87, P=0.03), 주로 심부전입원감소가 견인(3.2% vs 4.4%, HR0.71)</td></tr>
+        <tr><td>주목할 2차결과</td><td>신부전 36%감소(0.9% vs 1.3%, HR0.64)</td></tr>
+        <tr><td>고칼륨혈증</td><td>10.8% vs 5.3%, 단 중단율은 1.2%뿐</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>📊 FIDELITY — 통합분석(FIDELIO+FIGARO)</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="dot">
+        <li>두 시험 통합(n=13,171) — CKD 중증도 전범위 평가 가능(인구집단 다름, 일부중첩, 유사설계)</li>
+        <li>심혈관복합결과(CV사망·비치명MI·비치명뇌졸중·심부전입원) — <strong>14% 감소</strong>(12.7% vs 14.4%, HR0.86, P=0.002)</li>
+        <li>신장복합결과(eGFR持续≥57%감소 또는 신장사망) — <strong>23% 감소</strong>(5.5% vs 7.1%, HR0.77, P&lt;0.001)</li>
+      </ul>
+      <div class="alert alert-success" style="margin-top:8px"><span>✅</span><span>통합분석은 기저ASCVD병력 유무와 무관하게 CKD 전 스펙트럼에서 finerenone의 심혈관·신장 이득을 확인·강화함(HFrEF 동반자는 제외)</span></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>🔬 병용요법 — SGLT2i + GLP-1RA + MRA</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="dot">
+        <li>모든 최근 신장·심혈관결과연구는 <strong>최대내약 RAS차단</strong> 환경에서 수행됨 — 병용치료를 고려할 때도 RAS차단을 최대내약용량까지 조정해야 함</li>
+        <li>SGLT2i·GLP-1RA·MRA 직접비교연구는 없으나 기전이 혈당강하와 독립적으로 서로 다름 — 병용치료가 심혈관·신장결과 모두에 이득일 가능성 증가 중</li>
+      </ul>
+      <table class="tc-table" style="margin-top:8px">
+        <tr><th>연구</th><th>비교</th><th>결과</th></tr>
+        <tr><td>인구기반 코호트연구</td><td>SGLT2i단독 대비 GLP-1RA추가</td><td>주요심혈관사건 30%감소, 중증신장사건 57%감소(중앙추적9개월)</td></tr>
+        <tr><td>同上</td><td>GLP-1RA단독 대비 SGLT2i추가</td><td>주요심혈관사건 29%감소</td></tr>
+        <tr><td>FLOW 사전계획분석</td><td>SGLT2i병용 유무에 따른 semaglutide효과</td><td>병용여부가 전체 이득에 영향없음(단 기저SGLT2i사용제한적이라 해석주의)</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>🏆 CONFIDENCE 시험 — 최초의 발표된 병용요법 RCT</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="dot">
+        <li>3개 무작위군: finerenone단독 / empagliflozin단독 / 병용</li>
+        <li>대상: CKD(eGFR&gt;30·&lt;90)+알부민뇨(UACR&gt;100·&lt;5,000)+2형당뇨</li>
+        <li>180일시점 UACR 변화 — <strong>병용요법 52% 감소</strong> (empagliflozin단독보다 32%p, finerenone단독보다 29%p 더 큰 효과)</li>
+      </ul>
+      <div class="alert alert-success" style="margin-top:8px"><span>✅</span><span>2형당뇨+CKD 환자에서 신질환진행을 늦추기 위한 <strong>초기 병용요법</strong>을 지지하는 첫 발표된 RCT 근거</span></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>🎯 임상 적용 — 의료진의 판단</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="dot">
+        <li>처음 처방할 약물(SGLT2i 또는 GLP-1RA)과 병용요법 필요여부는 동반질환·개인선호를 고려한 의료진의 최선의 판단으로 결정</li>
+        <li>모든 관련 연구는 ACEi 또는 ARB(흔히 최대내약용량) 복용자를 포함했음을 기억할 것</li>
+        <li>현재 신장이득 근거는 2형당뇨CKD에 국한 — 1형당뇨에서도 이러한 치료가 신장결과를 개선하는지 확인하기 위한 다수 연구가 진행 중</li>
+      </ul>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══════════ TAB: 중증CKD·의뢰 ═══════════ -->
+<div id="tab-severe" class="panel">
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>📌 중증CKD·신부전 치료 — 핵심 권고문</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="rec-list">
+        <li class="rec-item"><span class="badge badge-B">B</span><span class="rec-text"><strong>11.11a</strong> eGFR&lt;20(비투석) — SGLT2i를 안전하게 지속 가능, CKD진행위험 감소 및 심혈관이득 <span class="badge badge-C">C</span></span></li>
+        <li class="rec-item"><span class="badge badge-C">C</span><span class="rec-text"><strong>11.11b</strong> 투석환자 — 신장청소율에 의존하지 않는 GLP-1기반치료를 안전하게 시작/지속 가능, 심혈관위험·사망률 감소목적</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>💊 SGLT2i — 진행된 CKD에서의 안전성</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="dot">
+        <li>SGLT2i는 심혈관계 등 다발성기관에 비신장적 효과 — 내약성이 있으면 신부전이 발생하지 않는 한 치료를 지속해야 함</li>
+        <li><strong>DAPA-CKD 사후분석</strong> — Stage G4 CKD+알부민뇨 환자에서 dapagliflozin 효과가 전체시험결과와 일관됨, 위험증가 증거 없음</li>
+        <li>현재 진행중인 <strong>Renal Lifecycle 시험</strong> — eGFR≤25 또는 신부전 환자에서 SGLT2i vs 위약의 신부전·심부전·사망률·안전성 영향을 평가 중(결과 발표시 안전성·효능에 대한 추가 정보 확보 예정)</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>💊 GLP-1기반치료 — 투석환자에서의 근거</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <table class="tc-table">
+        <tr><th>연구</th><th>설계</th><th>결과</th></tr>
+        <tr><td>Idorn et al.</td><td>투석환자 GLP-1수치 비교</td><td>비투석대조군보다 GLP-1수치 높음, 위장관증상 더 흔함</td></tr>
+        <tr><td>Hiramatsu et al.</td><td>복막투석환자, 12개월 liraglutide</td><td>좌심실질량지수 감소, 좌심실박출률 증가</td></tr>
+        <tr><td>Vanek et al.</td><td>고BMI로 이식거부된 투석환자13명, 12주개방형</td><td>평균체중감소 4.6±2.4kg(semaglutide)</td></tr>
+        <tr><td>전국코호트(151,649명, 2013–2021투석시작)</td><td>GLP-1기반치료 vs 미사용</td><td>사망률23%낮음, 이식대기자등록확률66%높음</td></tr>
+        <tr><td>관찰연구(투석시작시점 GLP-1치료)</td><td>중앙추적1.4년</td><td>주요심혈관사건 감소(HR0.65), 전체사망률 감소(HR0.63) — 단 AKI환자포함 등 방법론적 한계 있음</td></tr>
+      </table>
+      <div class="alert alert-danger" style="margin-top:8px"><span>🚫</span><span><strong>Exenatide·lixisenatide는 투석환자에서 사용하지 말 것</strong> — 신장청소율에 의존하는 약물이기 때문</span></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>📌 신장내과 의뢰 — 핵심 권고문</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="rec-list">
+        <li class="rec-item"><span class="badge badge-A">A</span><span class="rec-text"><strong>11.12a</strong> 요알부민 급속증가 및/또는 eGFR 급속감소 및/또는 eGFR&lt;30 — 신장내과 평가 의뢰</span></li>
+        <li class="rec-item"><span class="badge badge-B">B</span><span class="rec-text"><strong>11.12b</strong> 신질환 원인 불확실 또는 관리상 어려운 문제 — 신장내과 의뢰</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>🩺 의뢰가 필요한 구체적 상황</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <table class="tc-table">
+        <tr><th>의뢰 상황</th></tr>
+        <tr><td>지속적으로 상승하는 UACR 및/또는 지속적으로 감소하는 eGFR</td></tr>
+        <tr><td>신질환 원인에 대한 불확실성</td></tr>
+        <tr><td>까다로운 관리 문제 — 빈혈, 이차성부갑상선기능항진증, 양호한 혈압관리에도 현저한 알부민뇨증가, 대사성골질환, 저항성고혈압, 전해질이상</td></tr>
+        <tr><td>진행된 신질환(eGFR&lt;30) — 신대체요법 논의 필요</td></tr>
+      </table>
+      <div class="alert alert-info" style="margin-top:8px"><span>ℹ️</span><span>의뢰 임계값은 의료진이 당뇨+신질환 환자를 마주하는 빈도에 따라 달라질 수 있음. <strong>Stage G4(eGFR&lt;30)</strong> 발생 시 신장내과 상담은 비용 절감, 진료 품질 개선, 투석 필요시점 지연과 연관됨이 확인됨</span></div>
+      <div class="alert alert-teal"><span>💡</span><span>신장내과 외 다른 전문의·의료진도 CKD의 진행적 특성, 혈압·혈당의 선제적 관리가 가지는 신장보존 이득, 향후 신대체요법 필요 가능성에 대해 당뇨환자를 교육해야 함</span></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══════════ TAB: 기준표 모음 ═══════════ -->
+<div id="tab-tables" class="panel">
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>📁 전체 권고문 표 (Rec 11.1–11.12)</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <table class="tc-table">
+        <tr><th>번호</th><th>권고 내용</th><th>등급</th></tr>
+        <tr><td>11.1a</td><td>1형(유병≥5년)·모든2형 — 연1회 UACR+eGFR 평가</td><td><span class="badge badge-B">B</span></td></tr>
+        <tr><td>11.1b</td><td>CKD환자 — 단계별 연1–4회 모니터링</td><td><span class="badge badge-B">B</span></td></tr>
+        <tr><td>11.2</td><td>알부민뇨≥300 — ≥30% 감소 목표</td><td><span class="badge badge-B">B</span></td></tr>
+        <tr><td>11.3</td><td>CKD G3이상 단백질0.8g/kg/day, 투석시1.0–1.2</td><td><span class="badge badge-A">A</span>/<span class="badge badge-B">B</span></td></tr>
+        <tr><td>11.4</td><td>혈당관리 최적화로 CKD위험감소</td><td><span class="badge badge-A">A</span></td></tr>
+        <tr><td>11.5</td><td>혈압목표&lt;130/80, 수축기&lt;120 장려</td><td><span class="badge badge-A">A</span></td></tr>
+        <tr><td>11.6a</td><td>UACR30–299 ACEi/ARB, ≥300/eGFR&lt;60 강력권장</td><td><span class="badge badge-B">B</span>/<span class="badge badge-A">A</span></td></tr>
+        <tr><td>11.6b</td><td>eGFR·K+ 모니터링</td><td><span class="badge badge-B">B</span></td></tr>
+        <tr><td>11.6c</td><td>정상혈압/UACR/eGFR — ACEi/ARB 1차예방 비권장</td><td><span class="badge badge-A">A</span></td></tr>
+        <tr><td>11.6d</td><td>경도크레아티닌상승(≤30%) — RAS차단 지속</td><td><span class="badge badge-A">A</span></td></tr>
+        <tr><td>11.7a</td><td>2형당뇨+CKD — SGLT2i(eGFR≥20부터)</td><td><span class="badge badge-A">A</span></td></tr>
+        <tr><td>11.7b</td><td>2형당뇨+CKD — GLP-1RA</td><td><span class="badge badge-A">A</span></td></tr>
+        <tr><td>11.8</td><td>CKD+알부민뇨 — 비스테로이드성MRA(eGFR≥25)</td><td><span class="badge badge-A">A</span></td></tr>
+        <tr><td>11.9</td><td>UACR≥100,eGFR30–90 — SGLT2i+nsMRA 동시시작 고려</td><td><span class="badge badge-B">B</span></td></tr>
+        <tr><td>11.10</td><td>가임기 — 신장보호약물 임신전 전환</td><td><span class="badge badge-B">B</span></td></tr>
+        <tr><td>11.11a</td><td>eGFR&lt;20비투석 — SGLT2i 안전지속</td><td><span class="badge badge-B">B</span>/<span class="badge badge-C">C</span></td></tr>
+        <tr><td>11.11b</td><td>투석환자 — GLP-1기반치료(신청소율비의존) 가능</td><td><span class="badge badge-C">C</span></td></tr>
+        <tr><td>11.12a</td><td>급속진행 또는 eGFR&lt;30 — 신장내과의뢰</td><td><span class="badge badge-A">A</span></td></tr>
+        <tr><td>11.12b</td><td>원인불확실/관리어려움 — 신장내과의뢰</td><td><span class="badge badge-B">B</span></td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span>📊 알부민뇨 분류 한눈에 보기</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body collapsed">
+      <table class="tc-table">
+        <tr><th>분류</th><th>UACR</th></tr>
+        <tr><td>정상~경도증가(A1)</td><td>&lt;30 mg/g</td></tr>
+        <tr><td>중등도증가(A2)</td><td>30–299 mg/g</td></tr>
+        <tr><td>중증증가(A3)</td><td>≥300 mg/g</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span>📊 GFR 단계 한눈에 보기</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body collapsed">
+      <table class="tc-table">
+        <tr><th>단계</th><th>eGFR(mL/min/1.73m²)</th></tr>
+        <tr><td>G1 정상/높음</td><td>≥90</td></tr>
+        <tr><td>G2 경도감소</td><td>60–89</td></tr>
+        <tr><td>G3a 경도~중등도</td><td>45–59</td></tr>
+        <tr><td>G3b 중등도~중증</td><td>30–44</td></tr>
+        <tr><td>G4 중증감소</td><td>15–29</td></tr>
+        <tr><td>G5 신부전</td><td>&lt;15</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span>📊 약물별 eGFR 사용기준 한눈에 보기</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body collapsed">
+      <table class="tc-table">
+        <tr><th>약물</th><th>eGFR 기준</th></tr>
+        <tr><td>Metformin</td><td>&lt;30 금기, &lt;45 신규시작 금지</td></tr>
+        <tr><td>SGLT2i</td><td>≥20부터 시작, 투석까지 지속가능</td></tr>
+        <tr><td>비스테로이드성MRA(finerenone)</td><td>≥25 필요</td></tr>
+        <tr><td>GLP-1RA(대부분)</td><td>저eGFR도 사용가능(용량조절 고려)</td></tr>
+        <tr><td>Exenatide·Lixisenatide</td><td>eGFR&lt;30/CrCl&lt;30 — 데이터제한, 투석환자 사용금지</td></tr>
+      </table>
+    </div>
+  </div>
+</div>
+</div><!-- /main -->
+
+<!-- ═══ MODAL: CKD 정의 ═══ -->
+<div id="ckdDefModal" class="modal-overlay" onclick="closeModalOutside(event,'ckdDefModal')">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal('ckdDefModal')">✕</button>
+    <div class="modal-title">🔬 CKD 진단 — UACR과 eGFR</div>
+
+    <div class="alert alert-info" style="margin:0 0 12px"><span>💡</span><span>CKD는 알부민뇨의 지속적 상승, eGFR&lt;60 mL/min/1.73m², 또는 기타 신장손상 증거로 진단한다. 두 지표 모두 정량화하여 치료결정을 가이드해야 한다.</span></div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">UACR 분류</div>
+      <table class="modal-table">
+        <tr><th>분류</th><th>UACR</th></tr>
+        <tr><td>정상~경도증가(A1)</td><td>&lt;30 mg/g creatinine</td></tr>
+        <tr><td>중등도증가(A2)</td><td>30–299 mg/g creatinine</td></tr>
+        <tr><td>중증증가(A3)</td><td>≥300 mg/g creatinine</td></tr>
+      </table>
+    </div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">eGFR 단계(G1–G5)</div>
+      <table class="modal-table">
+        <tr><th>단계</th><th>eGFR범위</th></tr>
+        <tr><td>G1/G2</td><td>≥60</td></tr>
+        <tr><td>G3a/G3b</td><td>30–59</td></tr>
+        <tr><td>G4</td><td>15–29</td></tr>
+        <tr><td>G5(신부전)</td><td>&lt;15</td></tr>
+      </table>
+    </div>
+
+    <div class="alert alert-warn" style="margin-top:4px"><span>⚠️</span><span>요알부민배설은 측정간 생물학적변동성이 &gt;20%로 높음 — 3–6개월 내 채취한 3개 검체 중 2개가 이상이어야 중등도/중증 알부민뇨로 판정한다.</span></div>
+  </div>
+</div>
+
+<!-- ═══ MODAL: CKD 혈압목표 ═══ -->
+<div id="bpGoalCkdModal" class="modal-overlay" onclick="closeModalOutside(event,'bpGoalCkdModal')">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal('bpGoalCkdModal')">✕</button>
+    <div class="modal-title">🩺 CKD 환자의 혈압 목표</div>
+
+    <div class="alert alert-info" style="margin:0 0 12px"><span>💡</span><span>CKD환자의 치료중 혈압목표는 안전하게 달성가능하면 &lt;130/80mmHg이며, 수축기&lt;120mmHg 및/또는 혈압변동성 감소를 장려한다.</span></div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">BPROAD 핵심 근거</div>
+      <ul class="dot">
+        <li>2형당뇨+CVD위험증가 12,821명, 목표≤120 vs ≤140mmHg</li>
+        <li>1차결과(뇌졸중·MI·심부전·CV사망) 21% 감소</li>
+        <li>신규알부민뇨 발생도 감소(HR 0.87)</li>
+      </ul>
+    </div>
+
+    <div class="alert alert-warn" style="margin-top:4px"><span>⚠️</span><span>CKD환자는 혈압변동성이 더 흔하고 큼 — 10mmHg 증가당 신부전위험 47% 증가와 연관된다. 변동성 감소도 치료목표의 일부다.</span></div>
+    <div class="alert alert-teal"><span>💡</span><span>이완기혈압이 70mmHg 미만으로 떨어지지 않을 때만 수축기혈압 강하의 이득이 확인됨(관찰연구) — 과도한 강하는 주의가 필요하다.</span></div>
+  </div>
+</div>
+
+<!-- ═══ MODAL: SGLT2i 신장기준 ═══ -->
+<div id="sgltKidneyModal" class="modal-overlay" onclick="closeModalOutside(event,'sgltKidneyModal')">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal('sgltKidneyModal')">✕</button>
+    <div class="modal-title">💉 SGLT2 억제제 — eGFR 기준 시작·지속 원칙</div>
+
+    <div class="alert alert-info" style="margin:0 0 12px"><span>💡</span><span>2형당뇨+CKD에서 입증된 SGLT2i는 eGFR≥20부터 시작 가능하며, 신부전(투석/이식)까지 안전하게 지속할 수 있다.</span></div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">핵심 3대 신장결과시험</div>
+      <table class="modal-table">
+        <tr><th>시험</th><th>약물</th><th>등록eGFR</th></tr>
+        <tr><td>CREDENCE</td><td>Canagliflozin</td><td>30–90 + UACR≥300</td></tr>
+        <tr><td>DAPA-CKD</td><td>Dapagliflozin</td><td>25–75 + UACR≥200</td></tr>
+        <tr><td>EMPA-KIDNEY</td><td>Empagliflozin</td><td>20–45, 또는 45–90+UACR≥200</td></tr>
+      </table>
+    </div>
+
+    <div class="alert alert-teal" style="margin-top:4px"><span>💡</span><span>혈당강하효과는 eGFR&lt;45에서 둔화되지만, 신장·심혈관이득은 eGFR 20까지 유지된다 — 이것이 eGFR≥20부터 시작을 권장하는 근거다.</span></div>
+    <div class="alert alert-success"><span>✅</span><span>eGFR&lt;20(비투석)에서도 내약성이 있으면 안전하게 지속 가능하다(DAPA-CKD stage G4 사후분석에서 위험증가 증거 없음).</span></div>
+  </div>
+</div>
+
+<!-- ═══ MODAL: 신장내과 의뢰기준 ═══ -->
+<div id="referralModal" class="modal-overlay" onclick="closeModalOutside(event,'referralModal')">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal('referralModal')">✕</button>
+    <div class="modal-title">🚨 신장내과 의뢰 — 기준 및 근거</div>
+
+    <div class="alert alert-info" style="margin:0 0 12px"><span>💡</span><span>요알부민의 급속증가, eGFR의 급속감소, 또는 eGFR&lt;30 mL/min/1.73m²인 경우 신장내과 평가를 위해 의뢰해야 한다.</span></div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">의뢰가 필요한 구체적 상황</div>
+      <table class="modal-table">
+        <tr><th>상황</th></tr>
+        <tr><td>지속적으로 상승하는 UACR 및/또는 지속적으로 감소하는 eGFR</td></tr>
+        <tr><td>신질환 원인에 대한 불확실성</td></tr>
+        <tr><td>까다로운 관리 문제(빈혈·이차성부갑상선기능항진증·대사성골질환·저항성고혈압·전해질이상)</td></tr>
+        <tr><td>진행된 신질환(eGFR&lt;30) — 신대체요법 논의 필요</td></tr>
+      </table>
+    </div>
+
+    <div class="alert alert-teal" style="margin-top:4px"><span>💡</span><span>Stage G4(eGFR&lt;30) 발생 시 신장내과 상담은 비용 절감, 진료 품질 개선, 투석 필요시점 지연과 연관됨이 확인되었다.</span></div>
+  </div>
+</div>
+
+<script>
+const FONT_ZOOM_LEVELS = [1, 1.25, 1.5];
+let fontZoomIndex = 0;
+
+function applyFontZoom(scale) {
+  document.documentElement.style.setProperty('--fscale', scale);
+  const label = document.getElementById('font-zoom-label');
+  if (label) label.textContent = Math.round(scale * 100) + '%';
+}
+
+function cycleFontZoom() {
+  fontZoomIndex = (fontZoomIndex + 1) % FONT_ZOOM_LEVELS.length;
+  applyFontZoom(FONT_ZOOM_LEVELS[fontZoomIndex]);
+}
+
+function showTab(id){
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('tab-'+id).classList.add('active');
+  event.target.classList.add('active');
+}
+function toggleCard(el){
+  el.classList.toggle('open');
+  el.nextElementSibling.classList.toggle('collapsed');
+}
+function toggleAcc(el){
+  const b=el.nextElementSibling;
+  b.style.display=b.style.display==='block'?'none':'block';
+  el.querySelector('span:last-child').textContent=b.style.display==='block'?'▴':'▾';
+}
+
+function openModal(id){document.getElementById(id).classList.add('open');}
+function closeModal(id){document.getElementById(id).classList.remove('open');}
+function closeModalOutside(e,id){if(e.target===document.getElementById(id))closeModal(id);}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')document.querySelectorAll('.modal-overlay.open').forEach(m=>m.classList.remove('open'));});
+
+const abbrs=[
+  ['CKD','Chronic Kidney Disease(만성콩팥병) — 알부민뇨 지속상승, eGFR&lt;60, 또는 기타 신장손상 증거로 진단.'],
+  ['UACR','Urine Albumin-to-Creatinine Ratio(요알부민/크레아티닌비) — 알부민뇨 평가의 핵심지표.'],
+  ['eGFR','estimated Glomerular Filtration Rate(추정사구체여과율) — CKD-EPI 2021 크레아티닌 방정식으로 산출.'],
+  ['CKD-EPI','Chronic Kidney Disease Epidemiology Collaboration — eGFR 계산공식을 제공하는 학술협력체.'],
+  ['AKI','Acute Kidney Injury(급성신손상) — 단기간 내 급격한 신기능저하, 당뇨환자에서 위험 5배 증가.'],
+  ['RAS','Renin-Angiotensin System(레닌-안지오텐신계) — ACEi/ARB가 차단하는 핵심 호르몬계.'],
+  ['ACEi','ACE inhibitor(안지오텐신전환효소억제제) — CKD+알부민뇨에서 1차 약제.'],
+  ['ARB','Angiotensin Receptor Blocker(안지오텐신수용체차단제) — ACEi 대체약물.'],
+  ['MRA','Mineralocorticoid Receptor Antagonist — spironolactone·eplerenone(스테로이드성), finerenone(비스테로이드성).'],
+  ['nsMRA','nonsteroidal MRA(비스테로이드성MRA) — finerenone, FIDELIO/FIGARO-DKD로 신장·심혈관이득 입증.'],
+  ['SGLT2i','Sodium-Glucose Cotransporter 2 inhibitor — CKD진행 둔화, eGFR≥20부터 시작 가능.'],
+  ['GLP-1 RA','Glucagon-Like Peptide 1 Receptor Agonist — FLOW시험으로 신장보호효과 입증(semaglutide).'],
+  ['CREDENCE','Canagliflozin and Renal Events in Diabetes with Established Nephropathy Clinical Evaluation — canagliflozin의 핵심 신장결과 RCT.'],
+  ['DAPA-CKD','Dapagliflozin and Prevention of Adverse Outcomes in Chronic Kidney Disease — dapagliflozin의 핵심 신장결과 RCT.'],
+  ['EMPA-KIDNEY','Empagliflozin의 핵심 신장결과 RCT — eGFR 20까지 효과 확인.'],
+  ['FIDELIO-DKD','Finerenone in Reducing Kidney Failure and Disease Progression in Diabetic Kidney Disease — finerenone의 핵심 신장중심 RCT.'],
+  ['FIGARO-DKD','Finerenone in Reducing Cardiovascular Mortality and Morbidity in Diabetic Kidney Disease — finerenone의 심혈관중심 RCT.'],
+  ['FIDELITY','FIDELIO-DKD+FIGARO-DKD 통합분석(pooled analysis).'],
+  ['FLOW','Semaglutide의 신장결과를 평가한 핵심 RCT(2형당뇨+CKD).'],
+  ['CONFIDENCE','Finerenone+Empagliflozin 병용요법을 평가한 최초의 발표된 병용RCT.'],
+  ['BPROAD','Blood Pressure Control Target in Diabetes — 2형당뇨에서 집중혈압관리(수축기&lt;120) 근거를 제공한 RCT.'],
+  ['GRADE','Glycemia Reduction Approaches in Diabetes — 여러 혈당강하제의 신장보호효과를 비교한 비교효과연구.'],
+  ['PTH','Parathyroid Hormone(부갑상선호르몬) — CKD 대사성골질환 평가지표.'],
+  ['NSAID','Nonsteroidal Anti-Inflammatory Drug(비스테로이드성소염제) — AKI 유발가능 약물.'],
+  ['KDOQI','Kidney Disease Outcomes Quality Initiative — National Kidney Foundation의 임상진료지침.'],
+  ['CrCl','Creatinine Clearance(크레아티닌청소율) — 신기능 평가지표, lixisenatide 등 약물용량결정에 사용.'],
+];
+
+function buildAbbr(){
+  const sorted=abbrs.slice().sort((a,b)=>a[0].localeCompare(b[0]));
+  document.getElementById('abbr-grid-drop').innerHTML=sorted.map(a=>
+    `<div style="background:var(--surface2);border:1px solid var(--border);border-radius:5px;padding:6px 10px;margin-bottom:4px;" data-term="${a[0].toLowerCase()}" data-def="${a[1].toLowerCase()}">
+       <span style="font-weight:700;color:var(--accent2);font-size: calc(12px * var(--fscale, 1));font-family:'Courier New',monospace">${a[0]}</span>
+       <div style="font-size: calc(11px * var(--fscale, 1));color:var(--text2);line-height:1.45;margin-top:2px">${a[1]}</div>
+     </div>`).join('');
+}
+function filterAbbr(val){
+  const v=val.toLowerCase().trim();
+  const drop=document.getElementById('abbr-dropdown');
+  const items=document.querySelectorAll('#abbr-grid-drop [data-term]');
+  if(!v){drop.style.display='none';return;}
+  const inp=document.getElementById('abbr-input');
+  const rect=inp.getBoundingClientRect();
+  const w=440;
+  let left=rect.right-w;if(left<8)left=8;
+  drop.style.top=(rect.bottom+4)+'px';drop.style.left=left+'px';
+  drop.style.display='block';
+  items.forEach(el=>{
+    const show=el.dataset.term.startsWith(v)||el.dataset.def.includes(v);
+    el.style.display=show?'':'none';
+  });
+}
+document.addEventListener('click',e=>{
+  const inp=document.getElementById('abbr-input');
+  const drop=document.getElementById('abbr-dropdown');
+  if(inp&&!inp.contains(e.target)&&drop&&!drop.contains(e.target))drop.style.display='none';
+});
+buildAbbr();
+</script>
+</body>
+</html>

@@ -1,0 +1,1312 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ADA 2026 종합 의학평가와 동반질환 평가</title>
+<style>
+  :root {
+    --bg:#f6f8fa;--surface:#fff;--surface2:#f0f2f5;--border:#d0d7de;
+    --accent:#0969da;--accent2:#0550ae;--green:#1a7f37;--yellow:#9a6700;
+    --red:#cf222e;--orange:#bc4c00;--text:#1f2328;--text2:#57606a;
+    --teal:#0a7c8a;--purple:#5a3ea0;--fscale:1;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'Pretendard','Noto Sans KR',-apple-system,sans-serif;background:var(--bg);color:var(--text);font-size: calc(13px * var(--fscale, 1));line-height:1.5;}
+  header{background:var(--surface);border-bottom:1px solid var(--border);padding:12px 16px 8px;display:flex;flex-direction:column;align-items:center;gap:4px;position:sticky;top:0;z-index:100;}
+  .header-inner{width:100%;max-width:960px;display:flex;flex-direction:column;align-items:center;gap:4px;}
+  .logo-badge{background:var(--accent2);color:#fff;font-size: calc(10px * var(--fscale, 1));font-weight:700;padding:3px 8px;border-radius:4px;letter-spacing:.5px;}
+  .tab-bar{display:flex;justify-content:center;background:var(--surface);border-bottom:1px solid var(--border);overflow-x:auto;scrollbar-width:none;}
+  .tab-bar::-webkit-scrollbar{display:none;}
+  .font-zoom-btn{display:flex;align-items:center;gap:3px;flex-shrink:0;margin:4px 4px 4px 6px;padding:5px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:6px;color:var(--accent2);font-size:calc(11px * var(--fscale, 1));font-weight:700;cursor:pointer;user-select:none;white-space:nowrap;transition:background .15s;}
+  .font-zoom-btn:hover{background:var(--border);}
+  .font-zoom-btn .fz-icon{font-size:calc(12px * var(--fscale, 1));}
+  .tab-bar-inner{width:100%;max-width:960px;display:flex;align-items:center;gap:2px;padding:0 4px;}
+  .tab{padding:7px 11px;font-size: calc(11.5px * var(--fscale, 1));color:var(--text2);cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;transition:color .15s,border-color .15s;user-select:none;flex-shrink:0;}
+  .tab:hover{color:var(--text);}
+  .tab.active{color:var(--accent2);border-bottom-color:var(--accent2);}
+  .tab-abbr-wrap{display:flex;align-items:center;padding:4px 4px;margin-left:4px;flex-shrink:0;position:relative;}
+  .main{padding:12px 16px;max-width:960px;margin:0 auto;}
+  .panel{display:none;}
+  .panel.active{display:block;}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+  .grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;}
+  @media(max-width:680px){.grid2,.grid3{grid-template-columns:1fr;}}
+  .card{background:var(--surface);border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-bottom:10px;}
+  .card-header{background:var(--surface2);padding:8px 12px;font-size: calc(12px * var(--fscale, 1));font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.5px;border-bottom:1px solid var(--border);cursor:pointer;display:flex;align-items:center;justify-content:space-between;user-select:none;}
+  .card-header .toggle{font-size: calc(13px * var(--fscale, 1));transition:transform .2s;}
+  .card-header.open .toggle{transform:rotate(180deg);}
+  .card-body{padding:10px 12px;}
+  .card-body.collapsed{display:none;}
+  .stat-row{display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap;}
+  .stat-box{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:10px 14px;flex:1;min-width:90px;text-align:center;}
+  .stat-box.clickable{cursor:pointer;transition:box-shadow .15s,border-color .15s;}
+  .stat-box.clickable:hover{border-color:var(--accent2);box-shadow:0 2px 8px rgba(5,80,174,.15);}
+  .stat-val{font-size: calc(18px * var(--fscale, 1));font-weight:700;color:var(--accent2);}
+  .stat-lbl{font-size: calc(10px * var(--fscale, 1));color:var(--text2);margin-top:2px;}
+  .stat-hint{font-size: calc(9px * var(--fscale, 1));color:var(--accent2);margin-top:4px;opacity:.7;}
+  /* Modal */
+  .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:500;align-items:center;justify-content:center;}
+  .modal-overlay.open{display:flex;}
+  .modal-box{background:var(--surface);border-radius:12px;padding:20px;max-width:680px;width:92%;max-height:84vh;overflow-y:auto;box-shadow:0 16px 48px rgba(0,0,0,.22);position:relative;}
+  .modal-close{position:absolute;top:12px;right:14px;background:none;border:none;font-size: calc(18px * var(--fscale, 1));cursor:pointer;color:var(--text2);line-height:1;}
+  .modal-title{font-size: calc(15px * var(--fscale, 1));font-weight:700;color:var(--text);margin-bottom:12px;padding-right:20px;line-height:1.4;}
+  .modal-section{margin-bottom:12px;}
+  .modal-section-title{font-size: calc(11px * var(--fscale, 1));font-weight:700;color:var(--accent2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;border-bottom:1px solid var(--border);padding-bottom:4px;}
+  .modal-table{width:100%;border-collapse:collapse;font-size: calc(11.5px * var(--fscale, 1));}
+  .modal-table th{background:var(--surface2);color:var(--text2);padding:4px 8px;font-size: calc(10.5px * var(--fscale, 1));font-weight:600;text-align:left;border-bottom:1px solid var(--border);}
+  .modal-table td{padding:5px 8px;border-bottom:1px solid var(--border);vertical-align:top;}
+  .modal-table tr:last-child td{border-bottom:none;}
+  .rec-list{list-style:none;}
+  .rec-item{padding:7px 0;border-bottom:1px solid var(--border);display:flex;gap:8px;align-items:flex-start;}
+  .rec-item:last-child{border-bottom:none;}
+  .rec-text{font-size: calc(12px * var(--fscale, 1));color:var(--text);line-height:1.65;}
+  .rec-text strong{color:#1f2328;}
+  .badge{display:inline-flex;align-items:center;padding:2px 8px;border-radius:10px;font-size: calc(10px * var(--fscale, 1));font-weight:700;white-space:nowrap;flex-shrink:0;margin-top:1px;}
+  .badge-A{background:#dafbe1;color:#116329;border:1px solid #1a7f37;}
+  .badge-B{background:#ddf4ff;color:var(--accent2);border:1px solid var(--accent2);}
+  .badge-C{background:#fff8c5;color:#7a4b00;border:1px solid #d4a017;}
+  .badge-E{background:#f3e5f5;color:#5a3ea0;border:1px solid #5a3ea0;}
+  .alert{padding:8px 12px;border-radius:6px;font-size: calc(12px * var(--fscale, 1));margin:8px 0;display:flex;gap:8px;align-items:flex-start;}
+  .alert-info{background:#ddf4ff;border-left:3px solid var(--accent2);color:#0550ae;}
+  .alert-warn{background:#fff8c5;border-left:3px solid #d4a017;color:#7a4b00;}
+  .alert-danger{background:#ffebe9;border-left:3px solid var(--red);color:#82071e;}
+  .alert-success{background:#dafbe1;border-left:3px solid var(--green);color:#116329;}
+  .alert-teal{background:#e0f5f5;border-left:3px solid var(--teal);color:#075050;}
+  .alert-orange{background:#fff3e0;border-left:3px solid var(--orange);color:#7a3500;}
+  .alert-purple{background:#f3e5f5;border-left:3px solid var(--purple);color:#5a3ea0;}
+  .tc-table{width:100%;border-collapse:collapse;font-size: calc(11.5px * var(--fscale, 1));}
+  .tc-table th{background:var(--surface2);color:var(--text2);padding:5px 8px;font-size: calc(10.5px * var(--fscale, 1));text-transform:uppercase;letter-spacing:.3px;font-weight:600;text-align:left;border-bottom:1px solid var(--border);}
+  .tc-table td{padding:5px 8px;border-bottom:1px solid var(--border);vertical-align:top;}
+  .tc-table tr:last-child td{border-bottom:none;}
+  .tc-table tr:hover td{background:rgba(0,0,0,.02);}
+  .acc{border:1px solid var(--border);border-radius:6px;margin-bottom:6px;overflow:hidden;}
+  .acc-hdr{background:var(--surface2);padding:7px 12px;font-size: calc(12px * var(--fscale, 1));font-weight:600;color:var(--text);cursor:pointer;display:flex;justify-content:space-between;align-items:center;user-select:none;}
+  .acc-hdr:hover{background:#e8eaec;}
+  .acc-body{display:none;padding:10px 12px;font-size: calc(12px * var(--fscale, 1));line-height:1.65;}
+  .flow-box{border:1px solid var(--border);border-radius:6px;background:var(--surface);padding:8px 12px;margin-bottom:6px;font-size: calc(12px * var(--fscale, 1));line-height:1.6;}
+  .flow-arrow{text-align:center;color:var(--text2);font-size: calc(14px * var(--fscale, 1));margin:2px 0;}
+  .step-num{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;background:var(--accent2);color:#fff;font-size: calc(10px * var(--fscale, 1));font-weight:700;flex-shrink:0;margin-right:6px;}
+  ul.dot{padding-left:18px;}
+  ul.dot li{margin-bottom:3px;font-size: calc(12px * var(--fscale, 1));line-height:1.6;}
+  ol.num{padding-left:18px;}
+  ol.num li{margin-bottom:4px;font-size: calc(12px * var(--fscale, 1));line-height:1.6;}
+  ::-webkit-scrollbar{width:5px;height:5px;}
+  ::-webkit-scrollbar-track{background:var(--bg);}
+  ::-webkit-scrollbar-thumb{background:#c8d0d9;border-radius:3px;}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div style="display:flex;align-items:center;gap:10px">
+      <span class="logo-badge">ADA 2026</span>
+      <h1 style="font-size:17px;font-weight:700;color:var(--text)">종합 의학평가와 동반질환 평가</h1>
+    </div>
+    <div style="text-align:center;line-height:1.5">
+      <span style="color:var(--text2);font-size: calc(11px * var(--fscale, 1))">Standards of Care in Diabetes—2026, Section 4 — American Diabetes Association</span><br>
+      <span style="font-size: calc(10px * var(--fscale, 1));color:var(--text2)">Diabetes Care 2026;49(Suppl. 1):S61–S88 · doi: 10.2337/dc26-S004</span>
+    </div>
+    <div style="font-size: calc(10px * var(--fscale, 1));color:var(--text2);font-style:italic;">This tool is not officially endorsed by the American Diabetes Association (ADA).</div>
+  </div>
+</header>
+
+<div class="tab-bar">
+  <div class="tab-bar-inner">
+    <div id="font-zoom-btn" class="font-zoom-btn" onclick="cycleFontZoom()"><span class="fz-icon">🔠</span><span id="font-zoom-label">100%</span></div>
+    <div class="tab active" onclick="showTab('overview')">🏠 개요</div>
+    <div class="tab" onclick="showTab('evaluation')">📋 종합평가</div>
+    <div class="tab" onclick="showTab('vaccine')">💉 예방접종</div>
+    <div class="tab" onclick="showTab('bone')">🦴 골건강</div>
+    <div class="tab" onclick="showTab('masld')">🫀 MASLD/MASH</div>
+    <div class="tab" onclick="showTab('cancer-cog')">🧠 암·인지장애</div>
+    <div class="tab" onclick="showTab('dental-disab')">🦷 치과·장애</div>
+    <div class="tab" onclick="showTab('sexual')">💑 성건강</div>
+    <div class="tab" onclick="showTab('other')">🔬 기타 동반질환</div>
+    <div class="tab" onclick="showTab('tables')">📁 표·요약 모음</div>
+    <div class="tab-abbr-wrap">
+      <div style="position:relative;display:flex;align-items:center;flex-shrink:0">
+        <span style="position:absolute;left:8px;color:var(--text2);font-size: calc(12px * var(--fscale, 1));pointer-events:none">🔍</span>
+        <input id="abbr-input" type="text" placeholder="약어" oninput="filterAbbr(this.value)"
+          style="background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:4px 8px 4px 26px;color:var(--text);font-size: calc(12px * var(--fscale, 1));width:90px;outline:none;"
+          onfocus="this.style.borderColor='var(--accent2)'" onblur="this.style.borderColor='var(--border)'">
+      </div>
+      <div id="abbr-dropdown" style="display:none;position:fixed;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:8px;width:440px;max-height:360px;overflow-y:auto;z-index:300;box-shadow:0 8px 24px rgba(0,0,0,.12)">
+        <div id="abbr-grid-drop"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="main">
+
+<!-- ═══ OVERVIEW ═══ -->
+<div id="tab-overview" class="panel active">
+  <div class="stat-row">
+    <div class="stat-box clickable" onclick="openModal('decisionCycleModal')"><div class="stat-val">Fig 4.1</div><div class="stat-lbl">인간중심 혈당관리 의사결정 사이클</div><div class="stat-hint">▸ 클릭하여 상세 보기</div></div>
+    <div class="stat-box clickable" onclick="openModal('languageModal')"><div class="stat-val">5대 원칙</div><div class="stat-lbl">당뇨병 언어사용 권고</div><div class="stat-hint">▸ 클릭하여 상세 보기</div></div>
+    <div class="stat-box clickable" onclick="openModal('fib4Modal')"><div class="stat-val">FIB-4</div><div class="stat-lbl">MASLD 선별 1차 검사</div><div class="stat-hint">▸ 클릭하여 상세 보기</div></div>
+    <div class="stat-box clickable" onclick="openModal('boneRiskModal')"><div class="stat-val">+34%</div><div class="stat-lbl">당뇨인 골절위험 증가</div><div class="stat-hint">▸ 클릭하여 상세 보기</div></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>📋 종합 의학평가 — 전체 흐름</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <div class="flow-box" style="border-left:3px solid var(--accent2)">
+        <strong>① 초기 방문 — 완전평가</strong><br>
+        <span style="color:var(--text2);font-size: calc(11px * var(--fscale, 1))">진단확인·분류, 혈당상태 평가, 합병증·동반질환 평가, 지지체계 확인, SDOH 평가, 관리계획 수립(A)</span>
+      </div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-box" style="border-left:3px solid var(--green)">
+        <strong>② 매 방문 — 핵심 모니터링</strong><br>
+        <span style="font-size: calc(11.5px * var(--fscale, 1))">저혈당 인지·빈도, 약물복용행태, 기술사용, 일상기능 평가 — 3–6개월마다, 최소 연 1회</span>
+      </div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-box" style="border-left:3px solid var(--yellow)">
+        <strong>③ 연례 평가 — 전신·합병증 점검</strong><br>
+        <span style="font-size: calc(11.5px * var(--fscale, 1))">동반질환, 신체검진, 검사실평가(A1C·지질·간·신장·갑상선 등), 발·눈 검진</span>
+      </div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-box" style="border-left:3px solid var(--orange)">
+        <strong>④ 동반질환별 특화 평가</strong><br>
+        <span style="font-size: calc(11.5px * var(--fscale, 1))">골건강, MASLD/MASH, 인지기능, 성건강, 장애 — 위험군 선별 후 전문과 의뢰</span>
+      </div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-box" style="border-left:3px solid var(--teal)">
+        <strong>⑤ 공유의사결정 — 관리계획 합의</strong><br>
+        <span style="font-size: calc(11.5px * var(--fscale, 1))">SMART 목표 설정, 치료선택 요인 고려, 정기적 재검토(연 1–2회 이상)</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <div class="card-header open" onclick="toggleCard(this)">
+        <span>📌 핵심 권고문 요약</span><span class="toggle">▾</span>
+      </div>
+      <div class="card-body">
+        <ul class="rec-list">
+          <li class="rec-item"><span class="badge badge-B">B</span><span class="rec-text"><strong>4.1</strong> 인간중심·강점기반 의사소통, 문해력·수리력·장벽 평가</span></li>
+          <li class="rec-item"><span class="badge badge-C">C</span><span class="rec-text"><strong>4.2</strong> 다학제 팀(CDCES, 1차의료, 전문과, 간호사, RDN, 운동전문가, 약사, 치과, 족부 등)</span></li>
+          <li class="rec-item"><span class="badge badge-A">A</span><span class="rec-text"><strong>4.3</strong> 초기·추적 완전평가 — 진단확인, 혈당평가, 합병증평가, SDOH, 관리계획</span></li>
+          <li class="rec-item"><span class="badge badge-B">B</span><span class="rec-text"><strong>4.4</strong> 전신건강·기능상태·합병증·CV위험·저혈당위험 평가로 지속관리 가이드</span></li>
+          <li class="rec-item"><span class="badge badge-E">E</span><span class="rec-text"><strong>4.5</strong> 연령별 권장 예방접종 시행</span></li>
+          <li class="rec-item"><span class="badge badge-B">B</span><span class="rec-text"><strong>4.6/4.7</strong> 1형당뇨 — 자가면역갑상선질환·셀리악병 선별</span></li>
+          <li class="rec-item"><span class="badge badge-A">A</span><span class="rec-text"><strong>4.8–4.13</strong> 골절위험 평가, DXA 모니터링, 약물선택·낙상예방, 골다공증 치료</span></li>
+          <li class="rec-item"><span class="badge badge-B">B</span><span class="rec-text"><strong>4.14</strong> 인지장애 동반 시 치료계획 단순화, 저혈당위험 최소화</span></li>
+          <li class="rec-item"><span class="badge badge-E">E</span><span class="rec-text"><strong>4.15/4.16</strong> 연 1회 치과검진 의뢰, 시술 전후 약물조정 협력</span></li>
+          <li class="rec-item"><span class="badge badge-C">C</span><span class="rec-text"><strong>4.17</strong> 초기·매방문 장애평가, 필요시 재활전문가 의뢰</span></li>
+          <li class="rec-item"><span class="badge badge-B">B</span><span class="rec-text"><strong>4.18–4.21</strong> 남성 ED·테스토스테론, 여성 성기능장애·GSM 선별</span></li>
+          <li class="rec-item"><span class="badge badge-B">B</span><span class="rec-text"><strong>4.22–4.24</strong> MASLD/MASH — FIB-4 선별, LSM/ELF 추가평가, 전문과 의뢰</span></li>
+          <li class="rec-item"><span class="badge badge-A">A</span><span class="rec-text"><strong>4.25–4.32</strong> MASLD 생활습관·약물치료(GLP-1RA 선호)·간전문의 협진·대사수술 고려</span></li>
+        </ul>
+      </div>
+    </div>
+
+    <div>
+      <div class="card">
+        <div class="card-header open" onclick="toggleCard(this)">
+          <span>⚠️ 권고 등급 체계 (Evidence Grading)</span><span class="toggle">▾</span>
+        </div>
+        <div class="card-body">
+          <table class="tc-table">
+            <tr><th>등급</th><th>의미</th></tr>
+            <tr><td><span class="badge badge-A">A</span></td><td>명확한 근거 — 잘 수행된 다기관 RCT 또는 메타분석</td></tr>
+            <tr><td><span class="badge badge-B">B</span></td><td>뒷받침되는 근거 — 잘 수행된 코호트 연구 등</td></tr>
+            <tr><td><span class="badge badge-C">C</span></td><td>뒷받침되는 근거 부족 — 대조군 없는 연구, 사례 보고</td></tr>
+            <tr><td><span class="badge badge-E">E</span></td><td>전문가 합의 또는 임상 경험 (Expert consensus)</td></tr>
+          </table>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header open" onclick="toggleCard(this)">
+          <span>🔑 핵심 개념</span><span class="toggle">▾</span>
+        </div>
+        <div class="card-body">
+          <div class="alert alert-info"><span>ℹ️</span><span>"불순응(noncompliance)" 대신 <strong>인간중심·강점기반 언어</strong> 사용 — ADA·ADCES 공동합의문 권고</span></div>
+          <div class="alert alert-warn"><span>⚠️</span><span>미국 2형당뇨 환자의 <strong>70% 이상이 MASLD</strong> 보유 추정 — 정상 간기능 수치에서도 FIB-4 선별 필요</span></div>
+          <div class="alert alert-danger"><span>🚫</span><span>당뇨는 모든 유형의 치매 위험을 <strong>43% 증가</strong>, 혈관성 치매는 <strong>91% 증가</strong> — 인지장애 시 치료 단순화 우선</span></div>
+          <div class="alert alert-teal"><span>💡</span><span>세마글루타이드가 MASH(중등도~진행성 간섬유화) 치료로 FDA 승인된 <strong>최초의 약물</strong></span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ COMPREHENSIVE EVALUATION ═══ -->
+<div id="tab-evaluation" class="panel">
+  <div class="alert alert-orange"><span>📋</span><span>완전한 의학평가는 초기 방문과 추적 방문 모두에 적용되며, 매방문/연례 항목을 구분해 효율적으로 운영한다(Table 4.1).</span></div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>📊 표 4.1 — 방문별 평가항목 핵심 요약</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <table class="tc-table">
+        <tr><th>영역</th><th>초기</th><th>매 추적방문</th><th>연례</th></tr>
+        <tr><td>당뇨병력(발병특징, 과거치료, 입원력)</td><td>✓</td><td>-</td><td>-</td></tr>
+        <tr><td>가족력(당뇨·자가면역)</td><td>✓</td><td>-</td><td>-</td></tr>
+        <tr><td>일반 동반질환(비만·OSA·MASLD, 고혈압·이상지질혈증)</td><td>✓</td><td>-</td><td>✓</td></tr>
+        <tr><td>대혈관·미세혈관 합병증</td><td>✓</td><td>-</td><td>✓</td></tr>
+        <tr><td>저혈당 인지·빈도·원인·시점</td><td>✓</td><td>✓</td><td>✓</td></tr>
+        <tr><td>장애평가·보조기구 사용</td><td>✓</td><td>✓</td><td>✓</td></tr>
+        <tr><td>운동·수면·식이·체중력</td><td>✓</td><td>✓</td><td>✓</td></tr>
+        <tr><td>OSA 선별</td><td>✓</td><td>✓</td><td>✓</td></tr>
+        <tr><td>흡연·음주·약물사용</td><td>✓</td><td>-</td><td>✓</td></tr>
+        <tr><td>현재 약물계획·복용행태·내약성</td><td>✓</td><td>✓</td><td>✓</td></tr>
+        <tr><td>건강앱·CGM/펌프 데이터 사용</td><td>✓</td><td>✓</td><td>✓</td></tr>
+        <tr><td>사회적 지지·대리결정자·SDOH</td><td>✓</td><td>-</td><td>✓</td></tr>
+        <tr><td>신체검진(키·체중·BMI·혈압·안저·갑상선·피부·발·우울/불안 선별)</td><td>✓</td><td>일부✓</td><td>✓</td></tr>
+        <tr><td>A1C</td><td>✓</td><td>✓(3개월 내 미확인 시)</td><td>✓</td></tr>
+        <tr><td>지질패널, 간기능(FIB-4), 갑상선기능(1형)</td><td>✓</td><td>-</td><td>✓(일부)</td></tr>
+        <tr><td>요알부민/크레아티닌비, 신기능(eGFR)</td><td>✓</td><td>-</td><td>✓</td></tr>
+        <tr><td>비타민B12(메트포르민 5년↑)</td><td>✓</td><td>-</td><td>✓</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>📊 표 4.2 — 평가·계획·의뢰 핵심구성</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <table class="tc-table">
+        <tr><th>영역</th><th>구성요소</th></tr>
+        <tr><td>합병증위험 평가</td><td>ASCVD·심부전 병력, 10년 ASCVD위험, CKD 단계, 저혈당위험, 망막병증·신경병증, MASLD/MASH</td></tr>
+        <tr><td>목표설정</td><td>A1C·혈당·TIR, 지질, 혈압(고혈압 시), 체중·운동, 자기관리 목표</td></tr>
+        <tr><td>치료계획</td><td>생활습관관리, 혈당저하제, 심혈관·신장보호 약물, 체중관리(약물/수술), 혈당모니터링·인슐린전달기기</td></tr>
+        <tr><td>초기관리 의뢰</td><td>안과(연1회 산동검사), 가족계획, RDN(MNT), DSMES, 치과, 행동건강전문가, 청각, 사회복지사, 재활의학</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="acc">
+    <div class="acc-hdr" onclick="toggleAcc(this)">
+      <span>인간중심 의사소통 — 언어 사용 5대 원칙</span><span>▾</span>
+    </div>
+    <div class="acc-body">
+      <ul class="dot">
+        <li>중립적·비판단적, 사실·행동·생리학에 기반한 언어 사용</li>
+        <li>낙인(stigma)이 없는 언어 사용</li>
+        <li>강점기반, 존중, 포용적, 희망을 주는 언어 사용</li>
+        <li>당뇨인과 의료진 간 협력을 촉진하는 언어 사용</li>
+        <li>인간중심 언어 사용 (예: "당뇨가 있는 사람" &gt; "당뇨병환자")</li>
+      </ul>
+      <div class="alert alert-warn" style="margin-top:8px"><span>⚠️</span><span>"불순응(noncompliance)"·"미준수(nonadherence)"는 당뇨인을 의사 지시에 순응하는 수동적 존재로 묘사 — 실제 자기관리의 능동적 역할과 상충됨</span></div>
+    </div>
+  </div>
+
+  <div class="acc">
+    <div class="acc-hdr" onclick="toggleAcc(this)">
+      <span>SMART 목표 설정 — 의사결정 사이클의 핵심</span><span>▾</span>
+    </div>
+    <div class="acc-body">
+      <table class="tc-table">
+        <tr><th>요소</th><th>의미</th></tr>
+        <tr><td>S</td><td>Specific (구체적)</td></tr>
+        <tr><td>M</td><td>Measurable (측정가능)</td></tr>
+        <tr><td>A</td><td>Achievable (달성가능)</td></tr>
+        <tr><td>R</td><td>Realistic (현실적)</td></tr>
+        <tr><td>T</td><td>Time limited (기한설정)</td></tr>
+      </table>
+      <p style="font-size: calc(11px * var(--fscale, 1));color:var(--text2);margin-top:6px">의사결정 사이클은 최소 연 1–2회 정기적으로 시행하며, 치료적 관성(therapeutic inertia)을 피하기 위해 합의된 치료변경은 시의적절하게 실행한다.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ VACCINATION ═══ -->
+<div id="tab-vaccine" class="panel">
+  <div class="alert alert-orange"><span>💉</span><span>당뇨인은 감염 후 중증화·사망 위험이 높아 연령에 맞는 예방접종이 특히 중요하다(ACIP/CDC 권고 기반).</span></div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>📊 표 4.3 — 당뇨인 핵심 권장 예방접종</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <table class="tc-table">
+        <tr><th>백신</th><th>대상</th><th>일정</th></tr>
+        <tr><td>COVID-19</td><td>6개월 이상 전체</td><td>최신 초기접종+부스터</td></tr>
+        <tr><td>B형간염</td><td>&lt;60세 당뇨 성인(필수), ≥60세는 임상의 판단</td><td>-</td></tr>
+        <tr><td>인플루엔자</td><td>전체 당뇨인 — 3가 불활성화/재조합 백신(생백신 금지)</td><td>매년</td></tr>
+        <tr><td>폐렴구균(PPSV23/PCV15/PCV20)</td><td>19–64세 면역저하/특정질환자, ≥65세 전체</td><td>이전 접종력에 따른 순서 적용</td></tr>
+        <tr><td>RSV</td><td>≥75세, 60–74세 고위험군</td><td>1회</td></tr>
+        <tr><td>Tdap</td><td>전체 성인(임신부 추가 1회)</td><td>10년마다 부스터</td></tr>
+        <tr><td>대상포진(Shingrix)</td><td>≥50세</td><td>2회 접종(과거접종력 무관)</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <div class="card-header open" onclick="toggleCard(this)">
+        <span>🦠 인플루엔자·폐렴구균 — 효과 근거</span><span class="toggle">▾</span>
+      </div>
+      <div class="card-body">
+        <ul class="dot">
+          <li>인플루엔자 백신 — 당뇨관련 입원 유의하게 감소</li>
+          <li>전체사망률·심혈관사망률·심혈관사건 위험 감소와 연관</li>
+          <li>2025–2026 시즌 미국 내 모든 인플루엔자 백신은 <strong>3가(trivalent)</strong></li>
+          <li>당뇨인의 폐렴구균 감염 사망률 최대 <strong>50%</strong> — 모든 당뇨인 대상 권장</li>
+        </ul>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header open" onclick="toggleCard(this)">
+        <span>📈 ACIP 근거등급 분류(GRADE)</span><span class="toggle">▾</span>
+      </div>
+      <div class="card-body">
+        <table class="tc-table">
+          <tr><th>등급</th><th>의미</th></tr>
+          <tr><td>1</td><td>RCT 또는 압도적인 관찰연구 근거</td></tr>
+          <tr><td>2</td><td>중요한 제한 있는 RCT 또는 매우 강력한 관찰연구 근거</td></tr>
+          <tr><td>3</td><td>관찰연구 또는 주목할 제한 있는 RCT</td></tr>
+          <tr><td>4</td><td>임상경험·관찰, 또는 주요 제한 있는 RCT</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ BONE HEALTH ═══ -->
+<div id="tab-bone" class="panel">
+  <div class="alert alert-orange"><span>🦴</span><span>당뇨는 골절위험을 34% 증가시키며, 특히 2형당뇨에서는 정상~높은 BMD에도 불구하고 골절위험이 증가하는 역설적 양상을 보인다. (본 섹션은 미국골대사학회 ASBMR의 승인을 받음)</span></div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>📊 표 4.4 — BMD 검사(DXA) 대상자</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <table class="tc-table">
+        <tr><th>대상군</th><th>조건</th></tr>
+        <tr><td>전체</td><td>65세 이상</td></tr>
+        <tr><td>폐경 후 여성, 50세 이상 남성</td><td>성인기 골절력 또는 당뇨특이 위험인자 동반 시</td></tr>
+      </table>
+      <p style="font-size: calc(12px * var(--fscale, 1));margin-top:8px;font-weight:600">당뇨특이 위험인자:</p>
+      <ul class="dot">
+        <li>빈번한 저혈당 사건</li>
+        <li>당뇨 유병기간 &gt;10년</li>
+        <li>인슐린, 티아졸리딘디온, 설폰요소제 사용</li>
+        <li>A1C &gt;8%</li>
+        <li>말초/자율신경병증, 망막병증, 신증</li>
+        <li>빈번한 낙상</li>
+        <li>글루코코르티코이드 사용(프레드니손 &gt;2.5mg/일, ≥3개월)</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <div class="card-header open" onclick="toggleCard(this)">
+        <span>📊 1형당뇨 — 골절위험 배수</span><span class="toggle">▾</span>
+      </div>
+      <div class="card-body">
+        <table class="tc-table">
+          <tr><th>부위</th><th>위험배수</th></tr>
+          <tr><td>고관절</td><td>4.35배</td></tr>
+          <tr><td>상지</td><td>1.83배</td></tr>
+          <tr><td>발목</td><td>1.97배</td></tr>
+        </table>
+        <p style="font-size: calc(11px * var(--fscale, 1));color:var(--text2);margin-top:6px">비당뇨인 대비 10–15년 더 일찍 골절 발생. 미세혈관합병증·신경병증 동반 시 위험 더 증가.</p>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header open" onclick="toggleCard(this)">
+        <span>📊 2형당뇨 — 골절위험 특이점</span><span class="toggle">▾</span>
+      </div>
+      <div class="card-body">
+        <ul class="dot">
+          <li>BMD가 정상~높아도 고관절골절 위험 <strong>1.79배</strong> 증가</li>
+          <li>평생 골절위험 비당뇨인 대비 <strong>40–70% 더 높음</strong></li>
+          <li>척추골절 발생률 35%↑, 사망위험 HR 2.11</li>
+          <li>BMD 5–10% 더 높지만 골강도·미세구조는 저하 — <strong>FRAX가 위험을 과소평가</strong></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="acc">
+    <div class="acc-hdr" onclick="toggleAcc(this)">
+      <span>혈당관리와 골절위험의 정량적 관계</span><span>▾</span>
+    </div>
+    <div class="acc-body">
+      <table class="tc-table">
+        <tr><th>지표</th><th>위험 관계</th></tr>
+        <tr><td>A1C 1% 상승</td><td>골절위험 8%↑ (RR 1.08)</td></tr>
+        <tr><td>2년간 A1C &gt;9%(2형당뇨)</td><td>골절위험 29%↑</td></tr>
+        <tr><td>저혈당 경험</td><td>고관절 등 골절위험 RR 1.52</td></tr>
+        <tr><td>중증 저혈당(일본 연구)</td><td>HR 2.24</td></tr>
+        <tr><td>당뇨 유병기간 &gt;10년</td><td>골절위험 유의하게 상승</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>📊 FRAX 보정 전략(2형당뇨)</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="dot">
+        <li>류마티스관절염 입력값을 당뇨의 대리지표로 활용</li>
+        <li>대퇴골경부 T-score를 0.5 SD 낮춰 입력</li>
+        <li>연령을 10세 가산하여 입력</li>
+        <li>골미세구조점수(trabecular bone score) 보정 적용</li>
+      </ul>
+      <div class="alert alert-info" style="margin-top:8px"><span>💡</span><span>실용적 지침: T-score ≤−2.0은 비당뇨인의 −2.5와 동등하게 해석 (DXA T-score 0.5 보정)</span></div>
+    </div>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <div class="card-header open" onclick="toggleCard(this)">
+        <span>💊 골다공증 치료 시작 기준</span><span class="toggle">▾</span>
+      </div>
+      <div class="card-body">
+        <table class="tc-table">
+          <tr><th>기준</th><th>등급</th></tr>
+          <tr><td>T-score ≤−2.5</td><td>치료 고려(B)</td></tr>
+          <tr><td>취약골절 과거력</td><td>치료 고려(B)</td></tr>
+          <tr><td>FRAX ≥3%(고관절) 또는 ≥20%(주요골절)</td><td>치료 고려(B)</td></tr>
+          <tr><td>T-score −2.0~−2.5 + 추가위험인자</td><td>치료 고려 가능(C)</td></tr>
+        </table>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header open" onclick="toggleCard(this)">
+        <span>💊 약물군별 특성</span><span class="toggle">▾</span>
+      </div>
+      <div class="card-body">
+        <ul class="dot">
+          <li><strong>비스포스포네이트</strong>: 복약순응 어려운 환자에 적합</li>
+          <li><strong>데노수맙</strong>: 진행 CKD(eGFR&lt;30)에서 저칼슘혈증 위험 ↑, 6개월 주기 유지 필요(중단 시 반동골손실)</li>
+          <li><strong>골형성촉진제</strong>(테리파라타이드·아바로파라타이드): 당뇨는 저골형성 상태 — 초고위험군에 고려</li>
+          <li><strong>로모소주맙</strong>: 폐경후여성만 FDA승인, 최근 1년 내 심근경색/뇌졸중 시 금기</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="acc">
+    <div class="acc-hdr" onclick="toggleAcc(this)">
+      <span>혈당저하제와 골건강 — 약물별 영향</span><span>▾</span>
+    </div>
+    <div class="acc-body">
+      <table class="tc-table">
+        <tr><th>약물군</th><th>골건강 영향</th></tr>
+        <tr><td>메트포르민</td><td>안전한 프로필</td></tr>
+        <tr><td>티아졸리딘디온(TZD)</td><td>골절위험 2배(HR 2.23) — 여성에서 특히, 중단 후 위험 감소</td></tr>
+        <tr><td>설폰요소제</td><td>골절위험 증가(RR 1.30) — 가속 골손실+저혈당으로 인한 낙상</td></tr>
+        <tr><td>DPP-4 억제제</td><td>중립적 영향</td></tr>
+        <tr><td>GLP-1 RA(저용량)</td><td>중립~유익 가능성(고용량 데이터 부족)</td></tr>
+        <tr><td>SGLT2 억제제(카나글리플로진)</td><td>CANVAS에서 골절증가 시사, 후속분석은 중립적 결과</td></tr>
+        <tr><td>SGLT2 억제제(엠파/에르투/다파글리플로진)</td><td>골건강 부정적 영향 근거 부족</td></tr>
+        <tr><td>인슐린</td><td>고관절골절 위험 2배 — 저혈당·유병기간·동반질환 영향</td></tr>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ MASLD/MASH ═══ -->
+<div id="tab-masld" class="panel">
+  <div class="alert alert-orange"><span>🫀</span><span>MASLD(대사이상관련 지방간질환)는 2형당뇨의 70% 이상에서 동반되며, FIB-4 기반 단계적 선별검사로 진행성 간섬유화를 조기 발견하는 것이 핵심이다.</span></div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>📊 MASLD/MASH 정의와 용어</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <table class="tc-table">
+        <tr><th>용어</th><th>정의</th></tr>
+        <tr><td>MASLD</td><td>지방간질환 + 인슐린저항성 관련 심대사위험인자(전당뇨·당뇨·이상지질혈증·고혈압) 1개 이상, 다른 원인 없음</td></tr>
+        <tr><td>MASH(구 NASH)</td><td>≥5% 간지방증 + 염증 + 간세포손상(ballooning), 섬유화 동반 가능</td></tr>
+        <tr><td>섬유화 단계</td><td>F0(없음)–F1(경증)–F2(중등도/유의)–F3(중증/진행성)–F4(간경화)</td></tr>
+      </table>
+      <div class="alert alert-info" style="margin-top:8px"><span>💡</span><span>음주기준: 남성 주 21잔 이하, 여성 주 14잔 이하(2년간) — 이를 초과하면 별도 범주(대사이상+알코올성 간질환)</span></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>📊 유병률 — 당뇨 유형별 비교</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <table class="tc-table">
+        <tr><th>집단</th><th>MASLD 유병률</th><th>위험인자 MASH(≥F2) 유병률</th></tr>
+        <tr><td>2형당뇨(미국)</td><td>&gt;70%</td><td>12–20%</td></tr>
+        <tr><td>1형당뇨(전체)</td><td>~20%(비만 동반시 증가)</td><td>~5%</td></tr>
+        <tr><td>1형당뇨(저비만, MRI측정)</td><td>8.8%</td><td>-</td></tr>
+      </table>
+      <p style="font-size: calc(11px * var(--fscale, 1));color:var(--text2);margin-top:6px">위험인자 MASH = 임상적으로 유의한 섬유화(≥F2)를 동반한 지방간염, 간경화 위험 보유 상태</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>🔬 FIB-4 — 1차 선별검사</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <table class="tc-table">
+        <tr><th>FIB-4 값</th><th>해석</th><th>대응</th></tr>
+        <tr><td>&lt;1.3</td><td>진행성 섬유화(F3–F4) 저위험</td><td>1차의료 관리, 1–2년마다 재검</td></tr>
+        <tr><td>1.3–2.67</td><td>위험인자 MASH(≥F2) 가능성 높음</td><td>LSM(또는 ELF) 추가 위험분류 필요</td></tr>
+        <tr><td>&gt;2.67</td><td>진행성 섬유화(F3–F4) 고위험</td><td>추가검사 없이 간전문의 의뢰</td></tr>
+      </table>
+      <div class="alert alert-warn" style="margin-top:8px"><span>⚠️</span><span>계산: 연령 × AST ÷ (혈소판 × √ALT). 65세 이상은 더 높은 컷오프(1.9–2.0) 고려. 35세 미만·소아에서는 검증되지 않음.</span></div>
+      <p style="font-size: calc(11px * var(--fscale, 1));color:var(--text2);margin-top:6px">민감도는 양호하나 특이도는 낮음 — 음성결과는 섬유화 배제에 유용, 양성결과는 확인검사 필요</p>
+    </div>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <div class="card-header open" onclick="toggleCard(this)">
+        <span>📊 2차 평가 — LSM(간탄성도)</span><span class="toggle">▾</span>
+      </div>
+      <div class="card-body">
+        <table class="tc-table">
+          <tr><th>LSM 값</th><th>해석</th></tr>
+          <tr><td>&lt;8.0 kPa</td><td>진행성 섬유화 저위험 — 비전문클리닉 추적(≥2년마다)</td></tr>
+          <tr><td>≥8.0 kPa</td><td>진행성 섬유화 고위험 — 간전문의 의뢰</td></tr>
+        </table>
+        <p style="font-size: calc(11px * var(--fscale, 1));color:var(--text2);margin-top:6px">진동제어 일시적 엘라스토그래피(transient elastography)로 측정, 최적 검증된 영상기법</p>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header open" onclick="toggleCard(this)">
+        <span>📊 대안 — ELF 검사</span><span class="toggle">▾</span>
+      </div>
+      <div class="card-body">
+        <table class="tc-table">
+          <tr><th>ELF 값</th><th>해석</th></tr>
+          <tr><td>&lt;9.8</td><td>저위험 — ≥2년마다 재검</td></tr>
+          <tr><td>9.2–9.7</td><td>더 빈번한 재검 고려</td></tr>
+          <tr><td>≥9.8</td><td>고위험 — 간전문의 의뢰</td></tr>
+        </table>
+        <p style="font-size: calc(11px * var(--fscale, 1));color:var(--text2);margin-top:6px">LSM 가용성이 낮을 때 좋은 대안</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>💊 MASLD/MASH 단계별 치료 알고리즘</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <table class="tc-table">
+        <tr><th>섬유화 단계</th><th>비만 약물치료</th><th>당뇨 약물치료</th><th>MASH 표적치료</th></tr>
+        <tr><td>F0–F1(섬유화 없음~경증)</td><td>GLP-1RA, 듀얼GIP/GLP-1RA 선호</td><td>GLP-1RA, 듀얼GIP/GLP-1RA, 피오글리타존, SGLT2i 선호</td><td>해당없음</td></tr>
+        <tr><td>F2–F3(위험인자 MASH)</td><td>GLP-1RA, 듀얼GIP/GLP-1RA 선호</td><td>GLP-1RA, 듀얼GIP/GLP-1RA, 피오글리타존 선호</td><td>레스메티롬, 세마글루타이드†</td></tr>
+        <tr><td>대상성 간경화</td><td>F2-F3과 동일(신중)</td><td>F2-F3과 동일(신중)</td><td>회피</td></tr>
+        <tr><td>비대상성 간경화</td><td>회피</td><td>인슐린만 사용</td><td>회피</td></tr>
+      </table>
+      <p style="font-size: calc(10.5px * var(--fscale, 1));color:var(--text2);margin-top:6px">† GLP-1RA 중 세마글루타이드만 MASH 치료로 FDA 승인됨</p>
+    </div>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <div class="card-header open" onclick="toggleCard(this)">
+        <span>🧪 세마글루타이드 — ESSENCE 3상시험</span><span class="toggle">▾</span>
+      </div>
+      <div class="card-body">
+        <table class="tc-table">
+          <tr><th>결과지표</th><th>세마글루타이드</th><th>위약</th></tr>
+          <tr><td>섬유화 개선(악화없이)</td><td>36.8%</td><td>22.4%</td></tr>
+          <tr><td>지방간염 소실(섬유화 악화없이)</td><td>62.9%</td><td>34.3%</td></tr>
+        </table>
+        <p style="font-size: calc(11px * var(--fscale, 1));color:var(--text2);margin-top:6px">72주, 2.4mg 주1회 피하주사. 결과 기반 FDA가 중등도~진행성 섬유화 동반 MASH 치료제로 승인.</p>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header open" onclick="toggleCard(this)">
+        <span>🧪 레스메티롬 — 갑상선호르몬수용체-β 작용제</span><span class="toggle">▾</span>
+      </div>
+      <div class="card-body">
+        <table class="tc-table">
+          <tr><th>결과지표</th><th>레스메티롬 100mg</th><th>위약</th></tr>
+          <tr><td>MASH 소실(섬유화 악화없이)</td><td>29.9%</td><td>9.7%</td></tr>
+          <tr><td>섬유화 개선</td><td>최대 25.9%</td><td>14.2%</td></tr>
+        </table>
+        <p style="font-size: calc(11px * var(--fscale, 1));color:var(--text2);margin-top:6px">F2/F3 섬유화 대상, 간경화·비대상성 질환에는 사용 불가. 부작용: 오심·구토·설사(용량의존적). T4 약 20%↓, SHBG 2–3배↑.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="acc">
+    <div class="acc-hdr" onclick="toggleAcc(this)">
+      <span>체중감소와 간 건강 — 목표치</span><span>▾</span>
+    </div>
+    <div class="acc-body">
+      <ul class="dot">
+        <li>최소 체중감소 <strong>5%</strong> — 간 조직학적 개선 목표</li>
+        <li>섬유화 개선을 위해서는 <strong>≥10%</strong> 체중감소가 더 바람직</li>
+        <li>지중해식 식이패턴이 간·심대사 건강 개선에 최선의 근거</li>
+        <li>유산소+저항운동 모두 참여도·강도에 비례해 MASLD 개선</li>
+        <li>피오글리타존+GLP-1RA 병용 — 고혈당 치료와 간지방증 감소에 부가적 이득</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span>⚕️ 대사수술과 스타틴 — 동반질환 관리</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body collapsed">
+      <ul class="dot">
+        <li>대사수술 후 간지방증 70–80%, 염증/세포손상 50–75%, 섬유화 30–40% 개선</li>
+        <li>대상성 간경화 시 신중히 사용(숙련 외과의 시 위험 유사), 비대상성 간경화에는 권고하지 않음</li>
+        <li>스타틴은 대상성 간경화에서도 <strong>안전</strong> — 심혈관위험감소 목적 지속/시작 가능(B)</li>
+        <li>비대상성 간경화에서는 신중 사용·면밀 모니터링 필요(데이터 제한적)</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ CANCER / COGNITIVE ═══ -->
+<div id="tab-cancer-cog" class="panel">
+  <div class="alert alert-orange"><span>🧠</span><span>당뇨는 다양한 암종 위험 증가, 인지기능 저하·치매 위험 증가와 연관되며, 인지장애 동반 시 치료계획의 단순화가 핵심이다.</span></div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>🎗️ 암 — 당뇨와의 연관성</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <table class="tc-table">
+        <tr><th>항목</th><th>내용</th></tr>
+        <tr><td>위험증가 암종</td><td>간, 췌장, 자궁내막, 대장직장, 유방, 방광</td></tr>
+        <tr><td>공유위험인자</td><td>고령, 비만, 신체활동부족</td></tr>
+        <tr><td>주의 신호</td><td>중년~고령에서 마른 체형·가족력없음의 새로운 비전형적 당뇨 → 췌장암 선행 가능성</td></tr>
+        <tr><td>췌장염후당뇨</td><td>2형당뇨 대비 췌장암 위험 2.4배(뉴질랜드 코호트)</td></tr>
+        <tr><td>췌장암 정기선별</td><td>증상(체중감소·복통) 없는 한 현재 권고하지 않음</td></tr>
+      </table>
+      <div class="alert alert-info" style="margin-top:8px"><span>💡</span><span>메트포르민·설폰요소제는 항암 가능성 시사, 피오글리타존(방광암 우려·근거혼재), GLP-1RA는 인체에서 갑상선암·췌장암 등 증가와 연관성 확인되지 않음</span></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>🧠 인지장애·치매 — 위험 정량화</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <table class="tc-table">
+        <tr><th>유형</th><th>당뇨인 위험증가</th></tr>
+        <tr><td>전체 치매</td><td>43%↑</td></tr>
+        <tr><td>알츠하이머 치매</td><td>43%↑</td></tr>
+        <tr><td>혈관성 치매</td><td>91%↑</td></tr>
+      </table>
+      <div class="alert alert-info" style="margin-top:8px"><span>💡</span><span>역방향 관계도 성립 — 알츠하이머 치매 환자는 비치매 인구보다 당뇨발생률이 더 높음. "당뇨관련치매"가 알츠하이머/혈관성과 구별되는 새로운 임상개체로 부상 중(서서히 진행, 비전형적 영상소견, 고령, 높은 A1C, 긴 유병기간, 빈번한 인슐린사용, 노쇄·근감소증 동반)</span></div>
+    </div>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <div class="card-header open" onclick="toggleCard(this)">
+        <span>📊 혈당상태와 인지기능</span><span class="toggle">▾</span>
+      </div>
+      <div class="card-body">
+        <ul class="dot">
+          <li>높은 A1C는 낮은 인지기능과 연관</li>
+          <li>집중혈당관리(A1C&lt;6.0–6.5%)는 ACCORD/ADVANCE/VADT에서 인지결과 차이 없음</li>
+          <li>CHARLS 연구: A1C 과도하게 낮거나 &gt;9%일 때 인지장애 위험 증가 (U자형)</li>
+          <li>→ <strong>인지기능 개선 목적의 집중혈당관리는 권고하지 않음</strong></li>
+          <li>치매 동반 2형당뇨인은 고혈당위기(DKA·HHS) 위험 더 높음</li>
+        </ul>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header open" onclick="toggleCard(this)">
+        <span>📊 중증 저혈당과 인지기능 — 양방향 관계</span><span class="toggle">▾</span>
+      </div>
+      <div class="card-body">
+        <ul class="dot">
+          <li>중증 저혈당 경험 → 인지저하·치매 위험 증가(다수 관찰연구)</li>
+          <li>낮은 인지기능 → 저혈당 증상 인지·대응능력 저하로 중증저혈당 위험 증가</li>
+          <li>DCCT/EDIC 장기추적: 반복적 중증저혈당이 정신운동·정신기능 저하와 가장 강하게 연관</li>
+          <li>→ 치료 단순화·A1C목표 완화로 저혈당 예방이 인지장애 환자 관리의 핵심</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ DENTAL / DISABILITY ═══ -->
+<div id="tab-dental-disab" class="panel">
+  <div class="alert alert-orange"><span>🦷</span><span>치주질환과 당뇨는 양방향 관계이며, 당뇨로 인한 장애는 일과 신체기능에 50–80% 더 높은 위험을 가져온다.</span></div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>🦷 치과 케어 — 핵심 사실</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="dot">
+        <li>치주질환은 당뇨인에서 더 중증·더 흔할 수 있으며 높은 A1C와 연관</li>
+        <li>치주질환 환자는 당뇨발생률 더 높음 — <strong>양방향 관계</strong></li>
+        <li>치주치료(subgingival instrumentation)가 혈당결과 개선 가능</li>
+        <li>최근 1년 치과방문률: 당뇨인 56.7% vs 비당뇨인 65.4% — <strong>더 낮음</strong></li>
+        <li>대부분의 임상의가 구강건강을 논의하지 않음</li>
+        <li>잇솔질 증가 → 구강건강·혈당관리 동시 개선(2형당뇨)</li>
+      </ul>
+      <div class="alert alert-warn" style="margin-top:8px"><span>⚠️</span><span>인슐린·설폰요소제·메글리티나이드 치료자는 치과시술(특히 공복) 중 저혈당 위험 — 치과의는 혈당측정기·탄수화물·글루카곤 준비 필요</span></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>♿ 장애 — 위험 정량화</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <table class="tc-table">
+        <tr><th>장애 유형</th><th>당뇨인 위험(OR/RR)</th></tr>
+        <tr><td>전체 장애 위험</td><td>비당뇨인 대비 50–80%↑</td></tr>
+        <tr><td>이동성 장애(mobility)</td><td>OR 1.71, RR 1.51</td></tr>
+        <tr><td>IADL(도구적 일상생활동작) 장애</td><td>OR 1.65</td></tr>
+        <tr><td>ADL(일상생활동작) 장애</td><td>OR 1.82, RR 1.82</td></tr>
+        <tr><td>낙상(고령자)</td><td>당뇨인 25% vs 비당뇨인 18.2%</td></tr>
+      </table>
+      <p style="font-size: calc(11px * var(--fscale, 1));color:var(--text2);margin-top:6px">하지기능 제한이 당뇨인에서 가장 흔한 장애 유형(47–84%)</p>
+    </div>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <div class="card-header open" onclick="toggleCard(this)">
+        <span>🦵 당뇨말초신경병증(DPN)과 장애</span><span class="toggle">▾</span>
+      </div>
+      <div class="card-body">
+        <ul class="dot">
+          <li>1형·2형당뇨의 최대 절반에서 동반</li>
+          <li>자세균형·보행역학 손상 → 기능적 장애</li>
+          <li>하지침범 DPN — 이동성 제한 위험 3배</li>
+          <li>1형당뇨에서는 혈당관리가 DPN 예방에 효과적, 2형당뇨에서는 효과 미미(동반질환 영향 추정)</li>
+          <li>진행 시 비외상성 하지절단으로 이어질 수 있음</li>
+        </ul>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header open" onclick="toggleCard(this)">
+        <span>📋 장애평가 도구</span><span class="toggle">▾</span>
+      </div>
+      <div class="card-body">
+        <table class="tc-table">
+          <tr><th>도구</th><th>용도</th></tr>
+          <tr><td>DDS(Diabetes Distress Scale)</td><td>당뇨 관련 정서적 부담 측정</td></tr>
+          <tr><td>WHODAS 2.0</td><td>전반적 장애 평가(WHO)</td></tr>
+        </table>
+        <p style="font-size: calc(11px * var(--fscale, 1));color:var(--text2);margin-top:6px">낙상, 응급실방문, 약속누락, 치료계획 오류, 무관심/우울감 시 구조화된 평가 특히 권장</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="acc">
+    <div class="acc-hdr" onclick="toggleAcc(this)">
+      <span>사회적 형평성 — 절단(amputation) 격차</span><span>▾</span>
+    </div>
+    <div class="acc-body">
+      <ul class="dot">
+        <li>당뇨관련 주요절단률은 인종·민족 소외집단에서 더 높음</li>
+        <li>농촌 거주자, 최저 사회경제수준 지역에서 더 높음</li>
+        <li>SDOH·인종민족·사회경제적 지위를 고려한 다각적 접근 필요</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ SEXUAL HEALTH ═══ -->
+<div id="tab-sexual" class="panel">
+  <div class="alert alert-orange"><span>💑</span><span>성기능장애는 남녀 당뇨인 모두에서 흔하지만 임상에서 충분히 논의되지 않아 과소진단·과소치료되고 있다.</span></div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>♂️ 남성 — 발기부전(ED)</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <table class="tc-table">
+        <tr><th>항목</th><th>내용</th></tr>
+        <tr><td>유병률(당뇨인)</td><td>52.5%</td></tr>
+        <tr><td>주요 예측인자</td><td>연령&gt;40세, CVD, 당뇨, 고혈압, 비만, 이상지질혈증, 대사증후군, 저성선기능증, 흡연, 우울, 항우울제/오피오이드 사용</td></tr>
+        <tr><td>심혈관 연관성</td><td>ED는 당뇨인·비당뇨인 모두에서 심혈관사건의 예측인자</td></tr>
+        <tr><td>1차 치료</td><td>PDE5 억제제(당뇨인은 비당뇨인보다 반응 낮을 수 있음)</td></tr>
+        <tr><td>2차 치료</td><td>해면체내주사, 요도내 프로스타글란딘, 진공압박기구, 보형물수술</td></tr>
+      </table>
+      <div class="alert alert-info" style="margin-top:8px"><span>💡</span><span>신규 ED 환자는 혈당평가(미진단 당뇨 배제), 지질패널, 아침 총·유리테스토스테론 검사를 <strong>필수적으로</strong> 고려해야 함</span></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>♀️ 여성 — 성기능장애(FSD)</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <table class="tc-table">
+        <tr><th>당뇨유형</th><th>FSD 위험(비당뇨인 대비)</th></tr>
+        <tr><td>1형당뇨</td><td>OR 2.27</td></tr>
+        <tr><td>2형당뇨</td><td>OR 2.49</td></tr>
+        <tr><td>만성신질환 동반</td><td>FSD 유병률 74%</td></tr>
+      </table>
+      <p style="font-size: calc(12px * var(--fscale, 1));margin-top:8px">고령여성은 남성만큼 성문제를 경험하지만 <strong>의사와 논의할 가능성은 유의하게 낮음</strong>(보정OR 0.28).</p>
+      <div class="alert alert-warn" style="margin-top:8px"><span>⚠️</span><span>1형당뇨 여성의 정성연구: 성욕감소, 빈도감소, 질건조감·통증, 성행위 중 저혈당 두려움(일부는 경미한 고혈당을 의도적으로 유지) — CGM/펌프가 신체적·정신적 장애물로 인식될 수 있음</span></div>
+    </div>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <div class="card-header open" onclick="toggleCard(this)">
+        <span>📋 선별 권고 — 남성(4.18/4.19)</span><span class="toggle">▾</span>
+      </div>
+      <div class="card-body">
+        <ul class="dot">
+          <li>고심혈관위험, 망막병증, CVD, CKD, 말초/자율신경병증, 장기 당뇨유병, 우울, 저성선기능증, 혈당목표 미달성자에서 ED 선별(B)</li>
+          <li>저성선기능증 증상/징후 시 아침 혈청 총테스토스테론 측정(B)</li>
+        </ul>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header open" onclick="toggleCard(this)">
+        <span>📋 선별 권고 — 여성(4.20/4.21)</span><span class="toggle">▾</span>
+      </div>
+      <div class="card-body">
+        <ul class="dot">
+          <li>욕구·흥분·오르가즘 문제 질문, 특히 우울·불안·반복요로감염 동반 시(B)</li>
+          <li>폐경후여성 — 생식기증후군(질건조·성교통) 선별(B)</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="acc">
+    <div class="acc-hdr" onclick="toggleAcc(this)">
+      <span>여성 성건강 — 개선 전략(Look AHEAD 연구 등)</span><span>▾</span>
+    </div>
+    <div class="acc-body">
+      <ul class="dot">
+        <li>Look AHEAD 생활습관중재 — FSFI 총점·모든 영역에서 통계적 개선</li>
+        <li>지중해식 식이, 걷기 등 운동, 금연 — 욕구·성기능 강화</li>
+        <li>폐경증상의 호르몬치료, 질건조/성교통 관리</li>
+        <li>요로감염·진균성 생식기감염 치료</li>
+        <li>우울·불안·당뇨고통 선별·치료</li>
+        <li>FDA 승인 중추작용 약물(flibanserin, bremelanotide) — 성욕감소장애에 고려 가능</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ OTHER COMORBIDITIES ═══ -->
+<div id="tab-other" class="panel">
+  <div class="alert alert-orange"><span>🔬</span><span>자가면역질환, C형간염, 수면무호흡, 췌장염, 감각장애 등도 당뇨인에서 더 흔하게 관찰되는 동반질환이다.</span></div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>🧬 자가면역질환(1형당뇨 동반)</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <table class="tc-table">
+        <tr><th>질환</th><th>선별 권고</th></tr>
+        <tr><td>자가면역갑상선질환</td><td>진단 직후 선별, 이후 임상적 필요시 반복(B, 4.6)</td></tr>
+        <tr><td>셀리악병</td><td>위장관 증상·징후·검사이상·임상의심 시 선별(B, 4.7)</td></tr>
+        <tr><td>악성빈혈(B12결핍)</td><td>말초신경병증·원인불명빈혈 시 B12(반사적 MMA) 고려</td></tr>
+        <tr><td>기타</td><td>자가면역간질환, 원발성부신기능부전(Addison병), 백반증, 결합조직질환, 중증근무력증</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <div class="card-header open" onclick="toggleCard(this)">
+        <span>🦠 C형간염(HCV)</span><span class="toggle">▾</span>
+      </div>
+      <div class="card-body">
+        <ul class="dot">
+          <li>만성HCV감염자의 최대 1/3에서 2형당뇨 동반</li>
+          <li>바이러스단백질 직접작용 + 염증성사이토카인 변화로 포도당대사 손상</li>
+          <li>direct-acting antiviral 치료로 거의 모든 경우 완치(SVR) 달성</li>
+          <li>완치 후 A1C 평균 0.45%↓, 혈당저하제 필요성 감소</li>
+        </ul>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header open" onclick="toggleCard(this)">
+        <span>😴 폐쇄성수면무호흡(OSA)</span><span class="toggle">▾</span>
+      </div>
+      <div class="card-body">
+        <table class="tc-table">
+          <tr><th>집단</th><th>OSA 유병률</th></tr>
+          <tr><td>2형당뇨 전체</td><td>최대 23%</td></tr>
+          <tr><td>수면호흡장애(전체)</td><td>최대 58%</td></tr>
+          <tr><td>비만+2형당뇨(Look AHEAD)</td><td>80% 초과</td></tr>
+        </table>
+        <p style="font-size: calc(11px * var(--fscale, 1));color:var(--text2);margin-top:6px">티르제파타이드(비당뇨인 3상시험)가 OSA 중증도를 상당히 개선 — 당뇨인 대상 추가연구 필요</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>🔬 췌장염과 췌장외분비기능</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="dot">
+        <li>당뇨인의 최대 절반이 어느정도의 췌장외분비기능 손상 보유</li>
+        <li>당뇨인은 급성췌장염 위험 약 2배</li>
+        <li>역으로 급성췌장염 후 약 1/3에서 전당뇨/당뇨 발생 — <strong>양방향 관계</strong></li>
+        <li>인크레틴기반 치료와 췌장염 연관성 — 연구결과 혼재, 인과관계 미확립</li>
+        <li>전체췌장절제+췌도자가이식 — 약 1/3이 수술 1년 후 인슐린 비의존, 일부는 10년까지 이식기능 유지</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span>👂 감각장애 — 청력·후각</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body collapsed">
+      <ul class="dot">
+        <li>당뇨인의 청력장애 유병률은 비당뇨인의 <strong>약 2배</strong>(NHANES, 연령보정)</li>
+        <li>고주파·중저주파 모두에서 증가, 특히 젊은층에서 연관성 더 강함</li>
+        <li>추정기전: 고혈당+산화스트레스로 인한 와우미세혈관병증·청각신경병증</li>
+        <li>DCCT/EDIC 장기추적(20년↑): A1C 10%↑마다 고주파청력장애 위험 19%↑</li>
+        <li>후각장애도 당뇨인에서 보고됨(미각장애는 명확하지 않음)</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ TABLES SUMMARY ═══ -->
+<div id="tab-tables" class="panel">
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>📊 핵심 수치 요약표</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <table class="tc-table">
+        <tr><th>항목</th><th>수치</th></tr>
+        <tr><td>2형당뇨 MASLD 유병률(미국)</td><td>&gt;70%</td></tr>
+        <tr><td>위험인자 MASH(≥F2) 유병률(2형당뇨)</td><td>12–20%</td></tr>
+        <tr><td>당뇨 골절위험 증가(전체)</td><td>34%</td></tr>
+        <tr><td>1형당뇨 고관절골절 위험배수</td><td>4.35배</td></tr>
+        <tr><td>2형당뇨 고관절골절 위험배수</td><td>1.79배</td></tr>
+        <tr><td>치매 위험 증가(전체/혈관성)</td><td>43% / 91%</td></tr>
+        <tr><td>당뇨인 ED 유병률</td><td>52.5%</td></tr>
+        <tr><td>당뇨인 청력장애 유병률(비당뇨대비)</td><td>약 2배</td></tr>
+        <tr><td>당뇨인 장애위험 증가</td><td>50–80%</td></tr>
+        <tr><td>당뇨인 치과방문률(연1회, 미국)</td><td>56.7% (비당뇨 65.4%)</td></tr>
+        <tr><td>FIB-4 고위험 컷오프</td><td>&gt;2.67</td></tr>
+        <tr><td>LSM 저위험 컷오프</td><td>&lt;8.0 kPa</td></tr>
+        <tr><td>세마글루타이드(ESSENCE) 섬유화개선율</td><td>36.8% vs 위약 22.4%</td></tr>
+        <tr><td>당뇨인 폐렴구균 감염 사망률</td><td>최대 50%</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span>📋 초기방문 종합평가 체크리스트</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body collapsed">
+      <ul class="dot">
+        <li>☐ 진단 확인·분류, 혈당상태 및 치료력 평가</li>
+        <li>☐ 합병증·동반질환·전반적 건강상태 평가</li>
+        <li>☐ 지지체계·대리결정자·SDOH 확인</li>
+        <li>☐ 신체검진(발·안저·갑상선·피부 포함)</li>
+        <li>☐ 검사실평가(A1C·지질·간기능FIB-4·신기능·요알부민)</li>
+        <li>☐ 예방접종 현황 확인·필요백신 접종</li>
+        <li>☐ 골절위험 평가(65세↑ 또는 위험인자 동반시 DXA)</li>
+        <li>☐ 우울·불안·당뇨고통·이상섭식 선별</li>
+        <li>☐ 성건강·발기부전/FSD 선별(해당시)</li>
+        <li>☐ 치과·안과·족부 의뢰</li>
+        <li>☐ 공유의사결정으로 SMART 목표·관리계획 수립</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span>📁 참고 — 유용한 외부 리소스</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body collapsed">
+      <table class="tc-table">
+        <tr><th>리소스</th><th>용도</th></tr>
+        <tr><td>cdc.gov/vaccines</td><td>연령별 예방접종 일정</td></tr>
+        <tr><td>mdcalc.com/calc/2200/fibrosis-4-fib-4-index-liver-fibrosis</td><td>FIB-4 계산기</td></tr>
+        <tr><td>diabetesdistress.org</td><td>Diabetes Distress Scale(DDS)</td></tr>
+        <tr><td>WHO WHODAS 2.0</td><td>장애 평가 표준도구</td></tr>
+        <tr><td>diabetes.org/diabetes-risk-test</td><td>ADA 위험검사(타 섹션 연계)</td></tr>
+      </table>
+    </div>
+  </div>
+</div>
+
+</div><!-- /main -->
+
+<!-- ═══ MODAL: DECISION CYCLE ═══ -->
+<div id="decisionCycleModal" class="modal-overlay" onclick="closeModalOutside(event,'decisionCycleModal')">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal('decisionCycleModal')">✕</button>
+    <div class="modal-title">📋 인간중심 혈당관리 의사결정 사이클(Fig. 4.1)</div>
+
+    <div class="alert alert-info" style="margin:0 0 12px"><span>💡</span><span>치료목표는 "합병증 예방"과 "삶의 질 최적화"라는 두 축을 중심으로, 6단계 순환 과정을 통해 지속적으로 재평가된다.</span></div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">6단계 사이클</div>
+      <table class="modal-table">
+        <tr><th>단계</th><th>내용</th></tr>
+        <tr><td>① 핵심 특성 평가</td><td>개인 선호·가치·목표, 생활습관, 동반질환(CVD·CKD·HF), 임상특성, 정신건강·인지·기능, SDOH</td></tr>
+        <tr><td>② 치료선택 영향요인 고려</td><td>혈당·체중 목표, 저혈당·심혈관·신장보호·MASLD 영향, 약물 부작용, 치료복잡성, 접근성·비용</td></tr>
+        <tr><td>③ 공유의사결정으로 계획 수립</td><td>DSMES 접근보장, 가족/돌봄자 참여, 동기면담·목표설정</td></tr>
+        <tr><td>④ 관리계획 합의 — SMART 목표</td><td>Specific·Measurable·Achievable·Realistic·Time-limited</td></tr>
+        <tr><td>⑤ 관리계획 실행</td><td>정기적 재검토, 초기에는 더 빈번한 접촉(DSMES 위해)</td></tr>
+        <tr><td>⑥ 지속 지지·모니터링</td><td>정서적웰빙, 생활습관, 약물내약성, 대리지표(BGM/CGM·체중·걸음수·A1C·혈압·지질)</td></tr>
+      </table>
+    </div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">검토·합의 단계로 돌아가기</div>
+      <ul class="dot">
+        <li>관리계획 검토, 변경사항 상호 합의</li>
+        <li>치료적 관성(therapeutic inertia) 방지 위해 시의적절한 변경 실행 보장</li>
+        <li>연 1–2회 이상 정기적으로 의사결정 사이클 시행</li>
+        <li>통합 진료시스템 내에서 운영</li>
+      </ul>
+    </div>
+
+    <p style="font-size: calc(10.5px * var(--fscale, 1));color:var(--text2);margin-top:8px">Davies et al.(2022) ADA/EASD 합의문에서 인용·각색</p>
+  </div>
+</div>
+
+<!-- ═══ MODAL: LANGUAGE ═══ -->
+<div id="languageModal" class="modal-overlay" onclick="closeModalOutside(event,'languageModal')">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal('languageModal')">✕</button>
+    <div class="modal-title">🗣️ 당뇨병 케어와 교육에서의 언어사용 — ADA/ADCES 합의문</div>
+
+    <div class="alert alert-info" style="margin:0 0 12px"><span>💡</span><span>언어는 인식과 행동에 강력한 영향을 미친다. 힘을 부여하는 언어는 정보전달과 동기부여에 기여하지만, 수치심·판단적 언어는 의욕을 저하시킨다.</span></div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">5대 핵심 합의 권고</div>
+      <table class="modal-table">
+        <tr><th>#</th><th>원칙</th><th>예시</th></tr>
+        <tr><td>1</td><td>중립적·비판단적·사실기반 언어</td><td>"혈당이 높다" (X: "관리를 안 한다")</td></tr>
+        <tr><td>2</td><td>낙인 없는 언어</td><td>"혈당검사" (X: "혈당체크" 강압적 어조 회피)</td></tr>
+        <tr><td>3</td><td>강점기반·존중·포용적, 희망적 언어</td><td>"당뇨관리에 적극 참여하고 있다"</td></tr>
+        <tr><td>4</td><td>협력 촉진 언어</td><td>"우리가 함께 계획을 세워봅시다"</td></tr>
+        <tr><td>5</td><td>인간중심 언어</td><td>"당뇨가 있는 사람" (X: "당뇨병환자")</td></tr>
+      </table>
+    </div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">"불순응/미준수" 용어의 문제점</div>
+      <ul class="dot">
+        <li>"의사 지시를 따른다"는 수동적·순응적 역할을 암시</li>
+        <li>실제 당뇨 자기관리는 일상적 의사결정·계획·모니터링·평가·문제해결을 포함하는 <strong>능동적 과정</strong></li>
+        <li>비판단적 접근으로 주기적 관리 공백을 정상화하면 문제 보고에 대한 저항을 줄일 수 있음</li>
+        <li>공감·적극적 경청(개방형 질문, 반영적 진술, 요약)이 소통을 촉진</li>
+      </ul>
+    </div>
+
+    <div class="alert alert-warn" style="margin-top:4px"><span>⚠️</span><span>당뇨인의 자기효능감(self-efficacy) 인식은 자기관리·치료결과 개선과 관련된 중요한 심리사회적 요인으로, 지속적 평가·교육·치료계획의 목표가 되어야 한다.</span></div>
+  </div>
+</div>
+
+<!-- ═══ MODAL: FIB-4 ═══ -->
+<div id="fib4Modal" class="modal-overlay" onclick="closeModalOutside(event,'fib4Modal')">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal('fib4Modal')">✕</button>
+    <div class="modal-title">🔬 FIB-4 지수 — MASLD 선별 1차 검사 상세</div>
+
+    <div class="alert alert-info" style="margin:0 0 12px"><span>💡</span><span>FIB-4는 연령, AST/ALT, 혈소판수로 계산하는 저비용·고특이도 검사로, 1차의료·내분비클리닉에서 가장 비용효과적인 초기 선별전략이다.</span></div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">계산법과 해석</div>
+      <table class="modal-table">
+        <tr><th>FIB-4 값</th><th>해석</th><th>대응</th></tr>
+        <tr><td>&lt;1.3</td><td>진행성섬유화(F3–F4) 저위험</td><td>1차의료 관리, 1–2년마다 FIB-4 반복</td></tr>
+        <tr><td>1.3–2.67</td><td>위험인자MASH(≥F2) 가능성 높음</td><td>LSM(또는 ELF) 추가 위험분류 필요</td></tr>
+        <tr><td>&gt;2.67</td><td>진행성섬유화(F3–F4) 고위험</td><td>추가검사 없이 간전문의 의뢰</td></tr>
+      </table>
+      <p style="font-size: calc(11px * var(--fscale, 1));color:var(--text2);margin-top:6px">계산식: 연령(세) × AST(U/L) ÷ [혈소판(10⁹/L) × √ALT(U/L)]</p>
+    </div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">주의사항</div>
+      <ul class="dot">
+        <li>35세 미만 성인·소아에서 검증되지 않음</li>
+        <li>65세 이상에서는 더 높은 컷오프(1.9–2.0) 권고</li>
+        <li>비만+2형당뇨에서는 FIB-4&lt;1.3이어도 위험인자MASH일 수 있음 — 다중 심대사위험인자 보유 시 1.0–1.3 구간도 추가검사 고려</li>
+        <li>혈장아미노전이효소(ALT) &gt;40 U/L를 선별기준으로 사용하면 대부분의 MASH를 놓침 — ALT 정상상한은 남성 29–33, 여성 19–25 U/L가 더 적절(미국위장병학회)</li>
+        <li>민감도는 양호, 특이도는 낮음 — 음성은 섬유화 배제에 유용, 양성은 확인검사(LSM/ELF) 필요</li>
+      </ul>
+    </div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">진단 알고리즘 — 고위험군 선별대상</div>
+      <ul class="dot">
+        <li>2형당뇨</li>
+        <li>전당뇨</li>
+        <li>비만 + 심대사위험인자 1개 이상</li>
+      </ul>
+      <p style="font-size: calc(11px * var(--fscale, 1));color:var(--text2);margin-top:6px">선별 전 다른 지방증 원인(이차성) 배제 필요. FIB-4≥1.3이면 LSM 또는 ELF로 2차 위험분류 진행.</p>
+    </div>
+
+    <div class="alert alert-warn" style="margin-top:4px"><span>⚠️</span><span>FIB-4&lt;1.3은 일반적 지침일 뿐 임상판단을 대체하지 않는다 — 저렴함·간편함·양호한 특이도로 1차 검사로 선택된다.</span></div>
+  </div>
+</div>
+
+<!-- ═══ MODAL: BONE RISK ═══ -->
+<div id="boneRiskModal" class="modal-overlay" onclick="closeModalOutside(event,'boneRiskModal')">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal('boneRiskModal')">✕</button>
+    <div class="modal-title">🦴 당뇨인 골절위험 — 상세 데이터</div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">연령보정 골절위험(전체)</div>
+      <p style="font-size: calc(13px * var(--fscale, 1));font-weight:600;color:var(--accent2);margin-bottom:8px">1형·2형당뇨 모두 양성에서 비당뇨인 대비 34% 골절위험 증가</p>
+    </div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">1형당뇨 — 부위별 위험배수</div>
+      <table class="modal-table">
+        <tr><th>부위</th><th>위험배수</th></tr>
+        <tr><td>고관절</td><td>4.35배</td></tr>
+        <tr><td>상지</td><td>1.83배</td></tr>
+        <tr><td>발목</td><td>1.97배</td></tr>
+      </table>
+      <p style="font-size: calc(11px * var(--fscale, 1));color:var(--text2);margin-top:6px">독립적 고위험인자: 평균A1C&gt;7.9%(RR 3.57), 유병기간&gt;26년(RR 7.6), 골절가족력(RR 2.64)</p>
+    </div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">2형당뇨 — 역설적 골절위험</div>
+      <table class="modal-table">
+        <tr><th>지표</th><th>값</th></tr>
+        <tr><td>BMD(비당뇨인 대비)</td><td>5–10% 더 높음</td></tr>
+        <tr><td>고관절골절 위험</td><td>1.79배(BMD 정상~높음에도)</td></tr>
+        <tr><td>평생 골절위험</td><td>40–70% 더 높음</td></tr>
+        <tr><td>척추골절 발생률</td><td>35%↑, 사망HR 2.11</td></tr>
+      </table>
+    </div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">혈당관리와 골절위험 — 정량적 관계</div>
+      <table class="modal-table">
+        <tr><th>지표</th><th>관계</th></tr>
+        <tr><td>A1C 1%↑</td><td>골절위험 8%↑ (RR 1.08)</td></tr>
+        <tr><td>A1C&gt;9%(2년간, 2형당뇨)</td><td>골절위험 29%↑</td></tr>
+        <tr><td>저혈당 경험</td><td>RR 1.52</td></tr>
+        <tr><td>중증저혈당(일본연구)</td><td>HR 2.24</td></tr>
+      </table>
+    </div>
+
+    <div class="alert alert-danger" style="margin-top:4px"><span>🚫</span><span>당뇨인 고관절골절은 사망위험이 더 높음(여성 28%, 남성 57%) — 회복 지연, 치유 저하와 연관</span></div>
+  </div>
+</div>
+
+<script>
+const FONT_ZOOM_LEVELS = [1, 1.25, 1.5];
+let fontZoomIndex = 0;
+
+function applyFontZoom(scale) {
+  document.documentElement.style.setProperty('--fscale', scale);
+  const label = document.getElementById('font-zoom-label');
+  if (label) label.textContent = Math.round(scale * 100) + '%';
+}
+
+function cycleFontZoom() {
+  fontZoomIndex = (fontZoomIndex + 1) % FONT_ZOOM_LEVELS.length;
+  applyFontZoom(FONT_ZOOM_LEVELS[fontZoomIndex]);
+}
+
+function showTab(id){
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('tab-'+id).classList.add('active');
+  event.target.classList.add('active');
+}
+function toggleCard(el){
+  el.classList.toggle('open');
+  el.nextElementSibling.classList.toggle('collapsed');
+}
+function toggleAcc(el){
+  const b=el.nextElementSibling;
+  b.style.display=b.style.display==='block'?'none':'block';
+  el.querySelector('span:last-child').textContent=b.style.display==='block'?'▴':'▾';
+}
+
+function openModal(id){document.getElementById(id).classList.add('open');}
+function closeModal(id){document.getElementById(id).classList.remove('open');}
+function closeModalOutside(e,id){if(e.target===document.getElementById(id))closeModal(id);}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')document.querySelectorAll('.modal-overlay.open').forEach(m=>m.classList.remove('open'));});
+
+const abbrs=[
+  ['CDCES','Certified Diabetes Care and Education Specialist (공인당뇨관리교육전문가)'],
+  ['RDN','Registered Dietitian Nutritionist (등록영양사)'],
+  ['DSMES','Diabetes Self-Management Education and Support (당뇨자기관리교육 및 지지)'],
+  ['SMART','Specific·Measurable·Achievable·Realistic·Time-limited — 목표설정 원칙'],
+  ['BGM','Blood Glucose Monitoring (혈당자가측정)'],
+  ['CGM','Continuous Glucose Monitoring (연속혈당측정)'],
+  ['ACIP','Advisory Committee on Immunization Practices — 美 예방접종자문위원회'],
+  ['GRADE','Grading of Recommendations Assessment, Development, and Evaluation — 근거등급체계'],
+  ['RSV','Respiratory Syncytial Virus (호흡기세포융합바이러스)'],
+  ['PPSV23/PCV15/PCV20','폐렴구균 백신 종류(다당류23가/단백접합15가/20가)'],
+  ['BMD','Bone Mineral Density (골밀도)'],
+  ['DXA','Dual-energy X-ray Absorptiometry (이중에너지X선흡수계측법) — 골밀도 표준검사'],
+  ['FRAX','Fracture Risk Assessment Tool — 10년 골절위험 예측도구'],
+  ['TZD','Thiazolidinedione (티아졸리딘디온) — 피오글리타존 등, 골절위험 증가 약물군'],
+  ['MASLD','Metabolic dysfunction-Associated Steatotic Liver Disease — 대사이상관련 지방간질환(구 NAFLD)'],
+  ['MASH','Metabolic dysfunction-Associated Steatohepatitis — 대사이상관련 지방간염(구 NASH)'],
+  ['FIB-4','Fibrosis-4 Index — 간섬유화 위험 예측 지수'],
+  ['LSM','Liver Stiffness Measurement (간탄성도 측정) — 일시적엘라스토그래피로 측정'],
+  ['ELF','Enhanced Liver Fibrosis test — 강화된 간섬유화 검사'],
+  ['ALT/AST','Alanine/Aspartate Aminotransferase — 간기능 효소(FIB-4 계산에 사용)'],
+  ['HCC','Hepatocellular Carcinoma (간세포암종)'],
+  ['GLP-1 RA','Glucagon-Like Peptide-1 Receptor Agonist — GLP-1 수용체작용제'],
+  ['GIP','Glucose-dependent Insulinotropic Polypeptide — 위장관 호르몬, 듀얼작용제 표적'],
+  ['SGLT2i','Sodium-Glucose Cotransporter 2 inhibitor — SGLT2 억제제'],
+  ['ED','Erectile Dysfunction (발기부전)'],
+  ['FSD','Female Sexual Dysfunction (여성 성기능장애)'],
+  ['FSFI','Female Sexual Function Index — 여성성기능지수(검증된 평가도구)'],
+  ['GSM','Genitourinary Syndrome of Menopause — 폐경기 생식기증후군'],
+  ['PDE5I','Phosphodiesterase type 5 Inhibitor — PDE5억제제(ED 1차치료)'],
+  ['DPN','Diabetic Peripheral Neuropathy (당뇨말초신경병증)'],
+  ['ADL/IADL','Activities/Instrumental Activities of Daily Living — 일상생활동작/도구적일상생활동작'],
+  ['DDS','Diabetes Distress Scale — 당뇨고통척도'],
+  ['WHODAS 2.0','WHO Disability Assessment Schedule — WHO장애평가척도'],
+  ['OSA','Obstructive Sleep Apnea (폐쇄성수면무호흡)'],
+  ['HCV','Hepatitis C Virus (C형간염바이러스)'],
+  ['NHANES','National Health and Nutrition Examination Survey — 美 국민건강영양조사'],
+  ['DCCT/EDIC','Diabetes Control and Complications Trial/Epidemiology of Diabetes Interventions and Complications — 1형당뇨 장기추적 핵심연구'],
+  ['ACCORD/ADVANCE/VADT','집중혈당관리 vs 표준관리 비교 3대 대규모 RCT'],
+  ['ASBMR','American Society for Bone and Mineral Research — 미국골대사학회(골건강 섹션 승인기관)'],
+];
+
+function buildAbbr(){
+  const sorted=abbrs.slice().sort((a,b)=>a[0].localeCompare(b[0]));
+  document.getElementById('abbr-grid-drop').innerHTML=sorted.map(a=>
+    `<div style="background:var(--surface2);border:1px solid var(--border);border-radius:5px;padding:6px 10px;margin-bottom:4px;" data-term="${a[0].toLowerCase()}" data-def="${a[1].toLowerCase()}">
+       <span style="font-weight:700;color:var(--accent2);font-size: calc(12px * var(--fscale, 1));font-family:'Courier New',monospace">${a[0]}</span>
+       <div style="font-size: calc(11px * var(--fscale, 1));color:var(--text2);line-height:1.45;margin-top:2px">${a[1]}</div>
+     </div>`).join('');
+}
+function filterAbbr(val){
+  const v=val.toLowerCase().trim();
+  const drop=document.getElementById('abbr-dropdown');
+  const items=document.querySelectorAll('#abbr-grid-drop [data-term]');
+  if(!v){drop.style.display='none';return;}
+  const inp=document.getElementById('abbr-input');
+  const rect=inp.getBoundingClientRect();
+  const w=440;
+  let left=rect.right-w;if(left<8)left=8;
+  drop.style.top=(rect.bottom+4)+'px';drop.style.left=left+'px';
+  drop.style.display='block';
+  items.forEach(el=>{
+    const show=el.dataset.term.startsWith(v)||el.dataset.def.includes(v);
+    el.style.display=show?'':'none';
+  });
+}
+document.addEventListener('click',e=>{
+  const inp=document.getElementById('abbr-input');
+  const drop=document.getElementById('abbr-dropdown');
+  if(inp&&!inp.contains(e.target)&&drop&&!drop.contains(e.target))drop.style.display='none';
+});
+buildAbbr();
+</script>
+</body>
+</html>

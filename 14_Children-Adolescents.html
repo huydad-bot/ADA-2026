@@ -1,0 +1,1237 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ADA 2026 소아청소년 당뇨병 관리</title>
+<style>
+  :root {
+    --bg:#f6f8fa;--surface:#fff;--surface2:#f0f2f5;--border:#d0d7de;
+    --accent:#0969da;--accent2:#0550ae;--green:#1a7f37;--yellow:#9a6700;
+    --red:#cf222e;--orange:#bc4c00;--text:#1f2328;--text2:#57606a;
+    --teal:#0a7c8a;--purple:#5a3ea0;--fscale:1;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'Pretendard','Noto Sans KR',-apple-system,sans-serif;background:var(--bg);color:var(--text);font-size: calc(13px * var(--fscale, 1));line-height:1.5;}
+  header{background:var(--surface);border-bottom:1px solid var(--border);padding:12px 16px 8px;display:flex;flex-direction:column;align-items:center;gap:4px;position:sticky;top:0;z-index:100;}
+  .header-inner{width:100%;max-width:960px;display:flex;flex-direction:column;align-items:center;gap:4px;}
+  .logo-badge{background:var(--accent2);color:#fff;font-size: calc(10px * var(--fscale, 1));font-weight:700;padding:3px 8px;border-radius:4px;letter-spacing:.5px;}
+  .tab-bar{display:flex;justify-content:center;background:var(--surface);border-bottom:1px solid var(--border);overflow-x:auto;scrollbar-width:none;}
+  .tab-bar::-webkit-scrollbar{display:none;}
+  .font-zoom-btn{display:flex;align-items:center;gap:3px;flex-shrink:0;margin:4px 4px 4px 6px;padding:5px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:6px;color:var(--accent2);font-size:calc(11px * var(--fscale, 1));font-weight:700;cursor:pointer;user-select:none;white-space:nowrap;transition:background .15s;}
+  .font-zoom-btn:hover{background:var(--border);}
+  .font-zoom-btn .fz-icon{font-size:calc(12px * var(--fscale, 1));}
+  .tab-bar-inner{width:100%;max-width:960px;display:flex;align-items:center;gap:2px;padding:0 4px;}
+  .tab{padding:7px 11px;font-size: calc(11.5px * var(--fscale, 1));color:var(--text2);cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;transition:color .15s,border-color .15s;user-select:none;flex-shrink:0;}
+  .tab:hover{color:var(--text);}
+  .tab.active{color:var(--accent2);border-bottom-color:var(--accent2);}
+  .tab-abbr-wrap{display:flex;align-items:center;padding:4px 4px;margin-left:4px;flex-shrink:0;position:relative;}
+  .main{padding:12px 16px;max-width:960px;margin:0 auto;}
+  .panel{display:none;}
+  .panel.active{display:block;}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+  .grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;}
+  @media(max-width:680px){.grid2,.grid3{grid-template-columns:1fr;}}
+  .card{background:var(--surface);border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-bottom:10px;}
+  .card-header{background:var(--surface2);padding:8px 12px;font-size: calc(12px * var(--fscale, 1));font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.5px;border-bottom:1px solid var(--border);cursor:pointer;display:flex;align-items:center;justify-content:space-between;user-select:none;}
+  .card-header .toggle{font-size: calc(13px * var(--fscale, 1));transition:transform .2s;}
+  .card-header.open .toggle{transform:rotate(180deg);}
+  .card-body{padding:10px 12px;}
+  .card-body.collapsed{display:none;}
+  .stat-row{display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap;}
+  .stat-box{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:10px 14px;flex:1;min-width:90px;text-align:center;}
+  .stat-box.clickable{cursor:pointer;transition:box-shadow .15s,border-color .15s;}
+  .stat-box.clickable:hover{border-color:var(--accent2);box-shadow:0 2px 8px rgba(5,80,174,.15);}
+  .stat-val{font-size: calc(18px * var(--fscale, 1));font-weight:700;color:var(--accent2);}
+  .stat-lbl{font-size: calc(10px * var(--fscale, 1));color:var(--text2);margin-top:2px;}
+  .stat-hint{font-size: calc(9px * var(--fscale, 1));color:var(--accent2);margin-top:4px;opacity:.7;}
+  /* Modal */
+  .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:500;align-items:center;justify-content:center;}
+  .modal-overlay.open{display:flex;}
+  .modal-box{background:var(--surface);border-radius:12px;padding:20px;max-width:680px;width:92%;max-height:84vh;overflow-y:auto;box-shadow:0 16px 48px rgba(0,0,0,.22);position:relative;}
+  .modal-close{position:absolute;top:12px;right:14px;background:none;border:none;font-size: calc(18px * var(--fscale, 1));cursor:pointer;color:var(--text2);line-height:1;}
+  .modal-title{font-size: calc(15px * var(--fscale, 1));font-weight:700;color:var(--text);margin-bottom:12px;padding-right:20px;line-height:1.4;}
+  .modal-section{margin-bottom:12px;}
+  .modal-section-title{font-size: calc(11px * var(--fscale, 1));font-weight:700;color:var(--accent2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;border-bottom:1px solid var(--border);padding-bottom:4px;}
+  .modal-table{width:100%;border-collapse:collapse;font-size: calc(11.5px * var(--fscale, 1));}
+  .modal-table th{background:var(--surface2);color:var(--text2);padding:4px 8px;font-size: calc(10.5px * var(--fscale, 1));font-weight:600;text-align:left;border-bottom:1px solid var(--border);}
+  .modal-table td{padding:5px 8px;border-bottom:1px solid var(--border);vertical-align:top;}
+  .modal-table tr:last-child td{border-bottom:none;}
+  .rec-list{list-style:none;}
+  .rec-item{padding:7px 0;border-bottom:1px solid var(--border);display:flex;gap:8px;align-items:flex-start;}
+  .rec-item:last-child{border-bottom:none;}
+  .rec-text{font-size: calc(12px * var(--fscale, 1));color:var(--text);line-height:1.65;}
+  .rec-text strong{color:#1f2328;}
+  .badge{display:inline-flex;align-items:center;padding:2px 8px;border-radius:10px;font-size: calc(10px * var(--fscale, 1));font-weight:700;white-space:nowrap;flex-shrink:0;margin-top:1px;}
+  .badge-A{background:#dafbe1;color:#116329;border:1px solid #1a7f37;}
+  .badge-B{background:#ddf4ff;color:var(--accent2);border:1px solid var(--accent2);}
+  .badge-C{background:#fff8c5;color:#7a4b00;border:1px solid #d4a017;}
+  .badge-E{background:#f3e5f5;color:#5a3ea0;border:1px solid #5a3ea0;}
+  .alert{padding:8px 12px;border-radius:6px;font-size: calc(12px * var(--fscale, 1));margin:8px 0;display:flex;gap:8px;align-items:flex-start;}
+  .alert-info{background:#ddf4ff;border-left:3px solid var(--accent2);color:#0550ae;}
+  .alert-warn{background:#fff8c5;border-left:3px solid #d4a017;color:#7a4b00;}
+  .alert-danger{background:#ffebe9;border-left:3px solid var(--red);color:#82071e;}
+  .alert-success{background:#dafbe1;border-left:3px solid var(--green);color:#116329;}
+  .alert-teal{background:#e0f5f5;border-left:3px solid var(--teal);color:#075050;}
+  .alert-orange{background:#fff3e0;border-left:3px solid var(--orange);color:#7a3500;}
+  .alert-purple{background:#f3e5f5;border-left:3px solid var(--purple);color:#5a3ea0;}
+  .tc-table{width:100%;border-collapse:collapse;font-size: calc(11.5px * var(--fscale, 1));}
+  .tc-table th{background:var(--surface2);color:var(--text2);padding:5px 8px;font-size: calc(10.5px * var(--fscale, 1));text-transform:uppercase;letter-spacing:.3px;font-weight:600;text-align:left;border-bottom:1px solid var(--border);}
+  .tc-table td{padding:5px 8px;border-bottom:1px solid var(--border);vertical-align:top;}
+  .tc-table tr:last-child td{border-bottom:none;}
+  .tc-table tr:hover td{background:rgba(0,0,0,.02);}
+  .acc{border:1px solid var(--border);border-radius:6px;margin-bottom:6px;overflow:hidden;}
+  .acc-hdr{background:var(--surface2);padding:7px 12px;font-size: calc(12px * var(--fscale, 1));font-weight:600;color:var(--text);cursor:pointer;display:flex;justify-content:space-between;align-items:center;user-select:none;}
+  .acc-hdr:hover{background:#e8eaec;}
+  .acc-body{display:none;padding:10px 12px;font-size: calc(12px * var(--fscale, 1));line-height:1.65;}
+  .flow-box{border:1px solid var(--border);border-radius:6px;background:var(--surface);padding:8px 12px;margin-bottom:6px;font-size: calc(12px * var(--fscale, 1));line-height:1.6;}
+  .flow-arrow{text-align:center;color:var(--text2);font-size: calc(14px * var(--fscale, 1));margin:2px 0;}
+  .step-num{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;background:var(--accent2);color:#fff;font-size: calc(10px * var(--fscale, 1));font-weight:700;flex-shrink:0;margin-right:6px;}
+  ul.dot{padding-left:18px;}
+  ul.dot li{margin-bottom:3px;font-size: calc(12px * var(--fscale, 1));line-height:1.6;}
+  ol.num{padding-left:18px;}
+  ol.num li{margin-bottom:4px;font-size: calc(12px * var(--fscale, 1));line-height:1.6;}
+  ::-webkit-scrollbar{width:5px;height:5px;}
+  ::-webkit-scrollbar-track{background:var(--bg);}
+  ::-webkit-scrollbar-thumb{background:#c8d0d9;border-radius:3px;}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div style="display:flex;align-items:center;gap:10px">
+      <span class="logo-badge">ADA 2026</span>
+      <h1 style="font-size:17px;font-weight:700;color:var(--text)">소아청소년 당뇨병 관리</h1>
+    </div>
+    <div style="text-align:center;line-height:1.5">
+      <span style="color:var(--text2);font-size: calc(11px * var(--fscale, 1))">Standards of Care in Diabetes—2026, Section 14 — American Diabetes Association</span><br>
+      <span style="font-size: calc(10px * var(--fscale, 1));color:var(--text2)">Diabetes Care 2026;49(Suppl. 1):S297–S320 · doi: 10.2337/dc26-S014</span>
+    </div>
+    <div style="font-size: calc(10px * var(--fscale, 1));color:var(--text2);font-style:italic;">This tool is not officially endorsed by the American Diabetes Association (ADA).</div>
+  </div>
+</header>
+
+<div class="tab-bar">
+  <div class="tab-bar-inner">
+    <div id="font-zoom-btn" class="font-zoom-btn" onclick="cycleFontZoom()"><span class="fz-icon">🔠</span><span id="font-zoom-label">100%</span></div>
+    <div class="tab active" onclick="showTab('overview')">🏠 개요</div>
+    <div class="tab" onclick="showTab('nutrition')">🥗 영양·운동</div>
+    <div class="tab" onclick="showTab('psychosocial')">💬 심리사회</div>
+    <div class="tab" onclick="showTab('t1d-tech')">📱 1형·기기·목표</div>
+    <div class="tab" onclick="showTab('t1d-detail')">🧬 1형 상세</div>
+    <div class="tab" onclick="showTab('t2d-dx')">🔬 2형 진단·관리</div>
+    <div class="tab" onclick="showTab('t2d-rx')">💊 2형 약물·수술</div>
+    <div class="tab" onclick="showTab('complications')">⚠️ 합병증(표14.1)</div>
+    <div class="tab" onclick="showTab('other')">🚭 물질사용·전환</div>
+    <div class="tab-abbr-wrap">
+      <div style="position:relative;display:flex;align-items:center;flex-shrink:0">
+        <span style="position:absolute;left:8px;color:var(--text2);font-size: calc(12px * var(--fscale, 1));pointer-events:none">🔍</span>
+        <input id="abbr-input" type="text" placeholder="약어" oninput="filterAbbr(this.value)"
+          style="background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:4px 8px 4px 26px;color:var(--text);font-size: calc(12px * var(--fscale, 1));width:90px;outline:none;"
+          onfocus="this.style.borderColor='var(--accent2)'" onblur="this.style.borderColor='var(--border)'">
+      </div>
+      <div id="abbr-dropdown" style="display:none;position:fixed;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:8px;width:440px;max-height:360px;overflow-y:auto;z-index:300;box-shadow:0 8px 24px rgba(0,0,0,.12)">
+        <div id="abbr-grid-drop"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="main">
+
+<!-- ═══ OVERVIEW ═══ -->
+<div id="tab-overview" class="panel active">
+  <div class="stat-row">
+    <div class="stat-box clickable" onclick="openModal('a1cModal')"><div class="stat-val">&lt;7% / &lt;6.5%</div><div class="stat-lbl">A1C 목표 (1형/2형)</div><div class="stat-hint">▸ 클릭하여 상세 보기</div></div>
+    <div class="stat-box clickable" onclick="openModal('algoModal')"><div class="stat-val">Fig.14.1</div><div class="stat-lbl">신규진단 초기치료 알고리즘</div><div class="stat-hint">▸ 클릭하여 상세 보기</div></div>
+    <div class="stat-box clickable" onclick="openModal('mmRuleModal')"><div class="stat-val">12–13세</div><div class="stat-lbl">Mature Minor Rule</div><div class="stat-hint">▸ 클릭하여 상세 보기</div></div>
+    <div class="stat-box clickable" onclick="openModal('approvedModal')"><div class="stat-val">4계열</div><div class="stat-lbl">소아 2형당뇨 승인 약물</div><div class="stat-hint">▸ 클릭하여 상세 보기</div></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>📋 소아청소년 당뇨병 — 구성 개관</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <p style="margin-bottom:10px;font-size: calc(11.5px * var(--fscale, 1));color:var(--text2)">소아청소년 당뇨병 관리는 성인 진료를 그대로 적용할 수 없다 — 역학·병태생리·발달적 고려사항·치료반응이 성인과 다르며, 1형·2형·기타 형태 간에도 권고가 다르다. 본 섹션은 4부로 구성된다.</p>
+      <div class="flow-box" style="border-left:3px solid var(--accent2)"><strong>① 1형·2형 당뇨병 소개</strong> — 역학·병태생리적 특징</div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-box" style="border-left:3px solid var(--green)"><strong>② 모든 유형 공통 관리</strong> — DSMES, 영양치료, 운동, 학교/보육, 심리사회 평가, 혈당모니터링·기기·목표</div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-box" style="border-left:3px solid var(--yellow)"><strong>③ 1형당뇨 특화 관리</strong> — 혈당목표, 운동전략, 자가면역 동반질환</div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-box" style="border-left:3px solid var(--orange)"><strong>④ 2형당뇨 특화 관리</strong> — 선별·진단, 생활습관, 약물치료, 대사수술</div>
+    </div>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <div class="card-header open" onclick="toggleCard(this)">
+        <span>📊 역학 핵심 수치</span><span class="toggle">▾</span>
+      </div>
+      <div class="card-body">
+        <table class="tc-table">
+          <tr><th>지표</th><th>내용</th></tr>
+          <tr><td>1형당뇨 유병률(美)</td><td>2019–2022년 소아청소년 1,000명당 약 4명</td></tr>
+          <tr><td>2형당뇨 증가추세</td><td>연 2.3% 증가 가정 시 20세 미만 유병률이 40년 내 4배 증가 전망</td></tr>
+          <tr><td>2형당뇨 특징</td><td>성인 2형과도 다름 — β세포기능의 더 급속한 저하, 합병증의 가속화된 발생</td></tr>
+          <tr><td>TODAY 연구 장기추적</td><td>소아·청소년기 진단 2형당뇨 대다수가 청년기에 이미 미세혈관 합병증 보유</td></tr>
+        </table>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header open" onclick="toggleCard(this)">
+        <span>🔑 핵심 개념</span><span class="toggle">▾</span>
+      </div>
+      <div class="card-body">
+        <div class="alert alert-info"><span>ℹ️</span><span>소아청소년은 신체발달·성성숙에 따른 인슐린감수성 변화, 자가관리능력, 보육/학교/운동환경에서의 감독, 청소년기 독립성 증가 등 고유한 관리요소를 고려해야 함</span></div>
+        <div class="alert alert-warn"><span>⚠️</span><span>비만·당뇨를 동반한 소아에서는 치료 시작 후 처음 몇 주간 당뇨병 유형이 불확실한 경우가 많고, 상당수가 임상적으로 유의한 케토산증을 동반함</span></div>
+        <div class="alert alert-teal"><span>💡</span><span>2형당뇨는 역사적으로 소외된 지역사회에 불균형적으로 영향을 미치며, 복잡한 심리사회적·문화적 맥락에서 발생할 수 있음</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span>⚠️ 권고 등급 체계 (Evidence Grading)</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body collapsed">
+      <table class="tc-table">
+        <tr><th>등급</th><th>의미</th></tr>
+        <tr><td><span class="badge badge-A">A</span></td><td>명확한 근거 — 잘 수행된 다기관 RCT 또는 메타분석</td></tr>
+        <tr><td><span class="badge badge-B">B</span></td><td>뒷받침되는 근거 — 잘 수행된 코호트 연구 등</td></tr>
+        <tr><td><span class="badge badge-C">C</span></td><td>뒷받침되는 근거 부족 — 대조군 없는 연구, 사례 보고</td></tr>
+        <tr><td><span class="badge badge-E">E</span></td><td>전문가 합의 또는 임상 경험 (Expert consensus)</td></tr>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ NUTRITION & EXERCISE ═══ -->
+<div id="tab-nutrition" class="panel">
+  <div class="alert alert-orange"><span>🥗</span><span>영양관리는 가족습관·음식선호·종교/문화적 필요·재정상황·일정·신체활동·수리력/문해력/자가관리능력을 고려해 개별화해야 한다.</span></div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>📋 영양치료 — 핵심 권고</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="rec-list">
+        <li class="rec-item"><span class="badge badge-B">B</span><span class="rec-text"><strong>14.2</strong> 전당뇨·당뇨 소아청소년에게 개별화된 의학적 영양치료 제공 — 비전분채소·통과일·콩류·통곡물·견과류·씨앗류·저지방유제품 늘리고, 당류음료·단것·육류·정제곡물·가공식품 줄이기</span></li>
+        <li class="rec-item"><span class="badge badge-B">B</span><span class="rec-text"><strong>14.3</strong> 탄수화물 계산법 또는 경험기반 추정법으로 탄수화물 섭취 모니터링 — 혈당·체중관리 최적화의 핵심요소</span></li>
+        <li class="rec-item"><span class="badge badge-A">A</span><span class="rec-text"><strong>14.4</strong> 고지방·고단백 식사 시 인슐린 조정 필요성을 교육 — 식사구성이 식후혈당변동에 영향</span></li>
+        <li class="rec-item"><span class="badge badge-E">E</span><span class="rec-text"><strong>14.5</strong> 진단 시 및 최소 매년(이상적으로 더 빈번히), 숙련된 영양사가 체중상태·연령적합 성장·이상섭식행동위험·심혈관위험인자와 관련한 식이패턴을 종합평가</span></li>
+      </ul>
+      <div class="alert alert-warn" style="margin-top:8px"><span>⚠️</span><span>지방·단백질이 많은 식사는 초기 저혈당 후 지연된 식후 고혈당을 유발할 수 있음 — 분할용량, 계산용량 증량, 또는 연장보너스(extended bolus) 기능 사용으로 개선 가능</span></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>🏃 신체활동 — 핵심 권고</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="rec-list">
+        <li class="rec-item"><span class="badge badge-B">B</span><span class="rec-text"><strong>14.6</strong> 모든 당뇨병 소아청소년 — 매일 60분 중등도~격렬한 강도의 유산소운동 권장, 주 3회 이상 격렬한 근력/뼈강화 운동</span></li>
+        <li class="rec-item"><span class="badge badge-C">C</span><span class="rec-text"><strong>14.7</strong> 인슐린치료 중인 경우 운동 전·중·후 혈당모니터링 및 개인별 혈당목표(운동유형·강도에 따라) 교육</span></li>
+        <li class="rec-item"><span class="badge badge-C">C</span><span class="rec-text"><strong>14.8</strong> 운동 중·후·야간 저혈당 예방전략 교육, 운동 전·중·후 저혈당 치료수단을 접근 가능하게 유지</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <div class="card-header" onclick="toggleCard(this)">
+        <span>🏃‍♂️ 1형당뇨 운동 시 혈당관리 — T1DEXIP 연구 기반</span><span class="toggle">▾</span>
+      </div>
+      <div class="card-body collapsed">
+        <ul class="dot">
+          <li>운동 중 혈당이 떨어지는 경향, 특히 A1C가 낮거나 당뇨유병기간이 짧거나 저혈당 두려움이 적은 경우 더 두드러짐</li>
+          <li>운동 후 8–16시간경 혈당이 가장 낮아지는 경향, 운동강도/시간이 클수록 야간저혈당 더 빈번</li>
+          <li>운동 전 혈당목표: 126–180mg/dL(개인별 조정)</li>
+          <li>인슐린펌프(AID 미사용) — 기저율을 약 10–50% 감량 또는 1–2시간 중단</li>
+          <li>운동 후 기저율/장시간인슐린 약 20% 감량 — 지연된 운동유발저혈당 감소 가능</li>
+          <li>AID 시스템은 운동 중 TIR 개선 가능, 더 보수적인 기기설정 또는 혈당목표 상향 고려</li>
+        </ul>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header" onclick="toggleCard(this)">
+        <span>🍎 운동 전후 탄수화물 보충 가이드</span><span class="toggle">▾</span>
+      </div>
+      <div class="card-body collapsed">
+        <table class="tc-table">
+          <tr><th>상황</th><th>권장량</th></tr>
+          <tr><td>저~중강도 유산소(30–60분), 공복 상태</td><td>탄수화물 10–15g으로 저혈당 예방 가능</td></tr>
+          <tr><td>인슐린 볼러스 후(상대적 고인슐린혈증)</td><td>운동 1시간당 탄수화물 0.5–1.0g/kg (약 30–60g)</td></tr>
+        </table>
+        <div class="alert alert-warn" style="margin-top:8px"><span>⚠️</span><span>AID 사용 시 운동 전 탄수화물 섭취 시점이 중요 — 혈당상승이 자동인슐린전달 증가로 이어져 저혈당위험을 높일 수 있음</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>🚫 운동 금기 — 고혈당·케톤 상황</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <div class="alert alert-danger"><span>🚫</span><span>인슐린결핍 상태에서 다음 중 하나라도 있으면 격렬한 활동을 연기해야 함: <strong>혈당 ≥350mg/dL(≥19.4mmol/L)</strong>, 중등도~다량 소변케톤, β-hydroxybutyrate &gt;1.5mmol/L</span></div>
+      <p style="font-size: calc(11px * var(--fscale, 1));color:var(--text2);margin-top:6px">β-hydroxybutyrate ≥0.6mmol/L이면서 인슐린 부재 상태일 때도 주의가 필요하다. 운동 전후 고혈당이 발생하면 인슐린결핍에 의한 것인지 확인해야 하며, 그렇다면 운동으로 고혈당·DKA위험이 악화될 수 있다.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span>🏫 학교·보육시설</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body collapsed">
+      <ul class="dot">
+        <li>대부분의 깨어있는 시간을 학교/보육시설에서 보내므로 개별화된 당뇨의료관리계획에 따라 직원/코치 교육이 필수</li>
+        <li>특히 인슐린이 필요한 소아청소년에게 중요</li>
+        <li>연방·주법은 학교·보육시설 등에 필요한 당뇨관리 제공을 요구함</li>
+        <li>ADA의 "Diabetes Care in the School Setting", "Care of Young Children with Diabetes in the Childcare and Community Setting" 입장문 및 "Safe at School" 웹사이트 참조</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ PSYCHOSOCIAL ═══ -->
+<div id="tab-psychosocial" class="panel">
+  <div class="alert alert-orange"><span>💬</span><span>소아청소년·신생성인기에는 빠르고 동적인 인지·발달·정서적 변화가 일어난다. 당뇨관리는 본인·가족에게 상당한 부담을 주므로 정기방문 시 심리사회적 상태와 건강의 사회적결정요인을 지속평가해야 한다.</span></div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>📋 심리사회 관리 — 핵심 권고</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="rec-list">
+        <li class="rec-item"><span class="badge badge-B">B</span><span class="rec-text"><strong>14.9</strong> 진단 시·정기 추적관찰 시 1형(B)·2형(B)·기타형태(E) 당뇨 모두에서 연령적합 표준화·검증도구로 심리사회적 문제(당뇨디스트레스·우울증상·불안·이상섭식행동)·가족요인·행동건강문제 선별, 필요시 소아당뇨 경험있는 행동건강전문가 의뢰</span></li>
+        <li class="rec-item"><span class="badge badge-E">E</span><span class="rec-text"><strong>14.10</strong> 행동건강전문가를 소아당뇨 인터프로페셔널팀의 필수 구성원으로 고려</span></li>
+        <li class="rec-item"><span class="badge badge-B">B</span><span class="rec-text"><strong>14.11</strong> 발달단계에 맞는 가족참여 권장(1형 B·2형 B·기타 E) — 조기/비지지적 책임이전이 당뇨디스트레스·자가관리참여저하·혈당악화로 이어질 수 있음을 인식</span></li>
+        <li class="rec-item"><span class="badge badge-E">E</span><span class="rec-text"><strong>14.12</strong> 식품불안정·주거불안정·건강문해력·재정장벽·사회적/지역사회지지를 선별하고 치료결정에 반영</span></li>
+        <li class="rec-item"><span class="badge badge-B">B</span><span class="rec-text"><strong>14.13</strong> 학령기 소아청소년(1형 B·2형 E·기타 E)과 보호자에게 사회적 적응(또래관계)·학교성취를 질문하여 추가중재 필요성 판단</span></li>
+        <li class="rec-item"><span class="badge badge-E">E</span><span class="rec-text"><strong>14.14</strong> 발달적으로 적절한 연령에서 의료진과 단독으로 보내는 시간 제공</span></li>
+        <li class="rec-item"><span class="badge badge-A">A</span><span class="rec-text"><strong>14.15</strong> 청소년기(사춘기 성장/발달 단계)부터 가임가능 모든 개인에게 일상 진료에 생식건강·임신전상담 통합 — 불량한 임신결과 위험 때문</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>📊 심리사회 문제 유병률</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <table class="tc-table">
+        <tr><th>문제</th><th>유병률/시작연령</th></tr>
+        <tr><td>당뇨디스트레스</td><td>1형 소아청소년의 약 30%, 2형의 약 24%, 선별 7–8세부터 가능</td></tr>
+        <tr><td>우울증(1형+2형 통합)</td><td>통합유병률 22.2%, 12세부터 정기선별 권장</td></tr>
+        <tr><td>불안(1형+2형 통합)</td><td>통합유병률 17.7%, 8세 이상부터 정기선별 권장</td></tr>
+        <tr><td>저혈당 두려움</td><td>6세부터 신뢰할 만한 자가보고 가능, 부모/보호자도 함께 선별</td></tr>
+        <tr><td>이상섭식행동(2형, SEARCH 연구)</td><td>50.3%가 이상섭식행동 보고, 23%가 인슐린생략 보고</td></tr>
+      </table>
+      <div class="alert alert-danger" style="margin-top:8px"><span>🚫</span><span>1형당뇨 소아청소년에서 특히 위험한 행동은 <strong>체중감량을 위한 인슐린생략</strong> — 심각한 단기·장기 합병증으로 이어질 수 있음</span></div>
+    </div>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <div class="card-header" onclick="toggleCard(this)">
+        <span>👨‍👩‍👧 가족참여와 의사결정</span><span class="toggle">▾</span>
+      </div>
+      <div class="card-body collapsed">
+        <ul class="dot">
+          <li>발달적으로 적절하고 지지적인 가족팀워크는 A1C≥8.0%인 소아청소년의 혈당 유지/개선에 도움</li>
+          <li>당뇨관련 가족관계(팀워크·갈등)에 대한 질문이 방문 시 유용</li>
+          <li>의사결정 참여는 자가관리·기술도입·혈당결과 개선과 연관</li>
+          <li>자가관리계약서(self-care contract) 작성, 혈당데이터를 의료팀과 공유하는 기술 통합이 공유의사결정에 도움</li>
+        </ul>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header" onclick="toggleCard(this)">
+        <span>⚖️ Mature Minor Rule (성숙미성년자 원칙)</span><span class="toggle">▾</span>
+      </div>
+      <div class="card-body collapsed">
+        <p style="margin-bottom:6px">법적 동의능력이 없는 소아청소년을 대상으로 할 때, 의료진은 임상적 감독과 발달적으로 적절한 독립성 증진 사이의 균형을 맞춰야 한다.</p>
+        <ul class="dot">
+          <li>일반적으로 채택되는 윤리적 입장: <strong>12–13세 이후</strong> 정보에 기반한 결정을 내릴 수 있는 소아는 일반적 의학치료에 동의/거부할 권리를 가짐(거부가 건강을 심각히 위협하는 경우는 예외)</li>
+          <li>모든 12–13세가 일상 자가관리 책임이전을 인지적·정서적으로 준비된 것은 아님</li>
+          <li>이런 경우 동의(assent)를 강조 — 의사결정 참여를 보장하고 보호자와 함께 자가관리에서 능동적 역할을 하도록 장려</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span>🤰 생식건강·임신전상담</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body collapsed">
+      <ul class="dot">
+        <li>사춘기 시작 또는 사춘기/사춘기후 소아청소년의 당뇨진단 시점부터 가임가능 모든 개인에게 효과적 피임법 교육 — A1C 상승과 태아기형 위험의 연관성 때문</li>
+        <li>TODAY 연구: 2형당뇨 청소년·청년에서 높은 임신 중 산모합병증률, 낮은 임신전상담·피임사용률 확인</li>
+        <li>발달적으로 적절한 교육·행동전략을 사용한 임신전상담은 정보에 기반한 의사결정을 가능하게 함</li>
+        <li>ADA가 청소년 맞춤 임신전상담 자료를 무료로 제공</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ T1D TECH & GOALS ═══ -->
+<div id="tab-t1d-tech" class="panel">
+  <div class="alert alert-orange"><span>📱</span><span>혈당모니터링·인슐린전달기기, A1C 목표 설정은 모든 유형의 당뇨병 소아청소년에게 적용되는 공통 원칙이다. CGM·AID 사용 확대와 함께 더 많은 소아청소년이 ADA 권장 혈당목표를 달성하고 있다.</span></div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>📋 혈당모니터링·인슐린전달기기 — 핵심 권고</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="rec-list">
+        <li class="rec-item"><span class="badge badge-A">A</span><span class="rec-text"><strong>14.16</strong> 진단 시 또는 가능한 빨리 CGM 제공(안전하게 사용가능한 소아청소년 — 본인 또는 보호자) — 기기선택은 개인·가족 상황·욕구·필요에 기반</span></li>
+        <li class="rec-item"><span class="badge badge-A">A</span><span class="rec-text"><strong>14.17</strong> 1형당뇨 소아청소년 — AID 시스템 제공(안전사용가능자)</span></li>
+        <li class="rec-item"><span class="badge badge-A">A</span><span class="rec-text"><strong>14.18</strong> 다회주사 중이며 AID 사용 불가능한 경우 — 개방형루프 인슐린펌프 제공</span></li>
+        <li class="rec-item"><span class="badge badge-C">C</span><span class="rec-text"><strong>14.19</strong> 학생은 학교에서 처방된 CGM·인슐린펌프·연결펜·AID 사용을 지원받아야 함</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>🎯 A1C 목표 — 단계적 개별화</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="rec-list">
+        <li class="rec-item"><span class="badge badge-B">B</span><span class="rec-text"><strong>14.20</strong> 대부분의 당뇨병 소아청소년에게 A1C &lt;7%(&lt;53mmol/mol) 적절 — 개별화·재평가 필수</span></li>
+        <li class="rec-item"><span class="badge badge-B">B</span><span class="rec-text"><strong>14.21</strong> 덜 엄격한 목표(&lt;7% 또는 &lt;7.5%)가 적절할 수 있는 경우 — 저혈당증상 표현불가, 저혈당인지저하, 첨단인슐린전달/CGM 접근불가, 정기혈당검사불가, A1C를 높이는 비혈당성 요인</span></li>
+        <li class="rec-item"><span class="badge badge-B">B</span><span class="rec-text"><strong>14.22</strong> 더욱 덜 엄격한 목표 — 중증 저혈당 병력, 제한된 기대수명, 치료의 해가 이득보다 큰 경우</span></li>
+        <li class="rec-item"><span class="badge badge-B">B</span><span class="rec-text"><strong>14.23</strong> 의미있는 저혈당·과도한 체중증가·정신건강/웰빙 부정적영향·과도한 돌봄부담 없이 달성가능한 경우 더 엄격한 목표(&lt;6.5%) 합리적 제안 가능, 또는 A1C를 낮추는 비혈당성 요인(적혈구생존기간 단축) 보유자. 신혼기(honeymoon phase)에도 낮은 목표 가능</span></li>
+        <li class="rec-item"><span class="badge badge-B">B</span><span class="rec-text"><strong>14.24</strong> 최근 14일(또는 그 이상) CGM 지표를 A1C와 함께(또는 단독으로) 사용 권장</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span>📊 CGM 지표 및 데이터 기간 근거</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body collapsed">
+      <table class="tc-table">
+        <tr><th>지표</th><th>정의</th></tr>
+        <tr><td>TIR</td><td>목표범위 내 시간비율(70–180mg/dL)</td></tr>
+        <tr><td>TBR</td><td>목표이하시간 (&lt;70mg/dL, &lt;54mg/dL)</td></tr>
+        <tr><td>TAR</td><td>목표초과시간 (&gt;180mg/dL, &gt;250mg/dL)</td></tr>
+      </table>
+      <div class="alert alert-info" style="margin-top:8px"><span>ℹ️</span><span>전통적으로 CGM 데이터 14일이 황금표준으로 여겨졌으나, 최근 데이터는 <strong>10일 이상</strong>이면 신뢰할 만한 혈당평가를 제공하며, TIR 목표달성 평가에는 <strong>7일 이상</strong>으로도 충분할 수 있음을 시사</span></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>🧠 신경발달 영향 — DKA·저혈당·고혈당</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <p style="margin-bottom:8px">1형당뇨와 만성 고혈당은 소아청소년기 인지에 부정적 영향을 줄 수 있다. 영향요인:</p>
+      <ul class="dot">
+        <li>어린 연령</li>
+        <li>6세 미만에서의 중증 저혈당</li>
+        <li>DKA</li>
+        <li>만성 고혈당</li>
+      </ul>
+      <div class="alert alert-success" style="margin-top:8px"><span>✅</span><span>더 높은 CGM TIR 달성은 더 나은 구조적 뇌발달·신경인지결과와 연관 — 혈당목표 달성의 중요성을 더욱 강조</span></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span>🔑 혈당목표 설정 핵심 개념</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body collapsed">
+      <ul class="dot">
+        <li>혈당목표는 개별화되어야 하며, 이득-위험평가에 근거해 더 낮은 목표가 합리적일 수 있음</li>
+        <li>빈번한 저혈당 또는 저혈당인지저하 소아에서는 혈당목표를 수정해야 함</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ T1D DETAIL ═══ -->
+<div id="tab-t1d-detail" class="panel">
+  <div class="alert alert-orange"><span>🧬</span><span>1형당뇨는 소아청소년에서 가장 흔한 당뇨병 형태다. 청소년기·청년기의 더 낮은 A1C는 미세혈관·대혈관합병증 위험/발생률 감소와 연관되며, 대사기억효과를 보여준다.</span></div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>📈 모니터링 빈도와 신혼기(Honeymoon Phase)</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="dot">
+        <li>혈당모니터링 빈도와 혈당결과 사이에 강한 연관관계 존재</li>
+        <li>가능한 한 CGM으로 하루 여러 번 혈당측정 — CGM 접근불가/판독부정확 시 손가락혈당검사 필수</li>
+        <li>진단 직후 CGM 사용은 A1C 개선과 연관</li>
+        <li><strong>신혼기(부분관해기)</strong> — 진단 직후 내인성 인슐린분비가 일시적으로 증가하는 시기. 인슐린치료 시작이 포도당독성을 해소하여 잔존 β세포의 인슐린분비가 개선됨. 이 시기와 CGM/AID 접근자에서는 더 낮은 목표가 가능</li>
+        <li>최신 기기 데이터는 낮은 A1C에서의 저혈당위험이 과거보다 낮음을 시사</li>
+        <li>레지스트리 데이터: 6세 미만 포함 소아에서도 중증저혈당 위험 증가없이 낮은 A1C목표 달성 가능</li>
+      </ul>
+      <div class="alert alert-warn" style="margin-top:8px"><span>⚠️</span><span>6세 미만 어린 소아는 저혈당을 인지·표현·관리하지 못하는 경우가 많아 저혈당위험에 특별한 주의가 필요</span></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>🏋️ 1형당뇨+비만 — 운동의 역할</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="dot">
+        <li>비만은 1형당뇨 동반/비동반 소아청소년에서 동등하게 흔함</li>
+        <li>비만은 심혈관위험인자 빈도 증가와 연관, 인종/민족 소외집단(흑인·라티노 등)에 불균형적 영향</li>
+        <li>당뇨의료진은 체중상태를 모니터링하고 건강한 식이패턴·신체활동·건강한 체중을 1형당뇨 소아관리의 핵심요소로 권장해야 함</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>🦠 자가면역 동반질환 — 갑상선질환·셀리악병</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <div class="grid2">
+        <div>
+          <h4 style="font-size: calc(12px * var(--fscale, 1));margin-bottom:6px;color:var(--accent2)">🦋 갑상선질환</h4>
+          <ul class="dot">
+            <li>1형당뇨와 연관된 가장 흔한 자가면역질환, 17–30%에서 발생</li>
+            <li>진단시점 ~25%가 갑상선자가항체 보유 — 갑상선기능장애(주로 갑상선저하증) 예측인자, 갑상선항진증은 ~0.5%</li>
+            <li>항-갑상선과산화효소 항체가 항-갑상선글로불린 항체보다 자가면역갑상선질환 예측력이 더 높음(다변량분석)</li>
+            <li>진단시점 갑상선기능검사는 이전 고혈당·케토산증·체중감소 영향으로 오인될 수 있어, 약간 비정상이면 대사안정 후 재검</li>
+            <li>무증상 갑상선저하증 — 증상성 저혈당·이상지질혈증 위험 증가, 선형성장률 감소와 연관 가능</li>
+          </ul>
+        </div>
+        <div>
+          <h4 style="font-size: calc(12px * var(--fscale, 1));margin-bottom:6px;color:var(--accent2)">🌾 셀리악병</h4>
+          <ul class="dot">
+            <li>1형당뇨에서 1.6–16.4% 발생(일반인구 0.3–1%)</li>
+            <li>골다공증·비타민D결핍·철결핍·성장장애·불규칙혈당·망막병증/알부민뇨 위험증가와 연관</li>
+            <li>선별: IgA + tTG IgA항체(IgA결핍 시 tTG IgG 또는 탈아미노글리아딘펩타이드 IgG항체)</li>
+            <li>대부분 진단 후 5년 내 발견 — 진단 직후 선별 후 2년·5년에 재검 또는 임상증상(성장저하·저혈당증가) 발생 시</li>
+            <li>증상있고 항체수치 높으면(정상상한치 10배 초과) 생검 불필요할 수 있음(추가검증 시행 시)</li>
+            <li>무증상 소아에서는 진단확정 전 생검 권장 — 글루텐프리 식이의 부담이 크기 때문</li>
+          </ul>
+        </div>
+      </div>
+      <div class="alert alert-info" style="margin-top:10px"><span>ℹ️</span><span>Addison병, 자가면역간염, 자가면역위염, 피부근염, 조기난소부전, 중증근무력증 등 기타 자가면역질환도 일반인구보다 흔하게 발생 — 임상적으로 적절히 평가/모니터링. 1형당뇨 환자의 친척은 연구(TrialNet 등)를 통한 췌도자가항체검사를 제공받을 수 있음</span></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>❤️ 심혈관 위험인자 관리(1형) — 고혈압·이상지질혈증</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="dot">
+        <li>인구기반 연구: 1형당뇨 소아청소년 14–45%가 ASCVD위험인자 2개 이상 보유, 연령에 따라 증가, 인종/민족소외집단에서 더 높음, 여아가 남아보다 위험부담이 더 큼</li>
+        <li>죽상경화과정은 소아기에 시작 — 진단 후 첫 10년 내 무증상 심혈관질환 관찰 가능</li>
+        <li>고혈압 치료는 일반적으로 ACE억제제로 시작, 불내성 시(예: 기침) ARB로 대체</li>
+        <li>Non-HDL콜레스테롤이 소아청소년 죽상경화증 예측인자로서 강력 — 공복 불필요해 임상적으로 실용적인 선별검사</li>
+        <li>AHA는 1형당뇨 소아청소년을 심혈관위험 최고등급으로 분류, LDL상승 시 생활습관+약물치료 권장</li>
+        <li>초기치료: 포화지방 7%·콜레스테롤 200mg/일 이하로 제한하는 영양계획(7개월 영아부터 안전성 확인된 RCT 데이터 존재)</li>
+        <li>가족성 고콜레스테롤혈증 소아에서 스타틴의 장기 안전성·심혈관예후 효능 확립됨, rosuvastatin은 6세부터 사용 가능</li>
+        <li>AdDIT 연구 — 1형당뇨 청소년에서 ACE억제제+스타틴 안전성 데이터 제공(단, 알부민-크레아티닌비 변화는 없었음)</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span>👁️🦶 미세혈관 합병증 — 신증·망막병증·신경병증(1형)</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body collapsed">
+      <table class="tc-table">
+        <tr><th>합병증</th><th>핵심 내용</th></tr>
+        <tr><td>신증</td><td>T1D Exchange 7,549명 데이터 — 혈당·혈압목표 달성이 CKD위험감소에 중요, 정기선별로 조기진단·치료 강조. GFR추정은 75mL/min/1.73m² 초과 시 부정확 — 더 나은 조기GFR손실 선별법 필요</td></tr>
+        <tr><td>망막병증</td><td>대개 사춘기 시작·당뇨유병 5–10년 이후 발생, 12세 이전 시력위협병변 위험 낮음. 2019년 DCCT청소년코호트 추적연구가 더 낮은 빈도의 안검진을 지지(특히 목표에 가까운 A1C인 경우). 자율AI선별이 접근성 향상에 도움</td></tr>
+        <tr><td>신경병증</td><td>사춘기전 소아 또는 당뇨 1–2년 이내에는 드묾. SEARCH연구: 1형청소년 1,734명 중 7%에서 말단말초신경병증 유병, 심혈관위험인자와 연관. 종합발검사(시진·맥박·핀찌름·10g단일사·128Hz진동·발목반사)를 매년 시행</td></tr>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ T2D DIAGNOSIS ═══ -->
+<div id="tab-t2d-dx" class="panel">
+  <div class="alert alert-orange"><span>🔬</span><span>최근 몇 년간 소아청소년 2형당뇨의 발생률·유병률이 급격히 증가했으며, 특히 역사적으로 소외된 지역사회에서 두드러진다. 비만 유행으로 1형·2형 감별이 어려워지고 있다.</span></div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>📋 선별검사·진단 — 핵심 권고</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="rec-list">
+        <li class="rec-item"><span class="badge badge-B">B</span><span class="rec-text"><strong>14.25</strong> 사춘기 시작 또는 10세 중 더 이른 시점부터 — 과체중(BMI 85–95백분위수) 또는 비만(≥95백분위수) + 추가위험인자 1개 이상 시 위험기반 전당뇨/2형당뇨 선별 고려</span></li>
+        <li class="rec-item"><span class="badge badge-E">E</span><span class="rec-text"><strong>14.26</strong> 선별결과 정상이면 최소 2년 간격 재선별 <span class="badge badge-C" style="margin-left:4px">C</span> 또는 BMI 증가 시 더 빈번히</span></li>
+        <li class="rec-item"><span class="badge badge-B">B</span><span class="rec-text"><strong>14.27</strong> FPG, 75g OGTT 2시간혈당, 고혈당증상동반 무작위혈당상승, 및/또는 A1C로 전당뇨/2형당뇨 검사 가능</span></li>
+        <li class="rec-item"><span class="badge badge-B">B</span><span class="rec-text"><strong>14.28</strong> 과체중/비만+고혈당으로 2형당뇨가 고려되는 소아청소년 — 자가면역 1형당뇨 배제 위해 췌도자가항체 패널 검사</span></li>
+      </ul>
+      <div class="alert alert-info" style="margin-top:8px"><span>ℹ️</span><span>일부 연구는 OGTT/FPG가 특정 인종에서 A1C보다 더 적합한 진단검사일 수 있다고 제시하나, ADA는 데이터의 한계를 인정하면서도 소아청소년 A1C 사용을 계속 권장. 단, 낭성섬유증 또는 급성1형당뇨 의심증상이 있는 경우 A1C는 진단에 권장되지 않으며, 혈색소병증 보유자는 간섭없는 A1C검사만 적합</span></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>🔀 진단의 어려움 — 1형·2형 중첩</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="dot">
+        <li>1형당뇨 소아에서도 과체중·비만 흔함, 2형당뇨 임상특징(비만·흑색가시세포증) 보유자에서도 당뇨관련 자가항체·케토시스 존재 가능</li>
+        <li>췌도자가항체 존재는 인슐린결핍으로의 더 빠른 진행과 연관</li>
+        <li>2형당뇨 진단 시 10–19세의 ~11%에서 DKA 발생</li>
+        <li>드물지만 10세 미만 사춘기전 소아에서도 2형당뇨 관찰됨 — 시사증상 있으면 감별진단에 포함해야 함</li>
+        <li>비만은 일부 개인에서 1형당뇨 발생에도 기여 — 당뇨유형 간 경계를 더욱 모호하게 함</li>
+        <li>1형당뇨 환자도 체중증가·인슐린저항성을 경험할 수 있음을 인정해야 함</li>
+      </ul>
+      <div class="alert alert-warn" style="margin-top:8px"><span>⚠️</span><span>정확한 진단이 중요 — 치료계획·교육방식·영양조언·결과가 인슐린저항성 우세형과 절대적 인슐린결핍형 사이에서 현저히 다름. 두 표현형의 중첩이 존재할 수 있으며 인슐린저항성·절대적 인슐린결핍 모두 적절히 치료해야 함</span></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>🗺️ 신규진단 초기치료 알고리즘 (Figure 14.1)</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <div class="alert alert-info" style="margin:0 0 10px"><span>💡</span><span>과체중/비만 + 2형당뇨 임상의심이 있는 신규진단 소아청소년 — 생활습관관리·당뇨교육을 즉시 시작하고, A1C·산증/케토시스 여부에 따라 3개 경로로 분류</span></div>
+
+      <div class="grid3">
+        <div class="flow-box" style="border-left:3px solid var(--green)">
+          <strong>경로① A1C&lt;8.5%, 산증/케토시스 없음</strong><br>
+          <span style="font-size: calc(11px * var(--fscale, 1))">메트포르민 시작, 내약성에 따라 1일 2,000mg까지 적정</span>
+        </div>
+        <div class="flow-box" style="border-left:3px solid var(--yellow)">
+          <strong>경로② A1C≥8.5%, 산증없음(케토시스 동반여부 무관)</strong><br>
+          <span style="font-size: calc(11px * var(--fscale, 1))">메트포르민 적정 + 장시간인슐린 0.5단위/kg/일 시작, BGM기반 2–3일마다 적정</span>
+        </div>
+        <div class="flow-box" style="border-left:3px solid var(--red)">
+          <strong>경로③ 산증 및/또는 DKA 및/또는 HHS</strong><br>
+          <span style="font-size: calc(11px * var(--fscale, 1))">DKA/HHS 관리, 산증해소까지 정맥인슐린 후 피하인슐린(자가항체결과 확인까지 1형당뇨처럼 관리)</span>
+        </div>
+      </div>
+
+      <div class="flow-arrow">↓ 췌도자가항체 검사</div>
+
+      <div class="grid2">
+        <div class="flow-box" style="border-left:3px solid var(--teal)">
+          <strong>음성(NEGATIVE)</strong><br>
+          <span style="font-size: calc(11.5px * var(--fscale, 1))">메트포르민 지속/시작, 인슐린 중이면 혈당치 기반 적정 → A1C목표 미달성 시: 메트포르민 지속 + GLP-1 RA 또는 SGLT2i(승인연령) 추가고려 + 체중증가 최소화 위해 인슐린 증량 전 비인슐린제 우선/최대화 고려 + 인슐린 적정/시작(장시간인슐린만으로 목표미달성 시 식전인슐린 추가, 총일일용량 1단위/kg/일 초과 가능)</span>
+        </div>
+        <div class="flow-box" style="border-left:3px solid var(--purple)">
+          <strong>양성(POSITIVE)</strong><br>
+          <span style="font-size: calc(11.5px * var(--fscale, 1))">1형당뇨처럼 다회주사 인슐린 또는 펌프요법 지속/시작 + 메트포르민 중단 고려</span>
+        </div>
+      </div>
+      <p style="font-size: calc(10px * var(--fscale, 1));color:var(--text2);margin-top:8px">A1C 8.5%=69mmol/mol. ADA 입장문 "Evaluation and Management of Youth-Onset Type 2 Diabetes"에서 응용. BGM=혈당측정, HHS=고혈당고삼투압상태</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>🥗 생활습관관리·혈당목표 — 핵심 권고</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="rec-list">
+        <li class="rec-item"><span class="badge badge-B">B</span><span class="rec-text"><strong>14.29</strong> 과체중/비만+2형당뇨 소아청소년과 가족 — 당뇨관리와 통합된 발달/문화적합 종합생활습관프로그램으로 과체중의 최소 7–10% 감소 목표</span></li>
+        <li class="rec-item"><span class="badge badge-E">E</span><span class="rec-text"><strong>14.30</strong> 장기체중관리 필요성을 고려해 만성질환관리모델 기반 생활습관중재를 당뇨진료 맥락에서 제공</span></li>
+        <li class="rec-item"><span class="badge badge-E">E</span><span class="rec-text"><strong>14.31</strong> 혈당상태를 최소 3개월마다 또는 임상적으로 필요한 만큼 자주 평가</span></li>
+        <li class="rec-item"><span class="badge badge-C">C</span><span class="rec-text"><strong>14.32</strong> 저혈당위험 낮은 대다수 2형당뇨 소아청소년 — A1C목표 &lt;6.5%(&lt;48mmol/mol) 고려, 고위험군은 개별화</span></li>
+      </ul>
+      <div class="alert alert-info" style="margin-top:8px"><span>ℹ️</span><span>1형(&lt;7%)보다 낮은 2형 목표(&lt;6.5%)는 더 낮은 저혈당위험과 더 높은 합병증위험으로 정당화됨. 가족중심 생활습관중재(신체활동 포함)가 효과적이며, 문화적으로 적절하고 가족자원에 민감해야 함</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ T2D PHARM & SURGERY ═══ -->
+<div id="tab-t2d-rx" class="panel">
+  <div class="alert alert-orange"><span>💊</span><span>현재 소아청소년 2형당뇨 약물치료는 인슐린, 메트포르민, GLP-1 RA, SGLT2 억제제 4계열로 제한된다. 대사수술도 점차 청소년에서 시행이 늘고 있다.</span></div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>📋 약물치료 — 핵심 권고</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="rec-list">
+        <li class="rec-item"><span class="badge badge-A">A</span><span class="rec-text"><strong>14.33</strong> 진단 시점부터 건강한영양·신체활동 행동상담과 함께, 다중 부가요법을 조기에 고려하며 약물치료 시작</span></li>
+        <li class="rec-item"><span class="badge badge-A">A</span><span class="rec-text"><strong>14.34</strong> 우연히 진단된 경우(A1C&lt;8.5%, 무증상) — 신기능 금기없으면 메트포르민이 1차 선택약물</span></li>
+        <li class="rec-item"><span class="badge badge-B">B</span><span class="rec-text"><strong>14.35</strong> 진단 시 산증없는 현저한 고혈당(A1C≥8.5%) — 장시간인슐린으로 초기치료하며 메트포르민 시작·적정</span></li>
+        <li class="rec-item"><span class="badge badge-A">A</span><span class="rec-text"><strong>14.36</strong> 케토산증 동반 — 피하 또는 정맥인슐린으로 고혈당·대사이상 신속교정, 산증해소 후 피하인슐린 지속하며 메트포르민 시작</span></li>
+        <li class="rec-item"><span class="badge badge-A">A</span><span class="rec-text"><strong>14.37</strong> 중증고혈당(혈당≥600mg/dL[≥33.3mmol/L]) — HHS 평가 및 필요시 치료 고려</span></li>
+        <li class="rec-item"><span class="badge badge-A">A</span><span class="rec-text"><strong>14.38</strong> 메트포르민(±장시간인슐린)으로 개별화목표 미달성/유지불가 — 승인연령의 GLP-1 RA 및/또는 SGLT2i 고려</span></li>
+        <li class="rec-item"><span class="badge badge-E">E</span><span class="rec-text"><strong>14.39</strong> 목표 미달성 시 인슐린요법 시작/강화 전 비인슐린요법(메트포르민·GLP-1 RA·SGLT2i) 최대화 고려</span></li>
+        <li class="rec-item"><span class="badge badge-B">B</span><span class="rec-text"><strong>14.40</strong> 인슐린+메트포르민/기타 약물로 시작했으나 혈당검사/CGM기준 목표달성 중 — 인슐린 감량/중단 고려</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>💊 약물계열별 임상근거</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <div class="acc">
+        <div class="acc-hdr" onclick="toggleAcc(this)"><span>메트포르민</span><span>▾</span></div>
+        <div class="acc-body">1차 약물. TODAY 연구: 메트포르민 단독으로 약 절반의 참가자만 6개월간 A1C&lt;8% 유지(내구적 혈당관리). RISE 연구: 메트포르민과 인슐린 간 혈당/β세포기능보존 차이없으나 인슐린군에서 체중증가 더 큼. TODAY연구는 생활습관+메트포르민 병합이 메트포르민 단독보다 더 우수하지 않음을 보임(현재까지 소아 2형당뇨에서 생활습관+메트포르민 병합을 평가한 유일한 시험).</div>
+      </div>
+      <div class="acc">
+        <div class="acc-hdr" onclick="toggleAcc(this)"><span>GLP-1 수용체작용제</span><span>▾</span></div>
+        <div class="acc-body">다수 RCT에서 A1C감소에 안전·효과적, 비만승인용량에서 체중감소 촉진 입증. 위장관부작용 빈도 증가 가능, 갑상선수질암 가족력자에서 사용금기. Tirzepatide(GIP/GLP-1 이중작용제) 5mg/10mg 주1회 RCT — 30주에 A1C·체중 모두 임상적으로 의미있고 통계적으로 유의한 개선, 52주까지 이득 지속. 가장 흔한 이상반응은 위장관계(성인시험과 동일). 현재 소아용 regulatory 승인 없음.</div>
+      </div>
+      <div class="acc">
+        <div class="acc-hdr" onclick="toggleAcc(this)"><span>SGLT2 억제제</span><span>▾</span></div>
+        <div class="acc-body">Empagliflozin, dapagliflozin, canagliflozin이 10–17세 2형당뇨에 승인됨(임상적으로 유의한 A1C감소를 보인 임상시험 기반). 중증저혈당·DKA 위험 낮고 내약성 양호. 비뇨생식기 감염위험 증가 상담 필요.<br><br>
+        <strong>DINAMO시험</strong> — empagliflozin 10mg(필요시 25mg 증량) vs linagliptin 5mg vs 위약, 6개월 후 empagliflozin군 A1C 유의감소(linagliptin은 위약 대비 이득 없음)<br>
+        <strong>Dapagliflozin시험</strong> — dapagliflozin 5mg(증량 10mg) vs saxagliptin 2.5mg(증량 5mg) vs 위약, 6개월 후 dapagliflozin군 A1C 유의감소(saxagliptin은 이득 없음)<br>
+        <strong>Canagliflozin시험</strong> — canagliflozin 100mg(증량 300mg) vs 위약, 6개월 후 유의한 A1C감소<br>
+        모든 SGLT2i 시험에서 12개월 안전성평가, 성인 2형당뇨 연구와 일치하는 안전성프로파일 확인</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>🏥 대사수술(Metabolic Surgery) — 핵심 권고</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="rec-list">
+        <li class="rec-item"><span class="badge badge-A">A</span><span class="rec-text"><strong>14.41</strong> 2급 비만 이상(BMI 35~&lt;40kg/m² 또는 연령·성별 120~&lt;140백분위, 둘 중 낮은 것) + A1C상승 및/또는 생활습관·약물치료에도 심각한 동반질환 — 대사수술 고려</span></li>
+        <li class="rec-item"><span class="badge badge-A">A</span><span class="rec-text"><strong>14.42</strong> 청소년 대사수술은 숙련된 외과의가 잘 조직되고 참여적인 인터프로페셔널팀(외과의·내분비내과의·영양사·행동건강전문가·간호사)의 일원으로 시행할 때만</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <div class="card-header" onclick="toggleCard(this)">
+        <span>📊 Teen-LABS·TODAY 연구 데이터</span><span class="toggle">▾</span>
+      </div>
+      <div class="card-body collapsed">
+        <ul class="dot">
+          <li>소규모 후향분석·전향적 다기관 비무작위연구 — 청소년 비만+2형당뇨에서 성인과 유사한 이득 시사</li>
+          <li>조기추적: 청소년이 성인과 비슷한 체중감소 보임, 2형당뇨·고혈압 관해율은 더 높음</li>
+          <li>Teen-LABS+TODAY 2차분석: 중증비만+2형당뇨 청소년의 수술치료가 TODAY연구 약물치료보다 더 나은 혈당관리와 연관</li>
+          <li>가장 흔히 시행되는 수술법은 복강경 위소매절제술(vertical sleeve gastrectomy)이나, 수술과 현재 치료옵션을 비교한 무작위시험은 없음</li>
+          <li>Teen-LABS 10년 추적 — 체중감소·동반질환관해의 장기지속성 입증</li>
+          <li>장기 합병증률·재수술률·영양결핍·당뇨재발률에 대한 추가 장기데이터 필요</li>
+        </ul>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header" onclick="toggleCard(this)">
+        <span>⚖️ 비만치료의 변화 — 약물요법의 부상</span><span class="toggle">▾</span>
+      </div>
+      <div class="card-body collapsed">
+        <ul class="dot">
+          <li>소아청소년 비만에 대한 체중감량·생활습관중재 결과는 다소 제한적</li>
+          <li>FDA승인(12세 이상): phentermine/topiramate 서방형 캡슐, GLP-1 RA</li>
+          <li>GIP/GLP-1 이중작용제의 소아 regulatory 승인은 아직 없음</li>
+          <li>최근 발표된 tirzepatide 시험 등 새로운 비만약물치료 시험들이 안전성과 함께 우수한 체중감소를 보일 경우, 대사수술의 필요성을 대체할 가능성도 있음</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span>🏥 2형당뇨 동반질환 — 조기관리 필요</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body collapsed">
+      <ul class="dot">
+        <li>동반질환이 2형당뇨 진단시점에 이미 존재할 수 있음 — 진단시 혈압측정, 공복지질패널, 무작위 요알부민-크레아티닌비, 발검사(신경병증), 산동안과검진 필요</li>
+        <li>다낭성난소질환, 수면무호흡, 지방간, 정형외과적 합병증, 심리사회적 문제 등 소아비만 동반질환도 평가 필요</li>
+        <li>2형당뇨 청소년에서 인슐린치료중이어도 저혈당위험 낮음, 만성합병증률은 높음</li>
+        <li>1형당뇨보다 더 짧은 유병기간·낮은 A1C에도 불구하고 더 높은 동반질환률 — 더 이른 발병 2형당뇨가 더 긴 평생 고혈당·죽상형성위험인자(인슐린저항성·이상지질혈증·고혈압·만성염증) 노출과 관련될 가능성</li>
+        <li>2형당뇨+다낭성난소증후군 청소년에서 경구피임제가 적절한 약물</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ COMPLICATIONS (Table 14.1) ═══ -->
+<div id="tab-complications" class="panel">
+  <div class="alert alert-orange"><span>⚠️</span><span>표 14.1 — 권고 14.43–14.79를 1형·2형당뇨 직접비교가 가능하도록 정리한 종합표. 자가면역질환은 1형에서만, 다낭성난소증후군·수면무호흡·MASLD는 주로 2형 권고로 제시된다.</span></div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>🩸 이상지질혈증</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <table class="tc-table">
+        <tr><th>구분</th><th>권고</th></tr>
+        <tr><td>1형 14.43</td><td><span class="badge badge-B">B</span> 진단 후 곧(혈당개선 후, 연령≥2세) 지질선별. 초기 LDL≤100mg/dL이면 9–11세에 재검 <span class="badge badge-E" style="margin-left:4px">E</span>·이후 3년마다</td></tr>
+        <tr><td>2형 14.44</td><td><span class="badge badge-B">B</span> 진단 후 곧(혈당개선 후) 지질선별, 이후 매년</td></tr>
+        <tr><td>공통 14.45</td><td><span class="badge badge-E">E</span> LDL목표 &lt;100mg/dL(&lt;2.6mmol/L)</td></tr>
+        <tr><td>공통 14.46</td><td><span class="badge badge-A">A</span> 지질이상 시 초기치료 = 혈당최적화+의학영양치료(지방칼로리25–30%·포화지방&lt;7%·콜레스테롤&lt;200mg/일 제한, 트랜스지방회피, 단일불포화지방~10%). 중성지방상승 시 탄수화물감소+오메가3 풍부식품 추가</td></tr>
+        <tr><td>공통 14.47</td><td><span class="badge badge-B">B</span> 영양중재 6개월 후 LDL&gt;130mg/dL 지속 시 스타틴 시작(목표 LDL&lt;100). 기형유발가능성으로 가임가능자는 생식상담 및 신뢰할 피임없이 스타틴 회피</td></tr>
+        <tr><td>공통 14.48</td><td><span class="badge badge-C">C</span> 중성지방 공복&gt;400 또는 비공복&gt;1,000mg/dL — 혈당최적화+fibrate 시작(목표 공복&lt;400, 췌장염위험감소)</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>🩺 고혈압</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <table class="tc-table">
+        <tr><th>구분</th><th>권고</th></tr>
+        <tr><td>공통 14.49</td><td><span class="badge badge-B">B</span> 매 방문시 혈압측정. 고혈압(연령·성별·신장별 ≥90백분위 또는 ≥13세는 ≥120/80mmHg) 3회 독립측정 시 외래혈압모니터링 강력고려</td></tr>
+        <tr><td>공통 14.50</td><td><span class="badge badge-C">C</span> 과도체중은 심혈관사건률 증가 — 의학영양치료·집중생활습관중재(이상지질혈증·고혈압·고혈당)+부가약물/적절시 비만수술로 대응</td></tr>
+        <tr><td>공통 14.51</td><td><span class="badge badge-C">C</span> 이차성고혈압 배제 후, 상승혈압(90~&lt;95백분위 또는 ≥13세 120–129/&lt;80) 치료 = 건강영양·신체활동·수면·적절시 체중관리 중심 생활습관수정</td></tr>
+        <tr><td>1형 14.52</td><td><span class="badge badge-B">B</span> 확진고혈압(지속 ≥95백분위 또는 ≥13세 ≥130/80) — 생활습관수정+ACE억제제/ARB 시작. 기형유발가능성으로 가임가능자는 생식상담, 신뢰할 피임없이 ACE/ARB 회피</td></tr>
+        <tr><td>공통 14.53</td><td><span class="badge badge-C">C</span> 치료목표: 혈압 &lt;90백분위 또는 ≥13세 &lt;130/80mmHg</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>🫘 신증</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <table class="tc-table">
+        <tr><th>구분</th><th>권고</th></tr>
+        <tr><td>1형 14.54</td><td><span class="badge badge-B">B</span> 사춘기 또는 ≥11세(더 이른시점), 당뇨유병 5년 후부터 선별, 이후 매년</td></tr>
+        <tr><td>2형 14.55</td><td><span class="badge badge-B">B</span> 진단시점부터 선별, 이후 매년. UACR&gt;30mg/g 상승 시 3개 중 2개 샘플로 확인</td></tr>
+        <tr><td>공통 14.56</td><td><span class="badge badge-B">B</span> 무작위 소변샘플로 선별, 운동/기립영향있으면 아침소변 고려. 상승 UACR은 6개월간 3개 중 2개 샘플로 확인</td></tr>
+        <tr><td>공통 14.57</td><td><span class="badge badge-E">E</span> 진단시점 eGFR산정, 이후 매년</td></tr>
+        <tr><td>공통 14.58</td><td>비임신자 — 중등도알부민뇨(UACR 30–299) <span class="badge badge-B" style="margin-left:4px">B</span>는 ACE/ARB 권장, 중증알부민뇨(≥300) 및/또는 eGFR&lt;60 <span class="badge badge-A" style="margin-left:4px">A</span>는 최대허용용량까지 강력권장. 한쪽 불내성 시 다른계열로 대체 <span class="badge badge-B" style="margin-left:4px">B</span>. 가임가능자 생식상담+신뢰할 피임없이 회피 <span class="badge badge-B" style="margin-left:4px">B</span></td></tr>
+        <tr><td>공통 14.59</td><td><span class="badge badge-E">E</span> 신증 있으면 3–6개월마다 및/또는 UACR·eGFR 지표에 따라 모니터링 지속</td></tr>
+        <tr><td>공통 14.60</td><td><span class="badge badge-E">E</span> 원인불명확·UACR악화·eGFR감소 시 신장내과 의뢰</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>👁️ 망막병증</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <table class="tc-table">
+        <tr><th>구분</th><th>권고</th></tr>
+        <tr><td>1형 14.61</td><td><span class="badge badge-B">B</span> 당뇨유병 3–5년 후, ≥11세 또는 사춘기시작(더 이른시점)에 첫 산동종합안과검진</td></tr>
+        <tr><td>2형 14.62</td><td><span class="badge badge-C">C</span> 진단시점 또는 곧, 이후 매년 망막병증선별</td></tr>
+        <tr><td>공통 14.63</td><td><span class="badge badge-B">B</span> 혈당최적화로 망막병증 위험/진행 감소</td></tr>
+        <tr><td>1형 14.64</td><td><span class="badge badge-B">B</span> 첫검진 후 2년마다 재검(산동검사 또는 망막촬영). 안과전문의 권고·위험인자평가(A1C&lt;8% 병력 포함) 기반으로 4년마다도 허용 가능</td></tr>
+        <tr><td>2형 14.65</td><td><span class="badge badge-C">C</span> 혈당목표달성+정상안검사 시 2년마다 검사 고려 가능</td></tr>
+        <tr><td>공통 14.66</td><td><span class="badge badge-B">B</span> 비산동 망막촬영(원격판독 또는 검증된 평가도구) 적절한 선별전략 가능</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>⚡ 신경병증</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <table class="tc-table">
+        <tr><th>구분</th><th>권고</th></tr>
+        <tr><td>1형 14.67</td><td><span class="badge badge-B">B</span> 사춘기시작 또는 ≥11세(더 이른시점), 당뇨유병 5년 후부터 연 1회 종합발검사 고려 — 시진·발맥박·핀찌름·10g단일사·128Hz진동·발목반사 포함</td></tr>
+        <tr><td>2형 14.68</td><td><span class="badge badge-C">C</span> 진단시·매년 발검사로 신경병증 선별 — 동일 검사항목</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <div class="card-header" onclick="toggleCard(this)">
+        <span>🫁 MASLD·수면무호흡 (2형/공통)</span><span class="toggle">▾</span>
+      </div>
+      <div class="card-body collapsed">
+        <table class="tc-table">
+          <tr><th>구분</th><th>권고</th></tr>
+          <tr><td>2형 14.69</td><td><span class="badge badge-B">B</span> 진단시·매년 AST·ALT측정으로 MASLD평가</td></tr>
+          <tr><td>2형 14.70</td><td><span class="badge badge-B">B</span> 지속/악화되는 트랜스아미나제 — 소화기내과 의뢰 고려</td></tr>
+          <tr><td>공통 14.71</td><td><span class="badge badge-B">B</span> 수면무호흡증상 최소 매년 선별, 필요시 소아수면전문가에게 수면다원검사 의뢰. 확인된 폐쇄성수면무호흡은 치료</td></tr>
+        </table>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header" onclick="toggleCard(this)">
+        <span>♀️ PCOS·심혈관질환 (공통)</span><span class="toggle">▾</span>
+      </div>
+      <div class="card-body collapsed">
+        <table class="tc-table">
+          <tr><th>구분</th><th>권고</th></tr>
+          <tr><td>공통 14.72</td><td><span class="badge badge-B">B</span> 당뇨여아 — 임상적 지표 있을 때 검사실검사 포함 다낭성난소증후군 평가</td></tr>
+          <tr><td>공통 14.73</td><td><span class="badge badge-E">E</span> 메트포르민+생활습관수정이 당뇨여아의 월경주기·고androgen증 개선 가능성</td></tr>
+          <tr><td>공통 14.74</td><td><span class="badge badge-C">C</span> 과도한 체중증가는 심혈관사건률 증가 — 생활습관·적절시 비만약물치료로 대응</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span>🦠 자가면역·갑상선·셀리악 (1형 전용)</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body collapsed">
+      <table class="tc-table">
+        <tr><th>구분</th><th>권고</th></tr>
+        <tr><td>1형 14.75</td><td><span class="badge badge-B">B</span> 급성질환외 상황에서 임상지표 있으면 자가면역질환 평가</td></tr>
+        <tr><td>1형 14.76</td><td><span class="badge badge-B">B</span> 진단시(임상안정 시) 또는 혈당최적화 직후 TSH측정. 정상이면 1–2년마다 재검 또는 갑상선항체양성·증상/징후(갑상선기능장애·갑상선종대·성장률이상·원인불명 혈당변동) 발생 시 더 조기재검</td></tr>
+        <tr><td>1형 14.77</td><td><span class="badge badge-B">B</span> 급성질환외 상황에서 진단직후 IgA tTG항체(국소검사실 정상IgA수치 확인 동반) 또는 IgA결핍시 IgG tTG·탈아미노글리아딘항체로 셀리악병 선별</td></tr>
+        <tr><td>1형 14.78</td><td><span class="badge badge-B">B</span> 1형진단 2년 내 재선별, 이후 5년 후 재선별. 증상있거나 셀리악병 1촌친족 있으면 더 빈번한 선별 고려</td></tr>
+        <tr><td>1형 14.79</td><td><span class="badge badge-B">B</span> 확진된 셀리악병 — 글루텐프리식이 처방(영양합병증 예방), 당뇨·셀리악병 모두에 경험있는 영양사에게 의뢰</td></tr>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ SUBSTANCE USE & TRANSITION ═══ -->
+<div id="tab-other" class="panel">
+  <div class="alert alert-orange"><span>🚭</span><span>물질사용 선별·소아→성인 진료전환은 모든 유형의 당뇨병 소아청소년에게 적용되는 공통 관리영역이다.</span></div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>📋 물질사용 — 핵심 권고</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="rec-list">
+        <li class="rec-item"><span class="badge badge-C">C</span><span class="rec-text"><strong>14.80</strong> 진단시·정기적으로 담배/니코틴 베이핑·물질사용·알코올사용 선별, 사용을 만류하고 필요시 금연프로그램 의뢰 <span class="badge badge-A" style="margin-left:4px">A</span></span></li>
+        <li class="rec-item"><span class="badge badge-E">E</span><span class="rec-text"><strong>14.81</strong> 모든 당뇨병 소아·청소년·청년에게 어떤 형태로도 대마초 레크리에이션 사용을 하지 말도록 권고</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <div class="card-header open" onclick="toggleCard(this)">
+        <span>🚬 담배·전자담배</span><span class="toggle">▾</span>
+      </div>
+      <div class="card-body">
+        <ul class="dot">
+          <li>당뇨병 청소년·청년의 흡연율이 비당뇨군보다 유의하게 높음</li>
+          <li>흡연은 알부민뇨 발생위험 증가 — 미세혈관·대혈관 합병증 예방을 위해 금연 중요</li>
+          <li>베이핑·전자담배 사용도 만류해야 함(금연수단 또는 레크리에이션 목적 모두)</li>
+          <li>어린 소아에서는 가정 내 간접흡연 노출도 평가 필요(2차흡연의 부정적영향)</li>
+        </ul>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header open" onclick="toggleCard(this)">
+        <span>🍺 알코올</span><span class="toggle">▾</span>
+      </div>
+      <div class="card-body">
+        <ul class="dot">
+          <li>음주 후 보통 6–12시간 후 지연성저혈당 유발 가능</li>
+          <li>알코올중독 증상(어눌한말투·졸림·혼동·보행장애)이 저혈당증상을 모방 — 저혈당인지저하 위험 증가</li>
+          <li>미치료 저혈당사건은 의식소실·발작·사망까지 이를 수 있음</li>
+          <li>만성질환(1형당뇨 포함) 청소년 대상 심리교육중재가 일부 하위그룹에서 지식·인지위험이해·사용감소에 효과 보임</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>🌿 대마초 — 고혈당케토시스-대마초과다구토증후군</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="dot">
+        <li>대마초 합법화 확대·제품다양화로 접근성 증가</li>
+        <li>1형당뇨 청소년 대마초사용 보고율 — 지난한달 17.1%, 지난3개월 23%, 평생 30.9%</li>
+        <li>성인 1형당뇨에서 대마초사용은 DKA위험 증가와 연관, 청소년에서도 유사양상 시사하는 신생증거 존재</li>
+        <li><strong>고혈당케토시스-대마초과다구토증후군</strong>: 오심이 중증구토로 진행 → 케토시스·알칼리증 → 이후 고혈당</li>
+        <li>고혈당응급으로 내원한 1형당뇨 청소년에서 pH≥7.4 + 중탄산염&gt;15mmol/L + 케토시스 동반 시 이 증후군 고려</li>
+      </ul>
+      <div class="alert alert-danger" style="margin-top:8px"><span>🚫</span><span>일상적 당뇨관리에서 모든 형태의 레크리에이션 대마초 사용을 만류해야 함</span></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>🔄 소아→성인 진료 전환 — 핵심 권고</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="rec-list">
+        <li class="rec-item"><span class="badge badge-E">E</span><span class="rec-text"><strong>14.82</strong> 당뇨관리팀은 청소년초기부터 전환준비프로그램을 시작, 늦어도 소아→성인 의료 예상이전 최소 1년 전에는 시작</span></li>
+        <li class="rec-item"><span class="badge badge-C">C</span><span class="rec-text"><strong>14.83</strong> 인터프로페셔널 성인·소아의료팀이 이전 전·중 청소년·청년·가족에게 지지와 자원 제공</span></li>
+        <li class="rec-item"><span class="badge badge-E">E</span><span class="rec-text"><strong>14.84</strong> 소아당뇨전문의는 당뇨청소년·보호자와 협력하여 성인당뇨전문의로의 이전시점에 대한 공유의사결정 참여. 이전을 위한 연령특정 기준은 없음</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>🌱 신생성인기(Emerging Adulthood) — 전환의 위험과 과제</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="dot">
+        <li>당뇨관리의 책임은 소아청소년기에 걸쳐 점차 부모/보호자에서 본인에게로 이전</li>
+        <li>소아→성인 의료진 전환은 종종 갑작스럽게 발생 — 신생성인기라는 발달단계와 맞물림</li>
+        <li>이 시기 새로운 책임: 자가관리, 진료예약 스케줄/참석, 처방재충전, 부모건강보험 적용종료 후 의료비 자체부담(美 ACA에 따라 26세까지 지속가능)</li>
+        <li>의료중단과 함께 혈당안정성 악화, 급성합병증 증가, 심리사회/정서/행동적 어려움, 만성합병증 출현이 동반되는 시기</li>
+        <li>전환기는 의료전달의 파편화에 취약 — 의료품질·비용·결과에 부정적 영향 가능</li>
+        <li>전환후·성인진입초기에 당뇨건강결과가 악화되는 경향이 문서화됨</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span>🛠️ 성공적 전환을 위한 전략</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body collapsed">
+      <ul class="dot">
+        <li>청소년초기부터 시작하는 포괄적·조율된 계획수립이 필요</li>
+        <li>효과적 중재에 대한 연구는 제한적이나, 추적방문참석률 향상·입원율감소에 도움이 될 유망한 발전들 존재</li>
+        <li>전환코디네이터 활용, 청년과의 소통지원기술, 기타 중재가 청년의 전환관련 필요/선호를 다루는 데 유용할 수 있음</li>
+        <li>전환을 다루는 당뇨관리팀에는 임상의·CDCES·간호사·행동건강전문가·영양사·사회복지사가 포함되어야 함</li>
+        <li>전환과정 중 사회적·동료지지를 향상시키는 자원도 가치있을 수 있음</li>
+        <li>Endocrine Society가 ADA 등 여러 기관과 협력하여 임상의·당뇨청년·가족을 위한 전환도구를 개발함</li>
+      </ul>
+      <div class="alert alert-info" style="margin-top:8px"><span>ℹ️</span><span>궁극적으로 당뇨청소년·청년이 성인당뇨진료로 이전하는 데 연령상한선은 없다. 이전결정은 당뇨를 가진 청년·보호자·소아당뇨전문의가 준비도·선호·우려사항을 함께 논의하는 협력적 과정이어야 한다.</span></div>
+    </div>
+  </div>
+</div>
+</div><!-- /main -->
+
+<!-- ═══ MODAL: A1C 목표 1형/2형 비교 ═══ -->
+<div id="a1cModal" class="modal-overlay" onclick="closeModalOutside(event,'a1cModal')">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal('a1cModal')">✕</button>
+    <div class="modal-title">🎯 소아청소년 A1C 목표 — 1형 vs 2형 당뇨병</div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">1형당뇨 A1C 목표 체계</div>
+      <table class="modal-table">
+        <tr><th>상황</th><th>목표</th></tr>
+        <tr><td>대부분의 1형당뇨 소아청소년</td><td>&lt;7% (&lt;53mmol/mol)</td></tr>
+        <tr><td>저혈당증상표현불가/인지저하/기기접근불가 등</td><td>&lt;7% 또는 &lt;7.5% (덜 엄격)</td></tr>
+        <tr><td>중증저혈당병력/제한된기대수명/치료해&gt;이득</td><td>더욱 덜 엄격(개별화)</td></tr>
+        <tr><td>부작용없이 달성가능 시 또는 신혼기</td><td>&lt;6.5% (&lt;48mmol/mol) 고려 가능</td></tr>
+      </table>
+    </div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">2형당뇨 A1C 목표</div>
+      <table class="modal-table">
+        <tr><th>상황</th><th>목표</th></tr>
+        <tr><td>저혈당위험 낮은 대다수</td><td>&lt;6.5% (&lt;48mmol/mol) 고려</td></tr>
+        <tr><td>저혈당고위험군</td><td>개별화</td></tr>
+      </table>
+    </div>
+
+    <div class="alert alert-info" style="margin-top:4px"><span>ℹ️</span><span>2형이 1형보다 더 낮은 목표를 갖는 이유는 ① 저혈당위험이 더 낮고 ② 합병증위험이 더 높기 때문이다(TODAY 연구 등에서 확인). 모든 목표는 CGM 사용 시 최근 14일 이상 데이터를 A1C와 함께 또는 대신 활용해 설정할 수 있다.</span></div>
+  </div>
+</div>
+
+<!-- ═══ MODAL: Figure 14.1 알고리즘 ═══ -->
+<div id="algoModal" class="modal-overlay" onclick="closeModalOutside(event,'algoModal')">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal('algoModal')">✕</button>
+    <div class="modal-title">🗺️ Figure 14.1 — 신규진단 청소년 당뇨병 초기치료 알고리즘</div>
+
+    <div class="alert alert-info" style="margin:0 0 12px"><span>💡</span><span>과체중/비만이 있고 임상적으로 2형당뇨가 의심되는 신규진단 소아청소년에 적용. 생활습관관리·당뇨교육을 즉시 시작한 후, A1C 수치와 산증/케토시스 여부로 3개 경로로 분류한다.</span></div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">초기 분류 (3개 경로)</div>
+      <table class="modal-table">
+        <tr><th>경로</th><th>기준</th><th>초기치료</th></tr>
+        <tr><td>①</td><td>A1C&lt;8.5%, 산증/케토시스없음</td><td>메트포르민(내약성에 따라 2,000mg/일까지)</td></tr>
+        <tr><td>②</td><td>A1C≥8.5%, 산증없음(케토시스무관)</td><td>메트포르민 적정 + 장시간인슐린 0.5단위/kg/일 시작, 2–3일마다 BGM기반 적정</td></tr>
+        <tr><td>③</td><td>산증/DKA/HHS</td><td>DKA·HHS 관리, 정맥인슐린→피하인슐린, 자가항체결과까지 1형처럼 관리</td></tr>
+      </table>
+    </div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">췌도자가항체 결과에 따른 후속관리</div>
+      <table class="modal-table">
+        <tr><th>결과</th><th>관리방향</th></tr>
+        <tr><td>음성</td><td>메트포르민 지속/시작. A1C목표 미달성 시: GLP-1 RA/SGLT2i 추가 → 인슐린증량 전 비인슐린제 우선/최대화 → 인슐린 적정/시작(필요시 식전인슐린 추가, 총량 1단위/kg/일 초과 가능)</td></tr>
+        <tr><td>양성</td><td>1형당뇨처럼 다회주사 또는 펌프요법 지속/시작, 메트포르민 중단 고려</td></tr>
+      </table>
+    </div>
+
+    <div class="alert alert-warn" style="margin-top:4px"><span>⚠️</span><span>치료 시작 후 처음 몇 주간 당뇨병 유형이 불확실한 경우가 많으므로, 최종유형과 무관하게 고혈당·대사이상을 우선 해결한 후 대사보상 확립 및 자가항체결과 확인 후 치료를 조정한다.</span></div>
+  </div>
+</div>
+
+<!-- ═══ MODAL: Mature Minor Rule ═══ -->
+<div id="mmRuleModal" class="modal-overlay" onclick="closeModalOutside(event,'mmRuleModal')">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal('mmRuleModal')">✕</button>
+    <div class="modal-title">⚖️ Mature Minor Rule (성숙미성년자 원칙)</div>
+
+    <div class="alert alert-info" style="margin:0 0 12px"><span>💡</span><span>법적 동의능력이 없는 소아청소년을 대상으로 진료할 때, 의료진은 임상적 감독과 발달적으로 적절한 독립성 증진 사이의 균형을 맞춰야 한다.</span></div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">원칙의 핵심</div>
+      <ul class="dot">
+        <li>인지능력은 개인마다 다양하나, 흔히 채택되는 윤리적 입장은 "성숙미성년자 원칙"</li>
+        <li><strong>12–13세 이후</strong> 정보에 기반한 결정을 내릴 수 있는 소아는 일반적 의학치료에 동의 또는 거부할 권리를 가짐</li>
+        <li>예외: 거부가 건강을 심각하게 위협하는 경우</li>
+      </ul>
+    </div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">실제 적용 시 고려사항</div>
+      <ul class="dot">
+        <li>모든 12–13세가 인지적·정서적으로 일상 자가관리 책임이전을 받을 준비가 된 것은 아님</li>
+        <li>이런 경우 "동의(assent)"를 강조 — 의사결정 과정에 참여를 보장하고, 보호자와 함께 자가관리에서 능동적 역할을 하도록 장려</li>
+      </ul>
+    </div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">발달단계별 접근 권고</div>
+      <ul class="dot">
+        <li>발달단계에 맞춘 교육 제공</li>
+        <li>자가관리 책임의 점진적 이전 장려</li>
+        <li>책임 변화에 따른 부모참여 안내</li>
+        <li>전환에 대비한 자기옹호(self-advocacy) 교육</li>
+        <li>모든 단계에서 심리사회적 지지 통합</li>
+      </ul>
+    </div>
+
+    <div class="alert alert-warn" style="margin-top:4px"><span>⚠️</span><span>조기 또는 비지지적인 당뇨관리 책임이전은 당뇨디스트레스 증가, 자가관리참여 저하, 혈당악화로 이어질 수 있어 신중한 접근이 필요하다.</span></div>
+  </div>
+</div>
+
+<!-- ═══ MODAL: 소아 2형당뇨 승인 약물 4계열 ═══ -->
+<div id="approvedModal" class="modal-overlay" onclick="closeModalOutside(event,'approvedModal')">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal('approvedModal')">✕</button>
+    <div class="modal-title">💊 소아청소년 2형당뇨 승인 약물 — 4계열</div>
+
+    <div class="alert alert-info" style="margin:0 0 12px"><span>💡</span><span>현재 소아청소년 2형당뇨 약물치료는 인슐린, 메트포르민, GLP-1 수용체작용제, SGLT2 억제제 4계열로 제한된다.</span></div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">① 인슐린</div>
+      <p>케토산증/현저한 케토시스 동반 시 정상 또는 정상에 가까운 공복·식후혈당 회복까지 필요. 다회주사로 장기관리하며 안전사용 가능한 경우 인슐린펌프 고려. 1형·2형 구분이 불명확하거나 무작위혈당≥250mg/dL 및/또는 A1C≥8.5%인 경우 초기치료로도 사용.</p>
+    </div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">② 메트포르민</div>
+      <p>1차 선택약물(신기능 금기없는 경우). 케토시스/케토산증 해소 후 추가. TODAY 연구에서 단독으로는 약 절반만 6개월간 내구적 혈당관리(A1C&lt;8%) 달성.</p>
+    </div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">③ GLP-1 수용체작용제</div>
+      <table class="modal-table">
+        <tr><th>항목</th><th>내용</th></tr>
+        <tr><td>효과</td><td>다수 RCT에서 A1C감소에 안전·효과적, 비만승인용량에서 체중감소 촉진</td></tr>
+        <tr><td>주의</td><td>위장관부작용 증가가능, 갑상선수질암 가족력자 금기</td></tr>
+        <tr><td>참고</td><td>Tirzepatide(GIP/GLP-1 이중작용제)는 30주·52주 RCT에서 A1C·체중 모두 개선 확인되었으나, 현재 소아용 regulatory 승인은 없음</td></tr>
+      </table>
+    </div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">④ SGLT2 억제제</div>
+      <table class="modal-table">
+        <tr><th>약물</th><th>승인연령</th></tr>
+        <tr><td>Empagliflozin, Dapagliflozin, Canagliflozin</td><td>10–17세</td></tr>
+      </table>
+      <p style="margin-top:6px">중증저혈당·DKA위험 낮음, 내약성 양호. 비뇨생식기감염 위험증가 상담 필요. 3개 모두 6개월 RCT에서 유의한 A1C감소 확인, 12개월 안전성평가에서 성인연구와 일치하는 프로파일.</p>
+    </div>
+
+    <div class="alert alert-warn" style="margin-top:4px"><span>⚠️</span><span>목표 미달성 시 인슐린요법 시작/강화 전 비인슐린요법(메트포르민·GLP-1 RA·SGLT2i)을 최대화하는 것을 고려해야 한다(권고 14.39).</span></div>
+  </div>
+</div>
+
+<script>
+const FONT_ZOOM_LEVELS = [1, 1.25, 1.5];
+let fontZoomIndex = 0;
+
+function applyFontZoom(scale) {
+  document.documentElement.style.setProperty('--fscale', scale);
+  const label = document.getElementById('font-zoom-label');
+  if (label) label.textContent = Math.round(scale * 100) + '%';
+}
+
+function cycleFontZoom() {
+  fontZoomIndex = (fontZoomIndex + 1) % FONT_ZOOM_LEVELS.length;
+  applyFontZoom(FONT_ZOOM_LEVELS[fontZoomIndex]);
+}
+
+function showTab(id){
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('tab-'+id).classList.add('active');
+  event.target.classList.add('active');
+}
+function toggleCard(el){
+  el.classList.toggle('open');
+  el.nextElementSibling.classList.toggle('collapsed');
+}
+function toggleAcc(el){
+  const b=el.nextElementSibling;
+  b.style.display=b.style.display==='block'?'none':'block';
+  el.querySelector('span:last-child').textContent=b.style.display==='block'?'▴':'▾';
+}
+
+function openModal(id){document.getElementById(id).classList.add('open');}
+function closeModal(id){document.getElementById(id).classList.remove('open');}
+function closeModalOutside(e,id){if(e.target===document.getElementById(id))closeModal(id);}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')document.querySelectorAll('.modal-overlay.open').forEach(m=>m.classList.remove('open'));});
+
+const abbrs=[
+  ['DSMES','Diabetes Self-Management Education and Support — 진단시·정기적으로 제공되는 당뇨자가관리교육 및 지지.'],
+  ['TODAY','Treatment Options for Type 2 Diabetes in Adolescents and Youth — 청소년 2형당뇨 치료법을 비교한 대표적 임상시험.'],
+  ['TODAY2','TODAY 연구의 장기추적 연장연구 — 청년기 당뇨디스트레스 등 평가.'],
+  ['SEARCH','SEARCH for Diabetes in Youth — 미국 소아청소년 당뇨병 역학·합병증을 추적하는 대규모 코호트연구.'],
+  ['RISE','Restoring Insulin Secretion Consortium — 메트포르민과 인슐린의 β세포기능 보존효과를 비교한 연구.'],
+  ['T1DEXIP','Type 1 Diabetes Exercise Initiative Pediatric — 1형당뇨 청소년의 실세계 운동 중 혈당변화를 추적한 연구.'],
+  ['Teen-LABS','Teen-Longitudinal Assessment of Bariatric Surgery — 청소년 비만대사수술 장기추적 다기관 연구.'],
+  ['AID','Automated Insulin Delivery (자동인슐린전달시스템) — 1형당뇨 소아청소년에게 권장되는 첨단인슐린기기.'],
+  ['CGM','Continuous Glucose Monitoring (연속혈당측정) — 진단시 또는 가능한 빨리 모든 당뇨병 소아청소년에게 제공 권장.'],
+  ['TIR','Time in Range (목표범위시간) — CGM에서 70–180mg/dL 범위 내 시간비율.'],
+  ['TBR','Time Below Range (목표이하시간) — CGM에서 저혈당범위(&lt;70, &lt;54mg/dL) 시간비율.'],
+  ['TAR','Time Above Range (목표초과시간) — CGM에서 고혈당범위(&gt;180, &gt;250mg/dL) 시간비율.'],
+  ['DKA','Diabetic Ketoacidosis (당뇨병성 케토산증) — 소아 2형당뇨 진단시 약 11%에서 발생, 인지기능에 부정적 영향 가능.'],
+  ['HHS','Hyperosmolar Hyperglycemic State (고혈당고삼투압상태) — 혈당≥600mg/dL 시 평가/치료 고려.'],
+  ['MDI','Multiple Daily Injections (다회일일주사) — AID 사용불가 시 개방형루프 펌프 또는 MDI 적용.'],
+  ['GLP-1','Glucagon-Like Peptide 1 수용체작용제 — 소아 2형당뇨 4대 승인 약물계열 중 하나.'],
+  ['SGLT2i','Sodium-Glucose Cotransporter 2 Inhibitor — empagliflozin·dapagliflozin·canagliflozin이 10–17세에 승인.'],
+  ['GIP','Glucose-dependent Insulinotropic Polypeptide — tirzepatide의 이중작용 표적 중 하나, 소아승인은 아직 없음.'],
+  ['MASLD','Metabolic Dysfunction-Associated Steatotic Liver Disease — 2형당뇨 소아청소년에서 AST·ALT로 매년 평가.'],
+  ['PCOS','Polycystic Ovary Syndrome (다낭성난소증후군) — 당뇨여아에서 임상지표 있을 때 평가.'],
+  ['UACR','Urinary Albumin-to-Creatinine Ratio (요알부민-크레아티닌비) — 신증 선별의 핵심 지표.'],
+  ['eGFR','Estimated Glomerular Filtration Rate (추정 사구체여과율) — 진단시·매년 산정.'],
+  ['tTG','Tissue Transglutaminase — 셀리악병 선별에 사용되는 항체 표적.'],
+  ['ARB','Angiotensin Receptor Blocker — ACE억제제 불내성 시 대체 약물.'],
+  ['AdDIT','Adolescent Type 1 Diabetes Cardio-Renal Intervention Trial — ACE억제제+스타틴의 안전성을 평가한 1형청소년 임상시험.'],
+  ['T1DEXIP','Type 1 Diabetes Exercise Initiative Pediatric — 실세계 운동데이터 기반 1형당뇨 청소년 혈당연구.'],
+  ['ISPAD','International Society for Pediatric and Adolescent Diabetes — 본 섹션을 공동승인한 국제소아청소년당뇨학회.'],
+  ['DCCT','Diabetes Control and Complications Trial — 집중치료의 청소년 미세혈관합병증 감소효과를 입증한 대표 임상시험.'],
+  ['CDCES','Certified Diabetes Care and Education Specialist — 소아당뇨 인터프로페셔널팀의 핵심 구성원.'],
+  ['Mature Minor Rule','성숙미성년자 원칙 — 12–13세 이후 정보기반결정 가능한 소아의 의료동의권을 인정하는 윤리적 입장.'],
+  ['ACA','Affordable Care Act — 美 의료보험법, 26세까지 부모보험 적용 지속 가능 규정.'],
+  ['LADA','관련 약어 — 본 섹션에서는 직접 다루지 않으나 1형당뇨 성인발병형과 혼동주의.'],
+];
+
+function buildAbbr(){
+  const sorted=abbrs.slice().sort((a,b)=>a[0].localeCompare(b[0]));
+  document.getElementById('abbr-grid-drop').innerHTML=sorted.map(a=>
+    `<div style="background:var(--surface2);border:1px solid var(--border);border-radius:5px;padding:6px 10px;margin-bottom:4px;" data-term="${a[0].toLowerCase()}" data-def="${a[1].toLowerCase()}">
+       <span style="font-weight:700;color:var(--accent2);font-size: calc(12px * var(--fscale, 1));font-family:'Courier New',monospace">${a[0]}</span>
+       <div style="font-size: calc(11px * var(--fscale, 1));color:var(--text2);line-height:1.45;margin-top:2px">${a[1]}</div>
+     </div>`).join('');
+}
+function filterAbbr(val){
+  const v=val.toLowerCase().trim();
+  const drop=document.getElementById('abbr-dropdown');
+  const items=document.querySelectorAll('#abbr-grid-drop [data-term]');
+  if(!v){drop.style.display='none';return;}
+  const inp=document.getElementById('abbr-input');
+  const rect=inp.getBoundingClientRect();
+  const w=440;
+  let left=rect.right-w;if(left<8)left=8;
+  drop.style.top=(rect.bottom+4)+'px';drop.style.left=left+'px';
+  drop.style.display='block';
+  items.forEach(el=>{
+    const show=el.dataset.term.startsWith(v)||el.dataset.def.includes(v);
+    el.style.display=show?'':'none';
+  });
+}
+document.addEventListener('click',e=>{
+  const inp=document.getElementById('abbr-input');
+  const drop=document.getElementById('abbr-dropdown');
+  if(inp&&!inp.contains(e.target)&&drop&&!drop.contains(e.target))drop.style.display='none';
+});
+buildAbbr();
+</script>
+</body>
+</html>

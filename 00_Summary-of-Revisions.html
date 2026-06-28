@@ -1,0 +1,946 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ADA 2026 개정사항 요약</title>
+<style>
+  :root {
+    --bg:#f6f8fa;--surface:#fff;--surface2:#f0f2f5;--border:#d0d7de;
+    --accent:#0969da;--accent2:#0550ae;--green:#1a7f37;--yellow:#9a6700;
+    --red:#cf222e;--orange:#bc4c00;--text:#1f2328;--text2:#57606a;
+    --teal:#0a7c8a;--purple:#5a3ea0;--fscale:1;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'Pretendard','Noto Sans KR',-apple-system,sans-serif;background:var(--bg);color:var(--text);font-size: calc(13px * var(--fscale, 1));line-height:1.5;}
+  header{background:var(--surface);border-bottom:1px solid var(--border);padding:12px 16px 8px;display:flex;flex-direction:column;align-items:center;gap:4px;position:sticky;top:0;z-index:100;}
+  .header-inner{width:100%;max-width:960px;display:flex;flex-direction:column;align-items:center;gap:4px;}
+  .logo-badge{background:var(--accent2);color:#fff;font-size: calc(10px * var(--fscale, 1));font-weight:700;padding:3px 8px;border-radius:4px;letter-spacing:.5px;}
+  .tab-bar{display:flex;justify-content:center;background:var(--surface);border-bottom:1px solid var(--border);overflow-x:auto;scrollbar-width:none;}
+  .tab-bar::-webkit-scrollbar{display:none;}
+  .font-zoom-btn{display:flex;align-items:center;gap:3px;flex-shrink:0;margin:4px 4px 4px 6px;padding:5px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:6px;color:var(--accent2);font-size:calc(11px * var(--fscale, 1));font-weight:700;cursor:pointer;user-select:none;white-space:nowrap;transition:background .15s;}
+  .font-zoom-btn:hover{background:var(--border);}
+  .font-zoom-btn .fz-icon{font-size:calc(12px * var(--fscale, 1));}
+  .tab-bar-inner{width:100%;max-width:960px;display:flex;align-items:center;gap:2px;padding:0 4px;}
+  .tab{padding:7px 11px;font-size: calc(11.5px * var(--fscale, 1));color:var(--text2);cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;transition:color .15s,border-color .15s;user-select:none;flex-shrink:0;}
+  .tab:hover{color:var(--text);}
+  .tab.active{color:var(--accent2);border-bottom-color:var(--accent2);}
+  .tab-abbr-wrap{display:flex;align-items:center;padding:4px 4px;margin-left:4px;flex-shrink:0;position:relative;}
+  .main{padding:12px 16px;max-width:960px;margin:0 auto;}
+  .panel{display:none;}
+  .panel.active{display:block;}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+  .grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;}
+  @media(max-width:680px){.grid2,.grid3{grid-template-columns:1fr;}}
+  .card{background:var(--surface);border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-bottom:10px;}
+  .card-header{background:var(--surface2);padding:8px 12px;font-size: calc(12px * var(--fscale, 1));font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.5px;border-bottom:1px solid var(--border);cursor:pointer;display:flex;align-items:center;justify-content:space-between;user-select:none;}
+  .card-header .toggle{font-size: calc(13px * var(--fscale, 1));transition:transform .2s;}
+  .card-header.open .toggle{transform:rotate(180deg);}
+  .card-body{padding:10px 12px;}
+  .card-body.collapsed{display:none;}
+  .stat-row{display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap;}
+  .stat-box{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:10px 14px;flex:1;min-width:90px;text-align:center;}
+  .stat-box.clickable{cursor:pointer;transition:box-shadow .15s,border-color .15s;}
+  .stat-box.clickable:hover{border-color:var(--accent2);box-shadow:0 2px 8px rgba(5,80,174,.15);}
+  .stat-val{font-size: calc(18px * var(--fscale, 1));font-weight:700;color:var(--accent2);}
+  .stat-lbl{font-size: calc(10px * var(--fscale, 1));color:var(--text2);margin-top:2px;}
+  .stat-hint{font-size: calc(9px * var(--fscale, 1));color:var(--accent2);margin-top:4px;opacity:.7;}
+  /* Modal */
+  .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:500;align-items:center;justify-content:center;}
+  .modal-overlay.open{display:flex;}
+  .modal-box{background:var(--surface);border-radius:12px;padding:20px;max-width:680px;width:92%;max-height:84vh;overflow-y:auto;box-shadow:0 16px 48px rgba(0,0,0,.22);position:relative;}
+  .modal-close{position:absolute;top:12px;right:14px;background:none;border:none;font-size: calc(18px * var(--fscale, 1));cursor:pointer;color:var(--text2);line-height:1;}
+  .modal-title{font-size: calc(15px * var(--fscale, 1));font-weight:700;color:var(--text);margin-bottom:12px;padding-right:20px;line-height:1.4;}
+  .modal-section{margin-bottom:12px;}
+  .modal-section-title{font-size: calc(11px * var(--fscale, 1));font-weight:700;color:var(--accent2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;border-bottom:1px solid var(--border);padding-bottom:4px;}
+  .modal-table{width:100%;border-collapse:collapse;font-size: calc(11.5px * var(--fscale, 1));}
+  .modal-table th{background:var(--surface2);color:var(--text2);padding:4px 8px;font-size: calc(10.5px * var(--fscale, 1));font-weight:600;text-align:left;border-bottom:1px solid var(--border);}
+  .modal-table td{padding:5px 8px;border-bottom:1px solid var(--border);vertical-align:top;}
+  .modal-table tr:last-child td{border-bottom:none;}
+  .rec-list{list-style:none;}
+  .rec-item{padding:7px 0;border-bottom:1px solid var(--border);display:flex;gap:8px;align-items:flex-start;}
+  .rec-item:last-child{border-bottom:none;}
+  .rec-text{font-size: calc(12px * var(--fscale, 1));color:var(--text);line-height:1.65;}
+  .rec-text strong{color:#1f2328;}
+  .badge{display:inline-flex;align-items:center;padding:2px 8px;border-radius:10px;font-size: calc(10px * var(--fscale, 1));font-weight:700;white-space:nowrap;flex-shrink:0;margin-top:1px;}
+  .badge-A{background:#dafbe1;color:#116329;border:1px solid #1a7f37;}
+  .badge-B{background:#ddf4ff;color:var(--accent2);border:1px solid var(--accent2);}
+  .badge-C{background:#fff8c5;color:#7a4b00;border:1px solid #d4a017;}
+  .badge-E{background:#f3e5f5;color:#5a3ea0;border:1px solid #5a3ea0;}
+  .badge-new{background:#dafbe1;color:#116329;border:1px solid #1a7f37;}
+  .badge-rev{background:#ddf4ff;color:var(--accent2);border:1px solid var(--accent2);}
+  .badge-endorse{background:#fff3e0;color:#7a3500;border:1px solid var(--orange);}
+  .alert{padding:8px 12px;border-radius:6px;font-size: calc(12px * var(--fscale, 1));margin:8px 0;display:flex;gap:8px;align-items:flex-start;}
+  .alert-info{background:#ddf4ff;border-left:3px solid var(--accent2);color:#0550ae;}
+  .alert-warn{background:#fff8c5;border-left:3px solid #d4a017;color:#7a4b00;}
+  .alert-danger{background:#ffebe9;border-left:3px solid var(--red);color:#82071e;}
+  .alert-success{background:#dafbe1;border-left:3px solid var(--green);color:#116329;}
+  .alert-teal{background:#e0f5f5;border-left:3px solid var(--teal);color:#075050;}
+  .alert-orange{background:#fff3e0;border-left:3px solid var(--orange);color:#7a3500;}
+  .alert-purple{background:#f3e5f5;border-left:3px solid var(--purple);color:#5a3ea0;}
+  .tc-table{width:100%;border-collapse:collapse;font-size: calc(11.5px * var(--fscale, 1));}
+  .tc-table th{background:var(--surface2);color:var(--text2);padding:5px 8px;font-size: calc(10.5px * var(--fscale, 1));text-transform:uppercase;letter-spacing:.3px;font-weight:600;text-align:left;border-bottom:1px solid var(--border);}
+  .tc-table td{padding:5px 8px;border-bottom:1px solid var(--border);vertical-align:top;}
+  .tc-table tr:last-child td{border-bottom:none;}
+  .tc-table tr:hover td{background:rgba(0,0,0,.02);}
+  .acc{border:1px solid var(--border);border-radius:6px;margin-bottom:6px;overflow:hidden;}
+  .acc-hdr{background:var(--surface2);padding:7px 12px;font-size: calc(12px * var(--fscale, 1));font-weight:600;color:var(--text);cursor:pointer;display:flex;justify-content:space-between;align-items:center;user-select:none;}
+  .acc-hdr:hover{background:#e8eaec;}
+  .acc-body{display:none;padding:10px 12px;font-size: calc(12px * var(--fscale, 1));line-height:1.65;}
+  .flow-box{border:1px solid var(--border);border-radius:6px;background:var(--surface);padding:8px 12px;margin-bottom:6px;font-size: calc(12px * var(--fscale, 1));line-height:1.6;}
+  .flow-arrow{text-align:center;color:var(--text2);font-size: calc(14px * var(--fscale, 1));margin:2px 0;}
+  .step-num{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;background:var(--accent2);color:#fff;font-size: calc(10px * var(--fscale, 1));font-weight:700;flex-shrink:0;margin-right:6px;}
+  ul.dot{padding-left:18px;}
+  ul.dot li{margin-bottom:3px;font-size: calc(12px * var(--fscale, 1));line-height:1.6;}
+  ol.num{padding-left:18px;}
+  ol.num li{margin-bottom:4px;font-size: calc(12px * var(--fscale, 1));line-height:1.6;}
+  .sec-tag{display:inline-flex;align-items:center;justify-content:center;min-width:24px;height:18px;padding:0 5px;border-radius:4px;background:var(--accent2);color:#fff;font-size:calc(10px * var(--fscale, 1));font-weight:700;flex-shrink:0;margin-right:6px;}
+  ::-webkit-scrollbar{width:5px;height:5px;}
+  ::-webkit-scrollbar-track{background:var(--bg);}
+  ::-webkit-scrollbar-thumb{background:#c8d0d9;border-radius:3px;}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div style="display:flex;align-items:center;gap:10px">
+      <span class="logo-badge">ADA 2026</span>
+      <h1 style="font-size:17px;font-weight:700;color:var(--text)">개정사항 요약 (Summary of Revisions)</h1>
+    </div>
+    <div style="text-align:center;line-height:1.5">
+      <span style="color:var(--text2);font-size: calc(11px * var(--fscale, 1))">Standards of Care in Diabetes—2026 — American Diabetes Association</span><br>
+      <span style="font-size: calc(10px * var(--fscale, 1));color:var(--text2)">Diabetes Care 2026;49(Suppl. 1):S6–S12 · doi: 10.2337/dc26-SREV</span>
+    </div>
+    <div style="font-size: calc(10px * var(--fscale, 1));color:var(--text2);font-style:italic;">This tool is not officially endorsed by the American Diabetes Association (ADA).</div>
+  </div>
+</header>
+
+<div class="tab-bar">
+  <div class="tab-bar-inner">
+    <div id="font-zoom-btn" class="font-zoom-btn" onclick="cycleFontZoom()"><span class="fz-icon">🔠</span><span id="font-zoom-label">100%</span></div>
+    <div class="tab active" onclick="showTab('overview')">🏠 개요</div>
+    <div class="tab" onclick="showTab('s1to3')">🧬 1–3장 진단·예방</div>
+    <div class="tab" onclick="showTab('s4to6')">⚖️ 4–6장 평가·행동·혈당</div>
+    <div class="tab" onclick="showTab('s7to9')">📱 7–9장 기술·비만·약물</div>
+    <div class="tab" onclick="showTab('s10to12')">❤️ 10–12장 심혈관·신장·눈/발</div>
+    <div class="tab" onclick="showTab('s13to15')">👥 13–15장 노인·소아·임신</div>
+    <div class="tab" onclick="showTab('s16to17')">🏥 16–17장 병원·옹호</div>
+    <div class="tab" onclick="showTab('tables')">📁 핵심 신규 변경 모음</div>
+    <div class="tab-abbr-wrap">
+      <div style="position:relative;display:flex;align-items:center;flex-shrink:0">
+        <span style="position:absolute;left:8px;color:var(--text2);font-size: calc(12px * var(--fscale, 1));pointer-events:none">🔍</span>
+        <input id="abbr-input" type="text" placeholder="약어" oninput="filterAbbr(this.value)"
+          style="background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:4px 8px 4px 26px;color:var(--text);font-size: calc(12px * var(--fscale, 1));width:90px;outline:none;"
+          onfocus="this.style.borderColor='var(--accent2)'" onblur="this.style.borderColor='var(--border)'">
+      </div>
+      <div id="abbr-dropdown" style="display:none;position:fixed;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:8px;width:440px;max-height:360px;overflow-y:auto;z-index:300;box-shadow:0 8px 24px rgba(0,0,0,.12)">
+        <div id="abbr-grid-drop"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="main">
+
+<!-- ═══ OVERVIEW ═══ -->
+<div id="tab-overview" class="panel active">
+  <div class="stat-row">
+    <div class="stat-box clickable" onclick="openModal('endorseModal')"><div class="stat-val">6개 학회</div><div class="stat-lbl">2026년 승인(endorsement) 섹션</div><div class="stat-hint">▸ 클릭하여 상세 보기</div></div>
+    <div class="stat-box clickable" onclick="openModal('newSectionModal')"><div class="stat-val">17개 섹션</div><div class="stat-lbl">전체 섹션 중 16개 섹션 개정</div><div class="stat-hint">▸ 클릭하여 상세 보기</div></div>
+    <div class="stat-box clickable" onclick="openModal('glp1Modal')"><div class="stat-val">GLP-1/GIP</div><div class="stat-lbl">전(全) 섹션 횡단 핵심 키워드</div><div class="stat-hint">▸ 클릭하여 상세 보기</div></div>
+    <div class="stat-box clickable" onclick="openModal('cancerModal')"><div class="stat-val">9.33–9.38</div><div class="stat-lbl">신설: 항암치료·이식 혈당관리</div><div class="stat-hint">▸ 클릭하여 상세 보기</div></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>📋 2026년 개정의 전체 흐름</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <div class="flow-box" style="border-left:3px solid var(--accent2)">
+        <strong>① 일반 변경 (General Changes)</strong><br>
+        <span style="color:var(--text2);font-size: calc(11px * var(--fscale, 1))">person-first·포용적 언어 지속 적용, 그림·표 접근성 표준 정렬, 단순 근거등급 변경(예: E→C)은 본 요약에서 제외</span>
+      </div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-box" style="border-left:3px solid var(--orange)">
+        <strong>② 학회 승인(Endorsement) 갱신</strong><br>
+        <span style="font-size: calc(11.5px * var(--fscale, 1))">골건강(ASBMR), 비만(Obesity Society), 심혈관(ACC), 노인(AGS) 갱신 + <strong>신규</strong> 신장(NKF), 소아청소년(ISPAD)</span>
+      </div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-box" style="border-left:3px solid var(--green)">
+        <strong>③ 약물치료 패러다임 확장</strong><br>
+        <span style="font-size: calc(11.5px * var(--fscale, 1))">GLP-1RA·dual GIP/GLP-1RA의 적응증이 MASH·심부전(HFpEF)·CKD·비만·소아·1형당뇨까지 전 섹션에 걸쳐 대폭 확장</span>
+      </div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-box" style="border-left:3px solid var(--yellow)">
+        <strong>④ 항암치료·이식 관련 신설</strong><br>
+        <span style="font-size: calc(11.5px * var(--fscale, 1))">면역관문억제제·PI3Kα억제제·mTOR억제제·글루코코르티코이드로 인한 고혈당, 이식 후 당뇨(PTDM) 관리 권고 다수 신설</span>
+      </div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-box" style="border-left:3px solid var(--teal)">
+        <strong>⑤ 당뇨기술(CGM·AID) 사용 확대</strong><br>
+        <span style="font-size: calc(11.5px * var(--fscale, 1))">CGM은 진단 시점부터 권장 확대, AID는 1형당뇨 우선·basal 인슐린 2형당뇨까지 고려 확대, 사용 전 C-peptide·자가항체·인슐린치료기간 요건 폐지</span>
+      </div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-box" style="border-left:3px solid var(--purple)">
+        <strong>⑥ 생애주기·심리사회 영역 강화</strong><br>
+        <span style="font-size: calc(11.5px * var(--fscale, 1))">소아 심리사회 선별 연령 하향(7–8세), 노인 PALTC 용어 표준화, 임신 전 GLP-1RA 중단 지침, 불안·저혈당공포 연 1회 선별</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <div class="card-header open" onclick="toggleCard(this)">
+        <span>📌 섹션별 핵심 개정 한눈에 보기</span><span class="toggle">▾</span>
+      </div>
+      <div class="card-body">
+        <ul class="rec-list">
+          <li class="rec-item"><span class="sec-tag">1</span><span class="rec-text">공유의사결정·디지털 자가관리도구·지역사회건강인력 역할 강화</span></li>
+          <li class="rec-item"><span class="sec-tag">2</span><span class="rec-text">1형당뇨 3기 신속평가 분리(2.8a/b), 항암제·스테로이드 유발 고혈당 감시 신설(2.18–2.22)</span></li>
+          <li class="rec-item"><span class="sec-tag">3</span><span class="rec-text">모든 당뇨유형 진행 모니터링 확대, PI3Kα억제제·고용량스테로이드 메트포르민 예방 신설</span></li>
+          <li class="rec-item"><span class="sec-tag">4</span><span class="rec-text">골다공증 치료기준 세분화(T-score −2.0~−2.5), MASH 혜택 GLP-1RA 권고 강화</span></li>
+          <li class="rec-item"><span class="sec-tag">5</span><span class="rec-text">금연·전자담배 병합치료, 불안·저혈당공포 연 1회 선별, 수면건강 선별 추가</span></li>
+          <li class="rec-item"><span class="sec-tag">6</span><span class="rec-text">고혈당위기(DKA) 외래 예방·관리 내용 확대, 직장·학교 응급키트 경구포도당 포함</span></li>
+          <li class="rec-item"><span class="sec-tag">7</span><span class="rec-text">CSII/AID 시작 전 C-peptide·자가항체·인슐린기간 요건 폐지, isCGM→rtCGM/OTC-CGM/전문가용 재분류</span></li>
+          <li class="rec-item"><span class="sec-tag">8</span><span class="rec-text">체지방 측정 추가, 1형당뇨 비만에 GLP-1RA·대사수술 옵션 신설</span></li>
+          <li class="rec-item"><span class="sec-tag">9</span><span class="rec-text">HFpEF dual GIP/GLP-1RA 신설, 항암치료·장기이식 관련 혈당관리 권고 대거 신설(9.33–9.38)</span></li>
+          <li class="rec-item"><span class="sec-tag">10</span><span class="rec-text">수축기혈압 &lt;120 목표, nsMRA 심부전 권고 신설(10.44h), Fig 10.5/10.6 신설</span></li>
+          <li class="rec-item"><span class="sec-tag">11</span><span class="rec-text">SGLT2i+nsMRA 동시투여 고려(11.9), 비투석 SGLT2i·투석 GLP-1 신설(11.11a/b)</span></li>
+          <li class="rec-item"><span class="sec-tag">12</span><span class="rec-text">GLP-1RA의 안과 영향 서술 확대, WIfI 분류·풋케어 스마트기술 신설</span></li>
+          <li class="rec-item"><span class="sec-tag">13</span><span class="rec-text">노인 CGM 권고 강화, 혈압목표 &lt;130/80 구체화, PALTC 용어 표준화</span></li>
+          <li class="rec-item"><span class="sec-tag">14</span><span class="rec-text">1형·2형 구분 재구성, 심리사회 선별 7–8세부터, GLP-1RA·SGLT2i 소아 자료 추가</span></li>
+          <li class="rec-item"><span class="sec-tag">15</span><span class="rec-text">임신 전 GLP-1RA 중단 지침, GDM 조기이상혈당 내용 이전·갱신, 혈압기준 140/90 명확화</span></li>
+          <li class="rec-item"><span class="sec-tag">16</span><span class="rec-text">수술전후 혈당목표 신설(16.14/16.15), DKA·HHS 진단표(16.1/16.2) 추가</span></li>
+          <li class="rec-item"><span class="sec-tag">17</span><span class="rec-text">2026년 개정 없음</span></li>
+        </ul>
+      </div>
+    </div>
+
+    <div>
+      <div class="card">
+        <div class="card-header open" onclick="toggleCard(this)">
+          <span>🏅 2026년 학회 승인(Endorsement) 현황</span><span class="toggle">▾</span>
+        </div>
+        <div class="card-body">
+          <table class="tc-table">
+            <tr><th>섹션</th><th>승인 학회</th><th>연속/신규</th></tr>
+            <tr><td>4. 골건강</td><td>American Society for Bone and Mineral Research</td><td>3년 연속</td></tr>
+            <tr><td>8. 비만·체중관리</td><td>The Obesity Society</td><td>승인</td></tr>
+            <tr><td>10. 심혈관질환</td><td>American College of Cardiology</td><td>8년 연속</td></tr>
+            <tr><td>13. 노인</td><td>American Geriatrics Society</td><td>2년 연속</td></tr>
+            <tr><td>11. 만성콩팥병</td><td>National Kidney Foundation</td><td><span class="badge badge-new">최초</span></td></tr>
+            <tr><td>14. 소아청소년</td><td>International Society for Pediatric and Adolescent Diabetes</td><td><span class="badge badge-new">최초</span></td></tr>
+          </table>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header open" onclick="toggleCard(this)">
+          <span>🔑 핵심 개념</span><span class="toggle">▾</span>
+        </div>
+        <div class="card-body">
+          <div class="alert alert-info"><span>ℹ️</span><span>1989년부터 매년 갱신 — ADA가 당뇨병 진료 가이드라인 분야를 선도</span></div>
+          <div class="alert alert-warn"><span>⚠️</span><span>근거등급만 변경(예: E→C)되고 임상권고 자체는 동일한 경우 본 요약에는 <strong>포함되지 않음</strong></span></div>
+          <div class="alert alert-teal"><span>💡</span><span>GLP-1RA·dual GIP/GLP-1RA가 심부전(HFpEF)·MASH·CKD·비만·암치료·이식 등 거의 모든 영역에서 적응증 확장 — 2026년 개정의 핵심 축</span></div>
+          <div class="alert alert-success"><span>✅</span><span>당뇨기술(CGM/AID) 사용 문턱이 크게 낮아짐 — 진단 즉시 CGM 고려, CSII/AID 시작 전 검사요건 폐지</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ S1-3 ═══ -->
+<div id="tab-s1to3" class="panel">
+  <div class="alert alert-orange"><span>🧬</span><span>1장(인구건강), 2장(진단·분류), 3장(예방) — 항암치료·스테로이드 관련 고혈당 감시와 모든 당뇨유형 진행 모니터링이 핵심 신설 내용이다.</span></div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>1️⃣ 인구 건강관리 및 진료 개선 (Section 1)</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="rec-list">
+        <li class="rec-item"><span class="badge badge-rev">개정</span><span class="rec-text"><strong>1.1</strong> 개인 가치·선호·예후·동반질환·재정여건 기반 공유의사결정 중요성 강조</span></li>
+        <li class="rec-item"><span class="badge badge-rev">개정</span><span class="rec-text"><strong>1.5</strong> 진료질·건강결과 개선을 위한 의료시스템의 지속적 질 개선(CQI) 중요성 강조</span></li>
+        <li class="rec-item"><span class="badge badge-rev">개정</span><span class="rec-text"><strong>1.8</strong> 디지털 자가관리도구·코치 활용을 적절히 고려하도록 개정</span></li>
+        <li class="rec-item"><span class="badge badge-rev">개정</span><span class="rec-text"><strong>1.9</strong> 지역사회건강인력(CHW)의 신장질환 위험요인 관리 지원 역할 추가(당뇨·심혈관 외)</span></li>
+        <li class="rec-item"><span class="badge badge-rev">개정</span><span class="rec-text"><strong>표 1.1</strong> 노인 당뇨환자에게 유용한 추가 진료팀 구성원 명시</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>2️⃣ 당뇨병의 진단과 분류 (Section 2)</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="rec-list">
+        <li class="rec-item"><span class="badge badge-rev">개정</span><span class="rec-text"><strong>2.8</strong> → 2.8a(자가항체 1개 이상 보유자 3기 1형당뇨 신속평가) / 2.8b(다중항체 시 전문센터 의뢰, 기존유지)로 분리</span></li>
+        <li class="rec-item"><span class="badge badge-new">신설</span><span class="rec-text"><strong>2.9</strong> IA-2 단독항체 확진자는 IA-2 음성 2기 1형당뇨와 동일하게 모니터링(진행위험 유사)</span></li>
+        <li class="rec-item"><span class="badge badge-new">신설</span><span class="rec-text"><strong>2.18</strong> 글루코코르티코이드 반복·장기치료 시 식후/무작위 혈당 모니터링</span></li>
+        <li class="rec-item"><span class="badge badge-new">신설</span><span class="rec-text"><strong>2.19</strong> 면역관문억제제(ICI)·PI3Kα억제제 등 항암제 시작 시 고혈당 위험 상담·교육</span></li>
+        <li class="rec-item"><span class="badge badge-new">신설</span><span class="rec-text"><strong>2.20</strong> ICI 치료 환자 매 방문 시 혈당 모니터링</span></li>
+        <li class="rec-item"><span class="badge badge-new">신설</span><span class="rec-text"><strong>2.21</strong> PI3Kα억제제 시작 첫 수주간 특히 면밀한 혈당 모니터링(고혈당 위험 매우 높음)</span></li>
+        <li class="rec-item"><span class="badge badge-new">신설</span><span class="rec-text"><strong>2.22</strong> mTOR억제제 치료 환자 매 방문 시 공복/무작위 혈당 모니터링</span></li>
+        <li class="rec-item"><span class="badge badge-rev">개정</span><span class="rec-text"><strong>2.24a</strong> 낭성섬유증 관련 당뇨(CFRD) — 가능하면 10세부터 매년 OGTT가 선호되는 선별검사임을 재확인</span></li>
+        <li class="rec-item"><span class="badge badge-rev">개정</span><span class="rec-text"><strong>2.24b</strong> OGTT 불가 시 A1C를 2단계 대체전략의 일부로 사용 가능</span></li>
+        <li class="rec-item"><span class="badge badge-rev">통합</span><span class="rec-text">기존 2.26b/2.26c(GDM 선별) → <strong>2.31b</strong>로 통합·이동, 관련 서술은 15장으로 이전·갱신</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>3️⃣ 당뇨병 및 동반질환의 예방·지연 (Section 3)</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="rec-list">
+        <li class="rec-item"><span class="badge badge-rev">확대</span><span class="rec-text"><strong>3.1</strong> 전당뇨 진행 모니터링 대상을 2형당뇨뿐 아니라 <strong>모든 당뇨유형</strong>으로 확대</span></li>
+        <li class="rec-item"><span class="badge badge-rev">개정</span><span class="rec-text"><strong>3.2</strong> 증상전기(presymptomatic) 1형당뇨 진행 감시에 CGM 데이터 고려 추가</span></li>
+        <li class="rec-item"><span class="badge badge-rev">명확화</span><span class="rec-text"><strong>3.3</strong> 고위험 과체중·비만자 — 초기체중 <strong>5–7% 감량·유지</strong> 목표로 예방프로그램 의뢰</span></li>
+        <li class="rec-item"><span class="badge badge-rev">개정</span><span class="rec-text"><strong>3.4</strong> 2형당뇨 예방 근거가 가장 강한 식이패턴(지중해식·저탄수화물)에 초점</span></li>
+        <li class="rec-item"><span class="badge badge-rev">명확화</span><span class="rec-text"><strong>3.6</strong> 인증된 기술기반 예방프로그램은 스마트폰·웹앱·원격의료로도 전달 가능</span></li>
+        <li class="rec-item"><span class="badge badge-new">신설</span><span class="rec-text"><strong>3.8</strong> PI3Kα억제제(alpelisib·inavolisib 등) 고위험군 고혈당 예방에 메트포르민 고려</span></li>
+        <li class="rec-item"><span class="badge badge-new">신설</span><span class="rec-text"><strong>3.9</strong> 고용량 글루코코르티코이드 고위험군 고혈당 예방에 메트포르민 고려</span></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ S4-6 ═══ -->
+<div id="tab-s4to6" class="panel">
+  <div class="alert alert-orange"><span>⚖️</span><span>4장(평가), 5장(행동건강), 6장(혈당목표·저혈당·고혈당위기) — MASH 관련 GLP-1RA 권고 강화와 정신건강 선별 확대가 핵심이다.</span></div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>4️⃣ 포괄적 의학평가 및 동반질환 평가 (Section 4)</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="rec-list">
+        <li class="rec-item"><span class="badge badge-rev">개정</span><span class="rec-text"><strong>4.3</strong> 초기·추적방문 시 혈당상태·치료력 평가, 지지체계·이용가능자원 추가</span></li>
+        <li class="rec-item"><span class="badge badge-rev">개정</span><span class="rec-text"><strong>4.5</strong> 예방접종 권고에 청소년 포함</span></li>
+        <li class="rec-item"><span class="badge badge-rev">개정</span><span class="rec-text"><strong>4.13a</strong> 골절위험 증가 노인, T-score ≤−2.5 시 골다공증 약물치료 고려</span></li>
+        <li class="rec-item"><span class="badge badge-new">신설</span><span class="rec-text"><strong>4.13b</strong> T-score −2.0~−2.5이면서 추가 골절위험 있는 성인도 치료 고려 가능</span></li>
+        <li class="rec-item"><span class="badge badge-rev">개정</span><span class="rec-text"><strong>4.26</strong> MASH 혜택 입증된 GLP-1RA — 2형당뇨+MASLD+과체중/비만에서 치료 고려</span></li>
+        <li class="rec-item"><span class="badge badge-rev">개정</span><span class="rec-text"><strong>4.27a</strong> 생검확인 MASH 또는 간섬유화 고위험군 — MASH 혜택 GLP-1RA가 혈당관리에 <strong>우선 선호</strong></span></li>
+        <li class="rec-item"><span class="badge badge-rev">개정</span><span class="rec-text">Fig 4.1 MASLD를 치료선택 영향요인으로 추가 / Fig 4.2 FIB-4&gt;2.67 시 간전문의 관리 명확화 / Fig 4.3 MASH 고위험군에 GLP-1RA 추가</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>5️⃣ 건강행동·웰빙 증진 (Section 5)</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="rec-list">
+        <li class="rec-item"><span class="badge badge-rev">개정</span><span class="rec-text"><strong>5.4/5.5</strong> 행동전략 기반 DSMES 지원, 문화·사회적 적합성 및 진료팀과의 소통 강조</span></li>
+        <li class="rec-item"><span class="badge badge-rev">개정</span><span class="rec-text"><strong>5.12</strong> 영양·운동·행동건강 포함 비만치료계획으로 기저체중 5–7% 감량 목표</span></li>
+        <li class="rec-item"><span class="badge badge-rev">개정</span><span class="rec-text"><strong>5.23</strong> 의도적 체중감량 시 적절한 영양섭취에 대한 상담·정기모니터링 권고</span></li>
+        <li class="rec-item"><span class="badge badge-rev">개정</span><span class="rec-text"><strong>5.32</strong> 갱신된 단식전 위험평가로 종교적 단식 안전성 위험점수 산출</span></li>
+        <li class="rec-item"><span class="badge badge-rev">개정</span><span class="rec-text"><strong>5.34</strong> 활동지침 충족을 목표로 신체활동 증가 권장</span></li>
+        <li class="rec-item"><span class="badge badge-rev">개정</span><span class="rec-text"><strong>5.40</strong> 흡연·전자담배 일상평가 및 회피, 상담+약물치료 병합요법 의뢰</span></li>
+        <li class="rec-item"><span class="badge badge-rev">개정</span><span class="rec-text"><strong>5.45</strong> 당뇨고통이 진료 중 충분히 해결되지 않으면 행동건강전문가 의뢰</span></li>
+        <li class="rec-item"><span class="badge badge-rev">개정</span><span class="rec-text"><strong>5.46</strong> 최소 <strong>연 1회</strong> 불안증상 선별, 진료범위 내 적극 관리 독려</span></li>
+        <li class="rec-item"><span class="badge badge-rev">개정</span><span class="rec-text"><strong>5.47</strong> 저혈당 고위험군/중증·빈번한 저혈당군 — 최소 연 1회 저혈당공포 선별, 훈련된 전문가 의뢰</span></li>
+        <li class="rec-item"><span class="badge badge-rev">개정</span><span class="rec-text"><strong>5.56</strong> 당뇨병 환자 및 고위험군의 수면건강 선별 권고</span></li>
+        <li class="rec-item"><span class="badge badge-rev">개정</span><span class="rec-text"><strong>표 5.3</strong> 라마단 단식 희망자를 위한 포괄적 단식전 위험평가 기준 갱신</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>6️⃣ 혈당목표·저혈당·고혈당위기 (Section 6)</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="rec-list">
+        <li class="rec-item"><span class="badge badge-new">신설</span><span class="rec-text"><strong>6.17</strong> 직장·학교 등 공공시설 응급키트에 저혈당 치료용 경구포도당 포함 권장</span></li>
+        <li class="rec-item"><span class="badge badge-rev">확대</span><span class="rec-text">"동반질환(Intercurrent Illness)" 절 — 급성질환 시 특정 약물군 보류기준 추가</span></li>
+        <li class="rec-item"><span class="badge badge-rev">확대+제목변경</span><span class="rec-text">"고혈당 위기: 진단·관리·예방" — DKA 외래 예방·관리 내용 확대, 절 제목에 "고혈당 위기" 추가</span></li>
+        <li class="rec-item"><span class="badge badge-rev">확대</span><span class="rec-text"><strong>Fig 6.1</strong> 개인맞춤 혈당목표 설정 — 건강상태·치료요인 기반 CGM 지표 개인목표 포함하여 확대</span></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ S7-9 ═══ -->
+<div id="tab-s7to9" class="panel">
+  <div class="alert alert-orange"><span>📱</span><span>7장(당뇨기술), 8장(비만), 9장(약물치료) — CGM/AID 사용문턱 완화와 항암치료·이식 관련 혈당관리 권고 대거 신설이 핵심이다.</span></div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>7️⃣ 당뇨병 기술 (Section 7)</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="rec-list">
+        <li class="rec-item"><span class="badge badge-new">신설</span><span class="rec-text">기기 종류별 환자·의료진 교육훈련 권고 신설, 의료진 지원·당뇨유형별 기기시작 정보 추가</span></li>
+        <li class="rec-item"><span class="badge badge-rev">분리</span><span class="rec-text"><strong>7.3</strong> → 7.3a(CGM 처방·시작·추적) / 7.3b(AID 동일내용)로 분리</span></li>
+        <li class="rec-item"><span class="badge badge-rev">개정</span><span class="rec-text"><strong>7.6</strong> 학교 내 소아청소년의 CGM·CSII·연동인슐린펜·AID 사용 지원으로 구체화</span></li>
+        <li class="rec-item"><span class="badge badge-new">신설</span><span class="rec-text"><strong>7.7</strong> ≥18세 — 교육·직장환경에서 기기관리·고저혈당 대응 시간 보장 등 합리적 편의제공</span></li>
+        <li class="rec-item"><span class="badge badge-new">신설</span><span class="rec-text"><strong>7.8a</strong> CSII·AID 시작 전 <strong>C-peptide 수치, 자가항체 존재, 인슐린치료기간 요건 폐지</strong></span></li>
+        <li class="rec-item"><span class="badge badge-rev">갱신</span><span class="rec-text">"혈당모니터링" 절 — 2형당뇨 혈당모니터링 혜택 문헌 갱신, CGM 사용자의 혈당계 접근성 확보 중요성 강조</span></li>
+        <li class="rec-item"><span class="badge badge-rev">확대</span><span class="rec-text"><strong>7.15</strong> CGM 사용을 <strong>당뇨 진단 시점부터</strong> 권장 — 인슐린치료, 저혈당 유발 가능 비인슐린치료, 관리에 도움되는 모든 치료로 확대</span></li>
+        <li class="rec-item"><span class="badge badge-rev">개정</span><span class="rec-text"><strong>7.17</strong> 임신 중 당뇨기기 사용 — 상세내용은 15장으로 이동</span></li>
+        <li class="rec-item"><span class="badge badge-new">신설</span><span class="rec-text"><strong>7.25a</strong> AID가 1형당뇨, MDI/CSII/센서증강펌프 사용 2형당뇨, 기타 인슐린결핍형 당뇨에서 <strong>선호되는 인슐린전달방식</strong></span></li>
+        <li class="rec-item"><span class="badge badge-new">신설</span><span class="rec-text"><strong>7.25b</strong> Basal 인슐린 사용 중 목표미달 2형당뇨에서도 AID 고려 가능</span></li>
+        <li class="rec-item"><span class="badge badge-rev">개정</span><span class="rec-text"><strong>표 7.3</strong> CGM 기기 분류 갱신 — isCGM 더 이상 별도 논의 안 됨, <strong>rtCGM·OTC-CGM·전문가용 CGM</strong> 3종으로 재정의</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>8️⃣ 비만 및 체중관리 (Section 8)</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="rec-list">
+        <li class="rec-item"><span class="badge badge-rev">개정</span><span class="rec-text"><strong>8.2a</strong> BMI 연 1회 선별 + 가능하면 체지방 추가측정(인체측정·직접측정)으로 과다체지방 확인</span></li>
+        <li class="rec-item"><span class="badge badge-rev">명확화</span><span class="rec-text"><strong>8.5</strong> 기저체중 5–7% 감량이 혈당 및 기타 중간 심혈관위험요인 개선</span></li>
+        <li class="rec-item"><span class="badge badge-rev">갱신</span><span class="rec-text"><strong>8.8b</strong> 대체 구조화 생활습관프로그램 구성요소·전달방식 사례 명확화</span></li>
+        <li class="rec-item"><span class="badge badge-rev">개정</span><span class="rec-text"><strong>8.14</strong> 의도적 체중감량 시 적절한 영양섭취 상담·정기모니터링</span></li>
+        <li class="rec-item"><span class="badge badge-rev">개정</span><span class="rec-text"><strong>8.15</strong> 체중증가 유발 약물 최소화 위해 타 진료팀원 참여 독려</span></li>
+        <li class="rec-item"><span class="badge badge-new">신설</span><span class="rec-text"><strong>8.20</strong> 비만 약물치료 용량·적정은 효과·이득·내약성 균형 고려</span></li>
+        <li class="rec-item"><span class="badge badge-rev">확대</span><span class="rec-text"><strong>8.21</strong> 치료조정·강화 접근법에 대체 약물제제 고려 포함</span></li>
+        <li class="rec-item"><span class="badge badge-new">신설</span><span class="rec-text"><strong>8.29</strong> 1형당뇨의 비만 치료옵션으로 GLP-1RA 기반 치료 및/또는 대사수술 포함</span></li>
+        <li class="rec-item"><span class="badge badge-rev">갱신</span><span class="rec-text"><strong>표 8.2</strong> 비만 약물치료 비용 2025년 7월 15일 기준으로 갱신</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>9️⃣ 혈당치료를 위한 약물학적 접근 (Section 9)</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="rec-list">
+        <li class="rec-item"><span class="badge badge-new">신설</span><span class="rec-text"><strong>9.9a</strong> 증상성 HFpEF — 심부전 혜택 입증된 <strong>dual GIP/GLP-1RA</strong> 권고 / <strong>9.9b</strong> GLP-1RA도 포함하도록 개정</span></li>
+        <li class="rec-item"><span class="badge badge-rev">개정</span><span class="rec-text"><strong>9.11</strong> 진행된 CKD 동반 2형당뇨에서 GLP-1 기반 치료 시작·지속 정보 추가</span></li>
+        <li class="rec-item"><span class="badge badge-rev">개정</span><span class="rec-text"><strong>9.12</strong> MASLD+과체중/비만 2형당뇨 — MASH 혜택 GLP-1RA 또는 MASH 잠재혜택 dual GIP/GLP-1RA 권고</span></li>
+        <li class="rec-item"><span class="badge badge-rev">개정</span><span class="rec-text"><strong>9.13a</strong> 생검확인 MASH·간섬유화고위험군 — MASH혜택 GLP-1RA 선호, pioglitazone·dual제제 고려 가능</span></li>
+        <li class="rec-item"><span class="badge badge-rev">개정</span><span class="rec-text"><strong>9.24</strong> 건강행동·DSMES·치료관성회피·건강의 사회적결정요인을 모든 환자 혈당치료계획 필수요소로 포함</span></li>
+        <li class="rec-item"><span class="badge badge-rev">개정</span><span class="rec-text"><strong>9.25</strong> 당뇨 진단 시점부터 CGM 사용 권고(인슐린·저혈당유발 비인슐린·관리도움 모든 치료)</span></li>
+        <li class="rec-item"><span class="badge badge-rev">개정</span><span class="rec-text"><strong>9.27</strong> 인슐린 사용 중인 모든 1형·2형당뇨 성인에게 AID 제공 권고</span></li>
+        <li class="rec-item"><span class="badge badge-new">신설</span><span class="rec-text"><strong>9.33</strong> 면역치료 중 고혈당 발생 시 DKA 예방위한 인슐린치료 필요성 평가, 면역치료관련당뇨 여부 추가검사</span></li>
+        <li class="rec-item"><span class="badge badge-new">신설</span><span class="rec-text"><strong>9.34/9.35a</strong> mTOR·PI3K억제제 유발 고혈당 — <strong>메트포르민 1차치료</strong> 고려 / <strong>9.35b</strong> 인슐린은 중증고혈당·고혈당위기에 한정(PI3K억제제 효능 영향 가능성)</span></li>
+        <li class="rec-item"><span class="badge badge-new">신설</span><span class="rec-text"><strong>9.36</strong> 글루코코르티곤 치료 환자 — 치료계획·혈당평가 기반 혈당저하제 조정/추가</span></li>
+        <li class="rec-item"><span class="badge badge-new">신설</span><span class="rec-text"><strong>9.37</strong> 장기이식 후 — 인슐린 선호, 경증고혈당엔 DPP-4억제제 고려 / <strong>9.38a-c</strong> 장기적 관리: 비인슐린제제(이식장기따라 선택)→GLP-1RA 고려(심대사혜택)→목표미달 시 인슐린 추가</span></li>
+        <li class="rec-item"><span class="badge badge-new">신설</span><span class="rec-text"><strong>Fig 9.2</strong> 1형당뇨 인슐린 알고리즘 신설</span></li>
+        <li class="rec-item"><span class="badge badge-rev">개정</span><span class="rec-text">Fig 9.4 HFpEF·MASLD/MASH·비만 2형당뇨에 dual GIP/GLP-1RA·GLP-1RA 포함 / Fig 9.5 basal인슐린 2형당뇨에 CGM 고려 제안</span></li>
+        <li class="rec-item"><span class="badge badge-rev">갱신</span><span class="rec-text"><strong>표 9.3/9.4</strong> 혈당저하제·인슐린 비용 2025년 7월 15일 기준으로 갱신</span></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ S10-12 ═══ -->
+<div id="tab-s10to12" class="panel">
+  <div class="alert alert-orange"><span>❤️</span><span>10장(심혈관), 11장(신장), 12장(눈·신경·발) — 심부전 약물치료 신설(nsMRA)과 신장보호 병용요법 신설이 핵심이다.</span></div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>🔟 심혈관질환 및 위험관리 (Section 10)</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="rec-list">
+        <li class="rec-item"><span class="badge badge-rev">개정</span><span class="rec-text"><strong>10.4</strong> 심혈관·신장 고위험군 — 수축기혈압 <strong>&lt;120 mmHg</strong> 목표 독려</span></li>
+        <li class="rec-item"><span class="badge badge-rev">개정</span><span class="rec-text"><strong>10.6</strong> 혈압약물치료는 개인맞춤 혈압목표 달성을 위해 적정(titrate)</span></li>
+        <li class="rec-item"><span class="badge badge-rev">개정</span><span class="rec-text"><strong>10.10</strong> 중증 알부민뇨 및/또는 eGFR&lt;60 — ACEi/ARB를 최대내약용량까지 강력권고(신장보호+심혈관사건감소)</span></li>
+        <li class="rec-item"><span class="badge badge-rev">개정</span><span class="rec-text"><strong>10.11</strong> ACEi/ARB/MRA 사용 시 eGFR감소·고칼륨혈증, 이뇨제 사용 시 저칼륨혈증 모니터링 빈도 구체화</span></li>
+        <li class="rec-item"><span class="badge badge-rev">개정</span><span class="rec-text"><strong>10.32</strong> 스타틴 치료 환자 — fibrate·niacin·n-3 지방산 보충제 추가는 심혈관위험 추가감소 없어 비권고</span></li>
+        <li class="rec-item"><span class="badge badge-rev">개정</span><span class="rec-text"><strong>10.40c</strong> 2형당뇨+CKD 포함, 심혈관혜택 입증 GLP-1RA로 심혈관사건위험 감소 권고</span></li>
+        <li class="rec-item"><span class="badge badge-rev">개정</span><span class="rec-text"><strong>10.44c</strong> 무증상(B기) 심부전+심혈관위험고위험/기존질환 — 심부전예방혜택 GLP-1RA 권고</span></li>
+        <li class="rec-item"><span class="badge badge-new">신설/개정</span><span class="rec-text"><strong>10.44d/e</strong> 비만+증상성HFpEF — 심부전사건감소 dual GIP/GLP-1RA(d) 또는 심부전증상개선 GLP-1RA(e)</span></li>
+        <li class="rec-item"><span class="badge badge-new">신설</span><span class="rec-text"><strong>10.44h</strong> 증상성 C기심부전(EF&gt;40%) — 심부전악화사건감소 입증된 <strong>비스테로이드 MRA(nsMRA)</strong> 권고</span></li>
+        <li class="rec-item"><span class="badge badge-new">신설</span><span class="rec-text"><strong>Fig 10.5</strong> 증상성 심부전 예방·치료 개요 / <strong>Fig 10.6</strong> 2형당뇨 ASCVD 예방 접근법 신설</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>1️⃣1️⃣ 만성콩팥병 및 위험관리 (Section 11)</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="rec-list">
+        <li class="rec-item"><span class="badge badge-rev">명확화</span><span class="rec-text"><strong>11.1a</strong> 신기능 평가 빈도 명확화</span></li>
+        <li class="rec-item"><span class="badge badge-rev">명확화</span><span class="rec-text"><strong>11.5</strong> 수축기혈압 목표 중심으로 혈압관리 목표 명확화</span></li>
+        <li class="rec-item"><span class="badge badge-rev">개정</span><span class="rec-text"><strong>11.6a</strong> 비임신 당뇨·고혈압 환자의 약물 불내성 관련 지침 명확화</span></li>
+        <li class="rec-item"><span class="badge badge-rev">개정</span><span class="rec-text"><strong>11.6b</strong> ACEi/ARB/MRA 사용 시 eGFR감소·고칼륨혈증, 저칼륨혈증 모니터링 빈도 구체화</span></li>
+        <li class="rec-item"><span class="badge badge-rev">명확화</span><span class="rec-text"><strong>11.8</strong> nsMRA 시작 후(CKD진행·심혈관위험 감소목적) 칼륨모니터링 명확화</span></li>
+        <li class="rec-item"><span class="badge badge-new">신설</span><span class="rec-text"><strong>11.9</strong> 요알부민/크레아티닌 ≥100mg/g + eGFR 30–90 + RAS억제제 사용 중 — <strong>SGLT2억제제+nsMRA 동시시작</strong> 고려 가능</span></li>
+        <li class="rec-item"><span class="badge badge-rev">개정</span><span class="rec-text"><strong>11.10</strong> 임신·가임기 성행위 활발군에서 잠재적 유해한 신장보호약물 관련 지침 명확화</span></li>
+        <li class="rec-item"><span class="badge badge-new">신설</span><span class="rec-text"><strong>11.11a</strong> 비투석군 — CKD진행위험 감소·심혈관혜택 위한 SGLT2억제제 사용 / <strong>11.11b</strong> 투석군 — 심혈관위험감소 위한 GLP-1기반치료 시작·지속 지침</span></li>
+        <li class="rec-item"><span class="badge badge-rev">개정</span><span class="rec-text"><strong>Fig 11.2</strong> SGLT2i·GLP-1RA·nsMRA 신장결과연구 참여자 대부분이 RAS억제제 최적화 배경치료 중이었음을 반영하여 RAS억제제 용량 배치 재정렬</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>1️⃣2️⃣ 망막병증·신경병증·발관리 (Section 12)</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="rec-list">
+        <li class="rec-item"><span class="badge badge-new">신설</span><span class="rec-text">40년 DCCT/EDIC 연구결과 포함한 병태생리학적 맥락의 새로운 서론 추가</span></li>
+        <li class="rec-item"><span class="badge badge-rev">확대</span><span class="rec-text">GLP-1RA의 안과영향 서술 확대 — 비동맥성앞허혈성시신경병증(NAION), 녹내장, 신생혈관성황반변성, 망막병증진행</span></li>
+        <li class="rec-item"><span class="badge badge-rev">확대</span><span class="rec-text">보조치료 역할을 안건강의 전인적·다인성 접근으로 확대</span></li>
+        <li class="rec-item"><span class="badge badge-rev">개정</span><span class="rec-text">신경병증 진단논의를 "발관리" 절과 더 긴밀히 정렬, <strong>Ipswich touch test</strong> 포함</span></li>
+        <li class="rec-item"><span class="badge badge-rev">강조</span><span class="rec-text"><strong>12.22</strong> 신경병증성 통증의 추가완화를 위한 병합치료 중요성 강조</span></li>
+        <li class="rec-item"><span class="badge badge-rev">강화</span><span class="rec-text">당뇨발 합병증 예방·관리 서술 강화, 감염과 신속관리 중요성 전반에 추가</span></li>
+        <li class="rec-item"><span class="badge badge-new">신설</span><span class="rec-text">족부 신기술 논의 추가 — 스마트매트·인솔·양말을 이용한 족부온도 자가모니터링으로 궤양 조기발견</span></li>
+        <li class="rec-item"><span class="badge badge-rev">확대</span><span class="rec-text">표준치료·수술적치료에 반응 없는 당뇨발궤양의 보조 첨단치료 중요성 강조, <strong>WIfI 분류체계</strong> 논의 확대(말초동맥질환 중증도·궤양치유예측·절단위험평가)</span></li>
+        <li class="rec-item"><span class="badge badge-rev">갱신</span><span class="rec-text">말초동맥질환 동반 당뇨관리의 전인적·중재적 접근 필요성 강조, GLP-1RA의 하지절단 감소 가능성 관련 신규근거 추가</span></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ S13-15 ═══ -->
+<div id="tab-s13to15" class="panel">
+  <div class="alert alert-orange"><span>👥</span><span>13장(노인), 14장(소아청소년), 15장(임신) — 생애주기별 맞춤 권고가 대폭 정교화되었다.</span></div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>1️⃣3️⃣ 노인 (Section 13)</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="rec-list">
+        <li class="rec-item"><span class="badge badge-rev">개정</span><span class="rec-text"><strong>13.5</strong> 인슐린 사용 1형·2형당뇨 노인 — 혈당개선·저혈당감소·치료부담감소 위한 <strong>CGM 사용</strong> 권고</span></li>
+        <li class="rec-item"><span class="badge badge-rev">구체화</span><span class="rec-text"><strong>13.9</strong> 대부분 노인 치료중 혈압목표 <strong>&lt;130/80</strong>(안전달성 시) / 건강불량·기대수명제한·고위험군은 완화목표(예: &lt;140/90)</span></li>
+        <li class="rec-item"><span class="badge badge-rev">구체화</span><span class="rec-text"><strong>13.11a</strong> 단백질섭취 구체적 가이드 추가(최소 0.8 g/kg체중/일)</span></li>
+        <li class="rec-item"><span class="badge badge-rev">분리</span><span class="rec-text"><strong>13.11b</strong> 제지방량 유지 위한 운동·신체활동 유형을 별도 권고로 분리(의도적체중감량군 특히 강조)</span></li>
+        <li class="rec-item"><span class="badge badge-rev">용어표준화</span><span class="rec-text">요양시설·생활지원시설 관련 용어를 <strong>PALTC</strong>(post-acute and long-term care)로 표준화</span></li>
+        <li class="rec-item"><span class="badge badge-new">신설</span><span class="rec-text"><strong>표 13.1</strong> 노인당뇨환자의 노인증후군·기능장애 평가용 표본 선별질문·검증된 언어 제공</span></li>
+        <li class="rec-item"><span class="badge badge-new">신설</span><span class="rec-text"><strong>Fig 13.2</strong> 치료계획 어려움 평가 → 공유의사결정 통한 혈당목표 재평가 → 치료계획 비강화/단순화/수정 → 중재의 안전성·부담 재평가의 단계적 접근법</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>1️⃣4️⃣ 소아 및 청소년 (Section 14)</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="rec-list">
+        <li class="rec-item"><span class="badge badge-rev">재구성</span><span class="rec-text">섹션 전체를 1형·2형당뇨 구분이 명확하도록 재구성, 양쪽 모두 적용되는 절은 통합</span></li>
+        <li class="rec-item"><span class="badge badge-rev">확대</span><span class="rec-text">발달학적 고려사항, 비만·심리사회요인 영향 서술 확대</span></li>
+        <li class="rec-item"><span class="badge badge-rev">강화</span><span class="rec-text"><strong>14.1</strong> 아동·가족중심 진료, 자가관리이행 지속재평가, 보육·학교직원 훈련 강조 언어 강화</span></li>
+        <li class="rec-item"><span class="badge badge-rev">개정</span><span class="rec-text"><strong>14.2</strong> 진단시·매년 성장·식습관·위험요인에 맞춘 포괄적 영양교육 강화</span></li>
+        <li class="rec-item"><span class="badge badge-rev">확대</span><span class="rec-text"><strong>14.3</strong> 다량영양소 구성(탄수화물·지방·단백질)이 인슐린용량·혈당변동·장기결과에 미치는 영향 근거 추가</span></li>
+        <li class="rec-item"><span class="badge badge-rev">개정</span><span class="rec-text">"신체활동과 운동" — <strong>일일 60분 이상</strong> 중등도~고강도 활동, <strong>주3회 이상</strong> 뼈·근력강화활동 강조. 운동관련 저혈당·고혈당 예방전략, 활동중 치료가능성 중요성 추가</span></li>
+        <li class="rec-item"><span class="badge badge-rev">확대</span><span class="rec-text">"심리사회적 관리" — 행동건강전문가 핵심팀원화, 식품/주거불안정·문해력·사회적지지 일상선별, 청소년 비밀보장시간, <strong>당뇨고통·우울·불안·저혈당공포·이상식이행동 7–8세부터 선별</strong>, 인지행동치료·마음챙김 등 협력중재</span></li>
+        <li class="rec-item"><span class="badge badge-new">신설</span><span class="rec-text"><strong>표 14.1</strong> 1형·2형당뇨 권고 비교표 신설, 지질·미세알부민뇨·망막병증·신경병증 선별 최신근거 반영(SEARCH·TODAY·T1D Exchange 연구)</span></li>
+        <li class="rec-item"><span class="badge badge-rev">추가</span><span class="rec-text">CGM, AI기반 망막선별도구, 약물치료(GLP-1RA·SGLT2i·dual GIP/GLP-1RA) 관련 권고언어 추가</span></li>
+        <li class="rec-item"><span class="badge badge-rev">갱신</span><span class="rec-text">"소아청소년 2형당뇨" — GLP-1RA·SGLT2i·dual제제의 소아 FDA승인현황·최신RCT 추가, 대사·비만대사수술 10년이상 추적자료로 확대</span></li>
+        <li class="rec-item"><span class="badge badge-rev">갱신</span><span class="rec-text">"소아-성인 진료 전환" — 구조화된 전환프로그램, 외래방문률 개선, 디지털도구 통한 진료연속성 지원 강조</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>1️⃣5️⃣ 임신 중 당뇨병 관리 (Section 15)</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="rec-list">
+        <li class="rec-item"><span class="badge badge-rev">개정</span><span class="rec-text"><strong>15.3</strong> 임신전 상담 — 임신전 혈당목표 달성 시 과도한 저혈당 회피의 중요성 강조</span></li>
+        <li class="rec-item"><span class="badge badge-rev">재구성</span><span class="rec-text">"임신전 상담"·"임신전 관리" 서술 재구성, 체중관리 관련 상담 통합</span></li>
+        <li class="rec-item"><span class="badge badge-rev">추가</span><span class="rec-text">치료조정 가이드를 위한 임신전 <strong>혈당목표</strong> 추가(기존 A1C 목표 외)</span></li>
+        <li class="rec-item"><span class="badge badge-new">신설</span><span class="rec-text"><strong>GLP-1RA·dual GIP/GLP-1RA 임신전 중단 지침</strong> 추가 — 중단 후 임신시도 전 임신전 혈당목표 달성 강조</span></li>
+        <li class="rec-item"><span class="badge badge-rev">이동·갱신</span><span class="rec-text">조기 이상혈당대사 서술을 2장에서 본 섹션으로 이동, 최신근거·관리전략 논쟁 반영하여 갱신</span></li>
+        <li class="rec-item"><span class="badge badge-rev">갱신</span><span class="rec-text">GDM에서 CGM 사용 평가 최신 RCT 반영</span></li>
+        <li class="rec-item"><span class="badge badge-rev">갱신</span><span class="rec-text">임신 중 현재 사용가능한 인슐린제제 사용 관련 추가정보 제공</span></li>
+        <li class="rec-item"><span class="badge badge-rev">통합</span><span class="rec-text">임신 중 CGM·AID 사용 관련 서술(기존 7장+15장 중복) — <strong>본 섹션으로 통합</strong></span></li>
+        <li class="rec-item"><span class="badge badge-rev">개정</span><span class="rec-text"><strong>15.24</strong> 항고혈압치료 시작/적정의 혈압임계값을 <strong>140/90 mmHg</strong>로 명확화(최신 RCT 자료 정렬)</span></li>
+        <li class="rec-item"><span class="badge badge-rev">개정</span><span class="rec-text"><strong>15.25b</strong> 중증 고중성지방혈증을 임신 중 지질저하치료 지속이 필요할 수 있는 추가요인으로 포함</span></li>
+        <li class="rec-item"><span class="badge badge-rev">추가</span><span class="rec-text">산후 OGTT 불내성/거부 소수군 — <strong>산후 6–12개월 A1C</strong>를 보조진단정보로 고려 가능(단, 표준 산후OGTT를 대체하지 않음)</span></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ S16-17 ═══ -->
+<div id="tab-s16to17" class="panel">
+  <div class="alert alert-orange"><span>🏥</span><span>16장(병원), 17장(옹호) — 수술전후 혈당목표 신설과 DKA/HHS 진단표 추가가 핵심이며, 17장은 2026년 개정이 없다.</span></div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>1️⃣6️⃣ 병원에서의 당뇨병 관리 (Section 16)</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="rec-list">
+        <li class="rec-item"><span class="badge badge-new">신설</span><span class="rec-text"><strong>16.14</strong> 선택수술 술전 3개월 내 A1C 목표 <strong>&lt;8%</strong>(&lt;64 mmol/mol), 또는 14일 GMI &lt;8%/TIR &gt;50% 대체가능 — 술후결과 개선 목적</span></li>
+        <li class="rec-item"><span class="badge badge-new">신설</span><span class="rec-text"><strong>16.15</strong> 수술전후 혈당 <strong>100–180 mg/dL</strong>(5.6–10.0 mmol/L) 유지 권고</span></li>
+        <li class="rec-item"><span class="badge badge-rev">개정</span><span class="rec-text"><strong>16.18</strong> 자택이 아닌 시설로 퇴원하는 경우 해당시설의 당뇨관리 역량 고려 제안</span></li>
+        <li class="rec-item"><span class="badge badge-new">신설</span><span class="rec-text"><strong>표 16.1/16.2</strong> DKA·HHS 진단기준 및 임상양상 정보 신규 포함</span></li>
+        <li class="rec-item"><span class="badge badge-rev">확대</span><span class="rec-text">병원환경 당뇨기술 사용 및 수술전후 비인슐린치료 관련 서술 확대</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span>1️⃣7️⃣ 당뇨병 옹호 (Section 17)</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body collapsed">
+      <div class="alert alert-info"><span>ℹ️</span><span>2026년 Standards of Care에서 <strong>개정사항 없음</strong>(No revisions have been made).</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ TABLES ═══ -->
+<div id="tab-tables" class="panel">
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>📊 신설 권고문(New Recommendations) 전체 모음</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <table class="tc-table">
+        <tr><th>섹션</th><th>번호</th><th>핵심 내용</th></tr>
+        <tr><td>2</td><td>2.9, 2.18–2.22</td><td>IA-2단독항체 모니터링, 항암제/스테로이드 고혈당 감시</td></tr>
+        <tr><td>3</td><td>3.8, 3.9</td><td>PI3Kα억제제·고용량스테로이드 메트포르민 예방</td></tr>
+        <tr><td>4</td><td>4.13b</td><td>T-score −2.0~−2.5 골다공증 치료고려</td></tr>
+        <tr><td>6</td><td>6.17</td><td>공공시설 응급키트 경구포도당</td></tr>
+        <tr><td>7</td><td>7.7, 7.8a, 7.25a/b</td><td>직장합리적편의, CSII/AID 검사요건 폐지, AID 우선권고</td></tr>
+        <tr><td>8</td><td>8.20, 8.29</td><td>비만약물 용량적정 균형, 1형당뇨 비만치료 옵션</td></tr>
+        <tr><td>9</td><td>9.9a, 9.33–9.38</td><td>HFpEF dual제제, 항암치료·이식 혈당관리 전체</td></tr>
+        <tr><td>10</td><td>10.44d/e/h</td><td>HFpEF dual제제·GLP-1RA, nsMRA 심부전</td></tr>
+        <tr><td>11</td><td>11.9, 11.11a/b</td><td>SGLT2i+nsMRA 병용, 비투석/투석군 약물지침</td></tr>
+        <tr><td>13</td><td>표13.1, Fig13.2</td><td>노인증후군 평가도구, 단계적 치료조정 접근법</td></tr>
+        <tr><td>14</td><td>표14.1</td><td>1형·2형당뇨 권고 비교표</td></tr>
+        <tr><td>15</td><td>GLP-1RA 임신전중단</td><td>임신전 GLP-1RA·dual제제 중단지침(신규서술)</td></tr>
+        <tr><td>16</td><td>16.14, 16.15, 표16.1/16.2</td><td>수술전후 혈당목표, DKA/HHS 진단표</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      <span>💊 GLP-1RA / Dual GIP·GLP-1RA 적응증 확장 — 섹션별 정리</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body">
+      <table class="tc-table">
+        <tr><th>섹션</th><th>적응증/맥락</th><th>권고</th></tr>
+        <tr><td>4</td><td>MASLD/MASH</td><td>MASH혜택 GLP-1RA 고려/우선선호(생검확인 MASH)</td></tr>
+        <tr><td>8</td><td>1형당뇨 비만</td><td>GLP-1RA 기반치료 및/또는 대사수술(8.29)</td></tr>
+        <tr><td>9</td><td>HFpEF</td><td>dual GIP/GLP-1RA(9.9a)·GLP-1RA(9.9b)</td></tr>
+        <tr><td>9</td><td>MASLD/MASH</td><td>GLP-1RA 또는 dual제제(9.12, 9.13a)</td></tr>
+        <tr><td>9</td><td>진행CKD</td><td>GLP-1기반치료 시작·지속(9.11)</td></tr>
+        <tr><td>9</td><td>이식후 장기관리</td><td>심대사혜택 위한 GLP-1RA 고려(9.38b)</td></tr>
+        <tr><td>10</td><td>심혈관사건감소(2형당뇨+CKD포함)</td><td>심혈관혜택입증 GLP-1RA(10.40c)</td></tr>
+        <tr><td>10</td><td>무증상심부전(B기) 고위험</td><td>심부전예방혜택 GLP-1RA(10.44c)</td></tr>
+        <tr><td>10</td><td>증상성HFpEF+비만</td><td>dual GIP/GLP-1RA(10.44d)·GLP-1RA(10.44e)</td></tr>
+        <tr><td>11</td><td>투석 중 심혈관위험감소</td><td>GLP-1기반치료(11.11b)</td></tr>
+        <tr><td>12</td><td>하지절단 감소 가능성</td><td>근거 추가(말초동맥질환)</td></tr>
+        <tr><td>14</td><td>소아청소년 2형당뇨</td><td>FDA승인현황·RCT 자료 추가</td></tr>
+        <tr><td>15</td><td>임신전 관리</td><td>임신시도 전 중단 지침 신설</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span>🎗️ 항암치료·이식 관련 혈당관리 — 신설 권고 전체(Section 9)</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body collapsed">
+      <table class="tc-table">
+        <tr><th>번호</th><th>상황</th><th>권고</th></tr>
+        <tr><td>9.33</td><td>면역치료(ICI) 중 고혈당</td><td>DKA예방 인슐린필요성 평가, 면역치료관련당뇨 추가검사</td></tr>
+        <tr><td>9.34</td><td>mTOR억제제 유발 고혈당</td><td>메트포르민 1차치료 고려</td></tr>
+        <tr><td>9.35a</td><td>PI3K억제제 유발 고혈당</td><td>메트포르민 1차치료 고려</td></tr>
+        <tr><td>9.35b</td><td>PI3K억제제+중증고혈당/고혈당위기</td><td>인슐린은 이 경우에 한정(약효영향 우려)</td></tr>
+        <tr><td>9.36</td><td>글루코코르티코이드 치료</td><td>치료계획·혈당평가 기반 약물 조정/추가</td></tr>
+        <tr><td>9.37</td><td>장기이식 후 수술직후기</td><td>인슐린 선호, 경증고혈당엔 DPP-4억제제 고려</td></tr>
+        <tr><td>9.38a</td><td>이식후 장기관리</td><td>비인슐린제제(이식장기에 따라 선택)</td></tr>
+        <tr><td>9.38b</td><td>이식후 장기관리</td><td>GLP-1RA 고려(심대사혜택)</td></tr>
+        <tr><td>9.38c</td><td>목표미달 시</td><td>비인슐린제제에 인슐린 추가</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span>🩺 당뇨기술(CGM/AID) 관련 핵심 변경 모음</span><span class="toggle">▾</span>
+    </div>
+    <div class="card-body collapsed">
+      <table class="tc-table">
+        <tr><th>구분</th><th>변경 전</th><th>변경 후(2026)</th></tr>
+        <tr><td>CGM 사용시점</td><td>제한적 권고</td><td>당뇨진단 시점부터 + 이후 모든시점(7.15, 9.25)</td></tr>
+        <tr><td>CSII/AID 시작요건</td><td>C-peptide·자가항체·인슐린치료기간 등 고려</td><td>요건 폐지(7.8a)</td></tr>
+        <tr><td>AID 우선순위</td><td>모호</td><td>1형당뇨·MDI/CSII/센서증강펌프 2형당뇨에 선호(7.25a), basal 2형당뇨도 고려(7.25b)</td></tr>
+        <tr><td>CGM 기기분류</td><td>isCGM 포함 3종 분류</td><td>rtCGM·OTC-CGM·전문가용 3종(isCGM은 구형옵션으로만 언급)</td></tr>
+        <tr><td>직장·교육 편의</td><td>소아청소년 위주</td><td>≥18세 직장·교육환경 합리적편의 신설(7.7)</td></tr>
+        <tr><td>임신 중 CGM/AID</td><td>7장·15장 중복서술</td><td>15장으로 통합</td></tr>
+      </table>
+    </div>
+  </div>
+</div>
+
+</div>
+
+<!-- ═══ MODAL: 학회 승인 ═══ -->
+<div id="endorseModal" class="modal-overlay" onclick="closeModalOutside(event,'endorseModal')">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal('endorseModal')">✕</button>
+    <div class="modal-title">🏅 2026년 학회 승인(Endorsement) 현황</div>
+
+    <div class="alert alert-info" style="margin:0 0 12px"><span>💡</span><span>ADA Standards of Care는 매년 관련 전문학회로부터 특정 섹션에 대한 공식 승인(endorsement)을 받는다. 2026년에는 기존 4개 승인이 연장되었고, 2개 섹션이 처음으로 승인을 받았다.</span></div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">① 연속 승인 갱신</div>
+      <table class="modal-table">
+        <tr><th>섹션</th><th>승인 학회</th><th>연속 횟수</th></tr>
+        <tr><td>4. 골건강(Bone Health)</td><td>American Society for Bone and Mineral Research (ASBMR)</td><td>3년 연속</td></tr>
+        <tr><td>8. 비만·체중관리</td><td>The Obesity Society</td><td>승인 유지</td></tr>
+        <tr><td>10. 심혈관질환 및 위험관리</td><td>American College of Cardiology (ACC)</td><td>8년 연속</td></tr>
+        <tr><td>13. 노인(Older Adults)</td><td>American Geriatrics Society (AGS)</td><td>2년 연속</td></tr>
+      </table>
+    </div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">② 신규 승인 (최초)</div>
+      <table class="modal-table">
+        <tr><th>섹션</th><th>승인 학회</th></tr>
+        <tr><td>11. 만성콩팥병 및 위험관리</td><td>National Kidney Foundation (NKF)</td></tr>
+        <tr><td>14. 소아 및 청소년</td><td>International Society for Pediatric and Adolescent Diabetes (ISPAD)</td></tr>
+      </table>
+    </div>
+
+    <div class="alert alert-success" style="margin-top:4px"><span>✅</span><span>학회 승인은 해당 섹션의 권고가 관련 전문분야 학회의 검토를 거쳐 임상적 타당성을 인정받았음을 의미한다.</span></div>
+  </div>
+</div>
+
+<!-- ═══ MODAL: 섹션 개정 현황 ═══ -->
+<div id="newSectionModal" class="modal-overlay" onclick="closeModalOutside(event,'newSectionModal')">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal('newSectionModal')">✕</button>
+    <div class="modal-title">📋 전체 17개 섹션 개정 현황</div>
+
+    <div class="alert alert-info" style="margin:0 0 12px"><span>💡</span><span>2026년 Standards of Care는 17개 섹션 중 <strong>16개 섹션에서 개정</strong>이 이루어졌으며, 17장(당뇨병 옹호)만 개정사항이 없었다.</span></div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">개정 규모별 분류</div>
+      <table class="modal-table">
+        <tr><th>분류</th><th>섹션</th></tr>
+        <tr><td><strong>대폭 개정</strong>(다수 신설 권고)</td><td>2, 6, 7, 9, 10, 11, 14, 16</td></tr>
+        <tr><td><strong>중간 개정</strong>(여러 권고 수정·명확화)</td><td>1, 3, 4, 5, 8, 12, 13, 15</td></tr>
+        <tr><td><strong>개정 없음</strong></td><td>17 (당뇨병 옹호)</td></tr>
+      </table>
+    </div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">가장 많은 신설 권고문이 추가된 섹션</div>
+      <table class="modal-table">
+        <tr><th>섹션</th><th>신설 권고 수(대표)</th><th>주제</th></tr>
+        <tr><td>9. 약물학적 접근</td><td>9개 이상(9.9a, 9.33–9.38 등)</td><td>HFpEF, 항암치료·이식 혈당관리</td></tr>
+        <tr><td>2. 진단·분류</td><td>5개(2.9, 2.18–2.22)</td><td>항암제·스테로이드 고혈당 감시</td></tr>
+        <tr><td>7. 당뇨기술</td><td>4개(7.7, 7.8a, 7.25a/b)</td><td>CGM/AID 사용확대</td></tr>
+        <tr><td>16. 병원관리</td><td>2개+표 2개(16.14, 16.15)</td><td>수술전후 혈당목표</td></tr>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ MODAL: GLP-1/GIP ═══ -->
+<div id="glp1Modal" class="modal-overlay" onclick="closeModalOutside(event,'glp1Modal')">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal('glp1Modal')">✕</button>
+    <div class="modal-title">💊 GLP-1RA / Dual GIP·GLP-1RA — 2026년 핵심 횡단 키워드</div>
+
+    <div class="alert alert-info" style="margin:0 0 12px"><span>💡</span><span>GLP-1 수용체작용제(GLP-1RA)와 GIP·GLP-1 듀얼작용제는 2026년 개정 전반에 걸쳐 가장 빈번하게 등장하는 약물군으로, 적응증이 심부전·MASH·CKD·비만·암치료·소아·임신까지 확장되었다.</span></div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">① 심혈관·심부전 영역 (Section 10)</div>
+      <table class="modal-table">
+        <tr><th>상황</th><th>권고</th></tr>
+        <tr><td>심혈관사건위험감소(2형당뇨+CKD포함)</td><td>심혈관혜택입증 GLP-1RA (10.40c)</td></tr>
+        <tr><td>무증상심부전(B기) 고위험</td><td>심부전예방혜택 GLP-1RA (10.44c)</td></tr>
+        <tr><td>증상성 HFpEF+비만</td><td>dual GIP/GLP-1RA (10.44d) 또는 GLP-1RA (10.44e)</td></tr>
+      </table>
+    </div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">② 간질환(MASLD/MASH) 영역 (Section 4, 9)</div>
+      <table class="modal-table">
+        <tr><th>상황</th><th>권고</th></tr>
+        <tr><td>MASLD+과체중/비만</td><td>MASH혜택 GLP-1RA 고려 (4.26, 9.12)</td></tr>
+        <tr><td>생검확인 MASH/간섬유화고위험</td><td>MASH혜택 GLP-1RA 우선선호 (4.27a, 9.13a)</td></tr>
+      </table>
+    </div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">③ 신장·이식·비만 영역 (Section 9, 11, 8)</div>
+      <table class="modal-table">
+        <tr><th>상황</th><th>권고</th></tr>
+        <tr><td>진행된 CKD</td><td>GLP-1기반치료 시작·지속 (9.11)</td></tr>
+        <tr><td>투석 중 심혈관위험감소</td><td>GLP-1기반치료 (11.11b)</td></tr>
+        <tr><td>이식후 장기관리</td><td>심대사혜택 위한 GLP-1RA 고려 (9.38b)</td></tr>
+        <tr><td>1형당뇨 비만</td><td>GLP-1RA 기반치료 및/또는 대사수술 (8.29)</td></tr>
+      </table>
+    </div>
+
+    <div class="alert alert-warn" style="margin-top:4px"><span>⚠️</span><span>각 권고는 "혜택이 입증된(demonstrated benefit)" 또는 "잠재적 혜택이 있는(potential benefit)" 특정 약제를 지칭하므로, 모든 GLP-1RA·dual제제가 동일하게 적용되는 것은 아니다 — 개별 약제의 임상시험 근거를 확인해야 한다.</span></div>
+  </div>
+</div>
+
+<!-- ═══ MODAL: 항암치료·이식 ═══ -->
+<div id="cancerModal" class="modal-overlay" onclick="closeModalOutside(event,'cancerModal')">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal('cancerModal')">✕</button>
+    <div class="modal-title">🎗️ 신설 — 항암치료·장기이식 관련 혈당관리 (Section 9)</div>
+
+    <div class="alert alert-info" style="margin:0 0 12px"><span>💡</span><span>2026년 개정에서 가장 눈에 띄는 신설 영역으로, 면역관문억제제·PI3Kα억제제·mTOR억제제로 인한 고혈당과 장기이식 후 당뇨 관리에 대한 체계적인 권고가 처음으로 마련되었다.</span></div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">① 면역치료(Immunotherapy) 관련 — 9.33</div>
+      <table class="modal-table">
+        <tr><th>항목</th><th>내용</th></tr>
+        <tr><td>대상</td><td>면역치료(ICI) 중 고혈당이 발생한 환자</td></tr>
+        <tr><td>권고</td><td>DKA 예방을 위한 인슐린치료 필요성 평가, 면역치료관련당뇨 여부를 확인하기 위한 추가검사 시행</td></tr>
+      </table>
+    </div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">② mTOR·PI3K 억제제 관련 — 9.34, 9.35a/b</div>
+      <table class="modal-table">
+        <tr><th>항목</th><th>내용</th></tr>
+        <tr><td>mTOR억제제 유발 고혈당(9.34)</td><td>메트포르민을 1차치료로 고려</td></tr>
+        <tr><td>PI3K억제제 유발 고혈당(9.35a)</td><td>메트포르민을 1차치료로 고려</td></tr>
+        <tr><td>인슐린 사용 제한(9.35b)</td><td>중증고혈당·고혈당위기에 한정 — PI3K억제제의 항암효능에 영향 미칠 가능성 고려</td></tr>
+      </table>
+    </div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">③ 글루코코르티코이드 치료 관련 — 9.36</div>
+      <table class="modal-table">
+        <tr><th>항목</th><th>내용</th></tr>
+        <tr><td>대상</td><td>글루코코르티코이드 치료를 받는 환자</td></tr>
+        <tr><td>권고</td><td>스테로이드 치료계획 및 지속적 혈당평가를 기반으로 혈당저하제 조정 또는 추가 시작</td></tr>
+      </table>
+    </div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">④ 장기이식 관련 — 9.37, 9.38a–c</div>
+      <table class="modal-table">
+        <tr><th>시기</th><th>권고</th></tr>
+        <tr><td>수술 직후(9.37)</td><td>인슐린 선호, 경증고혈당에는 DPP-4억제제 고려 가능</td></tr>
+        <tr><td>장기관리(9.38a)</td><td>비인슐린 약물치료 사용 가능, 이식장기 종류에 따라 약제 선택</td></tr>
+        <tr><td>장기관리(9.38b)</td><td>심대사적 추가혜택을 위해 GLP-1RA 고려 가능</td></tr>
+        <tr><td>장기관리(9.38c)</td><td>개인맞춤 혈당목표 미달성/유지불가 시 비인슐린제제에 인슐린 추가</td></tr>
+      </table>
+    </div>
+
+    <div class="alert alert-warn" style="margin-top:4px"><span>⚠️</span><span>PI3K억제제 치료 중에는 인슐린 사용이 약물의 항암효능에 영향을 줄 가능성이 우려되어, 메트포르민을 우선 고려하고 인슐린은 중증 상황에 한정하는 것이 핵심 원칙이다.</span></div>
+  </div>
+</div>
+
+<script>
+const FONT_ZOOM_LEVELS = [1, 1.25, 1.5];
+let fontZoomIndex = 0;
+
+function applyFontZoom(scale) {
+  document.documentElement.style.setProperty('--fscale', scale);
+  const label = document.getElementById('font-zoom-label');
+  if (label) label.textContent = Math.round(scale * 100) + '%';
+}
+
+function cycleFontZoom() {
+  fontZoomIndex = (fontZoomIndex + 1) % FONT_ZOOM_LEVELS.length;
+  applyFontZoom(FONT_ZOOM_LEVELS[fontZoomIndex]);
+}
+
+function showTab(id){
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('tab-'+id).classList.add('active');
+  event.target.classList.add('active');
+}
+function toggleCard(el){
+  el.classList.toggle('open');
+  el.nextElementSibling.classList.toggle('collapsed');
+}
+function toggleAcc(el){
+  const b=el.nextElementSibling;
+  b.style.display=b.style.display==='block'?'none':'block';
+  el.querySelector('span:last-child').textContent=b.style.display==='block'?'▴':'▾';
+}
+
+function openModal(id){document.getElementById(id).classList.add('open');}
+function closeModal(id){document.getElementById(id).classList.remove('open');}
+function closeModalOutside(e,id){if(e.target===document.getElementById(id))closeModal(id);}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')document.querySelectorAll('.modal-overlay.open').forEach(m=>m.classList.remove('open'));});
+
+const abbrs=[
+  ['ADA','American Diabetes Association — 본 Standards of Care 발행 단체.'],
+  ['ASBMR','American Society for Bone and Mineral Research — 4장(골건강) 승인 학회.'],
+  ['ACC','American College of Cardiology — 10장(심혈관질환) 8년 연속 승인 학회.'],
+  ['AGS','American Geriatrics Society — 13장(노인) 2년 연속 승인 학회.'],
+  ['NKF','National Kidney Foundation — 11장(만성콩팥병) 2026년 최초 승인 학회.'],
+  ['ISPAD','International Society for Pediatric and Adolescent Diabetes — 14장(소아청소년) 2026년 최초 승인 학회.'],
+  ['DSMES','Diabetes Self-Management Education and Support — 당뇨자가관리교육및지지.'],
+  ['CHW','Community Health Worker — 지역사회건강인력, 신장질환 위험요인 관리지원 역할 확대.'],
+  ['ICI','Immune Checkpoint Inhibitor (면역관문억제제) — PD-1/PD-L1, CTLA-4 차단 항암제. 고혈당 유발 가능.'],
+  ['PI3Kα','Phosphoinositide 3-Kinase alpha 억제제 — alpelisib·inavolisib 등 유방암 치료제, 고혈당 위험 매우 높음.'],
+  ['mTOR','Mammalian Target of Rapamycin 억제제 — everolimus 등 항암제, 고혈당 유발 가능.'],
+  ['MASLD','Metabolic Dysfunction-Associated Steatotic Liver Disease — 대사이상관련지방간질환.'],
+  ['MASH','Metabolic Dysfunction-Associated Steatohepatitis — 대사이상관련지방간염, MASLD의 진행된 형태.'],
+  ['FIB-4','Fibrosis-4 Index — 간섬유화 평가지표. &gt;2.67 시 간전문의 관리 필요.'],
+  ['HFpEF','Heart Failure with preserved Ejection Fraction (박출률보존심부전) — GLP-1RA·dual제제 적응증 확대 영역.'],
+  ['nsMRA','nonsteroidal Mineralocorticoid Receptor Antagonist (비스테로이드 미네랄코르티코이드수용체 차단제) — 심부전·CKD 진행감소에 신규 권고.'],
+  ['RAS','Renin-Angiotensin-Aldosterone System — 레닌-안지오텐신-알도스테론계, 관련억제제가 신장보호 배경치료로 강조.'],
+  ['eGFR','estimated Glomerular Filtration Rate (추정신장여과율) — 신기능 평가지표.'],
+  ['GLP-1 RA','Glucagon-Like Peptide-1 Receptor Agonist — 2026년 개정 전반의 핵심 약물군, 심부전·MASH·CKD·비만 등 적응증 확장.'],
+  ['GIP','Glucose-dependent Insulinotropic Polypeptide — GLP-1과의 듀얼작용제(예: tirzepatide) 구성성분.'],
+  ['DPP-4i','Dipeptidyl Peptidase 4 inhibitor — 경증고혈당·이식후 관리에 고려되는 비인슐린제제.'],
+  ['SGLT2','Sodium-Glucose Cotransporter 2 억제제 — 비투석 CKD진행위험감소·심혈관혜택, nsMRA와 병용 고려.'],
+  ['CGM','Continuous Glucose Monitoring — 당뇨진단 시점부터 사용 권장범위 확대.'],
+  ['AID','Automated Insulin Delivery — 1형당뇨·특정 2형당뇨에 선호되는 인슐린전달방식으로 격상.'],
+  ['CSII','Continuous Subcutaneous Insulin Infusion (지속피하인슐린주입) — 인슐린펌프, 시작전 검사요건 폐지.'],
+  ['rtCGM','real-time CGM — 실시간 연속혈당모니터링, 2026년 CGM 3분류 중 하나.'],
+  ['OTC-CGM','Over-The-Counter CGM — 처방전없이구매가능한 연속혈당모니터링, 2026년 신규 분류.'],
+  ['isCGM','intermittently scanned CGM — 간헐스캔식 연속혈당모니터링, 2026년부터 구형옵션으로만 언급.'],
+  ['PALTC','Post-Acute and Long-term Care — 급성기후·장기요양, 요양시설 관련 표준화된 용어.'],
+  ['WIfI','Wound, Ischemia, foot Infection — 당뇨발병변 단계분류체계, 말초동맥질환 중증도·절단위험평가에 사용확대.'],
+  ['NAION','Nonarteritic Anterior Ischemic Optic Neuropathy (비동맥성앞허혈성시신경병증) — GLP-1RA와의 연관성이 논의되는 안과 합병증.'],
+  ['DCCT/EDIC','Diabetes Control and Complications Trial/Epidemiology of Diabetes Interventions and Complications — 40년 추적한 대규모 1형당뇨 장기연구.'],
+  ['SEARCH','SEARCH for Diabetes in Youth — 소아청소년 당뇨 선별기준 갱신에 활용된 미국 코호트 연구.'],
+  ['TODAY','Treatment Options for Type 2 Diabetes in Adolescents and Youth — 청소년 2형당뇨 치료 연구.'],
+  ['GMI','Glucose Management Indicator — CGM기반 추정 A1C, 16장 수술전후목표에서 A1C대체 가능.'],
+  ['TIR','Time in Range — 목표범위내시간, 수술전후 평가에 사용.'],
+  ['DKA','Diabetic Ketoacidosis — 당뇨병성케토산증, 16장에 진단표(표16.1) 신규 포함.'],
+  ['HHS','Hyperglycemic Hyperosmolar State — 고혈당고삼투압상태, 16장에 진단표(표16.1) 신규 포함.'],
+];
+
+function buildAbbr(){
+  const sorted=abbrs.slice().sort((a,b)=>a[0].localeCompare(b[0]));
+  document.getElementById('abbr-grid-drop').innerHTML=sorted.map(a=>
+    `<div style="background:var(--surface2);border:1px solid var(--border);border-radius:5px;padding:6px 10px;margin-bottom:4px;" data-term="${a[0].toLowerCase()}" data-def="${a[1].toLowerCase()}">
+       <span style="font-weight:700;color:var(--accent2);font-size: calc(12px * var(--fscale, 1));font-family:'Courier New',monospace">${a[0]}</span>
+       <div style="font-size: calc(11px * var(--fscale, 1));color:var(--text2);line-height:1.45;margin-top:2px">${a[1]}</div>
+     </div>`).join('');
+}
+function filterAbbr(val){
+  const v=val.toLowerCase().trim();
+  const drop=document.getElementById('abbr-dropdown');
+  const items=document.querySelectorAll('#abbr-grid-drop [data-term]');
+  if(!v){drop.style.display='none';return;}
+  const inp=document.getElementById('abbr-input');
+  const rect=inp.getBoundingClientRect();
+  const w=440;
+  let left=rect.right-w;if(left<8)left=8;
+  drop.style.top=(rect.bottom+4)+'px';drop.style.left=left+'px';
+  drop.style.display='block';
+  items.forEach(el=>{
+    const show=el.dataset.term.startsWith(v)||el.dataset.def.includes(v);
+    el.style.display=show?'':'none';
+  });
+}
+document.addEventListener('click',e=>{
+  const inp=document.getElementById('abbr-input');
+  const drop=document.getElementById('abbr-dropdown');
+  if(inp&&!inp.contains(e.target)&&drop&&!drop.contains(e.target))drop.style.display='none';
+});
+buildAbbr();
+</script>
+</body>
+</html>
